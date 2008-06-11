@@ -1,0 +1,61 @@
+<div id="sidebar1" class="sidebar">
+  <div class="sideBarTitle">My Allocations</div>
+  <div class="sideBarItem countbox">
+    <div id="countcontainer">
+      <div class="countbutton64 red64">
+        <div id="user_count" class="count">
+          <%= link_to current_user.available_user_votes, 
+            votes_path(:user_id => current_user.id), 
+            html_options = {
+            :onmouseover => "Tip('View votes that consumed your allocations')"} %>
+        </div>
+        <div class="description">User</div>
+      </div>
+      <div class="countbutton64 red64">
+        <div id="enterprise_count" class="count">
+          <%= link_to current_user.available_enterprise_votes,
+            votes_path(:enterprise_id => current_user.enterprise.id), 
+            html_options = {
+            :onmouseover => "Tip('View votes that consumed allocations for your enterprise')"} %>
+          </div>
+          <div class="description">Enterprise</div>
+      </div>
+      <div class="countbutton64 black64">
+        <div id="total_count" class="count">           
+          <%= link_to current_user.available_votes,
+            votes_path(:enterprise_id => current_user.enterprise.id, 
+                :user_id => current_user.id), 
+            html_options = {
+            :onmouseover => "Tip('View votes that consumed either your allocations or allocations for your enterprise')"} %>
+        </div>
+        <div class="description">Total</div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="sideBarTitle">Jump to Idea</div>
+  <div class="sideBarItem">
+    <% form_tag({:action => 'jump_to'}, {:method => :get}) do -%>
+      <label for="goto_id">Idea #:</label>
+      <%= text_field_tag 'goto_id', '', { :size => 6 } %>
+      <%= submit_tag 'Go', html_options = {:class=> "button"} %>
+    <% end %>
+  </div>
+  
+  <div class="sideBarTitle">Announcements</div>
+  <div class="sideBarItem">
+    <div class="unorderListNavContainer">
+      <ul class="navlist2">
+        <% for announcement in Announcement.list(1, 5, 5) %>
+          <li>
+            <%= announcement_link announcement %>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+  <% tiptxt= "Subscribe to be notified of new ideas" %>
+  <a href="<%= url_for(:action => 'rss', :only_path => false) %>" onmouseover="Tip('<%= tiptxt %>')"><%= theme_image_tag("icons/14x14/feed-icon-14x14.png", :border=>0) %></a>
+  <span style="font-size:0.75em;" onmouseover="Tip('<%= tiptxt %>')">Subscribe via RSS</span>
+  <div style="clear: left"></div>
+</div>

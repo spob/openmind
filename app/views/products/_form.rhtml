@@ -1,0 +1,13 @@
+<%= error_messages_for 'product' %>
+
+<!--[form:product]-->
+<p><label for="product_name">Name</label><br/>
+<%= text_field 'product', 'name'  %></p>
+
+<p><label for="product_description">Description</label><br/>
+<%= text_field 'product', 'description'  %></p>
+
+<p><label for="product_active">Active</label><br/>
+<select id="product_active" name="product[active]"><option value="false">False</option><option value="true" selected>True</option></select></p>
+<!--[eoform:product]-->
+

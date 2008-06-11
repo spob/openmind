@@ -1,0 +1,70 @@
+= fixture_references
+
++fixture_references+ adds support for referencing external fixtures (by name) from
+within a fixture definition.
+
+== Resources
+
+Announcement
+
+* http://www.pluginaweek.org/2007/04/07/14-fix-your-fixtures-with-fewer-foreign-key-ids
+
+Wiki
+
+* http://wiki.pluginaweek.org/Fixture_references
+
+API
+
+* http://api.pluginaweek.org/fixture_references
+
+Development
+
+* http://dev.pluginaweek.org/browser/trunk/plugins/active_record/migrations/fixture_references
+
+Source
+
+* http://svn.pluginaweek.org/trunk/plugins/active_record/migrations/fixture_references
+
+== Description
+
+When writing many complex fixtures for testing within your applications or
+plugins, it can become cumbersome to keep track of which fixtures reference
+which other fixtures and going back and forther between files to track ids.
+This plugin takes the route offered by unit tests by allowing you to reference
+those fixtures by name rathern than by id.
+
+== Usage
+
+See the PluginAWeek::FixtureReferences API for usage information.
+
+=== Example
+
+employees.yml:
+  <% id = 0 %>
+  bob:
+    id: <%= id += 1 %>
+    name: Bob
+    
+  joe:
+    id: <%= id += 1 %>
+    name: Joe
+
+departments.yml:
+  <%
+  fixtures :employees
+  id = 0
+  %>
+  
+  packaging:
+    id: <%= id += 1 %>
+    name: Packaging
+    manager_id: <%= employees(:bob) %>
+
+== Testing
+
+Before you can run any tests, the following gems must be installed:
+* plugin_test_helper[http://wiki.pluginaweek.org/Plugin_test_helper]
+
+== Dependencies
+
+This plugin does not depend on the presence of any other plugin.

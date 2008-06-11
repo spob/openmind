@@ -1,0 +1,23 @@
+<%content_for :bodyTag do -%>
+ <%= set_focus_to_id 'login' -%>
+<%end%>
+<div style="width:450px;">
+  <div class="formTitle">Login</div>
+  <% form_tag({}, {:class => "cssform"}) do -%>
+    <p>
+      <label for="login">Username:</label>
+      <%= text_field_tag 'login', @login %>
+    </p>
+    <p>
+      <label for="password">Password:</label>
+      <%= password_field_tag 'password' %>
+    </p>
+    <p>
+      <%= check_box_tag 'remember_me' %>Remember me on this computer.
+    </p>
+    <p><%= submit_tag 'Sign in', html_options = {:class=> "button", :disable_with => "Please wait..."} %></p>
+  <% end -%>
+ 
+  <p><%= link_to 'Forgot your password?', { :controller => :users,
+    :action => 'lost_password' } %></p>
+</div>

@@ -1,0 +1,24 @@
+<% id = 0 %>
+bob:
+  id: <%= id += 1 %>
+  name: Bob
+  
+joe:
+  id: <%= id += 1 %>
+  name: Joe
+  
+jane:
+  id: <%= id += 1 %>
+  name: Jane
+  
+ryan:
+  id: <%= id += 1 %>
+  name: Ryan
+  
+will:
+  id: <%= id += 1 %>
+  name: Will
+  
+kevin:
+  id: <%= id += 1 %>
+  name: Kevin

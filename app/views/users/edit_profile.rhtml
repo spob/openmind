@@ -1,0 +1,39 @@
+<%content_for :bodyTag do -%>
+  <%= set_focus_to_id 'user_first_name' %>
+<%end%>
+
+<%= error_messages_for :user %>
+<% form_for :user, :url => { :action => "update_profile", :id => @user } do |f| -%>
+  <div class="formTitle">
+    <%= theme_image_tag("icons/16x16/userEdit.png", 
+      options = {:alt=>"Update Profile"}) %>Update Profile
+  </div>
+  <div class="cssform widerLabel">
+    <p>  
+      <label for="Email">Email:</label><%= h @user.email %>
+    </p>
+    <p>  
+      <label for="first_name">First Name:</label>
+      <%= f.text_field :first_name %>
+    </p>
+    <p>  
+      <label for="last_name">Last Name:</label>
+      <%= f.text_field :last_name %>
+    </p>
+    <p>  
+      <label for="time_zone">User Time Zone:</label>
+      <%= f.time_zone_select :time_zone %>
+    </p>
+    <p> 
+      <label for="row_limit">Rows to Display:</label>
+      <%= f.select :row_limit, User.row_limit_options %>
+    </p>
+    <p>
+      <label for="hide_contact_info">Hide Contact Info:</label>
+      <%= f.check_box(:hide_contact_info, {}, '1', '0') %>
+    </p>
+    <p>  
+      <label></label>
+    <%= submit_tag 'Submit', html_options = {:class=> "button", :disable_with => "Please wait..."} %>  </p>
+  </div>
+<% end -%>

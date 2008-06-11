@@ -1,0 +1,11 @@
+<div class="commentbox">
+  <%=textilize h(comment_item.body) %>
+  <%= link_to '[Edit]', edit_comment_path(comment_item), 
+    html_options = { :class=> "btTxt editButton",
+    :onmouseover => "Tip('Edit this comment')"} if can_edit_comment? comment_item %>
+</div>
+<div class="commentfooter">
+  Posted by <%= "#{user_display_name comment_item.user}" %> 
+  on <%=om_date_time comment_item.created_at%> 
+</div>
+

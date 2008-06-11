@@ -1,0 +1,56 @@
+<%content_for :head do -%>
+  <%= theme_stylesheet_link_tag 'forms' %>
+  <%= theme_stylesheet_link_tag 'tables' %>
+  <%= javascript_include_tag "tablecloth" %>
+<%end%>
+<%= javascript_include_tag "wz_tooltip.js" %> 
+
+<%content_for :bodyTag do -%>
+<%end%>
+<%= javascript_include_tag "wz_tooltip.js" %> 
+<%= error_messages_for 'idea' %>
+
+<div id="actionButtons2">
+  <%= link_to "Back to Edit", 
+    options = { :controller => 'ideas',  :action => 'edit', :id => @idea }, 
+    html_options = {:class=> "button",
+    :onmouseover => "Tip('Return to edit idea for this idea')"} %>
+</div>
+<h1>Merging idea "<%= @idea.user_friendly_idea_name %>"</h1>
+<h3>Select Idea to Merge into:</h3>
+
+<% form_tag(merge_idea_path(@idea.id), :method => :get ) do -%>
+  <label for="title">Search:</label>
+  <%= text_field_tag 'id_title_filter', params[:id_title_filter], { :size => "80" } %>
+  <%= submit_tag 'Search', html_options = {:class=> "button", :disable_with => "Please wait...",
+        :onmouseover => "Tip('Filter idea by the search criteria')"} %>
+<% end -%>
+<%= set_focus_to_id_in_list_form 'id_title_filter' -%>
+<br/>
+
+<table cellspacing="0" cellpadding="0" class="cssform">
+  <tr>
+    <th>Idea Number</th>
+    <th>Author</th>
+    <th>Product Name</th>
+    <th>Release</th>
+    <th>Title</th>
+    <th>Total Votes</th>
+    <th>Total Comments</th>
+    <th>Actions</th>
+  </tr>  
+  
+  <% for idea in @ideas %>
+    <tr>
+      <td><%= link_to idea.id.to_s, { :controller => 'ideas',  :action => 'show', :id => idea } %></td>
+      <td><%= h idea.user.full_name %></td>
+      <td><%= h idea.product.name %></td>
+      <td><%= h nvl(idea.user_friendly_release_name, '-') %></td>
+      <td><%= idea.title %></td>
+      <td><%= pluralize(idea.votes.size, 'vote') %></td>
+      <td><%= pluralize(idea.comments.size, 'comment') %></td>
+      <td><%= show_merge_button idea %></td>
+    </tr>
+  <% end %>
+</table>
+<%= will_paginate @ideas %>

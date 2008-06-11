@@ -1,0 +1,41 @@
+<%content_for :bodyTag do -%>
+      <%= set_focus_to_id 'comment_body' -%>
+<%end%>
+<%= javascript_include_tag "wz_tooltip.js" %> 
+
+<%= error_messages_for 'comment' %>
+<% form_for :comment, :html => {:id => "new-comment"}, 
+      :url => comments_path(:id => @idea) do |form| %>
+  <div id="actionButtons2">
+      <%= link_to theme_image_tag("icons/24x24/ideasList.png", 
+      :alt=>"Show Idea", :title=> "Show Idea"),
+      options = { :controller=> 'ideas', :action => 'show', :id => @idea},
+      html_options = {:onmouseover => "Tip('Return to idea ##{@idea.id}')"}        
+    %>
+  </div>
+  <div class="formTitle">Add Comment</div>
+  <div class="cssform widerLabel">
+    <p>
+      <label for="idea">For Idea:</label>
+      <%= h @idea.user_friendly_idea_name %>  
+    </p>
+    <p>
+      <label for="comment">Comment:</label>
+      <%= form.text_area :body,  {:cols => 70, :rows => 8 } %>
+      <span style="padding-left:10px;font-size:0.83em;">(supports <a href="http://hobix.com/textile/" target="_blank" onmouseover="Tip('Click here for explanation of textile tags')">textile</a> tags)</span>
+    </p>
+    <p>
+      <label></label>
+      <%= submit_tag 'Create', html_options = {:class=> "button", :disable_with => "Please wait...",
+        :onmouseover => "Tip('Create this comment for idea ##{@idea.id}')"}  %>
+    </p>
+  </div>  
+<% end %>
+
+<%= observe_form "new-comment",
+      :frequency => 1,
+      :update => "live-preview",
+      :complete => "Element.show('live-preview')",
+      :url => preview_comments_path %>
+
+<div id="live-preview" style="display: none, border => 1px solid"></div>

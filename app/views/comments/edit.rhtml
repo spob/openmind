@@ -1,0 +1,30 @@
+<%content_for :bodyTag do -%>
+  <%= set_focus_to_id 'comment_name' %>
+<%end%>
+<%= error_messages_for 'comment' %>
+<% form_for(:comment, :url => comment_path(@comment), 
+  :html => {:method => :put }) do |form| %>
+  <div id="actionButtons2">
+      <%= link_to theme_image_tag("icons/24x24/ideasList.png", 
+      :alt=>"Show Idea", :title=> "Show Idea"),
+      options = { :controller=> 'ideas', :action => 'show', :id => @comment.idea},
+      html_options = {:onmouseover => "Tip('Return to idea ##{@comment.idea.id}')"}        
+    %>
+  </div>
+  <div class="formTitle">Edit Comment</div>
+  <div class="cssform widerLabel">
+    <p>
+      <label for="idea">For Idea:</label>
+      <%= h @comment.idea.user_friendly_idea_name %>  
+    </p>
+    <p>
+      <label for="comment">Comment:</label>
+      <%= form.text_area :body,  {:cols => 70, :rows => 8 } %>
+      <span style="padding-left:10px;font-size:0.83em;">(supports <a href="http://hobix.com/textile/" target="_blank" onmouseover="Tip('Click here for explanation of textile tags')">textile</a> tags)</span>
+    </p>
+    <p>
+      <label></label>
+      <%= submit_tag 'Save', html_options = {:class=> "button", :disable_with => "Please wait..."} %>
+    </p>
+  </div>
+<% end %>

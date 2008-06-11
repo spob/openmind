@@ -1,0 +1,95 @@
+<%content_for :head do -%>
+  <%= theme_stylesheet_link_tag 'forms' %>
+  <%= theme_stylesheet_link_tag 'tables' %>
+  <%= javascript_include_tag "tablecloth" %>                
+<%end%>
+<%= javascript_include_tag "wz_tooltip.js" %> 
+<%= error_messages_for 'product' %>
+<h1>
+    <%= theme_image_tag("icons/48x48/products.png", 
+      options = {:alt=>"Products"}) %>
+      Products
+    </h1>
+<table cellspacing="0" cellpadding="0" class="cssform">
+  <tr>
+    <th>Name</th>
+    <th>Description</th>
+    <th class="center">Active</th>
+    <th class="center">Current Release</th>
+    <th>Action</th>
+  </tr>
+  <% if prodmgr? %>
+  <tr>
+    <% form_for :product, :url => products_path do |form| %>
+      <td><%= form.text_field :name, { :size => 30, :maxlength => 30 } %></td>
+      <td><%= form.text_field :description, { :size => 50, :maxlength => 200 } %></td>
+      <td class="center">Active</td>
+      <td class="center">-</td>
+      <td><%= submit_tag 'Create', options = {:class=> "button", :disable_with => "Please wait...",
+        :onmouseover => "Tip('Create a new product')"} %></td>
+    <% end %>
+  <%= set_focus_to_id_in_list_form 'product_name' -%>
+  </tr>
+  <% end %>
+  
+    <% for product in @products %>
+    <tr>
+      <div id="release_body<%= product.id %>" style="display:none;" >
+        <%  tagtip = "" %>
+        <% if product.current_release and !product.current_release.description.nil? and !product.current_release.description.strip.empty? %>        
+          <%  tagtip = "TagToTip('release_body#{product.id}')" %>
+          <%= textilize(truncate(product.current_release.description, 500)) %>
+        <% end %>
+      </div>
+      <td><%= product.name %></td>
+      <td><%= product.description %></td>
+      <td class="center"><input type="checkbox" name="active" value="active" <%= "checked" if product.active?  %> disabled ></td>
+      <td class="center">
+        <% if product.current_release_version.nil? || product.current_release_version.strip.empty? %>
+            &nbsp;
+        <% else %>
+            <%= link_to(h(product.current_release_version), release_path(product.current_release),
+                html_options = {
+                :onmouseover => tagtip } )  %>
+        <% end %>
+        </td>
+      <td>
+        <% if prodmgr? %>
+        <%= link_to theme_image_tag("icons/16x16/viewAction.png", :alt=>"view", :title=> "view"),
+          product_path(product), 
+          html_options = {
+          :onmouseover => "Tip('View details for this product')"} 
+        %>
+        <%= link_to theme_image_tag("icons/16x16/editAction.png", :alt=>"edit", :title=> "edit"), 
+          edit_product_path(product),
+          html_options = {
+          :onmouseover => "Tip('Edit this product')"}
+        %>
+      
+        <%= link_to(
+          theme_image_tag("icons/16x16/deleteAction.png", :alt=>"delete", :title=> "delete"),
+          product_path(product),
+          html_options = {:confirm => 'Are you sure?', :method => :delete,
+            :onmouseover => "Tip('Delete this product')"} ) if product.can_delete? %>
+      
+        <%= link_to theme_image_tag("icons/16x16/releasesView.png", :alt=>"view releases", :title=> "view releases"),
+          releases_path(:product_id => product.id),
+          html_options = {
+          :onmouseover => "Tip('View releases for this product')"}
+        %>
+    <% end %>
+      
+        <% if !product.current_release.nil? and !product.current_release.download_url.nil? and !product.current_release.download_url.strip.empty? %>
+          <%= link_to theme_image_tag("icons/16x16/download.png", :alt=>"download release", :title=> "download release"),
+          product.current_release.download_url,
+          html_options = {
+          :onmouseover => "Tip('Download release #{product.current_release_version}')"}
+          %>
+          <% else %>
+            &nbsp;
+          <% end %>
+      </td>
+  </tr>
+<% end %>
+</table>
+<p><%= will_paginate @products %></p>

@@ -1,0 +1,16 @@
+<%= error_messages_for 'announcement' %>
+
+<!--[form:announcement]-->
+<p><label for="announcement_headline">Headline</label><br/>
+<%= text_field 'announcement', 'headline'  %></p>
+
+<p><label for="announcement_description">Description</label><br/>
+<%= text_field 'announcement', 'description'  %></p>
+
+<p><label for="announcement_lock_version">Lock version</label><br/>
+<%= text_field 'announcement', 'lock_version'  %></p>
+
+<p><label for="announcement_created_at">Created at</label><br/>
+<%= datetime_select 'announcement', 'created_at'  %></p>
+<!--[eoform:announcement]-->
+

@@ -1,0 +1,59 @@
+<%content_for :head do -%>
+  <%= theme_stylesheet_link_tag 'forms' %>
+  <%= theme_stylesheet_link_tag 'tables' %>
+  <%= javascript_include_tag "tablecloth" %>
+<%end%>
+<%= javascript_include_tag "wz_tooltip.js" %> 
+<%= error_messages_for 'enterprise' %>
+<h1><%= theme_image_tag("icons/32x32/enterprises.png", 
+      options = {:alt=>"Enterprises"}) %>Enterprises</h1>
+<table cellspacing="0" cellpadding="0" class="cssform">
+  <tr>
+    <th>Name</th>
+    <th class="center">Available Votes</th>
+    <th class="center">Users</th>
+    <th class="center">Active</th>
+    <th>Action</th>
+  </tr>
+  
+  <% form_for :enterprise, :url => enterprises_path do |form| %>
+    <tr>
+      <td> <%= form.text_field :name, { :size => 50, :maxlength => 50 } %></td>
+      <td class="center">0</td>
+      <td class="center">0</td>
+      <td class="center">Active</td>
+      <td><%= submit_tag 'Create', html_options = {:class=> "button", :disable_with => "Please wait...",
+          :onmouseover => "Tip('Create a new enterprise')"} %>
+      </td>
+    </tr>
+  <% end %>
+  <%= set_focus_to_id_in_list_form 'enterprise_name' -%>
+  
+  <% for enterprise in @enterprises %>
+    <tr>
+      <td><%= h enterprise.name%></td>
+      <td class="center"><%= h enterprise.available_votes %></td>
+      <td class="center"><%= h enterprise.users.size %></td>
+      <td class="center"><input type="checkbox" name="active" value="active" <%= "checked" if enterprise.active?  %> disabled ></td>
+      <td>
+        <%= link_to theme_image_tag("icons/16x16/viewAction.png", :alt=>"view", :title=> "view"),
+          enterprise_path(enterprise), 
+          html_options = {
+          :onmouseover => "Tip('View details for this enterprise')"} 
+        %>
+        <%= link_to theme_image_tag("icons/16x16/editAction.png", :alt=>"edit", :title=> "edit"), 
+          edit_enterprise_path(enterprise),
+          html_options = {
+          :onmouseover => "Tip('Edit this enterprise')"}
+        %>
+      
+        <%= link_to(
+          theme_image_tag("icons/16x16/deleteAction.png", :alt=>"delete", :title=> "delete"),
+          enterprise_path(enterprise),
+          html_options = {:confirm => 'Are you sure?', :method => :delete,
+            :onmouseover => "Tip('Delete this enterprise')"} ) if enterprise.can_delete? %>
+      </td>
+    </tr>
+  <% end %>
+</table>
+<p><%= will_paginate @enterprises %></p>

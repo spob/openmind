@@ -1,0 +1,49 @@
+<%content_for :head do -%>
+  <%= theme_stylesheet_link_tag 'forms' %>
+  <%= theme_stylesheet_link_tag 'tables' %>
+  <%= javascript_include_tag "tablecloth" %>                
+<%end%>
+<%= javascript_include_tag "wz_tooltip.js" %> 
+<div id="actionButtons2">
+  <%= link_to 'Edit', edit_product_url(@product), html_options = {:class=> "button",
+  :onmouseover => "Tip('Edit this product')"} %>
+  <%= link_to 'List Products', products_path , html_options = {:class=> "button",
+    :onmouseover => "Tip('Return to list products')"}%>
+  <%= link_to 'List Releases', releases_path(:product_id => @product.id),
+          html_options = {:class=> "button",
+          :onmouseover => "Tip('View releases for this product')"} %>
+</div>
+<div class="formTitle">Product Detail</div>
+<div class="cssform">
+  <p>
+    <label for="name">Name:</label>
+    <%= h @product.name %>
+  </p>
+  <p>
+    <label for="description">Description:</label>
+    <%= h @product.description %>
+  </p>
+  <p>
+    <label for="description">Active:</label>
+    <input type="checkbox" name="active" value="active" <%= "checked" if @product.active?  %> disabled />
+         </p>
+</div>
+<br/>
+<h3><%= link_to 'Releases',
+    releases_path(:product_id => @product.id),
+    html_options = {
+    :onmouseover => "Tip('View releases for this product')"}
+  %>
+</h3>
+<table cellspacing="0" cellpadding="0" class="cssform" width="25%">
+  <tr>
+    <th>Version</th>
+    <th>Status</th>
+  </tr>
+  <% for release in @product.releases %>
+    <tr>
+      <td><%= link_to h(release.version), release_path(release) %></td>
+      <td><%= h release.release_status.description %></td>
+    </tr>
+  <% end %>
+</table>

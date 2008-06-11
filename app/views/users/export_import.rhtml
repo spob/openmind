@@ -1,0 +1,95 @@
+<%= javascript_include_tag "wz_tooltip.js" %> 
+<div id="actionButtons2">  
+  <%= link_to 'List Users', option = {:action => 'list'}, 
+          html_options = { :class=> "button",
+          :onmouseover => "Tip('Return to List Users')"} %>
+</div>
+<div class="formTitle"><%=theme_image_tag("icons/16x16/user.png", :alt=>"bulk load users")%>User Bulk Load Instructions</div>
+<div class="cssform widerLabel">
+  <% unless @errors.empty? %>
+    <p>No rows were processed because of the following errors:<p/>
+    <ul>
+      <% for error in @errors %>
+        <li><%= error %></li>
+      <% end %>
+    </ul>
+    Correct these errors and reimport the file.
+  <% end %>
+  
+  
+  <% unless @users.empty? %>
+    Users processed:
+    <p/>
+    <ul>
+      <% for user in @users %>
+        <li><%= user.email %></li>
+      <% end %>
+    </ul>
+  <% end %>
+    <% unless @enterprises.empty? %>
+    Enterprises created:
+    <p/>
+    <ul>
+      <% @enterprises.each do |enterprise| %>
+        <li><%= enterprise.name %></li>
+      <% end %>
+    </ul>
+  <% end %>
+    
+  <br/>
+  
+  <div id="show_images" style="<%= pix_button_display_style "SHOW" %>">
+    &nbsp;&nbsp;
+    <%= link_to_remote("Show Images",
+            {:url => { :action => "toggle_pix" }},
+            {:class => "button"} ) %>
+  </div>
+  
+  <div id="hide_images" style="<%= pix_button_display_style "HIDE" %>">
+    &nbsp;&nbsp;
+    <%= link_to_remote("Hide Images",
+            {:url => { :action => "toggle_pix" }},
+            {:class => "button"} ) %>
+  </div>
+  
+  <ol>
+    <li>
+      Export the spreadsheet template. 
+      <%= button_to 'Export', options = { :action => "export" }, 
+              html_options = {:class=> "button", :method => :post }%>
+    </li>
+    <li>
+      Save the file to disk.
+      <div ID="image1" style="<%= pix_display_style %>">
+        <%= theme_image_tag("general/allocations/file_download.png", :border=>0) %>
+      </div>
+    </li>
+    <li>Open the file using a spreadsheet program such as Excel or OpenOffice.
+      <div ID="image2" style="<%= pix_display_style %>">
+        <%= theme_image_tag("general/users/export.png", :border=>0) %>
+      </div>
+      Edit the contents of the file. Each new row will create a new user. 
+      <i>NOTE: be very careful about the values you specify in the enterprise column. 
+        If you enter an enterprise that is not recognized by the system, the bulk load 
+      will result in the creation of a new enterprise. Be sure this is what you intend.</i>
+    </li>
+    <li>
+      Save the file as a CSV file
+    </li>
+    <li>
+      Import the saved file.
+      <% form_for :dump, :url=> {:action => "import"},
+              :html => { :multipart => true } do |f| -%>
+        Select a CSV File: <%= f.file_field :file -%>&nbsp;&nbsp;&nbsp;<%= submit_tag 'Import', html_options = {:class=> "button", :disable_with => "Please wait..."}-%>
+      <% end -%>
+    </li>
+    <li>
+      When you are ready to notify users that their new accounts have been created, 
+      select "Process Imported Users".
+      <%= button_to 'Process Imported Users', option = {:action => 'process_imported'}, 
+            html_options = {:class=> "button", 
+            :onmouseover => "Tip('Process user records that were imported into the users table')",
+            :method => :post } %>
+    </li>
+  </ol>
+</div>

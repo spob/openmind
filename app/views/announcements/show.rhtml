@@ -1,0 +1,8 @@
+<% for column in Announcement.content_columns %>
+<p>
+  <b><%= column.human_name %>:</b> <%=h @announcement.send(column.name) %>
+</p>
+<% end %>
+
+<%= link_to 'Edit', :action => 'edit', :id => @announcement %> |
+<%= link_to 'View Announcements', :action => 'list' %>

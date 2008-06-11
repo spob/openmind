@@ -1,0 +1,56 @@
+<%= calendar_date_select_includes "blue" %>
+<%= error_messages_for 'allocation' %>
+  <%content_for :bodyTag do -%>
+  <%= set_focus_to_id 'allocation_quantity' -%>
+<%end%>
+<% form_for :allocation, :url => allocation_path(@allocation), 
+  :html => {:method => :put } do |form| %>
+  <div id="actionButtons2">
+    <!--
+              <%= link_to 'View Details', allocation_path(@allocation), html_options = {:class=> "button"} %>
+              -->
+    <%= link_to 'List Allocations', allocations_path, html_options = {:class=> "button"} %>  
+  </div>
+  <div class="formTitle"><%= theme_image_tag("icons/16x16/allocations.png", 
+          options = {:alt=>"allocations"}) %>Edit Allocation</div>
+  <div class="cssform widerLabel">
+    <p>
+      <label for="user">Allocated To:</label>
+      <%=h allocated_to(@allocation) %>
+    </p>
+    <p>
+      <label for="allocation type">Allocation Type:</label>
+      <%= h @allocation.class %>
+    </p>
+    <p>
+      <label for="quantity">Quantity:</label>
+      <%= form.text_field :quantity, { :maxlength => 10, :class=> "narrowText" } %>
+    </p>
+    <p>
+      <label for="comments">Comments:</label>
+      <%= form.text_area :comments,  {:cols => 50, :rows => 5 } %>
+    </p>
+    <% user_allocation_area @allocation do %>
+      <p>
+        <label for="user">User:</label>
+        <%=form.collection_select :user_id, User.active_voters, :id, 
+          :email, { :prompt => "Please select..." } %>
+      </p>
+    <% end %>
+    <% enterprise_allocation_area @allocation do %>
+      <p>
+        <label for="user">Enterprise:</label>
+        <%=form.collection_select  :enterprise_id, Enterprise.active_enterprises,
+          :id, :name, { :prompt => "Please select..." }%>
+      </p>
+    <% end %>
+    <p>
+      <label for="expiration_date">Expiration Date:</label>
+      <%= calendar_date_select :allocation, :expiration_date, :popup => :force, :time => false %>
+    </p>
+    <p>
+      <label></label>
+      <%= submit_tag 'Save', options = {:class=> "button", :disable_with => "Please wait..."} %>
+    </p>
+  </div> 
+<% end %>

@@ -1,0 +1,27 @@
+<div id="actionButtons2">
+  <%= link_to 'Edit', edit_lookup_code_path(@lookup_code), html_options = {:class=> "button"}%>
+  <%= link_to 'List Lookup Codes', lookup_codes_path, html_options = {:class=> "button"}%>
+</div>
+<div class="formTitle">
+    <%= theme_image_tag("icons/16x16/lookupCodes.png", 
+      options = {:alt=>"Lookup Code"}) %>
+  Lookup Codes
+</div>
+<div class="cssform">
+  <p>
+    <label align="right">Type:</label>
+    <%= @lookup_code.class %>
+  </p>
+  <p>
+    <label align="right">Short Name:</label>
+    <%= @lookup_code.short_name %>
+  </p>
+  <p>
+    <label align="right">Description:</label>
+    <%= @lookup_code.description %>
+  </p>
+  <p>
+    <label align="right">Sort Value:</label>
+    <%= @lookup_code.sort_value %>
+  </p>
+</div>

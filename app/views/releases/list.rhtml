@@ -1,0 +1,63 @@
+<%content_for :head do -%>
+    <%= theme_stylesheet_link_tag 'tables' %>
+    <%= javascript_include_tag "tablecloth" %>                
+<%end%>
+
+<%= error_messages_for 'release' %>
+<h1>Product Releases</h1>
+<% form_tag('/releases/list', :method => :get, :class => 'cssform widerLabel', :name => 'search' ) do -%>
+<p>
+  <label for="release_status_id">Releases by Status:</label>
+
+    <%= select_tag :release_status_id, 
+      options_from_collection_for_select(
+        @release_statuses, 
+        "id", 
+        "description",
+        session[:release_status_id].to_i),
+      html_options = { :onchange => 'document.search.submit();'} %>
+    <% end %>
+</p>
+        
+<table cellspacing="0" cellpadding="0" class="cssform">
+<tr>
+  <th width="10%">Product</th>
+  <th>Version Number</th>
+  <th>Release Date</th>
+  <th width="80%">Description</th>
+</tr>
+
+<% for release in @releases %>
+  <tr>
+    <td>
+        <% if prodmgr? %>
+          <%= link_to h(release.product.name), product_path(release.product) %>
+        <% else %>
+          <%=h release.product.name %>
+        <% end %>
+    </td>
+    <td>
+      <%= link_to h(release.version), release_path(release) %>
+    </td>
+    <td><%=h nvl(release.user_release_date, '-') %></td>
+    <td>
+        <% if !release.description.nil? and !release.description.blank? %>
+          <b>Description:</b><br/>
+          <%= textilize(release.description).gsub(/<[pP]>/,'<p class="releases">').gsub(/<[uU][lL]>/,'<ul class="releases_desc">') %>
+        <% end %>
+        &nbsp;
+        <% if !release.ideas.empty? %>
+          <b>Scheduled Ideas:</b><br/>
+          <ul class="releases">
+          <% for idea in release.ideas %>
+              <li><%= link_to h(idea.user_friendly_idea_name),
+                  :controller => 'ideas',
+                  :action => 'show', 
+                  :id => idea.id %> </li>
+          <% end %>
+          </ul>
+        <% end %>
+      </td>
+  </tr>
+<% end %>
+</table>

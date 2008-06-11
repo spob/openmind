@@ -1,0 +1,33 @@
+#main-content {
+    background-position: right;
+    background-repeat: repeat-y;
+    margin: 0;
+    border-left: solid 1px #ccc;
+    border-right: solid 1px #ccc;
+    margin: 0px 215px 0px 215px;
+    padding: 10px 20px 5px 20px;
+}
+
+/********* Side Bars ***********/
+#sidebar1 {
+    margin: 0;
+    width: 190px;
+    float: right;
+    padding: 10px;
+}
+
+#sidebar2 {
+    margin: 0;
+    width: 190px;
+    float: left;
+    padding: 10px;
+}
+
+#main-contentShell {
+    margin-top: 1px;
+    background-color: #EFEFEF;
+}
+
+.cssform input[type="text"], .cssform textarea, .cssform select {
+    width: 95%;
+}

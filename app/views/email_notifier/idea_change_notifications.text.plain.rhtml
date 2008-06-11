@@ -1,0 +1,7 @@
+You are watching idea # <%= @idea.id %> ("<%= @idea.title %>")  which was recently updated:
+
+<% for notice in @change_notices %>
+*  <%= notice %>
+<% end %>
+
+Logon <%= @url %>

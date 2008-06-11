@@ -1,0 +1,37 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+<%
+fixtures :users, :ideas,  :allocations
+id = 0;
+%>
+
+first_vote:
+  id: <%= id += 1 %>
+  user_id: <%= users(:allroles, 'id') %>
+  allocation_id: <%= allocations(:user_allocation, 'id') %>
+  idea_id: <%=ideas(:first_idea, 'id') %>
+  created_at: <%=1.days.ago.to_s :db %>
+  updated_at: <%=Time.now.to_s(:db)%>
+
+available_votes_calc_test1:
+  id: <%= id += 1 %>
+  user_id: <%= users(:allocation_calculation_test, 'id') %>
+  allocation_id: <%= allocations(:allocation_calculation_test2, 'id') %>
+  idea_id: <%=ideas(:first_idea, 'id') %>
+  created_at: <%=1.days.ago.to_s :db %>
+  updated_at: <%=Time.now.to_s(:db)%>
+
+available_votes_calc_test2:
+  id: <%= id += 1 %>
+  user_id: <%= users(:allocation_calculation_test, 'id') %>
+  allocation_id: <%= allocations(:allocation_calculation_test2, 'id') %>
+  idea_id: <%=ideas(:new_votes_idea, 'id') %>
+  created_at: <%= 3.hours.ago.to_s :db %>
+  updated_at: <%=Time.now.to_s(:db)%>
+
+available_votes_calc_test3:
+  id: <%= id += 1 %>
+  user_id: <%= users(:allocation_calculation_test, 'id') %>
+  allocation_id: <%= allocations(:allocation_calculation_test4, 'id') %>
+  idea_id: <%=ideas(:first_idea, 'id') %>
+  created_at: <%=1.days.ago.to_s :db %>
+  updated_at: <%=Time.now.to_s(:db)%>

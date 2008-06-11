@@ -1,0 +1,22 @@
+## Seed data for release statuses
+
+planned:
+  code_type: ReleaseStatus
+  short_name: Planned
+  description: Planned
+  sort_value: 10
+  created_at: <%=Time.now.to_s(:db)%>
+
+in_progress:
+  code_type: ReleaseStatus
+  short_name: InProgress
+  description: In Progress
+  sort_value: 20
+  created_at: <%=Time.now.to_s(:db)%>
+
+released:
+  code_type: ReleaseStatus
+  short_name: Released
+  description: Released
+  sort_value: 30
+  created_at: <%=Time.now.to_s(:db)%>

@@ -1,0 +1,30 @@
+*SVN*
+
+*0.1.1* (September 26th, 2007)
+
+* Add documentation
+
+* Move test fixtures out of the test application root directory
+
+* Convert dos newlines to unix newlines
+
+* Provide helpful error messages.  Fixes #22 [Matt Scilipoti]
+
+* Update tests to use the plugin_test_helper plugin
+
+* Add more unit tests
+
+* More gracefully handle problems with fixture references to alert you when something might be awry
+
+*0.1.0* (April 22nd, 2007)
+
+* API change: Assume that the id is wanted by default.  For example,
+  
+  companies(:time_warner) will return the id
+  companies(:time_warner, 'name') will return the name attribute
+
+* Make sure Test::Unit is loaded before loading Fixtures.  Fixes #18
+
+*0.0.1* (April 7th, 2007)
+
+* Initial release

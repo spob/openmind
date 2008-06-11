@@ -1,0 +1,8 @@
+<div id="tabs">
+  <ul class="tabs">
+    <li <%= tab_class("DETAILS")%>><%= link_to_remote "Details", 
+          :url=> {:controller => :ideas, :action=> 'select_details', :id => @idea }%></li>
+    <%= show_toggle_votes_link @idea %>
+    <%= show_toggle_comments_link @idea %>
+  </ul>
+</div>

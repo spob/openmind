@@ -1,0 +1,76 @@
+<%content_for :head do -%>
+  <%= theme_stylesheet_link_tag 'tables' %>
+  <%= javascript_include_tag "tablecloth" %>
+<%end%>
+<%= javascript_include_tag "wz_tooltip.js" %> 
+
+<h1><%=theme_image_tag("icons/32x32/allocations.png", :alt=>"allocations")%>
+    <%= "My " unless params[:by_user].nil? %>
+  Allocations</h1>
+  <% if allocmgr? %>
+  <div id="actionButtons">
+    <% if params[:by_user].nil? %>
+    <%= link_to 'My Allocations', 
+                  allocations_path(:by_user => 'true'), 
+                  html_options = {:class => "button",
+                  :onmouseover => "Tip('View only my allocations or those of my enterprise')"} %>
+    <% end %>
+    <%= link_to 'New Allocation', new_allocation_path, 
+                    html_options = {:class => "button",
+                    :onmouseover => "Tip('Create a new allocation')"} %>
+    <%= link_to 'Bulk Load', export_import_allocations_path, 
+                    html_options = {:class => "button",
+                    :onmouseover => "Tip('Create multiple new allocations')"} %>
+  </div>
+<% end %>
+<table cellspacing="0" cellpadding="0" class="cssform">
+  <tr>
+    <th>Allocated To</th>
+    <th>Allocation Type</th>
+    <th class="center">Quantity</th>
+    <th class="center">Votes Used</th>
+    <th class="center">Votes Left</th>
+    <th>Created</th>
+    <th>Expires</th>
+    <th>Comments</th>
+    <% if allocmgr? %>
+        <th>Action</th>
+    <% end %>
+  </tr>
+  
+  <% for allocation in @allocations %>
+    <tr>
+      <td><%=h allocated_to(allocation) %></td>
+      <td><%=h allocation.class %></td>
+      <td class="center"><%=h allocation.quantity %></td>
+      <td class="center"><%=h allocation.votes.size %></td>
+      <td class="center"><%=h allocation.quantity - allocation.votes.size %></td>
+      <td><%=om_date_time(allocation.created_at) %></td>
+      <td><%=format_date(allocation.expiration_date) %></td>
+      <td><%=h nvl(allocation.comments, '-') %></td>
+      <% if allocmgr? %>
+        <td style="white-space:nowrap;">
+          <!--
+            <%= link_to theme_image_tag("icons/16x16/viewAction.png", :alt=>"view", :title=> "view"),
+            allocation_path(allocation), 
+            html_options = {
+            :onmouseover => "Tip('View details for this allocation')"} 
+            %>
+            -->
+            <%= link_to theme_image_tag("icons/16x16/editAction.png", :alt=>"edit", :title=> "edit"), 
+            edit_allocation_path(allocation),
+            html_options = {
+            :onmouseover => "Tip('Edit this allocation')"}
+            %>
+
+            <%= link_to(
+            theme_image_tag("icons/16x16/deleteAction.png", :alt=>"delete", :title=> "delete"),
+            allocation_path(allocation),
+            html_options = {:confirm => 'Are you sure?', :method => :delete,
+            :onmouseover => "Tip('Delete this allocation')"} ) if allocation.can_delete? %>
+        </td>
+      <% end %>
+    </tr>
+  <% end %>
+</table>
+<p><%= will_paginate @allocations %></p>

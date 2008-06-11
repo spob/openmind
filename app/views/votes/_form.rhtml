@@ -1,0 +1,14 @@
+<%= error_messages_for 'vote' %>
+
+<!--[form:vote]-->
+
+<p><label for="vote_created_at">Created at</label><br/>
+<%= datetime_select 'vote', 'created_at'  %></p>
+
+<p><label for="vote_updated_at">Updated at</label><br/>
+<%= datetime_select 'vote', 'updated_at'  %></p>
+
+<p><label for="vote_lock_version">Lock version</label><br/>
+<%= text_field 'vote', 'lock_version'  %></p>
+<!--[eoform:vote]-->
+

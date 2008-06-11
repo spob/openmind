@@ -1,0 +1,39 @@
+<%content_for :bodyTag do -%>
+  <%= set_focus_to_id 'idea_title' -%>
+<%end%>
+<%= error_messages_for 'idea' %>
+<% form_for :idea, :html => {:id => "new-idea"}, :url => { :action => "create" } do |form| %>
+  <div id="actionButtons2">
+    <%= link_to 'List Ideas', options = {:action => 'list'}, 
+      html_options = { :class=> "button" } %>
+  </div>
+  <div class="formTitle">New Idea</div>
+  <div class="cssform widerLabel">
+    <p>
+      <label for="title">Title:</label>
+      <%= form.text_field :title, { :size => 60, :maxlength => 100 } %>
+    </p>
+    <p>
+      <label for="description:"> Description:</label>
+      <%= form.text_area :description,  {:cols => 70, :rows => 8 } %>
+      (supports <a href="http://hobix.com/textile/" target="_blank">textile</a> tags)
+    </p>
+    <p>
+      <label for="product">Product:</label>
+      <%=form.collection_select :product_id, Product.all_active_products, :id, :name,
+        options = { :prompt => true} %>    
+    </p>
+    <p>
+      <label></label>
+      <%= submit_tag 'Create', options = {:class=> "button", :disable_with => "Please wait..."} %>
+    </p>
+  </div>  
+<% end %>
+
+<%= observe_form "new-idea",
+  :frequency => 1,
+  :update => "live-preview",
+  :complete => "Element.show('live-preview')",
+  :url => { :action => "preview" } %>
+
+<div id="live-preview" style="display: none, border => 1px solid"></div>

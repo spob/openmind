@@ -1,0 +1,8 @@
+<% for column in Vote.content_columns %>
+<p>
+  <b><%= column.human_name %>:</b> <%=h @vote.send(column.name) %>
+</p>
+<% end %>
+
+<%= link_to 'Edit', :action => 'edit', :id => @vote %> |
+<%= link_to 'View Votes', :action => 'list' %>

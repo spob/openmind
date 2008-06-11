@@ -1,0 +1,61 @@
+<%content_for :bodyTag do -%>
+  <%= set_focus_to_id 'user_email' %>
+<%end%>
+
+<%= error_messages_for 'user' %>
+<% form_for :user, :url => { :action => "create" } do |form| %>
+  <div class="formTitle">
+    <%= theme_image_tag("icons/16x16/userEdit.png", 
+      options = {:alt=>"Create User"}) %>
+      Create User</div>
+    <div class="cssform widerLabel">
+    <p>
+      <label for="user_email">Email:</label>
+      <%= form.text_field :email, { } %>
+    </p>
+    <p>
+      <label for="user_email">First Name:</label>
+      <%= form.text_field :first_name, { } %>
+    </p>
+    <p>
+      <label for="user_email">Last Name:</label><%= form.text_field :last_name, { } %>
+    </p>
+    <p>
+      <label for="enterprise_id">Enterprise:</label>
+      <%= form.collection_select :enterprise_id, @enterprises, :id, :name,
+      options = { :prompt => true} %>
+    </p>
+    <p>
+      <label for="time_zone">User Time Zone:</label>
+      <%= form.time_zone_select :time_zone %>
+    </p>
+    <p>
+      <label for="row_limit">Rows to Display:</label>
+      <%= form.select :row_limit, User.row_limit_options %>
+    </p>
+    <p>
+      <label for="hide_contact_info">Hide Contact Info:</label>
+      <%= form.check_box(:hide_contact_info, {}, '1', '0') %>
+    </p>
+    <p>
+      <label>Roles:</label>
+      <% for role in Role.list %>
+        <span style="display:block;margin-left:10px;">
+          <%= check_box_tag "user[role_ids][]", role.id, role.default_role -%>
+          <%= h role.description -%>
+        </span>
+      <% end %>
+    </p>
+    <% if !CustomField.users_custom_boolean1.nil? %>
+    <p>
+      <label for="custom_boolean1"><%= CustomField.users_custom_boolean1 %>:</label>
+      <%= form.check_box(:custom_boolean1, {}, '1', '0') %>
+    </p>
+    <% end %>
+    <p>
+      <label></label>
+      <%= submit_tag 'Create', html_options = {:class=> "button", :disable_with => "Please wait..."} %>
+      <%= link_to 'List Users', options = {:action => 'list'}, html_options = {:class=> "button"}%> 
+    </p>
+  </div>
+<% end %>

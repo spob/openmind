@@ -1,0 +1,11 @@
+Dear <%= @user.full_name %>,
+
+Your password has been reset. You will need to reactivate your account before you can use it.
+  
+  Username:        <%= @user.login %>
+  Password:        <%= @user.password %>
+  Activation Code: <%= @user.activation_code %>
+  
+Visit this url to activate your account:
+
+  <%= @url %>

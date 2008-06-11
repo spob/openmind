@@ -1,0 +1,49 @@
+<%content_for :head do -%>
+  <%= theme_stylesheet_link_tag 'tables' %>
+  <%= javascript_include_tag "tablecloth" %>
+  <%= auto_discovery_link_tag(:rss, url_options = {:action=>'rss'}, tag_options = {:title=>'OpenMind: Announcements'})%>
+<%end%>
+<%= javascript_include_tag "wz_tooltip.js" %> 
+
+<h1><%= theme_image_tag("icons/32x32/announcements1.png", 
+          options = {:alt=>"Announcements"}) %>Announcements</h1>
+<% admin_area do %>
+  <div id="actionButtons">
+    <%= link_to 'New Announcement', new_announcement_path, html_options = {:class=> "button",
+      :onmouseover => "Tip('Create a new announcement')"} %>
+      &nbsp;&nbsp;&nbsp;
+      <% tiptxt= "Subscribe to be notified of new announcements" %>
+      <a href="<%= rss_announcements_path %>" onmouseover="Tip('<%= tiptxt %>')"><%= theme_image_tag("icons/14x14/feed-icon-14x14.png", :border=>0) %></a>
+      <span style="font-size:0.75em;" onmouseover="Tip('<%= tiptxt %>')">Subscribe via RSS</span>
+      <div style="clear: left"></div>
+    </div>
+  <table cellspacing="0" cellpadding="0" class="cssform">
+    <tr>
+      <th>Date</th>
+      <th>Announcement</th>
+      <th>Action</th>
+    </tr>
+  
+    <% for announcement in @announcements %>
+      <tr>
+        <td><%=  om_date_time announcement.created_at %></td>
+        <td><a href="#<%= announcement.id %>"><%=  h announcement.headline %></a></td>    
+        <td>
+          <%= link_to theme_image_tag("icons/16x16/editAction.png", 
+            options = {:alt=>"edit", :title=> "edit", :onmouseover => "Tip('Edit this Announcement')"}), 
+            edit_announcement_path(announcement) %>
+      
+          <%= link_to theme_image_tag("icons/16x16/deleteAction.png", 
+            options = {:alt=>"delete", :title=> "delete", :onmouseover => "Tip('Delete this announcement')"}), 
+            announcement_path(announcement), 
+            :confirm => 'Are you sure you want to delete this announcement?', 
+            :method => :delete if announcement.can_delete? %>
+        </td>
+      </tr>
+    <% end %>
+  </table>
+  <br />
+  <%= will_paginate @announcements %>
+  <hr/>
+<% end %>
+  <%=render(:partial => "announcements/announcement_item", :collection => @announcements)%>

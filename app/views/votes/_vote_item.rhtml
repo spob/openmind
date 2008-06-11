@@ -1,0 +1,3 @@
+<li><%= "#{user_display_name vote_item.user}" %> voted on <%=om_date_time vote_item.created_at%>
+  <%= ": #{vote_item.comments}" unless vote_item.comments.nil? %>
+</li>

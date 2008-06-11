@@ -1,0 +1,34 @@
+<%content_for :bodyTag do -%>
+  <%= set_focus_to_id 'announcement_headline' -%>
+<%end%>
+<%= error_messages_for 'announcement' %>
+<% form_for(@announcement) do |form| %>
+  <div id="actionButtons2">
+      <%= link_to 'List Announcements', announcements_path, html_options = {:class=> "button"} %>  
+  </div>
+  <div class="formTitle"><%= theme_image_tag("icons/16x16/announcements1.png", 
+          options = {:alt=>"Announcements"}) %>Edit Announcement</div>
+        <div class="cssform widerLabel">
+    <p>
+      <label for="headline">Headline:</label>
+      <%= form.text_field :headline, { :size => 50, :maxlength => 80 } %>
+    </p>
+    <p>
+      <label for="headline">Description:</label>
+      <%= form.text_area :description,  {:cols => 50, :rows => 10 } %>
+      (supports <a href="http://hobix.com/textile/" target="_blank">textile</a> tags)
+    </p>
+    <p>
+      <label></label>
+      <%= submit_tag 'Save', html_options = {:class=> "button", :disable_with => "Please wait..."} %>  
+    </p>
+  </div>
+<% end %>
+
+<%= observe_form "announcement_description", # preview is disabled...doesn't work with multiple html parameters in form
+:frequency => 1,
+  :update => "live-preview",
+  :complete => "Element.show('live-preview')",
+  :url => preview_announcements_path %>
+
+<div id="live-preview" style="display: none, border => 1px solid"></div>

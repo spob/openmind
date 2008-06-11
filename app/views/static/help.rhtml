@@ -1,0 +1,102 @@
+<% cache 'help' do %>
+  <h4>What is OpenMind?</h4>
+  <p>OpenMind allows product companies to solicit feedback and input from 
+  users of their product. </p>
+  <br/>
+
+  <p>Using the OpenMind application, user can:</p>
+  <ul>
+    <li>Create ideas that represents features they would like to see in the product</li>
+    <li>View ideas that other users have created, and vote for those ideas which 
+    they would like to see added to the product</li>
+    <li>Engage in online discussions with other users</li>
+    <li>Mark ideas of interest to be watched</li>
+  </ul>
+  <br/>
+
+  <p>Using the OpenMind application, product managers can:</p>
+  <ul>
+    <li>See concrete information about which features users value most</li>
+    <li>Move features to scheduled releases on the product roadmap</li>
+    <li>Communicate roadmap decisions to the user community</li>
+  </ul>
+  <br/>
+
+  <h4>What is an enterprise?</h4>
+  <p>An enterprise is a company. Every user is associated to an enterprise.</p>
+  <br/>
+
+  <h4>What is an allocation?</h4>
+  <p>Allocations authorize users to vote for the features they value most. 
+    For example, an allocation with a quantity of 5 allows a user to cast 5 votes. 
+  A user can vote multiple times for the same idea, or can spread their votes across multiple ideas.</p>
+  <br/>
+
+  <h4>What is a user allocation? What is an enterprise allocation?</h4>
+  <p>An allocation can be assigned to an enterprise or to an individual named user. 
+    A user allocation can only be used by the user to whom the allocation is assigned. 
+    An enterprise allocation can be used by any user belonging to the enterprise to 
+    which the allocation is assigned. A user may have both user allocations and 
+    enterprise allocations available simultaneously, in which case user allocations 
+  will be consumed before any enterprise allocations.</p>
+  <br/>
+
+  <h4>Do allocations expire?</h4>
+  <p>Yes. You are encouraged to use them before you lose them.</p>
+  <br/>
+
+  <h4>What does it mean to watch an idea?</h4>
+  <p>Users can keep abreast of those ideas in which they are interested by marking 
+    such ideas as “watched”. If you are watching an idea that is updated or for
+    which a comment is added, you will receive an email notification informing you
+    of that event. Additionally, users can filter the 
+    <i>"<a href="/ideas">List Ideas</a>"</i> page to show 
+  only watched ideas.</p>
+  <br/>
+
+  <h4>What is a merged idea?</h4>
+  <p>If two ideas represent the same feature request, a product manager may merge 
+    one idea into the other. Once an idea has been merged, users can no longer vote for that idea. 
+    Any votes that were originally associated with the idea will be reassigned to 
+  the idea into which it was merged.</p>
+  <br/>
+
+  <h4>Can a user edit an idea after creating it?</h4>
+  <p>A user can edit idea up until the time that idea has received votes.</p>
+  <br/>
+
+  <h4>I voted for an idea by mistake. Can I take back my vote?</h4>
+  <p>A user can rescind a vote within 
+    <% now = Time.now %>
+    <%= distance_of_time_in_words now, now + Vote.rescind_seconds.seconds, false %> 
+    of placing the vote. 
+    After <%= distance_of_time_in_words now, now + Vote.rescind_seconds.seconds, false %>,
+    your vote is permanent. To rescind you vote, click the "Rescind Vote" button icon in 
+  either the <i>"<a href="/ideas">List Ideas</a>"</i> or <i>"Show Idea"</i> screen.</p>
+  <br/>
+
+  <h4>Will the idea with the most votes automatically be associated into the product?</h4>
+  <p>No. OpenMind provides product managers with accurate data about which ideas are 
+    valued most by their users. Product managers determine which ideas will be 
+  incorporated into the product based upon their own policies and procedures.</p>
+  <br/>
+
+  <h4>How do users know if their ideas have been selected for conclusion into the product?</h4>
+  <p>Ideas can be associated to a product release by the product manager, 
+    indicating that the idea has been selected for inclusion in that product release. 
+  Users can see if their ideas have been scheduled for a release in the <i>“Show Idea Details”</i> page.</p>
+  <br/>
+
+  <h4>Can I be notified when new ideas are entered?</h4>
+  <p>OpenMind provides an RSS feed which allows you to receive notifications when new ideas are
+    entered. The <i>"<a href="/ideas">List Ideas</a>"</i> screen provides link to the RSS feed in 
+    the lower right hand corner of the screen. Depending on your browser, clicking on the link may
+    cause the RSS feed to be rendered by your browser's built-in RSS read capability. Alternatively,
+  you can right click and copy the link, and enter it into the RSS reader of your choice.</p>
+  <br/>
+
+  <h4>Can I edit a comment on an idea after I've entered it?</h4>
+  <p>Yes, if you're a product manager or system administrator, or you're the author of the
+  comment and the comment you wish to edit was the last comment entered for that idea.</p>
+  <br/>
+<% end %>

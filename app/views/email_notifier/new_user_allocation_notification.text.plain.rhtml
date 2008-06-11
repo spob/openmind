@@ -1,0 +1,7 @@
+Congratulations! You've just received a new allocation in OpenMind for <%= @allocation.quantity %>. This allows you to vote up to <%= pluralize(@allocation.quantity, 'time') %> for features and enhancements you'd like to see added to the products you use. This allocation expires on <%= @expiration_date %>.
+
+<% if !@allocation.comments.nil? && @allocation.comments.empty? -%>
+Allocation Comments: <%= @allocation.comments %>
+<% end -%>
+
+Logon at <%= @url %>

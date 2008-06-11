@@ -1,0 +1,61 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+<%
+fixtures :users, :releases, :products, :votes
+id = 0;
+%>
+
+first_idea:
+  id: <%= id += 1 %>
+  user_id: <%= users(:allroles, 'id') %>
+  product_id: <%= products(:producta, 'id') %>
+  release_id: <%=releases(:controller_test, 'id') %>
+  title: test idea 1
+  description: test description 1
+  created_at: <%=1.days.ago.to_s :db %>
+  updated_at: <%=Time.now.to_s(:db)%>
+
+available_votes_calc_test1:
+  id: <%= id += 1 %>
+  user_id: <%= users(:allocation_calculation_test, 'id') %>
+  product_id: <%= products(:available_votes_calc_test1, 'id') %>
+  title: test idea 2
+  description: test description 1
+  created_at: <%=1.days.ago.to_s :db %>
+  updated_at: <%=Time.now.to_s(:db)%>
+
+available_votes_calc_test2:
+  id: <%= id += 1 %>
+  user_id: <%= users(:allocation_calculation_test, 'id') %>
+  product_id: <%= products(:available_votes_calc_test1, 'id') %>
+  title: test idea 3
+  description: test description 1
+  created_at: <%=1.days.ago.to_s :db %>
+  updated_at: <%=Time.now.to_s(:db)%>
+
+no_votes_idea:
+  id: <%= id += 1 %>
+  user_id: <%= users(:allroles, 'id') %>
+  product_id: <%= products(:producta, 'id') %>
+  release_id: <%=releases(:controller_test, 'id') %>
+  title: idea with no votes
+  description: a bigger idea with no votes
+  created_at: <%=1.days.ago.to_s :db %>
+  updated_at: <%=Time.now.to_s(:db)%>
+
+new_votes_idea:
+  id: <%= id += 1 %>
+  user_id: <%= users(:allroles, 'id') %>
+  product_id: <%= products(:producta, 'id') %>
+  title: idea with recent votes
+  description: a bigger idea with recent votes
+  created_at: <%=3.hours.ago.to_s :db %>
+  updated_at: <%=Time.now.to_s(:db)%>
+
+no_comments_idea:
+  id: <%= id += 1 %>
+  user_id: <%= users(:allroles, 'id') %>
+  product_id: <%= products(:producta, 'id') %>
+  title: idea with no comments
+  description: blah blah
+  created_at: <%=3.hours.ago.to_s :db %>
+  updated_at: <%=Time.now.to_s(:db)%>

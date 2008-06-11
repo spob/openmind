@@ -1,0 +1,40 @@
+<%content_for :head do -%>
+  <%= theme_stylesheet_link_tag 'tables' %>
+  <%= theme_stylesheet_link_tag 'forms' %>
+  <%= theme_stylesheet_link_tag 'ideas' %>
+  <%= theme_stylesheet_link_tag 'sideBarRight' %>
+  <%= theme_stylesheet_link_tag 'filtermenu' %>
+
+  <% if !@ideas.empty? %>
+  <%= javascript_include_tag "tablecloth" %>  
+  <% end %>
+  <%= auto_discovery_link_tag(:rss, url_options = {:action=>'rss'}, tag_options = {:title=>'OpenMind: Ideas'})%>
+<%end%>
+<%= javascript_include_tag "wz_tooltip.js" %> 
+<%= error_messages_for 'idea' %>
+
+<%content_for :sidebar1 do -%>
+  <%=render(:partial => "sidebar1", :object => @current_user)%>
+  <%end%>  
+  
+  <%content_for :ieOnlyCss do -%>
+      <%= theme_stylesheet_link_tag 'ideas_ie6' %>
+  <%end%>    
+
+  <div id="actionButtons">
+    <% if can_create_idea? %>
+      <%= button_to 'Create Idea', option = {:action => 'new'}, 
+      html_options = {:class=> "button", 
+      :onmouseover => "Tip('Create a new idea')"} %>
+    <% end %>
+</div>
+<h1><%= theme_image_tag("icons/32x32/ideas.png", 
+      options = {:alt=>"Ideas"}) %>Ideas</h1>
+<%=render(:partial => "search_box")%>
+
+<div id="filterContainer">
+  <%=render(:partial => "filter_tabs")%>
+  <%=render(:partial => "ideas_table")%>
+  <div style="clear: both;"></div>
+</div>
+<br style="clear: left" />

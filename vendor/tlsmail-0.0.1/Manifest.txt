@@ -1,0 +1,10 @@
+Rakefile
+README.txt
+CHANGELOG.txt
+Manifest.txt
+lib/tlsmail.rb
+lib/net/pop.rb
+lib/net/smtp.rb
+test/test_helper.rb
+test/tlsmail_test.rb
+test/template.parameters.rb

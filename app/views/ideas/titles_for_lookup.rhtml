@@ -1,0 +1,5 @@
+var titles = new Array(<%= @titles.size %>)
+
+<% @titles.each_with_index do |idea, index| %>
+  titles[<%= index %>] = "<%= idea.title %>";
+<% end %>

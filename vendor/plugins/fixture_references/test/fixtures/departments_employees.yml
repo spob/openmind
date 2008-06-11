@@ -1,0 +1,24 @@
+<%
+fixtures :departments, :employees
+
+{
+  :packaging         => [:will, :kevin],
+  :quality_assurance => [:ryan, :will],
+  :marketing         => [:kevin, :ryan]
+}.each do |department, employees|
+%>
+<%= department %>_manager:
+  department_id: <%= departments(department) %>
+  employee_id: <%= departments(department, 'manager_id') %>
+
+<%
+  employees.each do |employee|
+%>
+
+<%= department %>_<%= employee %>:
+  department_id: <%= departments(department) %>
+  employee_id: <%= employees(employee) %>
+<%
+  end
+end
+%>

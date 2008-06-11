@@ -1,0 +1,28 @@
+<%
+fixtures :users, :ideas
+id = 0;
+%>
+
+first_comment:
+  id: <%= id += 1 %>
+  user_id: <%= users(:quentin, 'id') %>
+  idea_id: <%= ideas(:first_idea, 'id') %>
+  body: first comment for first idea
+  created_at: <%=1.days.ago.to_s :db %>
+  updated_at: <%=Time.now.to_s(:db)%>
+
+second_comment:
+  id: <%= id += 1 %>
+  user_id: <%= users(:aaron, 'id') %>
+  idea_id: <%= ideas(:first_idea, 'id') %>
+  body: second comment for first idea
+  created_at: <%=1.days.ago.to_s :db %>
+  updated_at: <%=Time.now.to_s(:db)%>
+
+third_comment:
+  id: <%= id += 1 %>
+  user_id: <%= users(:prodmgr, 'id') %>
+  idea_id: <%= ideas(:no_votes_idea, 'id') %>
+  body: third comment for no votes idea
+  created_at: <%=1.days.ago.to_s :db %>
+  updated_at: <%=Time.now.to_s(:db)%>

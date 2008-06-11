@@ -1,0 +1,65 @@
+<%content_for :head do -%>
+  <%= theme_stylesheet_link_tag 'tables' %>
+  <%= javascript_include_tag "tablecloth" %>
+<%end%>
+<%= javascript_include_tag "wz_tooltip.js" %> 
+<h1><%=theme_image_tag("icons/32x32/users.png", :alt=>"users")%>Users</h1>
+<div id="actionButtons">
+  <% restrict_to "sysadmin" do %>
+    <%= button_to 'Create User', option = {:action => 'new'}, 
+      html_options = {:class=> "button", 
+      :onmouseover => "Tip('Create a new user')"} %>
+    <%= button_to 'Bulk Load', option = {:action => 'export_import'}, 
+      html_options = {:class=> "button", 
+      :onmouseover => "Tip('Bulk load users into the users table')",
+      :method => :get } %>
+    <%= button_to 'User Logons', 
+      option = {:controller => 'user_logons', :action => 'index'}, 
+      html_options = {:class=> "button", 
+      :onmouseover => "Tip('View logons in the last 90 days')",
+      :method => :get } %>
+    <% end %>
+</div>
+<table cellspacing="0" cellpadding="0" class="cssform">
+  <tr>
+    <th>Email</th>
+    <th>Name</th>
+    <th class="center">Available Enterprise Votes</th>
+    <th class="center">Available User Votes</th>
+    <th>Enterprise</th>
+    <th>Active</th>
+    <th>Last Logon</th>
+    <th>Action</th>
+  </tr>
+  
+  <% for user in @users %>
+    <tr>
+      <td><%= h user.email %></td>
+      <td><%= h user.full_name %></td>
+      <td class="center"><%= h user.available_enterprise_votes %></td>
+      <td class="center"><%= h user.available_user_votes %></td>
+      <td><%= h user.enterprise.name %></td>
+      <td class="center"><input type="checkbox" name="active" value="active" <%= "checked" if user.active?  %> disabled ></td>
+      <td><%= h nvl(om_date_time(user.last_logon_date), "-") %></td>
+      <td class="nowrap">
+        <%= link_to theme_image_tag("icons/16x16/viewAction.png", 
+          options = {:alt=>"view", :title=> "view", :onmouseover => "Tip('View details of this user')"}), 
+          options = { :action => 'show', :id => user  } %>
+      
+        <% restrict_to "sysadmin" do %>
+          <%= link_to theme_image_tag("icons/16x16/editAction.png", 
+            options = {:alt=>"edit", :title=> "edit", :onmouseover => "Tip('Edit this user')"}), 
+            options = { :action => 'edit', :id => user  } %>
+      
+          <%= link_to(theme_image_tag("icons/16x16/deleteAction.png", 
+              options = {:alt=>"delete", :title=> "delete", :onmouseover => "Tip('Delete this user')"}),  
+            options = {:action => 'destroy', :id => user}, 
+            html_options = {:method => :post , :confirm => 'Are you sure?'}) if user.can_delete? %>
+        <% end %>
+      </td>
+    </tr>
+  <% end %>
+</table>
+<%= will_paginate @users %>
+<% restrict_to "sysadmin" do %>
+<% end %>

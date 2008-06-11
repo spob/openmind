@@ -1,0 +1,15 @@
+<% if @releases %>
+ <select id="idea_release_id" name="idea[release_id]">
+   <% for release in @releases do -%>
+        <option value="<%=release[1] %>" >
+          <%= release[0].to_s%>
+        </option>
+      <% end -%>
+    </select>  
+<% end %>
+
+<%## Old code attempts  %>
+<%#*<select id="release_id" name="release[id]">%>
+<%#=options_from_collection_for_select(@releases, "id", "version")%>
+<%#*</select>%>
+<%# select(:release_id, "id", @releases) %>

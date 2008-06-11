@@ -1,0 +1,26 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+dummy_role:
+  id: 1
+  title: dummy
+  description: dummy role
+  created_at: <%=Time.now.to_s(:db)%>
+sysadmin:
+  id: 2
+  title: sysadmin
+  description: sysadmin role
+  created_at: <%=Time.now.to_s(:db)%>
+prodmgr:
+  id: 3
+  title: prodmgr
+  description: prodmgr role
+  created_at: <%=Time.now.to_s(:db)%>
+voter:
+  id: 4
+  title: voter
+  description: voter role
+  created_at: <%=Time.now.to_s(:db)%>
+allocmgr:
+  id: 5
+  title: allocmgr
+  description: allocations manager role
+  created_at: <%=Time.now.to_s(:db)%>

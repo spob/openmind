@@ -1,0 +1,19 @@
+<%
+fixtures :employees
+id = 0
+%>
+
+packaging:
+  id: <%= id += 1 %>
+  name: Packaging
+  manager_id: <%= employees(:bob) %>
+  
+quality_assurance:
+  id: <%= id += 1 %>
+  name: Quality Assurance
+  manager_id: <%= employees(:joe) %>
+  
+marketing:
+  id: <%= id += 1 %>
+  name: Marketing
+  manager_id: <%= employees(:jane) %>

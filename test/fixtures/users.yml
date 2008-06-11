@@ -1,0 +1,163 @@
+<% SALT = 'NaCl' unless defined?(SALT)
+
+fixtures :enterprises
+
+enterprise_id = enterprises(:active_enterprise, 'id')
+alloc_enterprise_id = enterprises(:allocation_calculation_test, 'id')
+
+id = 0;
+%>
+
+quentin:
+  id: <%= id += 1 %>
+  email: quentin@example.com
+  salt: <%= SALT %>
+  crypted_password: <%= (User.encrypt 'secret', SALT) %>
+  #crypted_password: "ce2/iFrNtQ8=\n" # quentin, use only if you're using 2-way encryption
+  created_at: <%= 5.days.ago.to_s :db %>
+  # activated_at: <%= 5.days.ago.to_s :db %> # only if you're activating new signups
+  enterprise_id: <%= enterprise_id %>
+  first_name: Quentin
+  last_name: Smith
+  force_change_password: 0
+  activated_at: <%= 5.days.ago.to_s :db %>
+
+aaron:
+  id: <%= id += 1 %>
+  email: aaron@example.com
+  salt: <%= SALT %>
+  crypted_password: <%= (User.encrypt 'secret', SALT) %>
+  # activation_code: aaronscode # only if you're activating new signups
+  created_at: <%= 1.days.ago.to_s :db %>
+  active: true
+  enterprise_id: <%= enterprise_id %>
+  first_name: 
+  last_name: Aaron
+  force_change_password: 0
+  activated_at: 
+  activation_code: blahblah
+
+prodmgr:
+  id: <%= id += 1 %>
+  email: prodmgr@example.com
+  salt: <%= SALT %>
+  crypted_password: <%= (User.encrypt 'secret', SALT) %>
+  # activation_code: aaronscode # only if you're activating new signups
+  created_at: <%= 1.days.ago.to_s :db %>
+  active: true
+  enterprise_id: <%= enterprise_id %>
+  first_name: Jim
+  last_name: ProdMgr
+  force_change_password: 0
+  activated_at: <%= 5.days.ago.to_s :db %>
+
+allroles:
+  id: <%= id += 1 %>
+  email: all@example.com
+  salt: <%= SALT %>
+  crypted_password: <%= (User.encrypt 'secret', SALT) %>
+  # activation_code: aaronscode # only if you're activating new signups
+  created_at: <%= 1.days.ago.to_s :db %>
+  active: true
+  enterprise_id: <%= enterprise_id %>
+  first_name: Bob
+  last_name: AllRoles
+  force_change_password: 0
+  activated_at: <%= 5.days.ago.to_s :db %>
+
+active_user_inactive_enterprise:
+  id: <%= id += 1 %>
+  email: active@example.com
+  salt: <%= SALT %>
+  crypted_password: <%= (User.encrypt 'secret', SALT) %>
+  # activation_code: aaronscode # only if you're activating new signups
+  created_at: <%= 1.days.ago.to_s :db %>
+  active: true
+  enterprise_id: <%= enterprises(:inactive_enterprise, 'id') %>
+  first_name: Alex
+  last_name: Jones
+  force_change_password: 0
+  activated_at: <%= 5.days.ago.to_s :db %>
+
+inactive_user:
+  id: <%= id += 1 %>
+  email: inactive@example.com
+  salt: <%= SALT %>
+  crypted_password: <%= (User.encrypt 'secret', SALT) %>
+  # activation_code: aaronscode # only if you're activating new signups
+  created_at: <%= 1.days.ago.to_s :db %>
+  active: false
+  enterprise_id: <%= enterprise_id %>
+  first_name: Mike
+  last_name: Donothing
+  force_change_password: 0
+  activated_at: <%= 5.days.ago.to_s :db %>
+
+user_no_roles:
+  id: <%= id += 1 %>
+  email: noroles@example.com
+  salt: <%= SALT %>
+  crypted_password: <%= (User.encrypt 'secret', SALT) %>
+  # activation_code: aaronscode # only if you're activating new signups
+  created_at: <%= 1.days.ago.to_s :db %>
+  active: true
+  enterprise_id: <%= enterprise_id %>
+  first_name: Sarah
+  last_name: NoRoles
+  force_change_password: 0
+  activated_at: <%= 5.days.ago.to_s :db %>
+
+allocation_calculation_test:
+  id: <%= id += 1 %>
+  email: calctest@example.com
+  salt: <%= SALT %>
+  crypted_password: <%= (User.encrypt 'secret', SALT) %>
+  # activation_code: aaronscode # only if you're activating new signups
+  created_at: <%= 1.days.ago.to_s :db %>
+  active: true
+  enterprise_id: <%= alloc_enterprise_id %>
+  first_name: Jill
+  last_name: Test
+  force_change_password: 0
+  activated_at: <%= 5.days.ago.to_s :db %>
+
+force_change_pw:
+  id: <%= id += 1 %>
+  email: change_pw@example.com
+  salt: <%= SALT %>
+  crypted_password: <%= (User.encrypt 'secret', SALT) %>
+  # activation_code: aaronscode # only if you're activating new signups
+  created_at: <%= 1.days.ago.to_s :db %>
+  active: true
+  enterprise_id: <%= alloc_enterprise_id %>
+  first_name: Jill
+  last_name: Test
+  force_change_password: 1
+  activated_at: <%= 5.days.ago.to_s :db %>
+
+imported_user:
+  id: <%= id += 1 %>
+  email: imported@example.com
+  salt: <%= SALT %>
+  crypted_password: <%= (User.encrypt 'secret', SALT) %>
+  # activation_code: aaronscode # only if you're activating new signups
+  created_at: <%= 1.days.ago.to_s :db %>
+  active: true
+  enterprise_id: <%= alloc_enterprise_id %>
+  first_name: Jill
+  last_name: Test
+  force_change_password: 1
+
+
+alloc_expiring_user:
+  id: <%= id += 1 %>
+  email: alloc_expiring_user@example.com
+  salt: <%= SALT %>
+  crypted_password: <%= (User.encrypt 'secret', SALT) %>
+  # activation_code: aaronscode # only if you're activating new signups
+  created_at: <%= 1.days.ago.to_s :db %>
+  active: true
+  enterprise_id: <%= alloc_enterprise_id %>
+  first_name: Jill
+  last_name: Test
+  force_change_password: 1

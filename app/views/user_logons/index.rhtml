@@ -1,0 +1,22 @@
+<%content_for :head do -%>
+  <%= theme_stylesheet_link_tag 'tables' %>
+  <%= javascript_include_tag "tablecloth" %>
+<%end%>
+<%= error_messages_for 'user_logon' %>
+<h1><%= theme_image_tag("icons/32x32/users.png", 
+      options = {:alt=>"Logons"}) %>Logons in the Last 90 Days
+    </h1>
+    <table cellspacing="0" cellpadding="0" class="cssform">
+  <tr>
+    <th>Logon Date</th>
+    <th>User</th>
+  </tr>
+  
+  <% for user_logon in @user_logons %>
+    <tr>
+      <td><%= om_date_time user_logon.created_at %></td>
+      <td><%= h user_display_name(user_logon.user) %></td>
+    </tr>
+  <% end %>
+</table>
+<p><%= will_paginate @user_logons %></p>

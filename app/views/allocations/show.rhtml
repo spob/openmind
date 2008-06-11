@@ -1,0 +1,34 @@
+<div class="formTitle"><%= theme_image_tag("icons/16x16/allocations.png", 
+          options = {:alt=>"allocations"}) %>Allocation Detail</div>
+<div class="cssform widerLabel">
+  <p>
+    <label for="user">Name:</label>
+    <%=h allocated_to(@allocation) %>
+  </p>
+  <p>
+    <label for="allocation type">Assign Allocation Type:</label>
+    <%= h @allocation.class %>
+  </p>
+  <p>
+    <label for="quantity">Quantity:</label>
+    <%= h @allocation.quantity %>
+  </p>
+  <p>
+    <label for="quantity">Votes Used:</label>
+    <%= h @allocation.votes.size %>
+  </p>
+  <p>
+    <label for="expiration_date">Expiration Date:</label>
+    <%= h format_date(@allocation.expiration_date) %>
+  </p>
+  <p>
+    <label for="comments">Comments:</label>
+    <%= h @allocation.comments %>
+  </p>
+  <p>
+    <label></label>
+    <%= link_to 'Edit', edit_allocation_path(@allocation), 
+      html_options = {:class=> "button"} %>
+    <%= link_to 'List Allocations', allocations_path , html_options = {:class=> "button"}%>
+  </p>
+</div>

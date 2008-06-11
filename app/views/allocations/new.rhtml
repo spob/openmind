@@ -1,0 +1,65 @@
+<%= calendar_date_select_includes "blue" %>
+<%content_for :bodyTag do -%>
+  <%= set_focus_to_id 'allocation_quantity' -%>
+<%end%>
+<%= error_messages_for 'allocation' %>
+<% form_for :allocation, :url => allocations_path do |form| %>
+  <div class="formTitle"><%= theme_image_tag("icons/16x16/allocations.png", 
+          options = {:alt=>"allocations"}) %>New Allocation</div>
+  <div class="cssform widerLabel">
+    <p>
+      <label for="allocation type">Assign Allocation Type:</label>
+      User <%= form.radio_button :allocation_type, 
+        "UserAllocation", {:onchange => "toggleAssignedTo();"} %>
+      &nbsp;&nbsp;&nbsp;
+      Enterprise <%= form.radio_button :allocation_type, 
+        "EnterpriseAllocation", {:onchange => "toggleAssignedTo();"} %>
+    </p>
+    <p>
+      <label for="quantity">Quantity:</label>
+      <%= form.text_field :quantity, { :size => 10, :maxlength => 10 } %>
+    </p>
+    <div ID="user_assigned_to" style="display:block;">
+      <p>
+        <label for="user">User:</label>
+        <%=form.collection_select :user_id, User.active_voters, :id, 
+          :email, { :prompt => "Please select..." } %>
+      </p>
+    </div>
+    <div ID="enterprise_assigned_to" style="display:none;">
+      <p>
+        <label for="enterprise">Enterprise: </label>
+        <%=form.collection_select :enterprise_id, Enterprise.active_enterprises,
+          :id, :name, { :prompt => "Please select..." } %>
+      </p>
+    </div>
+    <p>
+      <label for="expiration_date">Expiration Date:</label>
+      <%= calendar_date_select :allocation, :expiration_date, :popup => :force, :time => false %>
+    </p>
+    <p>
+      <label for="comments">Comments:</label>
+      <%= form.text_area :comments,  {:cols => 50, :rows => 5 } %>
+    </p>
+    <p>
+      <label></label>
+      <%= submit_tag 'Create', html_options = {:class=> "button", :disable_with => "Please wait..."} %>
+      <%= link_to 'List Allocations', allocations_path, 
+      html_options = {:class=> "button"}%></p>
+  </div>  
+<% end %>
+
+<script type="text/javascript" language="JavaScript">
+  <!--
+  function toggleAssignedTo() {
+    if(document.getElementById("allocation_allocation_type_userallocation").checked) { 
+      document.getElementById("user_assigned_to").style.display = "block"; 
+      document.getElementById("enterprise_assigned_to").style.display = "none"; 
+    }
+    else { 
+      document.getElementById("user_assigned_to").style.display = "none"; 
+      document.getElementById("enterprise_assigned_to").style.display = "block"; 
+    }
+  }
+  //-->
+</script>

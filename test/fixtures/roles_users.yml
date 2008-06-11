@@ -1,0 +1,33 @@
+# 
+# roles_users.yml
+# 
+# Created on Nov 16, 2007, 5:02:01 PM
+# 
+<%
+fixtures :users, :roles
+%>
+
+sysadmin:
+    user_id: <%= users(:allroles, 'id') %>
+    role_id: <%= roles(:sysadmin, 'id') %>
+    created_at: <%= 5.days.ago.to_s :db %>
+  
+prodmgr:
+    user_id: <%= users(:allroles, 'id') %>
+    role_id: <%= roles(:prodmgr, 'id') %>
+    created_at: <%= 5.days.ago.to_s :db %>
+  
+voter:
+    user_id: <%= users(:allroles, 'id') %>
+    role_id: <%= roles(:voter, 'id') %>
+    created_at: <%= 5.days.ago.to_s :db %>
+  
+allocmgr:
+    user_id: <%= users(:allroles, 'id') %>
+    role_id: <%= roles(:allocmgr, 'id') %>
+    created_at: <%= 5.days.ago.to_s :db %>
+  
+force_change_pw:
+    user_id: <%= users(:force_change_pw, 'id') %>
+    role_id: <%= roles(:sysadmin, 'id') %>
+    created_at: <%= 5.days.ago.to_s :db %>

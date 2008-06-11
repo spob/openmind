@@ -1,0 +1,10 @@
+<%
+fixtures :companies
+id = 0
+%>
+time_warner:
+  id: <%= id += 1 %>
+  
+cnn:
+  id: <%= id += 1 %>
+  parent_company_id: <%= companies(:time_warner) %>

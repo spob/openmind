@@ -1,0 +1,50 @@
+<%content_for :head do -%>
+  <%= theme_stylesheet_link_tag 'tables' %>
+  <%= javascript_include_tag "tablecloth" %>
+<%end%>
+<%= javascript_include_tag "wz_tooltip.js" %> 
+<%= error_messages_for 'lookup_code' %>
+<h1><%= theme_image_tag("icons/32x32/lookupCodes.png", 
+          options = {:alt=>"Lookup Codes"}) %>Lookup Codes</h1>
+        <table cellspacing="0" cellpadding="0" class="cssform">
+  <tr>
+    <th align="left">Type</th>
+    <th align="left">Short Name</th>
+    <th align="left">Description</th>
+    <th align="left">Sort Value</th>
+    <th align="left">Action</th>
+  </tr>
+  <tr>
+    <% form_for :lookup_code, :url => lookup_codes_path do |form| %>
+      <td><%= form.select :code_type, @types %></td>
+      <td><%= form.text_field :short_name, { :size => 20, :maxlength => 40 } %></td>
+      <td><%= form.text_field :description, { :size => 50, :maxlength => 50 } %></td>
+      <td class="center"><%= form.text_field :sort_value, { :size => 5 } %></td>
+      <td class="nowrap"><%= submit_tag 'Create', html_options = {:class=> "button", :disable_with => "Please wait...",
+        :onmouseover => "Tip('Create a new lookup code')"} %></td>
+    <% end %>
+    <%= set_focus_to_id_in_list_form 'lookup_code_short_name' -%>
+  </tr>
+  
+  <% for lookup_code in @lookup_codes %>
+    <tr>
+      <td><%= lookup_code.code_type %></td>
+      <td><%= lookup_code.short_name %></td>
+      <td><%= lookup_code.description %></td>
+      <td class="center"><%= lookup_code.sort_value %></td>
+      <td class="nowrap">
+      
+        <%= link_to theme_image_tag("icons/16x16/editAction.png", 
+          options = {:alt=>"edit", :title=> "edit", :onmouseover => "Tip('Edit this lookup code')"}), 
+          edit_lookup_code_path(lookup_code) %>
+      
+        <%= link_to theme_image_tag("icons/16x16/deleteAction.png", 
+          options = {:alt=>"delete", :title=> "delete", :onmouseover => "Tip('Delete this lookup code')"}), 
+          lookup_code_path(lookup_code), 
+          :confirm => 'Are you sure?', 
+          :method => :delete if lookup_code.can_delete? %>
+      </td>
+    </tr>
+  <% end %>
+</table>
+<p><%= will_paginate @lookup_codes %></p>

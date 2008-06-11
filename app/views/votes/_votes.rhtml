@@ -1,0 +1,5 @@
+<div id="tabBody">
+  <ul>
+    <%=render(:partial => "votes/vote_item", :collection => @idea.votes, :order => 'created_at DESC' )%>
+    </ul>
+  </div>

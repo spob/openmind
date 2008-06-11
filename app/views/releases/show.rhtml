@@ -1,0 +1,51 @@
+<% if prodmgr? %>
+  <div id="actionButtons2">
+    <%= link_to 'Edit', edit_release_path(@release) , options = {:class=> "button",
+      :onmouseover => "Tip('Edit this release')"}%>
+    <%= link_to 'List Releases', releases_path(:product_id => @release.product) , options = {
+      :class=> "button", :onmouseover => "Tip('Return to list releases')" }%>
+  </div>
+<% end %>
+<div class="formTitle">Release Detail for Product <%= @release.product.name %></div>
+<div class="cssform widerLabel">
+  <p>
+    <label for="release_version">Version:</label>
+    <%=h @release.version %>
+  </p>
+  <p>
+    <label for="release_version">Release Status:</label>
+    <%=h @release.release_status.description %>
+  </p>
+  <p>
+    <label for="release_date">Release Date:</label>
+    <%=h format_date(@release.release_date) %>
+  </p>
+  <p>
+    <label for="user_release_date">Label for Release Date:</label>
+    <%=h @release.user_release_date %>
+  </p>
+  <p>
+    <label for="release_description">Description:</label>
+    <%=textilize @release.description unless @release.description.nil? %>
+  </p>
+  <% unless @release.download_url.nil? %>
+  <p>
+    <label for="download_url">Download URL:</label>
+    <%= link_to @release.download_url, @release.download_url, :popup => true  %>
+  </p>
+  <% end %>
+  <p>
+    <label for="ideas">Scheduled Ideas:</label>
+  </p>
+  <% for idea in @release.ideas %>
+    <p>
+      <label for="ideas"></label><%= link_to h(idea.user_friendly_idea_name),
+        :controller => 'ideas',
+        :action => 'show', 
+        :id => idea.id %> 
+    <% end %>
+  </p>
+  <p>
+    <label></label>
+  </p>
+</div>

@@ -1,0 +1,117 @@
+Welcome to the acl_system plugin for rails. This plugin is designed to give you a 
+flexible declarative way of protecting your various controller actions using roles.
+It's made to site on top of any authentication framework that follows a few conventions.
+You will need to have a current_user method that returns the currently logged in user. 
+And you will need to make your User or Account model(or whatever you named it) have a
+has_and_belongs_to_many :roles. So you need a model called Role that has a title attribute.
+Once these two things are satisfied you can use this plugin.
+
+So lets take a look at the sugar you get from using this plugin. Keep in mind that the
+!blacklist part isn’t really necessary here. I was just showing it as an example of how
+flexible the permissions string logic parser is. 
+
+class PostController < ApplicationController
+  before_filter :login_required, :except => [:list, :index]
+  access_control [:new, :create, :update, :edit] => '(admin | user | moderator)',
+                 :delete => 'admin & (!moderator & !blacklist)' 
+
+Of course you can define them all seperately if they differ at all.
+
+class PostController < ApplicationController
+  before_filter :login_required, :except => [:list, :index]
+  access_control :new => '(admin | user | moderator) & !blacklist',
+                 :create => 'admin & !blacklist',
+                 :edit => '(admin | moderator) & !blacklist',
+                 :update => '(admin | moderator) & !blacklist',
+                 :delete => 'admin & (!moderator | !blacklist)' 
+
+And you can also use :DEFAULT if you have a lot of actions that need the same permissions.
+
+class PostController < ApplicationController
+  before_filter :login_required, :except => [:list, :index]
+  access_control :DEFAULT => '!guest' 
+                [:new, :create, :update, :edit] => '(admin | user | moderator)',
+                 :delete => 'admin & (!moderator & !blacklist)'
+
+There are two callback methods you can use to define your own success and failure behaviors.
+If you define permission_granted and/or permission_denied  as protected methods in your controller you
+can redirect or render and error page or whatever else you might want to do if access is allowed
+or denied.
+
+class PostController < ApplicationController
+  before_filter :login_required, :except => [:list, :index]
+  access_control :DEFAULT => '!guest' 
+                [:new, :create, :update, :edit] => '(admin | user | moderator)',
+                 :delete => 'admin & (!moderator & !blacklist)'
+
+  # the rest of your controller here
+
+  protected
+
+  def permission_denied
+    flash[:notice] = "You don't have privileges to access this action"
+    return redirect_to :action => 'denied'
+  end
+
+  def permission_granted
+    flash[:notice] = "Welcome to the secure area of foo.com!"
+  end
+
+end
+
+There is also a helper method that can be used in the view or controller. In the view its 
+handy for conditional menus or stuff like that. 
+
+<% restrict_to "(admin | moderator) & !blacklist" do %>
+  <%= link_to "Admin & Moderator only link", :action =>'foo' %>
+<% end %>
+
+So the gist of it is that in the access_control controller macro, you can assign 
+permission logic strings to actions in your controller. You supply a hash of 
+:action => ‘permissions string” pairs. Any action not in the list is left open to 
+any user. Any action with a logic string gets evaluated on each request to see if
+ the current user has the right role to access the action. The plugin has a small 
+recursive descent parser that evaluates the permission logic strings against the 
+current_user.roles.
+
+The way this works is that you have your User model and a Role model. User <= habtm => Role.
+ So when an action that is access_control’ed gets requested the permission logic string 
+gets evaluated against the current_user.roles . So a prerequisite of using this plugin
+ is that you add a Role model with a title attribute that has_and_belongs_to_many User
+ models. And you need to have a current_user method defined somewhere in your controllers 
+or user system. Luckily the acts_as_authenticated plugin has the current_user defined already. 
+
+So here is the schema of this application including the Post model and the User and Role 
+model plus the habtm join table: 
+
+ActiveRecord::Schema.define(:version => 3) do
+  create_table "posts", :force => true do |t|
+    t.column "title", :string, :limit => 40
+    t.column "body", :text
+  end
+  create_table "roles", :force => true do |t|
+    t.column "title", :string
+  end
+  create_table "roles_users", :id => false, :force => true do |t|
+    t.column "role_id", :integer
+    t.column "user_id", :integer
+  end
+  create_table "users", :force => true do |t|
+    t.column "login", :string, :limit => 40
+    t.column "email", :string, :limit => 100
+    t.column "crypted_password", :string, :limit => 40 
+    t.column "salt", :string, :limit => 40
+    t.column "created_at", :datetime
+    t.column "updated_at", :datetime
+  end
+end
+And so thats pretty much it for now. You add the roles to the Role.title attribute like admin,
+ moderator and blacklist like above. These can be anything you want them to be, roles, groups
+ or whatever. Then you can use as many nested parens and logic with & | ! as you want to 
+define your complex permissions for accessing your controller. Make sure that your access_control
+ gets called after the login_required before_filter because we assume that you are already 
+logged in if you made it this far and then we eval the permissions logic.
+
+You will want to define these access_control in each controller that needs specific permissions.
+ unless you want to protect the same actions in all controllers, then you can put it in 
+application.rb but I dont recommend it.

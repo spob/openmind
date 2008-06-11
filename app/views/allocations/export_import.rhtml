@@ -1,0 +1,73 @@
+<div id="actionButtons2">  
+  <%= link_to 'List Allocations', allocations_path, html_options = {:class=> "button"} %>  
+</div>
+<div class="formTitle"><%= theme_image_tag("icons/16x16/allocations.png", 
+          options = {:alt=>"Grant Allocations"}) %>Grant Allocations Instructions</div>
+<div class="cssform widerLabel">
+  <% unless @errors.empty? %>
+    <p>No rows were processed because of the following errors:<p/>
+    <ul>
+      <% for error in @errors %>
+        <li><%= error %></li>
+      <% end %>
+    </ul>
+    Correct these errors and reimport the file.
+  <% end %>
+  
+  
+  <% unless @allocations.empty? %>
+  Allocations processed:
+  <p/>
+  <ul>
+    <% for allocation in @allocations %>
+      <li><%= allocation.to_s %></li>
+    <% end %>
+  </ul>
+<% end %>
+  
+  <br/>
+  
+  <div id="show_images" style="<%= pix_button_display_style "SHOW" %>">
+       &nbsp;&nbsp;
+     <%= link_to_remote("Show Images",
+       {:url => toggle_pix_allocations_path},
+       {:class => "button"} ) %>
+       </div>
+  
+  <div id="hide_images" style="<%= pix_button_display_style "HIDE" %>">
+       &nbsp;&nbsp;
+     <%= link_to_remote("Hide Images",
+       {:url => toggle_pix_allocations_path},
+       {:class => "button"} ) %>
+       </div>
+  
+  <ol>
+    <li>
+      Export the list of users and enterprises. 
+    <%= button_to 'Export', export_allocations_path, html_options = {:class=> "button"}%>
+    </li>
+    <li>
+      Save the file to disk.
+      <div ID="image1" style="<%= pix_display_style %>">
+      <%= theme_image_tag("general/allocations/file_download.png", :border=>0) %>
+      </div>
+    </li>
+    <li>Open the file using a spreadsheet program such as Excel or OpenOffice.
+      <div ID="image2" style="<%= pix_display_style %>">
+      <%= theme_image_tag("general/allocations/export.png", :border=>0) %>
+      </div>
+      Edit the contents of the file. You can change values in the "allocation qty" column. 
+      You can delete or reorder rows. You should not alter other column values.
+    </li>
+    <li>
+      Save the file as a CSV file
+    </li>
+    <li>
+      Import the saved file.
+    <% form_for :dump, :url=>import_allocations_path,
+      :html => { :multipart => true } do |f| -%>
+      Select a CSV File: <%= f.file_field :file -%>&nbsp;&nbsp;&nbsp;<%= submit_tag 'Import', html_options = {:class=> "button", :disable_with => "Please wait..."}-%>
+    <% end -%>
+    </li>
+  </ol>
+</div>
