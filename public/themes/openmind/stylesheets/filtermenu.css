@@ -1,0 +1,91 @@
+#filtermenu {
+    float: left;
+    border-bottom-width: 0;
+    width: 160px;
+    margin:0;
+}
+
+#filtermenu ul {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+    font-family: 'Trebuchet MS' , 'Lucida Grande' , Arial, sans-serif;
+    line-height:1em;
+}
+
+#filtermenu li  {
+    font-size: 1.0em;
+    margin-bottom: 0px;
+}
+
+#filtermenu li a {
+    display: block;
+    padding: 3px 0;
+    padding-left: 9px;
+    width: 169px; /*160px minus all left/right paddings and margins*/
+    width: 144px;
+    text-decoration: none;
+    color: white;
+    background-color: #444444;
+    border-left: 7px solid #9E1F00;
+    border-top: solid 1px #ccc;
+}
+
+* html #filtermenu li a {
+    /*IE only */
+    width: 187px; 
+    width: 142px;
+    font-size: 1em;
+}
+
+#filtermenu li a:hover, #filtermenu li .selected {
+    border-left-color: #D72B00;
+    color: white;
+    background-color: #9F0000;
+}
+
+#filtermenu li .selected {
+    color: #000;
+    font-weight: bold;
+    border-left-color: #D72B00;
+    background-color: #999999;
+}
+
+#filtermenu div.menutitle {
+    color: white;
+    border-bottom: 1px solid black;
+    padding: 1px 0;
+    padding-left: 5px;
+    background-color: black;
+    font-family: 'Trebuchet MS' , 'Lucida Grande' , Arial, sans-serif;
+    background: transparent url(../images/menus/blockdefault.gif) center center repeat-x;
+    font-size: 1.17em;
+    line-height:1.50em;
+}
+
+#data {
+    padding: 10px;
+    background-color: #999999;
+    margin: 0 0 0 160px;
+}
+
+#filterContainer
+{
+    border: solid 1px #fff;
+    margin-top:15px;
+    margin-bottom:0px;
+    padding:0;
+    background-color: #999999;
+    background-image:url(../images/menus/filterBgTile.gif);
+    background-repeat:repeat-y;
+}
+
+#filterContainer table.cssform
+{
+    margin-bottom:0;
+}
+
+#filterContainer table.cssform .odd
+{
+    background-color:#CCC;
+}
