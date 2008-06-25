@@ -21,8 +21,8 @@ rescind_minutes: 240
 allocation_expiration_days: 120
 
 # The url to the directory where the images for emails are stored
-email_image_url: http://openmind.scribesoftware.com/themes/scribe/images/email
+email_image_url: http://localhost:3000/themes/scribe/images/email
 
 # The name of the theme (e.g., skin). This should correspond to a directory 
 # under the public/themes directory
-app_theme: scribe
+app_theme: openmind
