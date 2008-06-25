@@ -1,6 +1,6 @@
 <div class="commentbox">
     <b><a name="<%= announcement_item.id %>"><%= h announcement_item.headline %></a></b> 
-    <%=textilize(announcement_item.description) %>
+    <%= textilize(announcement_item.description) %>
 </div>
 <div class="commentfooter">
   Posted on <%=om_date_time announcement_item.created_at%> 

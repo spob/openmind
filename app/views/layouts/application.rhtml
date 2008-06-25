@@ -77,7 +77,7 @@
         <div id="footer">
           <div id="footerLeft"><% if logged_in? %>Logged in as: <%= current_user.display_name(true) %><span class="separator">|</span><% end %>
           Contact <%= mail_to(APP_CONFIG['admin_email'], 'System Administrator', :encode => "javascript" ) %></div> 
-          <div id="footerRight">Powered by <a href="#">Openmind</a> v<%= OpenMindVersion.version %><span class="separator">|</span>Distributed under the <%= link_to "GNU GPL license", { :controller => 'static', :action => 'license'} %></div>
+          <div id="footerRight">Powered by <a href="#">Openmind</a> v<%= OpenmindVersion.version %><span class="separator">|</span>Distributed under the <%= link_to "GNU GPL license", { :controller => 'static', :action => 'license'} %></div>
         </div>
       </div>
     <div style="clear: both;"></div>
