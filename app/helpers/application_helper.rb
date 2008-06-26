@@ -12,7 +12,8 @@ module ApplicationHelper
       ["Enterprises",     enterprises_path,     ["sysadmin", "allocmgr"] ],
       ["Allocations",     allocations_path,                    ],
       ["Votes",           votes_path                           ],
-      ["Announcements",   announcements_path ,     ["sysadmin", "prodmgr"]  ],
+      ["Announcements",   announcements_path ,  ["sysadmin", "prodmgr"]  ],
+#      ["Polls",           polls_path ,          ["prodmgr"]  ],
     ]
     output = ""
     for menu in @menus

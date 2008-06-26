@@ -1,0 +1,63 @@
+<%content_for :head do -%>
+  <%= theme_stylesheet_link_tag 'forms' %>
+  <%= theme_stylesheet_link_tag 'tables' %>
+  <%= javascript_include_tag "tablecloth" %>                
+<%end%>
+<%= javascript_include_tag "wz_tooltip.js" %> 
+<%= error_messages_for 'poll' %>
+<h1>
+    <%= theme_image_tag("icons/48x48/products.png", 
+      options = {:alt=>"Poll"}) %>
+      Polls
+    </h1>
+<table cellspacing="0" cellpadding="0" class="cssform">
+  <tr>
+    <th>Title</th>
+    <th>Expiration Date</th>
+    <th>Action</th>
+  </tr>
+  <% if prodmgr? %>
+  <tr>
+    <% form_for :poll, :url => polls_path do |form| %>
+      <td><%= form.text_field :title, { :size => 50, :maxlength => 120 } %></td>
+      <td><%= submit_tag 'Create', options = {:class=> "button", :disable_with => "Please wait...",
+        :onmouseover => "Tip('Create a new poll')"} %></td>
+    <% end %>
+  <%= set_focus_to_id_in_list_form 'poll_title' -%>
+  </tr>
+  <% end %>
+  
+    <% for poll in @polls %>
+    <tr>
+      <td><%= poll.title %></td>
+      <td><%= poll.expiration_date %></td>
+      <td>
+        <% if prodmgr? %>
+        <%= link_to theme_image_tag("icons/16x16/viewAction.png", :alt=>"view", :title=> "view"),
+          poll_path(poll), 
+          html_options = {
+          :onmouseover => "Tip('View details for this poll')"} 
+        %>
+        <%= link_to theme_image_tag("icons/16x16/editAction.png", :alt=>"edit", :title=> "edit"), 
+          edit_poll_path(poll),
+          html_options = {
+          :onmouseover => "Tip('Edit this poll')"}
+        %>
+      
+        <%= link_to(
+          theme_image_tag("icons/16x16/deleteAction.png", :alt=>"delete", :title=> "delete"),
+          poll_path(poll),
+          html_options = {:confirm => 'Are you sure?', :method => :delete,
+            :onmouseover => "Tip('Delete this poll')"} ) if poll.can_delete? %>
+      
+        <%= link_to theme_image_tag("icons/16x16/releasesView.png", :alt=>"view releases", :title=> "view releases"),
+          releases_path(:poll_id => poll.id),
+          html_options = {
+          :onmouseover => "Tip('View releases for this poll')"}
+        %>
+    <% end %>
+      </td>
+  </tr>
+<% end %>
+</table>
+<p><%= will_paginate @polls %></p>
