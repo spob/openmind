@@ -1,0 +1,19 @@
+<%content_for :head do -%>
+  <%= theme_stylesheet_link_tag 'forms' %>
+  <%= theme_stylesheet_link_tag 'tables' %>
+  <%= javascript_include_tag "tablecloth" %>                
+<%end%>
+<%= javascript_include_tag "wz_tooltip.js" %> 
+<div id="actionButtons2">
+  <%= link_to 'Edit', edit_poll_url(@poll), html_options = {:class=> "button",
+  :onmouseover => "Tip('Edit this poll')"} %>
+  <%= link_to 'List Polls', polls_path , html_options = {:class=> "button",
+    :onmouseover => "Tip('Return to list polls')"}%>
+</div>
+<div class="formTitle">Poll Detail</div>
+<div class="cssform">
+  <p>
+    <label for="name">Title:</label>
+    <%= h @poll.title %>
+  </p>
+</div>

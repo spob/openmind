@@ -3,6 +3,7 @@ class PollsController < ApplicationController
   access_control [:new, :commit, :show, :edit, :create, :update, :destroy] => 'prodmgr'
   
   def index
+    new
     @polls = Poll.list params[:page], current_user.row_limit
   end
 
@@ -15,18 +16,19 @@ class PollsController < ApplicationController
     :redirect_to => { :action => :index }
 
   def show
-    @product = Product.find(params[:id])
+    @poll = Poll.find(params[:id])
   end
 
   def new
-    @product = Product.new
+    @poll = Poll.new
+    @poll.expiration_date = Date.jd(Date.today.jd + 7)
   end
 
   def create
-    @product = Product.new(params[:product])
-    if @product.save
-      flash[:notice] = "Product #{@product.name} was successfully created."
-      redirect_to products_path
+    @poll = Poll.new(params[:poll])
+    if @poll.save
+      flash[:notice] = "Poll #{@poll.title} was successfully created."
+      redirect_to polls_path
     else
       index
       render :action => :index
@@ -34,24 +36,24 @@ class PollsController < ApplicationController
   end
 
   def edit
-    @product = Product.find(params[:id])
+    @poll = Poll.find(params[:id])
   end
 
   def update
-    @product = Product.find(params[:id])
-    if @product.update_attributes(params[:product])
-      flash[:notice] = "Product #{@product.name} was successfully updated."
-      redirect_to product_path(@product)
+    @poll = Poll.find(params[:id])
+    if @poll.update_attributes(params[:product])
+      flash[:notice] = "Poll '#{@poll.title}' was successfully updated."
+      redirect_to poll_path(@poll)
     else
       render :action => :edit
     end
   end
 
   def destroy
-    product = Product.find(params[:id])
+    product = Poll.find(params[:id])
     name = product.name
     product.destroy
-    flash[:notice] = "Product #{name} was successfully deleted."
+    flash[:notice] = "Poll #{name} was successfully deleted."
     redirect_to products_url
   end
 end

@@ -1,3 +1,4 @@
+<%= calendar_date_select_includes "blue" %>
 <%content_for :head do -%>
   <%= theme_stylesheet_link_tag 'forms' %>
   <%= theme_stylesheet_link_tag 'tables' %>
@@ -20,6 +21,9 @@
   <tr>
     <% form_for :poll, :url => polls_path do |form| %>
       <td><%= form.text_field :title, { :size => 50, :maxlength => 120 } %></td>
+      <td>
+        <%= calendar_date_select :poll, :expiration_date, :popup => :force, :time => false %>
+      </td>
       <td><%= submit_tag 'Create', options = {:class=> "button", :disable_with => "Please wait...",
         :onmouseover => "Tip('Create a new poll')"} %></td>
     <% end %>
@@ -30,7 +34,7 @@
     <% for poll in @polls %>
     <tr>
       <td><%= poll.title %></td>
-      <td><%= poll.expiration_date %></td>
+      <td><%= format_date(poll.expiration_date) %></td>
       <td>
         <% if prodmgr? %>
         <%= link_to theme_image_tag("icons/16x16/viewAction.png", :alt=>"view", :title=> "view"),
@@ -49,12 +53,6 @@
           poll_path(poll),
           html_options = {:confirm => 'Are you sure?', :method => :delete,
             :onmouseover => "Tip('Delete this poll')"} ) if poll.can_delete? %>
-      
-        <%= link_to theme_image_tag("icons/16x16/releasesView.png", :alt=>"view releases", :title=> "view releases"),
-          releases_path(:poll_id => poll.id),
-          html_options = {
-          :onmouseover => "Tip('View releases for this poll')"}
-        %>
     <% end %>
       </td>
   </tr>

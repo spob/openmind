@@ -1,0 +1,24 @@
+<%content_for :bodyTag do -%>
+  <%= set_focus_to_id 'poll_title' %>
+<%end%>
+<%= error_messages_for 'poll' %>
+<% form_for(:poll, :url => poll_path(@poll), 
+  :html => {:method => :put }) do |form| %>
+  <div id="actionButtons2">
+    <%= link_to 'View Details', poll_path(@poll), 
+      html_options = { :class => "button" } %>
+    <%= link_to 'List polls', polls_path, 
+      html_options = { :class => "button" } %>
+  </div>
+  <div class="formTitle"><%=theme_image_tag("icons/16x16/products.png", :alt=>"edit poll")%>Edit poll</div>
+  <div class="cssform widerLabel">
+    <p>
+      <label for="poll_title">Title:</label>
+      <%= form.text_field :title, { :size => 30, :maxlength => 30 } %>
+    </p>
+    <p>
+      <label></label>
+      <%= submit_tag 'Save', html_options = {:class=> "button", :disable_with => "Please wait..."} %>
+    </p>
+  </div>
+<% end %>
