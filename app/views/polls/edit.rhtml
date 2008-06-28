@@ -18,6 +18,7 @@
       <%= form.text_field :title, { :size => 30, :maxlength => 30 } %>
     </p>
     <p>
+      <label for="close_date">Close Date:</label>
         <%= calendar_date_select :poll, :close_date, :popup => :force, :time => false %>
     </p>
     <p>
