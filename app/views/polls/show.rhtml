@@ -20,4 +20,11 @@
     <label for="close_date">Close Date:</label>
     <%= h format_date(@poll.close_date) %>
   </p>
+    Options
+    <% for option in @poll.poll_options %>
+        <p>
+            <label for="option_description">Choice:</label>
+            <%= h option.description %>
+        </p>
+    <% end %>
 </div>

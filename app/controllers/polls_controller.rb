@@ -26,6 +26,8 @@ class PollsController < ApplicationController
 
   def create
     @poll = Poll.new(params[:poll])
+    @poll.poll_options << PollOption.new(:description => 'Choice 1...')
+    @poll.poll_options << PollOption.new(:description => 'Choice 2...')
     if @poll.save
       flash[:notice] = "Poll #{@poll.title} was successfully created."
       redirect_to edit_poll_path(@poll)
@@ -41,7 +43,7 @@ class PollsController < ApplicationController
 
   def update
     @poll = Poll.find(params[:id])
-    if @poll.update_attributes(params[:product])
+    if @poll.update_attributes(params[:poll])
       flash[:notice] = "Poll '#{@poll.title}' was successfully updated."
       redirect_to poll_path(@poll)
     else
@@ -50,10 +52,10 @@ class PollsController < ApplicationController
   end
 
   def destroy
-    product = Poll.find(params[:id])
-    name = product.name
-    product.destroy
-    flash[:notice] = "Poll #{name} was successfully deleted."
-    redirect_to products_url
+    poll = Poll.find(params[:id])
+    title = poll.title
+    poll.destroy
+    flash[:notice] = "Poll #{title} was successfully deleted."
+    redirect_to polls_url
   end
 end
