@@ -21,7 +21,7 @@ class PollsController < ApplicationController
 
   def new
     @poll = Poll.new
-    @poll.expiration_date = Date.jd(Date.today.jd + 7)
+    @poll.close_date = Date.jd(Date.today.jd + 7)
   end
 
   def create

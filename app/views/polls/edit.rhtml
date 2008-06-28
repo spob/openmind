@@ -1,3 +1,4 @@
+<%= calendar_date_select_includes "blue" %>
 <%content_for :bodyTag do -%>
   <%= set_focus_to_id 'poll_title' %>
 <%end%>
@@ -15,6 +16,9 @@
     <p>
       <label for="poll_title">Title:</label>
       <%= form.text_field :title, { :size => 30, :maxlength => 30 } %>
+    </p>
+    <p>
+        <%= calendar_date_select :poll, :close_date, :popup => :force, :time => false %>
     </p>
     <p>
       <label></label>

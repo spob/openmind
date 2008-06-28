@@ -14,7 +14,7 @@
 <table cellspacing="0" cellpadding="0" class="cssform">
   <tr>
     <th>Title</th>
-    <th>Expiration Date</th>
+    <th>Close Date</th>
     <th>Action</th>
   </tr>
   <% if prodmgr? %>
@@ -22,7 +22,7 @@
     <% form_for :poll, :url => polls_path do |form| %>
       <td><%= form.text_field :title, { :size => 50, :maxlength => 120 } %></td>
       <td>
-        <%= calendar_date_select :poll, :expiration_date, :popup => :force, :time => false %>
+        <%= calendar_date_select :poll, :close_date, :popup => :force, :time => false %>
       </td>
       <td><%= submit_tag 'Create', options = {:class=> "button", :disable_with => "Please wait...",
         :onmouseover => "Tip('Create a new poll')"} %></td>
@@ -34,7 +34,7 @@
     <% for poll in @polls %>
     <tr>
       <td><%= poll.title %></td>
-      <td><%= format_date(poll.expiration_date) %></td>
+      <td><%= format_date(poll.close_date) %></td>
       <td>
         <% if prodmgr? %>
         <%= link_to theme_image_tag("icons/16x16/viewAction.png", :alt=>"view", :title=> "view"),
