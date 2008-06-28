@@ -28,7 +28,7 @@ class PollsController < ApplicationController
     @poll = Poll.new(params[:poll])
     if @poll.save
       flash[:notice] = "Poll #{@poll.title} was successfully created."
-      redirect_to polls_path
+      redirect_to edit_poll_path(@poll)
     else
       index
       render :action => :index
