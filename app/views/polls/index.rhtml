@@ -14,6 +14,7 @@
 <table cellspacing="0" cellpadding="0" class="cssform">
   <tr>
     <th>Title</th>
+    <th>Published?</th>
     <th>Close Date</th>
     <th>Action</th>
   </tr>
@@ -21,6 +22,7 @@
   <tr>
     <% form_for :poll, :url => polls_path do |form| %>
       <td><%= form.text_field :title, { :size => 50, :maxlength => 120 } %></td>
+      <td>false</td>
       <td>
         <%= calendar_date_select :poll, :close_date, :popup => :force, :time => false %>
       </td>
@@ -34,6 +36,7 @@
     <% for poll in @polls %>
     <tr>
       <td><%= poll.title %></td>
+      <td><%= poll.active %></td>
       <td><%= format_date(poll.close_date) %></td>
       <td>
         <% if prodmgr? %>
@@ -53,6 +56,18 @@
           poll_path(poll),
           html_options = {:confirm => 'Are you sure?', :method => :delete,
             :onmouseover => "Tip('Delete this poll')"} ) if poll.can_delete? %>
+          
+        <%= link_to(
+         "Publish",
+          publish_poll_path(:id => poll),
+          html_options = { :method => :post, :class=> "button",
+            :onmouseover => "Tip('Publish this poll')"} ) unless poll.active %>
+        
+        <%= link_to(
+         "Unpublish",
+          unpublish_poll_path(:id => poll),
+          html_options = { :method => :post, :class=> "button",
+            :onmouseover => "Tip('Unpublish this poll')"} ) if poll.active %>
     <% end %>
       </td>
   </tr>

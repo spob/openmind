@@ -7,6 +7,17 @@
 <div id="actionButtons2">
   <%= link_to 'Edit', edit_poll_url(@poll), html_options = {:class=> "button",
   :onmouseover => "Tip('Edit this poll')"} %>
+  <%= link_to(
+   "Publish",
+    publish_poll_path(:id => @poll),
+    html_options = { :method => :post, :class=> "button",
+      :onmouseover => "Tip('Publish this poll')"} ) unless @poll.active %>
+
+  <%= link_to(
+   "Unpublish",
+    unpublish_poll_path(:id => @poll),
+    html_options = { :method => :post, :class=> "button",
+      :onmouseover => "Tip('Unpublish this poll')"} ) if @poll.active %>
   <%= link_to 'List Polls', polls_path , html_options = {:class=> "button",
     :onmouseover => "Tip('Return to list polls')"}%>
 </div>
