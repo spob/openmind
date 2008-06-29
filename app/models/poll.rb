@@ -29,7 +29,11 @@ class Poll < ActiveRecord::Base
   
   def save_options
     poll_options.each do |o|
-      o.save(false)
+      if o.should_destroy?
+        o.destroy
+      else
+        o.save(false)
+      end
     end
   end
 end

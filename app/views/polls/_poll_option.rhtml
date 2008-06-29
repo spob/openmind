@@ -1,7 +1,15 @@
-<% fields_for "poll[option_attributes][]", poll_option do |option_form| %>
-  <p>
-      <label for="option_description">Choice:</label>
-      <%= option_form.text_field :description, { :index => nil, :size => 30, :maxlength => 80 } %>
-      <%= option_form.hidden_field :id, :index => nil %>
-  </p>
-<% end %>
+<div class="option">
+  <% fields_for "poll[option_attributes][]", poll_option do |option_form| %>
+    <p>
+        <label for="option_description">Choice:</label>
+        <%= option_form.text_field :description, { :index => nil, :size => 30, :maxlength => 80 } %>
+        <% if poll_option.new_record? %>
+            <%= link_to_function "Remove", "this.up('.option').remove()" %>
+        <% else %>
+          <%= link_to_function "Remove", "mark_for_destroy(this)" %>
+          <%= option_form.hidden_field :id, :index => nil %>
+          <%= option_form.hidden_field :should_destroy, :index => nil, :class => 'should_destroy' %>
+        <% end %>
+    </p>
+  <% end %>
+</div>

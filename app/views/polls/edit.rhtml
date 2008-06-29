@@ -1,4 +1,5 @@
 <%= calendar_date_select_includes "blue" %>
+<%= javascript_include_tag :defaults %> 
 <%content_for :bodyTag do -%>
   <%= set_focus_to_id 'poll_title' %>
 <%end%>
@@ -22,7 +23,11 @@
         <%= calendar_date_select :poll, :close_date, :popup => :force, :time => false %>
     </p>
     Options
-    <%= render :partial => 'poll_option', :collection => @poll.poll_options %>
+    <div id="poll_options">
+      <%= render :partial => 'poll_option', :collection => @poll.poll_options %>
+    </div>
+    <%= add_option_link "Add a choice" %>
+      
     <p>
       <label></label>
       <%= submit_tag 'Save', html_options = {:class=> "button", :disable_with => "Please wait..."} %>
