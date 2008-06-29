@@ -22,15 +22,7 @@
         <%= calendar_date_select :poll, :close_date, :popup => :force, :time => false %>
     </p>
     Options
-    <% for option in @poll.poll_options %>
-      <% fields_for "poll[option_attributes][]", option do |option_form| %>
-        <p>
-            <label for="option_description">Choice:</label>
-            <%= option_form.text_field :description, { :index => nil, :size => 30, :maxlength => 80 } %>
-            <%= option_form.hidden_field :id, :index => nil %>
-        </p>
-      <% end %>
-    <% end %>
+    <%= render :partial => 'poll_option', :collection => @poll.poll_options %>
     <p>
       <label></label>
       <%= submit_tag 'Save', html_options = {:class=> "button", :disable_with => "Please wait..."} %>
