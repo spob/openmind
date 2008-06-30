@@ -27,6 +27,14 @@ class Poll < ActiveRecord::Base
     end
   end
   
+  def user_responses
+    responses = []
+    for poll_option in poll_options
+      responses << poll_option.user_responses
+    end
+    responses.flatten
+  end
+  
   def save_options
     poll_options.each do |o|
       if o.should_destroy?

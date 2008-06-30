@@ -14,6 +14,6 @@ class PollOption < ActiveRecord::Base
   def percent_chosen
     total = poll.total_responses
     return 0 if total == 0
-    return user_responses.size/total
+    return (user_responses.size.to_f/total.to_f) * 100
   end
 end

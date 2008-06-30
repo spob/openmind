@@ -36,7 +36,8 @@
         <p>
             <label for="option_description">Choice:</label>
             <%= h option.description %>
-            (<%= option.percent_chosen %>%, <%= pluralize(option.user_responses.size, 'response') %>)
+            (<%= number_to_percentage(option.percent_chosen, :precision => 2) %>,
+            <%= pluralize(option.user_responses.size, 'response') %>)
         </p>
     <% end %>
     <p>

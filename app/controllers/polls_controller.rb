@@ -9,7 +9,7 @@ class PollsController < ApplicationController
   end
 
   # GETs should be safe (see http://www.w3.org/2001/tag/doc/whenToUseGet.html)
-  verify :method => :post, :only => [:create, :publish, :unpublish ],
+  verify :method => :post, :only => [:create, :publish, :unpublish, :take_survey ],
     :redirect_to => { :action => :index }
   verify :method => :put, :only => [ :update ],
     :redirect_to => { :action => :index }
@@ -72,11 +72,41 @@ class PollsController < ApplicationController
     redirect_to polls_url
   end
   
-  private
-  def set_active(id, active)
-    @poll = Poll.find(id)
-    @poll.active = active
-    @poll.save
-    @poll
+  def take_survey
+    if params[:poll_option_id].nil?
+      take_survey_failed "You must select an option"
+    else
+      poll_option = PollOption.find(params[:poll_option_id])
+      if !poll_option.poll.user_responses.index(current_user).nil?
+        take_survey_failed "You can only answer this survey once"
+      else
+        poll_option.user_responses << current_user
+        poll_option.save
+        redirect_to poll_path(poll_option.poll)
+      end
+    end
   end
-end
+  
+  def show_survey
+    @poll = Poll.find(params[:id])
+    if !@poll.user_responses.index(current_user).nil?
+      flash[:error] = "You can only answer this survey once"
+      redirect_to poll_path(@poll)
+    end
+  end
+  
+    private
+  
+    def take_survey_failed(msg)
+      @poll = Poll.find(params[:id])
+      flash[:error] = msg
+      render :action => :show_survey
+    end
+  
+    def set_active(id, active)
+      @poll = Poll.find(id)
+      @poll.active = active
+      @poll.save
+      @poll
+    end
+  end
