@@ -36,4 +36,12 @@ class Poll < ActiveRecord::Base
       end
     end
   end
+  
+  def total_responses
+    count = 0
+    for option in poll_options
+      count += option.user_responses.size
+    end
+    count
+  end
 end

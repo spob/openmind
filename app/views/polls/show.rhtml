@@ -36,6 +36,10 @@
         <p>
             <label for="option_description">Choice:</label>
             <%= h option.description %>
+            (<%= option.percent_chosen %>%, <%= pluralize(option.user_responses.size, 'response') %>)
         </p>
     <% end %>
+    <p>
+      <label for="total">Total:</label> <%= pluralize(@poll.total_responses, 'response') %>
+    </p>
 </div>
