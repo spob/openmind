@@ -27,6 +27,10 @@ class Poll < ActiveRecord::Base
     end
   end
   
+  def taken_survey?(user)
+    !user_responses.index(user).nil?
+  end
+  
   def user_responses
     responses = []
     for poll_option in poll_options

@@ -77,7 +77,7 @@ class PollsController < ApplicationController
       take_survey_failed "You must select an option"
     else
       poll_option = PollOption.find(params[:poll_option_id])
-      if !poll_option.poll.user_responses.index(current_user).nil?
+      if poll_option.poll.taken_survey?(current_user)
         take_survey_failed "You can only answer this survey once"
       else
         poll_option.user_responses << current_user
@@ -89,7 +89,7 @@ class PollsController < ApplicationController
   
   def show_survey
     @poll = Poll.find(params[:id])
-    if !@poll.user_responses.index(current_user).nil?
+    if @poll.taken_survey?(current_user)
       flash[:error] = "You can only answer this survey once"
       redirect_to poll_path(@poll)
     end
