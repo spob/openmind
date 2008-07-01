@@ -24,4 +24,12 @@ class PollTest < Test::Unit::TestCase
       :close_date => Date.today)
     assert poll.valid?
   end
+  
+  def test_invalid_uniqueness
+    poll = Poll.new(
+      :title => "What is your favor color?")
+    assert !poll.valid?
+    assert_equal "has already been taken", 
+      poll.errors.on(:title)
+  end
 end

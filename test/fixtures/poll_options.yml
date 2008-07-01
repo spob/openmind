@@ -1,1 +1,24 @@
-# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+<%
+fixtures :polls
+
+poll_id = polls(:color_poll, 'id')
+
+id = 0;
+%>
+color_poll_green_option:
+  id: <%= id += 1 %>
+  poll_id: <%= poll_id %>
+  description: green
+  created_at: <%=5.days.ago.to_s :db %>
+
+color_poll_blue_option:
+  id: <%= id += 1 %>
+  poll_id: <%= poll_id %>
+  description: blue
+  created_at: <%=5.days.ago.to_s :db %>
+
+color_poll_red_option:
+  id: <%= id += 1 %>
+  poll_id: <%= poll_id %>
+  description: red
+  created_at: <%=5.days.ago.to_s :db %>
