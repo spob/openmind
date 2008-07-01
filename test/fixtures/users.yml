@@ -15,7 +15,6 @@ quentin:
   crypted_password: <%= (User.encrypt 'secret', SALT) %>
   #crypted_password: "ce2/iFrNtQ8=\n" # quentin, use only if you're using 2-way encryption
   created_at: <%= 5.days.ago.to_s :db %>
-  # activated_at: <%= 5.days.ago.to_s :db %> # only if you're activating new signups
   enterprise_id: <%= enterprise_id %>
   first_name: Quentin
   last_name: Smith
@@ -27,7 +26,6 @@ aaron:
   email: aaron@example.com
   salt: <%= SALT %>
   crypted_password: <%= (User.encrypt 'secret', SALT) %>
-  # activation_code: aaronscode # only if you're activating new signups
   created_at: <%= 1.days.ago.to_s :db %>
   active: true
   enterprise_id: <%= enterprise_id %>
@@ -161,3 +159,4 @@ alloc_expiring_user:
   first_name: Jill
   last_name: Test
   force_change_password: 1
+  activated_at: <%= 5.days.ago.to_s :db %>

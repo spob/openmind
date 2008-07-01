@@ -44,10 +44,10 @@ class ReleaseStatusTest < Test::Unit::TestCase
   
   def test_invalid_too_long
     release_status = ReleaseStatus.new(
-      :short_name => "1234567890123456789012345678901", 
+      :short_name => "12345678901234567890123456789012345678901", 
       :description => "description")
     assert !release_status.valid?
-    assert_equal "is too long (maximum is 20 characters)", 
+    assert_equal "is too long (maximum is 40 characters)", 
       release_status.errors.on(:short_name)
   end
 end

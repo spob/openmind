@@ -48,7 +48,7 @@ class Allocation < ActiveRecord::Base
   
   def self.min(val1, val2)
     return val1 if val1 < val2
-    return val2
+    val2
   end
 
   protected 

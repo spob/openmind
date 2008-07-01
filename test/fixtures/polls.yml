@@ -2,8 +2,10 @@
 one:
   id: 1
   title: MyString
-  expiration_date: 2008-06-25
+  close_date: 2008-06-25
+  created_at: <%=5.days.ago.to_s :db %>
 two:
   id: 2
   title: MyString
-  expiration_date: 2008-06-25
+  close_date: 2008-06-25
+  created_at: <%=5.days.ago.to_s :db %>

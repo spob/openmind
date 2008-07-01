@@ -48,6 +48,7 @@ allocation_calculation_test3:
   enterprise_id: <%=  enterprises(:allocation_calculation_test, 'id') %>
   created_at: <%=5.days.ago.to_s :db %>
   updated_at: <%= Time.now.to_s :db %>
+  expiration_date: <%= 119.days.since.to_s :db %>
 
 allocation_calculation_test4:
   id: <%= id += 1 %>
@@ -57,6 +58,7 @@ allocation_calculation_test4:
   enterprise_id: <%=  enterprises(:allocation_calculation_test, 'id') %>
   created_at: <%=5.days.ago.to_s :db %>
   updated_at: <%= Time.now.to_s :db %>
+  expiration_date: <%= 119.days.since.to_s :db %>
 
 user_exp_allocation:
   id: <%= id += 1 %>
