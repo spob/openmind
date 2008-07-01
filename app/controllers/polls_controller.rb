@@ -95,18 +95,18 @@ class PollsController < ApplicationController
     end
   end
   
-    private
+  private
   
-    def take_survey_failed(msg)
-      @poll = Poll.find(params[:id])
-      flash[:error] = msg
-      render :action => :show_survey
-    end
-  
-    def set_active(id, active)
-      @poll = Poll.find(id)
-      @poll.active = active
-      @poll.save
-      @poll
-    end
+  def take_survey_failed(msg)
+    @poll = Poll.find(params[:id])
+    flash[:error] = msg
+    render :action => :show_survey
   end
+  
+  def set_active(id, active)
+    @poll = Poll.find(id)
+    @poll.active = active
+    @poll.save
+    @poll
+  end
+end
