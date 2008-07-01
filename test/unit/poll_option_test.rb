@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
 class PollOptionTest < Test::Unit::TestCase
-  fixtures :poll_options
+  fixtures :polls, :poll_options, :poll_user_responses
 
   def test_invalid_with_empty_attributes
     poll_option = PollOption.new
@@ -21,5 +21,11 @@ class PollOptionTest < Test::Unit::TestCase
     poll_option = PollOption.new(
       :description => "dummy")
     assert poll_option.valid?
+  end
+  
+  def test_percent_chosen
+    assert_equal 75, poll_options(:color_poll_green_option).percent_chosen
+    assert_equal 25, poll_options(:color_poll_blue_option).percent_chosen
+    assert_equal 0, poll_options(:color_poll_red_option).percent_chosen
   end
 end

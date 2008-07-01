@@ -32,4 +32,10 @@ class PollTest < Test::Unit::TestCase
     assert_equal "has already been taken", 
       poll.errors.on(:title)
   end
+  
+  def test_total_responses
+    assert_equal 4, polls(:color_poll).total_responses
+    assert_equal 0, polls(:no_options_poll).total_responses
+    assert_equal 0, polls(:no_votes_poll).total_responses
+  end
 end
