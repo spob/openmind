@@ -3,8 +3,25 @@ require File.dirname(__FILE__) + '/../test_helper'
 class PollTest < Test::Unit::TestCase
   fixtures :polls
 
-  # Replace this with your real tests.
-  def test_truth
-    assert true
+  def test_invalid_with_empty_attributes
+    poll = Poll.new()
+    assert !poll.valid?
+    assert poll.errors.invalid?(:title)
+    assert poll.errors.invalid?(:close_date)
+  end
+  
+  def test_invalid_too_long
+    poll = Poll.new(
+      :title => "0123456789001234567890012345678900123456789001234567890123456789012345678901234567890123456789012345678901234567890123456789x")
+    assert !poll.valid?
+    assert_equal "is too long (maximum is 120 characters)", 
+      poll.errors.on(:title)
+  end
+  
+  def test_valid_with_attributes
+    poll = Poll.new(
+      :title => "dummy",    
+      :close_date => Date.today)
+    assert poll.valid?
   end
 end
