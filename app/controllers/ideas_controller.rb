@@ -131,6 +131,8 @@ class IdeasController < ApplicationController
   def create
     @idea = Idea.new(params[:idea])
     @idea.user_id = current_user.id
+    # author should watch the idea by default
+    @idea.watchers << current_user
     if @idea.save
       # also createa  user read record so it doesn't show up as an unread record
       mark_as_read @idea
