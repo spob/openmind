@@ -72,17 +72,28 @@ class PollsController < ApplicationController
     redirect_to polls_url
   end
   
+  def self.POLL_NO_THANKS_ACTION
+    "No Thanks"
+  end
+  
   def take_survey
-    if params[:poll_option_id].nil?
-      take_survey_failed "You must select an option"
+    if (params[:action] == PollsController.POLL_NO_THANKS_ACTION)
+      poll = Poll.find(params[:id])
+      poll.user_responses << poll.unselectable_poll_option
+      poll.save
+      redirect_to home_path
     else
-      poll_option = PollOption.find(params[:poll_option_id])
-      if poll_option.poll.taken_survey?(current_user)
-        take_survey_failed "You can only answer this survey once"
+      if params[:poll_option_id].nil?
+        take_survey_failed "You must select an option"
       else
-        poll_option.user_responses << current_user
-        poll_option.save
-        redirect_to poll_path(poll_option.poll)
+        poll_option = PollOption.find(params[:poll_option_id])
+        if poll_option.poll.taken_survey?(current_user)
+          take_survey_failed "You can only answer this survey once"
+        else
+          poll_option.user_responses << current_user
+          poll_option.save
+          redirect_to poll_path(poll_option.poll)
+        end
       end
     end
   end

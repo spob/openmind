@@ -18,7 +18,7 @@ class PollTest < Test::Unit::TestCase
       poll.errors.on(:title)
   end
   
-  def test_valid_with_attributes
+  def test_create
     poll = Poll.new(
       :title => "dummy",    
       :close_date => Date.today)
@@ -28,6 +28,9 @@ class PollTest < Test::Unit::TestCase
     poll = Poll.find(poll.id)
     assert 0, poll.poll_options.size
     assert 1, poll.poll_options_all.size
+    noselect = poll.unselectable_poll_option
+    assert_not_nil noselect
+    assert false, noselect.selectable
   end
   
   def test_invalid_uniqueness

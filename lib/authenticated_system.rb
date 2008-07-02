@@ -69,7 +69,7 @@ module AuthenticatedSystem
   end
   
   def offer_poll
-    unless self.current_user.nil? or session[:check_for_polls] == "OFFERED"
+    unless self.current_user.nil? or session[:check_for_polls] == "OFFERED" or !voter?
       session[:check_for_polls] = "OFFERED"
       polls = self.current_user.open_polls
       if !polls.empty?

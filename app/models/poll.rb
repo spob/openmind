@@ -15,12 +15,18 @@ class Poll < ActiveRecord::Base
     :foreign_key => "poll_id",
     :dependent => :destroy
   
+  has_one :unselectable_poll_option,
+    :class_name => 'PollOption', 
+    :foreign_key => "poll_id",
+    :dependent => :destroy,
+    :conditions => { :selectable => false}
+  
   def can_delete?
     true
   end
   
   def self.list(page, per_page)
-    paginate :page => page, :order => 'close_date', 
+    paginate :page => page, :order => 'close_date DESC', 
       :per_page => per_page
   end
   
