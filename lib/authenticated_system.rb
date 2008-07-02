@@ -52,6 +52,7 @@ module AuthenticatedSystem
     self.current_user ||= User.authenticate(username, passwd) || :false if username && passwd
     success = logged_in? && authorized? ? true : access_denied
     success = force_password_change if success
+    success = offer_poll if success
     success
   end
     
@@ -61,6 +62,20 @@ module AuthenticatedSystem
       if self.current_user.force_change_password
         redirect_to :controller => '/account', :action => 'change_password'
         flash[:notice] = "Please change your password"
+        return false
+      end
+    end
+    return true
+  end
+  
+  def offer_poll
+    unless self.current_user.nil? or session[:check_for_polls] == "OFFERED"
+      session[:check_for_polls] = "OFFERED"
+      polls = self.current_user.open_polls
+      if !polls.empty?
+        @poll = polls[0]
+        redirect_to present_survey_poll_path(@poll)
+        flash[:notice] = "Would you like to participate in a survey?"
         return false
       end
     end

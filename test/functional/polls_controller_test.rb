@@ -78,11 +78,11 @@ class PollsControllerTest < Test::Unit::TestCase
     assert !poll.active
   end
 
-  def test_show_survey
-    get :show_survey, :id => polls(:color_poll)
+  def test_present_survey
+    get :present_survey, :id => polls(:color_poll)
 
     assert_response :success
-    assert_template 'show_survey'
+    assert_template 'present_survey'
   end
 
   def test_take_survey
@@ -99,13 +99,13 @@ class PollsControllerTest < Test::Unit::TestCase
     
     post :take_survey, :id => polls(:color_poll).id, 
       :poll_option_id => option.id
-    assert_template 'show_survey'
+    assert_template 'present_survey'
     assert_equal "You can only answer this survey once", flash[:error]
   end
   
   def test_take_survey_no_selection
     post :take_survey, :id => polls(:color_poll).id
-    assert_template 'show_survey'
+    assert_template 'present_survey'
     assert_equal "You must select an option", flash[:error]
   end
 end

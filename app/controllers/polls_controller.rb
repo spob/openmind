@@ -1,6 +1,6 @@
 class PollsController < ApplicationController
   before_filter :login_required
-  access_control [:new, :commit, :show, :edit, :create, :update, :destroy,
+  access_control [:new, :commit, :edit, :create, :update, :destroy,
     :publish, :unpublish ] => 'prodmgr'
   
   def index
@@ -87,7 +87,7 @@ class PollsController < ApplicationController
     end
   end
   
-  def show_survey
+  def present_survey
     @poll = Poll.find(params[:id])
     if @poll.taken_survey?(current_user)
       flash[:error] = "You can only answer this survey once"
@@ -100,7 +100,7 @@ class PollsController < ApplicationController
   def take_survey_failed(msg)
     @poll = Poll.find(params[:id])
     flash[:error] = msg
-    render :action => :show_survey
+    render :action => :present_survey
   end
   
   def set_active(id, active)
