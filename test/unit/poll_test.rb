@@ -23,6 +23,11 @@ class PollTest < Test::Unit::TestCase
       :title => "dummy",    
       :close_date => Date.today)
     assert poll.valid?
+    
+    poll.save
+    poll = Poll.find(poll.id)
+    assert 0, poll.poll_options.size
+    assert 1, poll.poll_options_all.size
   end
   
   def test_invalid_uniqueness

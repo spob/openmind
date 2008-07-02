@@ -4,7 +4,15 @@ class Poll < ActiveRecord::Base
   validates_uniqueness_of :title 
   validates_length_of :title, :maximum => 120
   
+  before_create :create_unselectable_poll_option
+  
   has_many :poll_options,
+    :dependent => :destroy,
+    :conditions => { :selectable => true}
+  
+  has_many :poll_options_all,
+    :class_name => 'PollOption', 
+    :foreign_key => "poll_id",
     :dependent => :destroy
   
   def can_delete?
@@ -14,6 +22,10 @@ class Poll < ActiveRecord::Base
   def self.list(page, per_page)
     paginate :page => page, :order => 'close_date', 
       :per_page => per_page
+  end
+  
+  def create_unselectable_poll_option
+    poll_options << PollOption.new(:description => 'Unselectable', :selectable => false)
   end
   
   def option_attributes=(option_attributes)

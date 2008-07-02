@@ -5,6 +5,13 @@ poll_id = polls(:color_poll, 'id')
 
 id = 0;
 %>
+color_poll_unselectable:
+  id: <%= id += 1 %>
+  poll_id: <%= poll_id %>
+  description: Unselectable
+  selectable: 0
+  created_at: <%=5.days.ago.to_s :db %>
+
 color_poll_green_option:
   id: <%= id += 1 %>
   poll_id: <%= poll_id %>
@@ -23,13 +30,21 @@ color_poll_red_option:
   description: red
   created_at: <%=5.days.ago.to_s :db %>
 
+no_votes_poll_unselectable:
+  id: <%= id += 1 %>
+  poll_id: <%= polls(:no_votes_poll) %>
+  description: one
+  created_at: <%=5.days.ago.to_s :db %>
+  description: Unselectable
+  selectable: 0
+
 no_votes_poll_option1:
   id: <%= id += 1 %>
   poll_id: <%= polls(:no_votes_poll) %>
   description: one
   created_at: <%=5.days.ago.to_s :db %>
 
-no_votes_poll_option12:
+no_votes_poll_option2:
   id: <%= id += 1 %>
   poll_id: <%= polls(:no_votes_poll) %>
   description: two
