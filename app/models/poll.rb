@@ -56,4 +56,22 @@ class Poll < ActiveRecord::Base
     end
     count
   end
+  
+  def self.open_polls(user)
+    sql = 
+      <<-endsql
+        SELECT *
+        FROM polls AS p
+        WHERE p.active = 1
+          AND p.close_date >= curdate()
+          AND NOT EXISTS
+          (SELECT null
+          FROM poll_options AS po INNER JOIN poll_user_responses AS pur
+          ON po.id = pur.poll_option_id
+          WHERE pur.user_id = ?
+            AND po.poll_id = p.id)
+        ORDER BY p.created_at
+      endsql
+    Poll.find_by_sql([sql, user.id])
+  end
 end

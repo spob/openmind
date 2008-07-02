@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
 class PollTest < Test::Unit::TestCase
-  fixtures :polls
+  fixtures :polls, :poll_options, :users
 
   def test_invalid_with_empty_attributes
     poll = Poll.new()
@@ -31,6 +31,10 @@ class PollTest < Test::Unit::TestCase
     assert !poll.valid?
     assert_equal "has already been taken", 
       poll.errors.on(:title)
+  end
+  
+  def test_open_polls
+    assert 0, Poll.open_polls(users(:quentin)).size
   end
   
   def test_total_responses

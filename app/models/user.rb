@@ -202,6 +202,10 @@ class User < ActiveRecord::Base
     return true if self.last_message_read.nil?
     self.last_message_read < last_announcement.created_at
   end
+  
+  def open_polls
+    Poll.open_polls(self)
+  end
 
   protected
   # before filter 
