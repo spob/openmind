@@ -21,7 +21,10 @@
   <%= link_to 'List Polls', polls_path , html_options = {:class=> "button",
     :onmouseover => "Tip('Return to list polls')"}%>
 </div>
-<div class="formTitle">Poll Detail</div>
+<div class="formTitle">
+  <%= theme_image_tag("icons/16x16/polls.png", options = {:alt=>"Poll"}) %>
+  Poll Detail
+</div>
 <div class="cssform">
   <p>
     <label for="name">Title:</label>
@@ -31,7 +34,7 @@
     <label for="close_date">Close Date:</label>
     <%= h format_date(@poll.close_date) %>
   </p>
-    Options
+  <span style="font-weight:bold; margin:5px 0 0 80px;text-decoration:underline;">Options</span>
     <% for option in @poll.poll_options %>
         <p>
             <label for="option_description">Choice:</label>
