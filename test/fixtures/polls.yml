@@ -8,7 +8,6 @@ color_poll:
 no_options_poll:
   id: 2
   title: No options?
-  active: 1
   close_date: <%= 119.days.since.to_s :db %>
   created_at: <%=5.days.ago.to_s :db %>
 
