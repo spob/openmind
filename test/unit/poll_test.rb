@@ -30,7 +30,7 @@ class PollTest < Test::Unit::TestCase
     assert 1, poll.poll_options_all.size
     noselect = poll.unselectable_poll_option
     assert_not_nil noselect
-    assert false, noselect.selectable
+    assert !noselect.selectable
   end
   
   def test_invalid_uniqueness
