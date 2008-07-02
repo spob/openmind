@@ -9,13 +9,13 @@
 <%= error_messages_for 'poll' %>
 <% form_for(:poll, :url => take_survey_poll_path(@poll), 
   :html => {:method => :post }) do |form| %>
-  <div class="cssform">
+  <div class="cssform pollOptions">
       <% for option in @poll.poll_options %>
         <span style="display:block;margin-left:10px;">
-          <%= radio_button_tag "poll_option_id", option.id, false -%>
-          <%= h option.description %>
+          <%= radio_button_tag "poll_option_id", option.id, false -%><%= h option.description %>
         </span>
       <% end %>
+     
       <%= submit_tag 'Select', html_options = {:class=> "button", :disable_with => "Please wait..."} %>
   </div>
 <% end %>

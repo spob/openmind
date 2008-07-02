@@ -130,22 +130,20 @@ div.auto_complete ul strong.highlight {
     background-image: url("../images/icons/64x64/redsquareOff.png" );
 }
 
-/*
+
 .red64:hover {
     background-image: url("../images/icons/64x64/redsquareOn.png" );
     cursor: pointer;
 }
-*/
+
 .black64 {
     background-image: url("../images/icons/64x64/blacksquareOff.png" );
 }
 
-/*
 .black64:hover {
     background-image: url("../images/icons/64x64/blacksquareOn.png" );
     cursor: pointer;
 }
-*/
 
 .black128 {
     background-image: url("../images/icons/128x128/blacksquareOff.png" );

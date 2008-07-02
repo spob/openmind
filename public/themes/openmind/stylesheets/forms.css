@@ -149,6 +149,15 @@ input.narrowText[type="text"]
     margin-right: 8px;
 }
 
+.pollOptions {
+    padding:20px;
+    margin:0px;
+}
+
+.pollOptions .button {
+    margin:20px 0 0 15px;
+}
+
 .req {
     float: none;
     color: red !important;
