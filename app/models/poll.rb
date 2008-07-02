@@ -45,7 +45,7 @@ class Poll < ActiveRecord::Base
   
   def user_responses
     responses = []
-    for poll_option in poll_options
+    for poll_option in poll_options_all
       responses << poll_option.user_responses
     end
     responses.flatten
