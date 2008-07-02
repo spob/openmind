@@ -172,6 +172,17 @@ div.auto_complete ul strong.highlight {
     color: #DFDFDF;
 }
 
+.count a:link, .count a:visited, .count a:active {
+    color: #fff;
+    text-decoration: none;
+}
+
+.count a:hover {
+    text-decoration: none;
+    color:#FFDF3E;
+    background-color: Transparent;
+}
+
 .countbutton128 .description {
     text-align: center;
     top: 24px;
