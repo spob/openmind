@@ -87,6 +87,18 @@ class PollsController < ApplicationController
     end
   end
   
+  #  def self.POLL_OPTION_ANSWER_SURVEY 
+  #    "Answer Survey"
+  #  end
+  #  
+  #  def self.POLL_OPTION_ASK_ME_LATER
+  #    "Not Now"
+  #  end
+  #  
+  #  def self.POLL_OPTION_NEVER
+  #    "Never"
+  #  end
+  
   def present_survey
     @poll = Poll.find(params[:id])
     if @poll.taken_survey?(current_user)

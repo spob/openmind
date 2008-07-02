@@ -16,7 +16,8 @@
         </span>
       <% end %>
      
-      <%= submit_tag 'Select', html_options = {:class=> "button", :disable_with => "Please wait..."} %>
+      <%= submit_tag 'Answer Survey', html_options = {:name => 'answer', :class=> "button", :disable_with => "Please wait..."} %>
+      <%= link_to 'Not Now, Perhaps Later', home_path, html_options = {:class=> "button"} %>
   </div>
 <% end %>
 <%content_for :head do -%>
