@@ -19,7 +19,8 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :lookup_codes
   map.resources :merge_ideas
   map.resources :polls, :member => { :publish => :post, :unpublish => :post,
-    :present_survey => :get, :take_survey => :post }
+    :present_survey => :get, :take_survey => :post}, 
+    :collection => {:toggle_details => :get }
   map.resources :products
   map.resources :releases, :member => { :commit => :post },
       :collection => { :preview => :get, :list => :get }

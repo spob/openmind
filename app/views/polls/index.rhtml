@@ -15,6 +15,7 @@
   <tr>
     <th>Title</th>
     <th>Published?</th>
+    <th>Responses</th>
     <th>Close Date</th>
     <th>Action</th>
   </tr>
@@ -23,6 +24,7 @@
     <% form_for :poll, :url => polls_path do |form| %>
       <td><%= form.text_field :title, { :size => 50, :maxlength => 120 } %></td>
       <td>false</td>
+      <td>0</td>
       <td>
         <%= calendar_date_select :poll, :close_date, :popup => :force, :time => false %>
       </td>
@@ -37,6 +39,7 @@
     <tr>
       <td><%= poll.title %></td>
       <td><%= poll.active %></td>
+      <td><%= poll.total_responses %></td>
       <td><%= format_date(poll.close_date) %></td>
       <td>
         <% if prodmgr? %>

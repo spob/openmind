@@ -17,6 +17,7 @@ class PollsController < ApplicationController
     :redirect_to => { :action => :index }
 
   def show
+    session[:polls_show_toggle_detail] ||= "HIDE"
     @poll = Poll.find(params[:id])
   end
 
@@ -118,6 +119,23 @@ class PollsController < ApplicationController
     end
   end
   
+  def toggle_details
+    poll = Poll.find(params[:id])
+    if session[:polls_show_toggle_detail] == "HIDE"
+      session[:polls_show_toggle_detail] = "SHOW"
+    else
+      session[:polls_show_toggle_detail] = "HIDE"
+    end
+    
+    respond_to do |format|
+      format.html { 
+        show
+        render poll_path(poll)
+      }
+      format.js  { do_rjs_toggle_details poll }
+    end
+  end
+  
   private
   
   def take_survey_failed(msg)
@@ -131,5 +149,23 @@ class PollsController < ApplicationController
     @poll.active = active
     @poll.save
     @poll
+  end
+  
+  def do_rjs_toggle_details  poll
+      render :update do |page|
+      if session[:polls_show_toggle_detail] == "HIDE"
+        page.visual_effect :blind_up, "hide_images", :duration => 0.2
+        page.visual_effect :blind_down, "show_images", :duration => 1
+        for option in poll.poll_options
+          page.visual_effect :squish, "details#{option.id}", :duration => 0.5
+        end
+      else
+        page.visual_effect :blind_up, "show_images", :duration => 0.2
+        page.visual_effect :blind_down, "hide_images", :duration => 1
+        for option in poll.poll_options
+          page.visual_effect :blind_down, "details#{option.id}", :duration => 1
+        end
+      end
+    end
   end
 end
