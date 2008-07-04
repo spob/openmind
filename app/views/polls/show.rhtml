@@ -36,6 +36,11 @@
     <label for="close_date">Close Date:</label>
     <%= h format_date(@poll.close_date) %>
   </p>
+  <% if @poll.total_responses > 0 %>
+    <p>
+        <%=google_pie_chart(@chart_data, :width => 626, :height => 300) %>
+    </p>
+  <% end %>
   <span style="font-weight:bold; margin:5px 0 0 80px;text-decoration:underline;">Options</span>
   
     <% for option in @poll.poll_options %>

@@ -19,6 +19,11 @@ class PollsController < ApplicationController
   def show
     session[:polls_show_toggle_detail] ||= "HIDE"
     @poll = Poll.find(params[:id])
+    @chart_data = []
+    for option in @poll.poll_options
+      data_point = [ option.description, option.user_responses.size]
+      @chart_data << data_point
+    end
   end
 
   def new
