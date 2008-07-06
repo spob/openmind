@@ -3,7 +3,7 @@ class Idea < ActiveRecord::Base
   belongs_to :user
   belongs_to :release
   belongs_to :product
-  has_one :last_comment, :class_name => "Comment", :order => "id DESC"
+  has_one :last_comment, :class_name => "IdeaComment", :order => "id DESC"
   has_many :votes,:dependent => :destroy     
   has_many :comments,:dependent => :destroy    
   has_many :user_idea_reads,:dependent => :destroy 

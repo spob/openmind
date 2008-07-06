@@ -20,17 +20,17 @@ class CommentsController < ApplicationController
     :redirect_to => { :controller => 'ideas', :action => :index }
 
   def show
-    @comment = Comment.find(params[:id])
+    @comment = IdeaComment.find(params[:id])
   end
 
   def new
     @idea = Idea.find(params[:id])
-    @comment ||= Comment.new
+    @comment ||= IdeaComment.new
   end
 
   def create
     @idea = Idea.find(params[:id])
-    @comment = Comment.new(params[:comment])
+    @comment = IdeaComment.new(params[:comment])
     @comment.user_id = current_user.id
     @comment.idea_id = @idea.id
     if @comment.save
@@ -43,11 +43,11 @@ class CommentsController < ApplicationController
   end
 
   def edit
-    @comment = Comment.find(params[:id])
+    @comment = IdeaComment.find(params[:id])
   end
 
   def update
-    @comment = Comment.find(params[:id])
+    @comment = IdeaComment.find(params[:id])
     if @comment.update_attributes(params[:comment])
       flash[:notice] = 'Comment was successfully updated.'
       redirect_to :controller => :ideas, :action => :show, :id => @comment.idea.id
@@ -57,7 +57,7 @@ class CommentsController < ApplicationController
   end
 
   def destroy
-    Comment.find(params[:id]).destroy
+    IdeaComment.find(params[:id]).destroy
     redirect_to comments_path
   end
 end

@@ -231,7 +231,7 @@ class IdeaTest < Test::Unit::TestCase
     
     assert !idea.unread_comment?(user)
     sleep 1
-    idea.comments.create(:user_id => user.id, :body => "blah")
+    idea.comments << IdeaComment.new(:user_id => user.id, :body => "blah")
     idea.save
     assert idea.unread_comment?(user)
     sleep 1
@@ -246,8 +246,8 @@ class IdeaTest < Test::Unit::TestCase
     idea = ideas(:no_comments_idea)
     assert idea.comments.empty?
     assert_nil idea.last_comment
-    comment1 = Comment.new(:user_id => user.id, :body => "blah1")
-    comment2 = Comment.new(:user_id => user.id, :body => "blah2")
+    comment1 = IdeaComment.new(:user_id => user.id, :body => "blah1")
+    comment2 = IdeaComment.new(:user_id => user.id, :body => "blah2")
     idea.comments << comment1
     idea.comments << comment2
     idea.save
