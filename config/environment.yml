@@ -26,3 +26,7 @@ email_image_url: http://localhost:3000/themes/scribe/images/email
 # The name of the theme (e.g., skin). This should correspond to a directory 
 # under the public/themes directory
 app_theme: openmind
+
+# The number of days within which to warn the user of unused allocations
+# about to expire. A value of 0 means never warn the user.
+allocation_expiration_warning_days: 45
