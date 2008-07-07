@@ -40,17 +40,18 @@ class Allocation < ActiveRecord::Base
   private
   
   def self.first_expiration_days(allocations)
-    allocation = nil
+    expiring_days = 9999
     if !allocations.nil?
-      for alloc in allocations
-        if alloc.available_quantity > 0
-          allocation = alloc
-          break;
+      for allocation in allocations
+        if allocation.available_quantity > 0
+          l_expiring_days = allocation.expiration_date.jd - Date.today.jd
+          if l_expiring_days < expiring_days and l_expiring_days >= 0
+            expiring_days = l_expiring_days
+          end          
         end
       end
     end
-    return 9999 if allocation.nil?
-    allocation.expiration_date.jd - Date.today.jd
+    expiring_days
   end
   
   def self.min(val1, val2)
