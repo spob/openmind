@@ -92,7 +92,7 @@ class AccountController < ApplicationController
   def expiration_msg
       expiration_days = Allocation.expiring_allocation_days self.current_user
       allocation_expiration_warning_days = APP_CONFIG['allocation_expiration_warning_days'].to_i
-      return nil if expiration_days > allocation_expiration_warning_days or allocation_expiration_warning_days > 0
+      return nil if expiration_days > allocation_expiration_warning_days or allocation_expiration_warning_days == 0
       ". You have allocations expiring in #{StringUtils.pluralize(expiration_days, 'day')} "
   end
 end
