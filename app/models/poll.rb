@@ -22,7 +22,7 @@ class Poll < ActiveRecord::Base
     :conditions => { :selectable => false}
   
   def can_delete?
-    true
+    total_responses == 0 and !active
   end
   
   def self.list(page, per_page)
