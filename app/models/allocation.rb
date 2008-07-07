@@ -22,7 +22,7 @@ class Allocation < ActiveRecord::Base
   def self.list_all_for_user(user, page, per_page)
     paginate :page => page, 
       :conditions => ["(allocation_type = 'UserAllocation' and allocations.user_id = ?) or (allocation_type = 'EnterpriseAllocation' and enterprise_id = ?)",
-        user.id, user.enterprise.id],
+      user.id, user.enterprise.id],
       :order => 'allocations.created_at DESC,  allocations.enterprise_id ASC, allocations.user_id  ASC' ,
       :per_page => per_page, :include => :votes
   end
@@ -41,7 +41,14 @@ class Allocation < ActiveRecord::Base
   
   def self.first_expiration_days(allocations)
     allocation = nil
-    allocation = allocations.first unless allocations.nil? or allocations.empty? 
+    if !allocations.nil?
+      for alloc in allocations
+        if alloc.available_quantity > 0
+          allocation = alloc
+          break;
+        end
+      end
+    end
     return 9999 if allocation.nil?
     allocation.expiration_date.jd - Date.today.jd
   end
