@@ -26,7 +26,7 @@ class AddUpdatedAtColumns < ActiveRecord::Migration
     change_column :poll_options, :updated_at, :datetime, :null => false
     change_column :polls, :updated_at, :datetime, :null => false
     change_column :products, :updated_at, :datetime, :null => false
-    change_column :polls, :updated_at, :datetime, :null => false
+    change_column :releases, :updated_at, :datetime, :null => false
     change_column :roles, :updated_at, :datetime, :null => false
     change_column :roles_users, :updated_at, :datetime, :null => false
   end
@@ -38,6 +38,7 @@ class AddUpdatedAtColumns < ActiveRecord::Migration
     remove_column :poll_options, :updated_at
     remove_column :polls, :updated_at
     remove_column :products, :updated_at
+    remove_column :releases, :updated_at
     remove_column :roles, :updated_at
     remove_column :roles_users, :updated_at
   end
