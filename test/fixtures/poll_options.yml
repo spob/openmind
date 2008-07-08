@@ -11,30 +11,35 @@ color_poll_unselectable:
   description: Unselectable
   selectable: 0
   created_at: <%=5.days.ago.to_s :db %>
+  updated_at: <%= Time.now.to_s :db %>
 
 color_poll_green_option:
   id: <%= id += 1 %>
   poll_id: <%= poll_id %>
   description: green
   created_at: <%=5.days.ago.to_s :db %>
+  updated_at: <%= Time.now.to_s :db %>
 
 color_poll_blue_option:
   id: <%= id += 1 %>
   poll_id: <%= poll_id %>
   description: blue
   created_at: <%=5.days.ago.to_s :db %>
+  updated_at: <%= Time.now.to_s :db %>
 
 color_poll_red_option:
   id: <%= id += 1 %>
   poll_id: <%= poll_id %>
   description: red
   created_at: <%=5.days.ago.to_s :db %>
+  updated_at: <%= Time.now.to_s :db %>
 
 no_votes_poll_unselectable:
   id: <%= id += 1 %>
   poll_id: <%= polls(:no_votes_poll) %>
   description: one
   created_at: <%=5.days.ago.to_s :db %>
+  updated_at: <%= Time.now.to_s :db %>
   description: Unselectable
   selectable: 0
 
@@ -43,9 +48,11 @@ no_votes_poll_option1:
   poll_id: <%= polls(:no_votes_poll) %>
   description: one
   created_at: <%=5.days.ago.to_s :db %>
+  updated_at: <%= Time.now.to_s :db %>
 
 no_votes_poll_option2:
   id: <%= id += 1 %>
   poll_id: <%= polls(:no_votes_poll) %>
   description: two
   created_at: <%=5.days.ago.to_s :db %>
+  updated_at: <%= Time.now.to_s :db %>

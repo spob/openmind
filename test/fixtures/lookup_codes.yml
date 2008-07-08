@@ -8,6 +8,7 @@ release_status_controller_test:
     description: description1
     sort_value: 1
     created_at: <%=Time.now.to_s(:db)%>
+    updated_at: <%= Time.now.to_s :db %>
 
 release_status_val2_test:
     id: <%= id += 1 %>
@@ -16,3 +17,4 @@ release_status_val2_test:
     description: description2
     sort_value: 2
     created_at: <%=Time.now.to_s(:db)%>
+    updated_at: <%= Time.now.to_s :db %>
