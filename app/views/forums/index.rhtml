@@ -1,0 +1,56 @@
+<%= calendar_date_select_includes "blue" %>
+<%content_for :head do -%>
+  <%= theme_stylesheet_link_tag 'forms' %>
+  <%= theme_stylesheet_link_tag 'tables' %>
+  <%= javascript_include_tag "tablecloth" %>                
+<%end%>
+<%= javascript_include_tag "wz_tooltip.js" %> 
+<%= error_messages_for 'forum' %>
+<h1>
+    <%= theme_image_tag("icons/48x48/polls.png", 
+      options = {:alt=>"Forum"}) %>
+      Forums
+    </h1>
+<table cellspacing="0" cellpadding="0" class="cssform">
+  <tr>
+    <th>Name</th>
+    <th>Action</th>
+  </tr>
+  <% if sysadmin? %>
+  <tr>
+    <% form_for :forum, :url => forums_path do |form| %>
+      <td><%= form.text_field :name, { :size => 50, :maxlength => 50 } %></td>
+      <td><%= submit_tag 'Create', options = {:class=> "button", :disable_with => "Please wait...",
+        :onmouseover => "Tip('Create a new forum')"} %></td>
+    <% end %>
+  <%= set_focus_to_id_in_list_form 'forum_name' -%>
+  </tr>
+  <% end %>
+  
+    <% for forum in @forums %>
+    <tr>
+      <td><%= h forum.name %></td>
+      <td>
+        <% if sysadmin? %>
+        <%= link_to theme_image_tag("icons/16x16/viewAction.png", :alt=>"view", :title=> "view"),
+          forum_path(forum), 
+          html_options = {
+          :onmouseover => "Tip('View details for this forum')"} 
+        %>
+        <%= link_to theme_image_tag("icons/16x16/editAction.png", :alt=>"edit", :title=> "edit"), 
+          edit_forum_path(forum),
+          html_options = {
+          :onmouseover => "Tip('Edit this forum')"}
+        %>
+      
+        <%= link_to(
+          theme_image_tag("icons/16x16/deleteAction.png", :alt=>"delete", :title=> "delete"),
+          forum_path(forum),
+          html_options = {:confirm => 'Are you sure?', :method => :delete,
+            :onmouseover => "Tip('Delete this forum')"} ) if forum.can_delete? %>
+    <% end %>
+      </td>
+  </tr>
+<% end %>
+</table>
+<p><%= will_paginate @forums %></p>

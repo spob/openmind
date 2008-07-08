@@ -5,4 +5,9 @@ class Forum < ActiveRecord::Base
   def can_delete?
     true
   end
+  
+  def self.list(page, per_page)
+    paginate :page => page, :order => 'name ASC', 
+      :per_page => per_page
+  end
 end

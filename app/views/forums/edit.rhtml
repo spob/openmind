@@ -1,0 +1,27 @@
+<%= calendar_date_select_includes "blue" %>
+<%= javascript_include_tag :defaults %> 
+<%content_for :bodyTag do -%>
+  <%= set_focus_to_id 'forum_name' %>
+<%end%>
+<%= error_messages_for 'forum' %>
+<% form_for(:forum, :url => forum_path(@forum), 
+  :html => {:method => :put }) do |form| %>
+  <div id="actionButtons2">
+    <%= link_to 'View Details', forum_path(@forum), 
+      html_options = { :class => "button" } %>
+    <%= link_to 'List forums', forums_path, 
+      html_options = { :class => "button" } %>
+  </div>
+  <div class="formTitle"><%=theme_image_tag("icons/16x16/polls.png", :alt=>"edit forum")%>Edit forum</div>
+  <div class="cssform widerLabel">
+    <p>
+      <label for="forum_name">Name:</label>
+      <%= form.text_field :name, { :size => 50, :maxlength => 50 } %>
+    </p>
+      
+    <p>
+      <label></label>
+      <%= submit_tag 'Save', html_options = {:class=> "button", :disable_with => "Please wait..."} %>
+    </p>
+  </div>
+<% end %>

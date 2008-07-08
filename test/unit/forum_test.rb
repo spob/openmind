@@ -21,4 +21,8 @@ class ForumTest < Test::Unit::TestCase
     forum = Forum.new(:name => "bugs")
     assert forum.valid?
   end
+  
+  def test_list
+    assert Forum.list(1, 10).size > 0
+  end
 end

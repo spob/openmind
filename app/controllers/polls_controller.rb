@@ -1,6 +1,6 @@
 class PollsController < ApplicationController
   before_filter :login_required
-  access_control [:new, :commit, :edit, :create, :update, :destroy,
+  access_control [:new,  :edit, :create, :update, :destroy,
     :publish, :unpublish ] => 'prodmgr'
   
   def index

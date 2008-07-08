@@ -37,7 +37,7 @@
   
     <% for poll in @polls %>
     <tr>
-      <td><%= poll.title %></td>
+      <td><%= h poll.title %></td>
       <td><%= poll.active %></td>
       <td><%= poll.total_responses %></td>
       <td><%= format_date(poll.close_date) %></td>

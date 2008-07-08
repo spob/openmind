@@ -7,6 +7,7 @@ module ApplicationHelper
       ["Ideas",           "/ideas"                             ],
       ["Products",        products_path,                       ],
       ["Releases",        list_releases_path                   ],
+      ["Forums",          forums_path                          ],
       ["Lookup Codes",    lookup_codes_path,    ["sysadmin"]   ],
       ["Users",           "/users",             ["sysadmin", "allocmgr"] ],
       ["Enterprises",     enterprises_path,     ["sysadmin", "allocmgr"] ],
