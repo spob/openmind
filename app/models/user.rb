@@ -21,6 +21,7 @@ class User < ActiveRecord::Base
   # This collection is for watches
   has_and_belongs_to_many :watched_ideas, :join_table => 'watches', :class_name => 'Idea'
   has_and_belongs_to_many :poll_options, :join_table => 'poll_user_responses'
+  has_and_belongs_to_many :mediated_forums, :join_table => 'forum_mediators', :class_name => 'Forum'
   
   has_one :last_logon, :class_name => "UserLogon", :order => "created_at DESC"
   has_many :user_logons, :order => "created_at DESC", :dependent => :destroy   

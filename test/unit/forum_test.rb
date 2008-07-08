@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
 class ForumTest < Test::Unit::TestCase
-  fixtures :forums
+  fixtures :forums, :forum_mediators
 
   # Replace this with your real tests.
   def test_invalid_with_empty_attributes
@@ -24,5 +24,10 @@ class ForumTest < Test::Unit::TestCase
   
   def test_list
     assert Forum.list(1, 10).size > 0
+  end
+  
+  def test_mediators
+    forum = Forum.find forums(:bugs_forum).id
+    assert forum.mediators.count == 1
   end
 end
