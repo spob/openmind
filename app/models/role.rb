@@ -19,4 +19,16 @@ class Role < ActiveRecord::Base
   def can_delete?
     return false
   end  
+  
+  def self.find_users_by_role(role_title)
+    if @role_title.nil? or role_title != @role_title
+      @role_title = role_title
+      @role = Role.find_by_title(role_title)
+    end
+    users = []
+    for user in User.find(:all, :order => 'email ASC')
+      users << user if user.roles.include? @role
+    end
+    users    
+  end
 end

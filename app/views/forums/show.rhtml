@@ -21,4 +21,10 @@
     <label for="name">Name:</label>
     <%= h @forum.name %>
   </p>
+  <p>
+    <label>Mediators:</label><br />
+    <% for user in @forum.mediators %>
+      &bull;&nbsp;<%= h user.full_name %><br />
+    <% end %>
+  </p>
 </div>

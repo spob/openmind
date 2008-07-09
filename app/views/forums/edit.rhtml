@@ -18,6 +18,15 @@
       <label for="forum_name">Name:</label>
       <%= form.text_field :name, { :size => 50, :maxlength => 50 } %>
     </p>
+    <p>
+      <label>Mediators:</label>
+      <% for user in @mediators %>
+        <span style="display:block;margin-left:10px;">
+          <%= check_box_tag "forum[mediator_ids][]", user.id, @forum.mediators.include?(user) %>
+          <%= h user.full_name %>
+        </span>
+      <% end %>
+    </p>
       
     <p>
       <label></label>

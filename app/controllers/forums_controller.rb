@@ -31,9 +31,11 @@ class ForumsController < ApplicationController
 
   def edit
     @forum = Forum.find(params[:id])
+    @mediators = Role.find_users_by_role('mediator')
   end
 
   def update
+    params[:forum][:mediator_ids] ||= []
     @forum = Forum.find(params[:id])
     if @forum.update_attributes(params[:forum])
       flash[:notice] = "Forum '#{@forum.name}' was successfully updated."
