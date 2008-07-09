@@ -1,0 +1,14 @@
+<%
+fixtures :forums, :users
+
+forum_id = forums(:bugs_forum, 'id')
+
+id = 0;
+%>
+bug_topic1:
+  id: <%= id += 1 %>
+  title: Topic one
+  forum_id: <%= forum_id %>
+  user_id: <%= users(:quentin, 'id') %>
+  updated_at: <%= 119.days.since.to_s :db %>
+  created_at: <%=5.days.ago.to_s :db %>
