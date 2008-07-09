@@ -4,7 +4,9 @@ class Forum < ActiveRecord::Base
   has_many :topics, :dependent => :destroy  
   
   validates_presence_of :name
+  validates_presence_of :description
   validates_length_of   :name, :maximum => 50
+  validates_length_of   :description, :maximum => 150
   
   def can_delete?
     true

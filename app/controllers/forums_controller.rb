@@ -10,6 +10,12 @@ class ForumsController < ApplicationController
   verify :method => :delete, :only => [ :destroy ],
     :redirect_to => { :action => :index }
 
+
+  def new
+    @forum = Forum.new
+    @mediators = Role.find_users_by_role('mediator')
+  end
+  
   def show
     @forum = Forum.find(params[:id])
   end
@@ -19,6 +25,7 @@ class ForumsController < ApplicationController
   end
 
   def create
+    params[:forum][:mediator_ids] ||= []
     @forum = Forum.new(params[:forum])
     if @forum.save
       flash[:notice] = "Forum #{@forum.name} was successfully created."

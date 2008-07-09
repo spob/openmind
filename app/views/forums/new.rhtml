@@ -1,0 +1,40 @@
+<%= calendar_date_select_includes "blue" %>
+<%content_for :bodyTag do -%>
+  <%= set_focus_to_id 'forum_name' -%>
+<%end%>
+<%= error_messages_for 'forum' %>
+
+<div id="actionButtons2">
+  <%= link_to 'List forums', forums_path, 
+      html_options = { :class => "button" } %>
+</div>
+
+<% form_for :forum, :url => forums_path do |form| %>
+  <div class="formTitle"><%= theme_image_tag("icons/16x16/polls.png", 
+    options = {:alt=>"Forums"}) %>New Forum</div>
+
+  <div class="cssform widerLabel">
+    <p>
+      <label for="name">Name:</label>
+      <%= form.text_field :name, { :size => 20, :maxlength => 50 } %>
+    </p>
+    <p>
+      <label for="description">Description</label>
+      <%= form.text_field :description, { :size => 30, :maxlength => 150 } %>
+    </p>
+    <p>
+      <label>Mediators:</label>
+      <% for user in @mediators %>
+        <span style="display:block;margin-left:10px;">
+          <%= check_box_tag "forum[mediator_ids][]", user.id, @forum.mediators.include?(user) %>
+          <%= h user.full_name %>
+        </span>
+      <% end %>
+    </p>
+    <p>
+      <label></label>
+      <%= submit_tag 'Create', options = {:class=> "button", :disable_with => "Please wait...",
+            :onmouseover => "Tip('Create a new forum')"} %>
+    </p>
+  </div>  
+<% end %>

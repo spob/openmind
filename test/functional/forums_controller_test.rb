@@ -27,7 +27,7 @@ class ForumsControllerTest < Test::Unit::TestCase
   def test_create
     num_forums = Forum.count
 
-    post :create, :forum => { :name => "x" }
+    post :create, :forum => { :name => "x", :description => "desc" }
     
     assert_equal num_forums + 1, Forum.count
     assert_response :redirect

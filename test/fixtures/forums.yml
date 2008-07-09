@@ -2,5 +2,6 @@
 bugs_forum:
   id: 1
   name: bugs
+  description: A forum to discuss product defects and work arounds
   updated_at: <%= 119.days.since.to_s :db %>
   created_at: <%=5.days.ago.to_s :db %>
