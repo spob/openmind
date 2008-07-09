@@ -5,6 +5,7 @@ class CreateTopics < ActiveRecord::Migration
       t.column :lock_version, :integer, :default => 0
       t.column :forum_id,  :integer, :null => false
       t.column :user_id,  :integer, :null => false
+      t.column :pinned, :boolean, :default => false, :null => false
       t.column :created_at, :datetime, :null => false
       t.column :updated_at, :datetime, :null => false
     end
