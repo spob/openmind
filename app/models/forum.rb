@@ -1,5 +1,7 @@
 class Forum < ActiveRecord::Base
-  has_and_belongs_to_many :mediators, :join_table => 'forum_mediators', :class_name => 'User'
+  has_and_belongs_to_many :mediators, :join_table => 'forum_mediators', 
+    :class_name => 'User'
+  has_many :topics, :dependent => :destroy  
   
   validates_presence_of :name
   validates_length_of   :name, :maximum => 50

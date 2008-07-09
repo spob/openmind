@@ -5,7 +5,7 @@ require 'forums_controller'
 class ForumsController; def rescue_action(e) raise e end; end
 
 class ForumsControllerTest < Test::Unit::TestCase
-  fixtures :forums, :users
+  fixtures :forums, :users, :forum_mediators
 
   def setup
     @controller = ForumsController.new
@@ -28,11 +28,11 @@ class ForumsControllerTest < Test::Unit::TestCase
     num_forums = Forum.count
 
     post :create, :forum => { :name => "x" }
-
+    
+    assert_equal num_forums + 1, Forum.count
     assert_response :redirect
     assert_redirected_to :controller => 'forums', :action => 'index'
 
-    assert_equal num_forums + 1, Forum.count
   end
 
   def test_edit
@@ -46,7 +46,7 @@ class ForumsControllerTest < Test::Unit::TestCase
   end
 
   def test_update
-    put :update, :id => forums(:bugs_forum)
+    put :update, {:id => forums(:bugs_forum), :forum => {:mediator_ids => [] }}
     assert_response :redirect
     assert_redirected_to :controller => 'forums', :action => 'index'
   end
