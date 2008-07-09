@@ -1,21 +1,21 @@
 <%= calendar_date_select_includes "blue" %>
 <%content_for :head do -%>
-    <%= theme_stylesheet_link_tag 'forms' %>
-    <%= theme_stylesheet_link_tag 'tables' %>
-    <%= javascript_include_tag "tablecloth" %>                
+      <%= theme_stylesheet_link_tag 'forms' %>
+      <%= theme_stylesheet_link_tag 'tables' %>
+      <%= javascript_include_tag "tablecloth" %>                
 <%end%>
 <%= javascript_include_tag "wz_tooltip.js" %> 
 <%= error_messages_for 'forum' %>
 <h1>
   <%= theme_image_tag("icons/48x48/polls.png", 
-      options = {:alt=>"Forum"}) %>
+        options = {:alt=>"Forum"}) %>
   Forums
 </h1>
 <% if sysadmin? %>
   <div id="actionButtons">
     <%= link_to 'New Forum', new_forum_path, 
-                      html_options = {:class => "button",
-                      :onmouseover => "Tip('Create a new forum')"} %>
+                        html_options = {:class => "button",
+                        :onmouseover => "Tip('Create a new forum')"} %>
   </div>
 <% end %>
 <table cellspacing="0" cellpadding="0" class="cssform">
@@ -32,24 +32,24 @@
       <td><%= h forum.topics.count %></td>
       <td>todo</td>
       <td>
-        <% if sysadmin? %>
-          <%= link_to theme_image_tag("icons/16x16/viewAction.png", :alt=>"view", :title=> "view"),
+        <%= link_to theme_image_tag("icons/16x16/viewAction.png", :alt=>"view", :title=> "view"),
               forum_path(forum), 
               html_options = {
               :onmouseover => "Tip('View details for this forum')"} 
-          %>
+        %>
+         <% if can_edit? forum %>
           <%= link_to theme_image_tag("icons/16x16/editAction.png", :alt=>"edit", :title=> "edit"), 
-              edit_forum_path(forum),
-              html_options = {
-              :onmouseover => "Tip('Edit this forum')"}
+                edit_forum_path(forum),
+                html_options = {
+                :onmouseover => "Tip('Edit this forum')"}
           %>
-    
+
           <%= link_to(
-              theme_image_tag("icons/16x16/deleteAction.png", :alt=>"delete", :title=> "delete"),
-              forum_path(forum),
-              html_options = {:confirm => 'Are you sure?', :method => :delete,
-                  :onmouseover => "Tip('Delete this forum')"} ) if forum.can_delete? %>
-    <% end %>
+                theme_image_tag("icons/16x16/deleteAction.png", :alt=>"delete", :title=> "delete"),
+                forum_path(forum),
+                html_options = {:confirm => 'Are you sure?', :method => :delete,
+                      :onmouseover => "Tip('Delete this forum')"} ) if forum.can_delete? %>
+  <% end %>
       </td>
     </tr>
   <% end %>

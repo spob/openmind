@@ -1,34 +1,64 @@
 <%content_for :head do -%>
-  <%= theme_stylesheet_link_tag 'forms' %>
-  <%= theme_stylesheet_link_tag 'tables' %>
-  <%= javascript_include_tag "tablecloth" %>                
+    <%= theme_stylesheet_link_tag 'forms' %>
+    <%= theme_stylesheet_link_tag 'tables' %>
+    <%= javascript_include_tag "tablecloth" %>                
 <%end%>
 <%= javascript_include_tag "wz_tooltip.js" %> 
 <% if sysadmin? %>
   <div id="actionButtons2">
     <%= link_to 'Edit', edit_forum_url(@forum), html_options = {:class=> "button",
-    :onmouseover => "Tip('Edit this forum')"} %>
+      :onmouseover => "Tip('Edit this forum')"} %>
     <%= link_to 'List Forums', forums_path , html_options = {:class=> "button",
-      :onmouseover => "Tip('Return to list forums')"}%>
+        :onmouseover => "Tip('Return to list forums')"}%>
   </div>
 <% end %>
 <div class="formTitle">
   <%= theme_image_tag("icons/16x16/polls.png", options = {:alt=>"Forum"}) %>
-  Forum Detail
+  Forum: <%= h @forum.name %>
 </div>
 <div class="cssform">
-  <p>
-    <label for="name">Name:</label>
-    <%= h @forum.name %>
-  </p>
-  <p>
-    <label for="name">Description:</label>
-    <%= h @forum.description %>
-  </p>
-  <p>
-    <label>Mediators:</label><br />
-    <% for user in @forum.mediators %>
-      &bull;&nbsp;<%= h user.full_name %><br />
-    <% end %>
-  </p>
+  <%= h @forum.description %>
+  <% if can_edit? @forum %>
+    <p>
+      <label>Mediators:</label><br />
+      <% for user in @forum.mediators %>
+        &bull;&nbsp;<%= h user_display_name(user) %><br />
+      <% end %>
+    </p>
+  <% end %>
 </div>
+<h1>Topics</h1>
+<table cellspacing="0" cellpadding="0" class="cssform">
+  <tr>
+    <th>Title</th>
+    <th>Started By</th>
+    <th>Action</th>
+  </tr>
+  
+    <% for topic in @forum.topics %>
+    <tr>
+      <td><%= h topic.title %></td>
+      <td><%= h user_display_name(topic.user) %></td>
+      <td>
+        <%= link_to theme_image_tag("icons/16x16/viewAction.png", :alt=>"view", :title=> "view"),
+              forum_path(topic), 
+              html_options = {
+              :onmouseover => "Tip('View details for this topic')"} 
+        %>
+         <% if can_edit? forum %>
+          <%= link_to theme_image_tag("icons/16x16/editAction.png", :alt=>"edit", :title=> "edit"), 
+                edit_forum_path(topic),
+                html_options = {
+                :onmouseover => "Tip('Edit this topic')"}
+          %>
+
+          <%= link_to(
+                theme_image_tag("icons/16x16/deleteAction.png", :alt=>"delete", :title=> "delete"),
+                forum_path(topic),
+                html_options = {:confirm => 'Are you sure?', :method => :delete,
+                      :onmouseover => "Tip('Delete this topic')"} ) if forum.can_delete? %>
+  <% end %>
+      </td>
+    </tr>
+  <% end %>
+</table>

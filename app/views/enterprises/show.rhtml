@@ -22,7 +22,7 @@
   <p>
     <label>Users</label>
     <% for user in @enterprise.users %>
-      &bull;&nbsp;<%=h user.full_name %><br />
+      &bull;&nbsp;<%=h user_display_name(user) %><br />
     <% end %>
   </p>
 </div>

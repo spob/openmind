@@ -23,7 +23,7 @@
       <% for user in @mediators %>
         <span style="display:block;margin-left:10px;">
           <%= check_box_tag "forum[mediator_ids][]", user.id, @forum.mediators.include?(user) %>
-          <%= h user.full_name %>
+          <%= h user(display_name user) %>
         </span>
       <% end %>
     </p>
