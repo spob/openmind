@@ -8,7 +8,7 @@
       html_options = { :class => "button" } %>
 </div>
 
-<% form_for :topic, :url => topics_path do |form| %>
+<% form_for :topic, :html => {:id => "new-topic"}, :url => topics_path do |form| %>
   <input type="hidden" value="<%= @topic.forum.id %>" name="forum_id"/>
   <div class="formTitle"><%= theme_image_tag("icons/16x16/polls.png", 
     options = {:alt=>"Topics"}) %>New Topic</div>
@@ -30,3 +30,11 @@
     </p>
   </div>  
 <% end %>
+
+<%= observe_form "new-topic",
+      :frequency => 1,
+      :update => "live-preview",
+      :complete => "Element.show('live-preview')",
+      :url => preview_topics_path %>
+
+<div id="live-preview" style="display: none, border => 1px solid"></div>

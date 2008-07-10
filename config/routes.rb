@@ -25,7 +25,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :products
   map.resources :releases, :member => { :commit => :post },
       :collection => { :preview => :get, :list => :get }
-  map.resources :topics
+  map.resources :topics, :collection => { :preview => :get }
   map.resources :user_logons
   map.resources :votes, :collection => { :create_from_show => :post }
   map.resources :watches, :collection => { :create_from_show => :post }

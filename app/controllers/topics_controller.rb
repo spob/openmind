@@ -39,4 +39,8 @@ class TopicsController < ApplicationController
       render :action => 'new', :forum_id => forum_id
     end
   end
+
+  def preview
+    render :layout => false
+  end
 end
