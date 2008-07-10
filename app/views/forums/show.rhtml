@@ -47,7 +47,7 @@
       <td><%= h user_display_name(topic.user) %></td>
       <td><%= topic.comments.count - 1%></td>
       <td>-</td>
-      <td>-</td>
+      <td><%= h om_date_time(topic.last_comment.created_at) %></td>
       <td>
         <%= link_to theme_image_tag("icons/16x16/viewAction.png", :alt=>"view", :title=> "view"),
                 forum_path(topic), 

@@ -4,6 +4,7 @@ class Topic < ActiveRecord::Base
   has_and_belongs_to_many :mediators, :join_table => 'forum_mediators', :class_name => 'User'
   has_many :comments, :dependent => :destroy , :order => "id ASC"   
   has_one :last_comment, :class_name => "TopicComment", :order => "id DESC"
+  has_one :main_comment, :class_name => "TopicComment", :order => "id ASC"
   
   validates_presence_of :title, :user
   validates_length_of   :title, :maximum => 120
