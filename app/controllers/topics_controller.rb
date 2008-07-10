@@ -47,4 +47,13 @@ class TopicsController < ApplicationController
   def show
     @topic = Topic.find(params[:id])
   end
+
+  def destroy
+    topic = Topic.find(params[:id])
+    forum = topic.forum
+    title = topic.title
+    topic.destroy
+    flash[:notice] = "Topic '#{title}' was successfully deleted."
+    redirect_to forum_path(forum)
+  end
 end

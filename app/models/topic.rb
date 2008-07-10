@@ -1,8 +1,7 @@
 class Topic < ActiveRecord::Base
   belongs_to :forum
   belongs_to :user
-  has_and_belongs_to_many :mediators, :join_table => 'forum_mediators', :class_name => 'User'
-  has_many :comments, :dependent => :destroy , :order => "id ASC"   
+  has_many :comments, :dependent => :delete_all , :order => "id ASC"   
   has_one :last_comment, :class_name => "TopicComment", :order => "id DESC"
   has_one :main_comment, :class_name => "TopicComment", :order => "id ASC"
   
