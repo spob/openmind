@@ -42,6 +42,7 @@ class ForumTest < Test::Unit::TestCase
   
   def test_mediators
     forum = Forum.find forums(:bugs_forum).id
+    assert !forum.can_delete?
     assert forum.mediators.count == 1
   end
 end

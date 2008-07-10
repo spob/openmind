@@ -9,7 +9,7 @@ class Forum < ActiveRecord::Base
   validates_length_of   :description, :maximum => 150
   
   def can_delete?
-    true
+    topics.empty?
   end
   
   def self.list(page, per_page)
