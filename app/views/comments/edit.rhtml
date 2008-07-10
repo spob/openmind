@@ -1,6 +1,7 @@
 <%content_for :bodyTag do -%>
-    <%= set_focus_to_id 'comment_name' %>
+    <%= set_focus_to_id 'comment_body' %>
 <%end%>
+<%= javascript_include_tag "wz_tooltip.js" %> 
 <%= error_messages_for 'comment' %>
 <% form_for(:comment, :url => comment_path(@comment), 
     :html => {:method => :put }) do |form| %>
