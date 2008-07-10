@@ -12,7 +12,7 @@ class Topic < ActiveRecord::Base
   attr_accessor :comment_body
   
   def can_delete?
-    true
+    comments.count <= 1
   end
   
   def self.list(page, per_page)

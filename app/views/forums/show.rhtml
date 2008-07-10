@@ -54,7 +54,7 @@
                 html_options = {
                 :onmouseover => "Tip('View details for this topic')"} 
         %>
-         <% if can_edit? @topic %>
+         <% if can_edit? topic.forum %>
             <%= link_to theme_image_tag("icons/16x16/editAction.png", :alt=>"edit", :title=> "edit"), 
                     edit_topic_path(topic),
                     html_options = {

@@ -16,10 +16,8 @@
       options = { :controller=> 'ideas', :action => 'show', :id => @idea},
       html_options = {:onmouseover => "Tip('Return to idea ##{@idea.id}')"} if object.class.to_s == "Idea" %>
     
-      <%= link_to theme_image_tag("icons/24x24/polls.png", 
-      :alt=>"Show Topic", :title=> "Show Topic"),
-      options = { :controller=> 'forum', :action => 'show', :id => @topic.forum.id},
-      html_options = {:onmouseover => "Tip('Return to topic ##{@topic.title}')"} if object.class.to_s == "Topic"  %>
+    <%=  link_to 'View Topic', topic_path(@topic.id) , html_options = {:class=> "button",
+      :onmouseover => "Tip('Return to topic ##{@topic.title}')"} if object.class.to_s == "Topic" %>
   </div>
   <div class="formTitle">Add Comment</div>
   <div class="cssform widerLabel">

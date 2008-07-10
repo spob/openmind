@@ -42,14 +42,18 @@ class CommentsController < ApplicationController
   end
 
   def edit
-    @comment = IdeaComment.find(params[:id])
+    @comment = Comment.find(params[:id])
   end
 
   def update
-    @comment = IdeaComment.find(params[:id])
+    @comment = Comment.find(params[:id])
     if @comment.update_attributes(params[:comment])
       flash[:notice] = 'Comment was successfully updated.'
-      redirect_to :controller => :ideas, :action => :show, :id => @comment.idea.id
+      if @comment.class.to_s == "IdeaComment"
+        redirect_to :controller => :ideas, :action => :show, :id => @comment.idea.id
+      else
+        redirect_to topic_path(@comment.topic.id)
+      end
     else
       render :action => 'edit'
     end

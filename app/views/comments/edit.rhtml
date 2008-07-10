@@ -1,21 +1,29 @@
 <%content_for :bodyTag do -%>
-  <%= set_focus_to_id 'comment_name' %>
+    <%= set_focus_to_id 'comment_name' %>
 <%end%>
 <%= error_messages_for 'comment' %>
 <% form_for(:comment, :url => comment_path(@comment), 
-  :html => {:method => :put }) do |form| %>
+    :html => {:method => :put }) do |form| %>
   <div id="actionButtons2">
-      <%= link_to theme_image_tag("icons/24x24/ideasList.png", 
+    <%= link_to theme_image_tag("icons/24x24/ideasList.png", 
       :alt=>"Show Idea", :title=> "Show Idea"),
       options = { :controller=> 'ideas', :action => 'show', :id => @comment.idea},
-      html_options = {:onmouseover => "Tip('Return to idea ##{@comment.idea.id}')"}        
-    %>
+      html_options = {:onmouseover => "Tip('Return to idea ##{@comment.idea.id}')"} if @comment.class.to_s == "IdeaComment"    
+  %>
+    <%=  link_to 'View Topic', topic_path(@comment.topic.id) , html_options = {:class=> "button",
+      :onmouseover => "Tip('Return to topic ##{@comment.topic.title}')"} if @comment.class.to_s == "TopicComment"    
+  %>
   </div>
   <div class="formTitle">Edit Comment</div>
   <div class="cssform widerLabel">
     <p>
-      <label for="idea">For Idea:</label>
-      <%= h @comment.idea.user_friendly_idea_name %>  
+      <% if @comment.class.to_s == "IdeaComment"  %>
+        <label for="idea">For Idea:</label>
+        <%= h @comment.idea.user_friendly_idea_name %>  
+      <% else %>
+        <label for="topic">For Topic:</label>
+        <%= h @comment.topic.title %>  
+      <% end%>
     </p>
     <p>
       <label for="comment">Comment:</label>
