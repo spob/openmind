@@ -16,4 +16,7 @@ class Forum < ActiveRecord::Base
     paginate :page => page, :order => 'name ASC', 
       :per_page => per_page
   end
+  def can_edit? user
+    mediators.include? user
+  end  
 end

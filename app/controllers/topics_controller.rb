@@ -43,4 +43,8 @@ class TopicsController < ApplicationController
   def preview
     render :layout => false
   end
+  
+  def show
+    @topic = Topic.find(params[:id])
+  end
 end

@@ -1,5 +1,5 @@
 module ForumsHelper
   def can_edit? forum
-    sysadmin? or current_user.mediated_forums.include? forum
+    sysadmin? or forum.can_edit? current_user
   end  
 end
