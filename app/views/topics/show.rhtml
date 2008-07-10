@@ -5,6 +5,10 @@
 <%end%>
 <%= javascript_include_tag "wz_tooltip.js" %> 
 <div id="actionButtons2">
+  <%= link_to "Reply", 
+              new_comment_path(:id => @topic, :type => 'topic'), 
+              html_options = {:class=> "button",
+                :onmouseover => "Tip('Add a comment to discussion forum for this topic')" } %>
   <%= link_to 'View Topics', forum_path(@topic.forum.id) , html_options = {:class=> "button",
         :onmouseover => "Tip('Return to list of topics')"}%>
 </div>

@@ -44,7 +44,7 @@
        <% end %>
         <%= link_to theme_image_tag("icons/24x24/commentAdd.png", 
                       :alt=>"add comment", :title=> "add comment"), 
-                    new_comment_path(:id => @idea), 
+                    new_comment_path(:id => @idea, :type => 'idea'), 
                     html_options = {:method => :get,
                       :onmouseover => "Tip('Add a comment to discussion forum for this idea')" } %>
        <%= show_watch_button(@idea, from) %>

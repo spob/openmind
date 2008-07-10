@@ -3,21 +3,34 @@
 <%end%>
 <%= javascript_include_tag "wz_tooltip.js" %> 
 
+<% object = @idea unless @idea.nil? %>
+<% object = @topic unless @topic.nil? %>
+
 <%= error_messages_for 'comment' %>
 <% form_for :comment, :html => {:id => "new-comment"}, 
-      :url => comments_path(:id => @idea) do |form| %>
+      :url => comments_path(:id => object.id) do |form| %>
+  <input type="hidden" value="<%= object.class.to_s %>" name="type"/>
   <div id="actionButtons2">
       <%= link_to theme_image_tag("icons/24x24/ideasList.png", 
       :alt=>"Show Idea", :title=> "Show Idea"),
       options = { :controller=> 'ideas', :action => 'show', :id => @idea},
-      html_options = {:onmouseover => "Tip('Return to idea ##{@idea.id}')"}        
-    %>
+      html_options = {:onmouseover => "Tip('Return to idea ##{@idea.id}')"} if object.class.to_s == "Idea" %>
+    
+      <%= link_to theme_image_tag("icons/24x24/polls.png", 
+      :alt=>"Show Topic", :title=> "Show Topic"),
+      options = { :controller=> 'forum', :action => 'show', :id => @topic.forum.id},
+      html_options = {:onmouseover => "Tip('Return to topic ##{@topic.title}')"} if object.class.to_s == "Topic"  %>
   </div>
   <div class="formTitle">Add Comment</div>
   <div class="cssform widerLabel">
     <p>
-      <label for="idea">For Idea:</label>
-      <%= h @idea.user_friendly_idea_name %>  
+        <% if object.class.to_s == "Idea" %>
+          <label for="idea">For Idea:</label>
+          <%= h @idea.user_friendly_idea_name %>  
+        <% else %>
+          <label for="topic">For Topic:</label>
+          <%= h @topic.title %>  
+        <% end %>
     </p>
     <p>
       <label for="comment">Comment:</label>
@@ -26,8 +39,10 @@
     </p>
     <p>
       <label></label>
+      <% text = "Create this comment for idea ##{@idea.id}" if object.class.to_s == "Idea" %>
+      <% text = "Create this comment for topic '#{@topic.title}'" if object.class.to_s == "Topic" %>
       <%= submit_tag 'Create', html_options = {:class=> "button", :disable_with => "Please wait...",
-        :onmouseover => "Tip('Create this comment for idea ##{@idea.id}')"}  %>
+        :onmouseover => "Tip('#{text}')"}  %>
     </p>
   </div>  
 <% end %>

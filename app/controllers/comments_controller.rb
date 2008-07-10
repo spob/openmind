@@ -24,21 +24,20 @@ class CommentsController < ApplicationController
   end
 
   def new
-    @idea = Idea.find(params[:id])
-    @comment ||= IdeaComment.new
+    if params[:type] == 'idea'
+      @idea = Idea.find(params[:id]) 
+      @comment ||= IdeaComment.new
+    else
+      @topic = Topic.find(params[:id]) 
+      @comment ||= TopicComment.new
+    end
   end
 
   def create
-    @idea = Idea.find(params[:id])
-    @comment = IdeaComment.new(params[:comment])
-    @comment.user_id = current_user.id
-    @comment.idea_id = @idea.id
-    if @comment.save
-      flash[:notice] = "Comment for idea number #{@comment.idea.id} was successfully created."
-      redirect_to :controller => 'ideas', :action => 'show', :id => @idea, :selected_tab => "COMMENTS"
-    else
-      new
-      render :action => 'new'
+    if params[:type] == 'Idea'
+      create_idea_comment
+    else 
+      create_topic_comment
     end
   end
 
@@ -59,5 +58,35 @@ class CommentsController < ApplicationController
   def destroy
     IdeaComment.find(params[:id]).destroy
     redirect_to comments_path
+  end
+  
+  private  
+
+  def create_idea_comment
+    @idea = Idea.find(params[:id])
+    @comment = IdeaComment.new(params[:comment])
+    @comment.user_id = current_user.id
+    @comment.idea_id = @idea.id
+    if @comment.save
+      flash[:notice] = "Comment for idea number #{@comment.idea.id} was successfully created."
+      redirect_to :controller => 'ideas', :action => 'show', :id => @idea, :selected_tab => "COMMENTS"
+    else
+      new
+      render :action => 'new'
+    end
+  end
+
+  def create_topic_comment
+    @topic = Topic.find(params[:id])
+    @comment = TopicComment.new(params[:comment])
+    @comment.user_id = current_user.id
+    @comment.topic_id = @topic.id
+    if @comment.save
+      flash[:notice] = "Comment for topic '#{@topic.title}' was successfully created."
+      redirect_to topic_path(@topic.id)
+    else
+      new
+      render :action => 'new'
+    end
   end
 end
