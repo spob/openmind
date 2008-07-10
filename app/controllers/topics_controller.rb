@@ -22,8 +22,15 @@ class TopicsController < ApplicationController
   def create
     forum_id = params[:forum_id]
     @topic = Topic.new(params[:topic])
-    @topic.forum_id = @topic
+    @topic.forum_id = forum_id
     @topic.user = current_user
+    @topic.save
+    
+    comment = TopicComment.new(
+      :user_id => current_user.id,
+      :body=>@topic.comment_body)
+    @topic.comments << comment
+  
     if @topic.save
       flash[:notice] = "Topic #{@topic.title} was successfully created."
       redirect_to forum_path(forum_id)

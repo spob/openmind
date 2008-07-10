@@ -1,5 +1,5 @@
 <%
-fixtures :users, :ideas
+fixtures :users, :ideas, :topics
 id = 0;
 %>
 
@@ -29,3 +29,12 @@ third_comment:
   created_at: <%=1.days.ago.to_s :db %>
   updated_at: <%=Time.now.to_s(:db)%>
   type: IdeaComment
+
+topic_comment:
+  id: <%= id += 1 %>
+  user_id: <%= users(:prodmgr, 'id') %>
+  topic_id: <%= topics(:bug_topic1, 'id') %>
+  body: topic comment
+  created_at: <%=1.days.ago.to_s :db %>
+  updated_at: <%=Time.now.to_s(:db)%>
+  type: TopicComment

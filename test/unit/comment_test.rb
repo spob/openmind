@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
 class CommentTest < Test::Unit::TestCase
-  fixtures :comments, :ideas, :users
+  fixtures :comments, :ideas, :users, :topics
   
   def test_fetch
     comment = IdeaComment.find(:first)
@@ -20,6 +20,12 @@ class CommentTest < Test::Unit::TestCase
     comment = IdeaComment.new(
       :user_id => comments(:first_comment).user_id,
       :idea_id=>comments(:first_comment).idea_id,
+      :body=>comments(:first_comment).body)
+    assert comment.valid?
+    
+    comment = TopicComment.new(
+      :user_id => comments(:first_comment).user_id,
+      :topic_id=>comments(:first_comment).idea_id,
       :body=>comments(:first_comment).body)
     assert comment.valid?
   end  

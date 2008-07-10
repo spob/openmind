@@ -19,6 +19,11 @@
       <%= form.text_field :title, { :size => 50, :maxlength => 150 } %>
     </p>
     <p>
+      <label for="comment">Comment:</label>
+      <%= form.text_area :comment_body,  {:cols => 70, :rows => 8 } %>
+      <span style="padding-left:10px;font-size:0.83em;">(supports <a href="http://hobix.com/textile/" target="_blank" onmouseover="Tip('Click here for explanation of textile tags')">textile</a> tags)</span>
+    </p>
+    <p>
       <label></label>
       <%= submit_tag 'Create', options = {:class=> "button", :disable_with => "Please wait...",
             :onmouseover => "Tip('Create a new topic')"} %>

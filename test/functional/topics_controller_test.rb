@@ -20,4 +20,25 @@ class TopicsControllerTest < Test::Unit::TestCase
 
     assert_redirected_to forums_path
   end
+
+  def test_create
+    num_topics = Topic.count
+    
+    topic = Topic.find(:first)
+
+    title = 5.days.ago.to_s(:db)
+    post :create, :forum_id => topic.forum.id, 
+      :topic => { :title=>title, :comment_body=>"fda"
+    }
+
+    assert_response :redirect
+    assert_redirected_to forum_path(:id => topic.forum.id)
+
+    assert_equal num_topics + 1, Topic.count
+    topic = Topic.find_by_title(title)
+    assert_not_nil topic
+    assert 1, topic.comments.count
+    
+    
+  end
 end
