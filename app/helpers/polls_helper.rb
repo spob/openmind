@@ -1,13 +1,12 @@
 module PollsHelper
   
   def add_option_link(name)
-    link_to_function name do |page|
+    link_to_function name, :class=> 'insideFormTitle' do |page|
       page.insert_html :bottom, :poll_options, :partial => 'poll_option', 
         :object => PollOption.new(:description => "...")
     end
   end
-  
-  
+    
   def details_button_text
     return "Show Details" if session[:polls_show_toggle_detail] == "HIDE"
       "Hide Details"

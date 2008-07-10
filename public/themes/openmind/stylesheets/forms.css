@@ -37,7 +37,7 @@
 }
 
 .secondary {
- margin-top:45px;
+    margin-top:45px;
 }
 
 .cssform p {
@@ -149,6 +149,12 @@ input.narrowText[type="text"]
     margin-right: 8px;
 }
 
+.cssform .insideFormTitle {
+    font-weight:bold; 
+    margin:5px 0 0 80px;
+    text-decoration:underline;
+}
+
 .pollOptions {
     padding:20px;
     margin:0px;
@@ -156,6 +162,11 @@ input.narrowText[type="text"]
 
 .pollOptions .button {
     margin:20px 0 0 15px;
+}
+
+input.pollTxtField[type="text"]
+{
+    width: 550px;
 }
 
 .req {

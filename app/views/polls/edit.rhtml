@@ -16,13 +16,14 @@
   <div class="cssform widerLabel">
     <p>
       <label for="poll_title">Title:</label>
-      <%= form.text_field :title, { :size => 30, :maxlength => 30 } %>
+      <%= form.text_field :title, { :size => 30, :maxlength => 30, :class=> 'pollTxtField' } %>
     </p>
     <p>
       <label for="close_date">Close Date:</label>
-        <%= calendar_date_select :poll, :close_date, :popup => :force, :time => false %>
+        <%= calendar_date_select :poll, :close_date, :popup => :force, :time => false, :class=> 'pollTxtField' %>
     </p>
-    Options
+   
+   <span class="insideFormTitle" style="margin-left:92px;">Options</span>
     <div id="poll_options">
       <%= render :partial => 'poll_option', :collection => @poll.poll_options %>
     </div>

@@ -1,6 +1,4 @@
 <%content_for :head do -%>
-  <%= theme_stylesheet_link_tag 'forms' %>
-  <%= theme_stylesheet_link_tag 'tables' %>
   <%= javascript_include_tag "tablecloth" %>                
 <%end%>
 <%= javascript_include_tag "wz_tooltip.js" %> 
@@ -41,8 +39,7 @@
         <%=google_pie_chart(@chart_data, :width => 626, :height => 300) %>
     </p>
   <% end %>
-  <span style="font-weight:bold; margin:5px 0 0 80px;text-decoration:underline;">Options</span>
-  
+  <span class="insideFormTitle">Options</span>
     <% for option in @poll.poll_options %>
         <p>
             <label for="option_description">&bull;</label>
