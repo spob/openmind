@@ -1,0 +1,27 @@
+<%content_for :bodyTag do -%>
+  <%= set_focus_to_id 'topic_title' -%>
+<%end%>
+<%= error_messages_for 'topic' %>
+
+<div id="actionButtons2">
+  <%= link_to 'List topics', forum_path(@topic.forum), 
+      html_options = { :class => "button" } %>
+</div>
+
+<% form_for :topic, :url => topics_path do |form| %>
+  <input type="hidden" value="<%= @topic.forum.id %>" name="forum_id"/>
+  <div class="formTitle"><%= theme_image_tag("icons/16x16/polls.png", 
+    options = {:alt=>"Topics"}) %>New Topic</div>
+
+  <div class="cssform widerLabel">
+    <p>
+      <label for="title">Title:</label>
+      <%= form.text_field :title, { :size => 50, :maxlength => 150 } %>
+    </p>
+    <p>
+      <label></label>
+      <%= submit_tag 'Create', options = {:class=> "button", :disable_with => "Please wait...",
+            :onmouseover => "Tip('Create a new topic')"} %>
+    </p>
+  </div>  
+<% end %>

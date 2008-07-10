@@ -5,12 +5,15 @@
 <%end%>
 <%= javascript_include_tag "wz_tooltip.js" %> 
 <div id="actionButtons2">
+  <%= link_to 'Create New Topic', new_topic_path(:forum_id => @forum.id),
+        html_options = {:class=> "button",
+        :onmouseover => "Tip('Create a new topic')"}%>
   <% if sysadmin? %>
         <%= link_to 'Edit', edit_forum_url(@forum), html_options = {:class=> "button",
             :onmouseover => "Tip('Edit this forum')"} %>
   <% end %>
-      <%= link_to 'List Forums', forums_path , html_options = {:class=> "button",
-            :onmouseover => "Tip('Return to list forums')"}%>
+  <%= link_to 'List Forums', forums_path , html_options = {:class=> "button",
+        :onmouseover => "Tip('Return to list forums')"}%>
 </div>
 <div class="formTitle">
   <%= theme_image_tag("icons/16x16/polls.png", options = {:alt=>"Forum"}) %>
@@ -32,6 +35,9 @@
   <tr>
     <th>Title</th>
     <th>Started By</th>
+    <th>Replies</th>
+    <th>Views</th>
+    <th>Last Post</th>
     <th>Action</th>
   </tr>
   
@@ -39,13 +45,16 @@
     <tr>
       <td><%= h topic.title %></td>
       <td><%= h user_display_name(topic.user) %></td>
+      <td><%= topic.comments.count - 1%></td>
+      <td>-</td>
+      <td>-</td>
       <td>
         <%= link_to theme_image_tag("icons/16x16/viewAction.png", :alt=>"view", :title=> "view"),
                 forum_path(topic), 
                 html_options = {
                 :onmouseover => "Tip('View details for this topic')"} 
         %>
-         <% if can_edit? forum %>
+         <% if can_edit? @forum %>
             <%= link_to theme_image_tag("icons/16x16/editAction.png", :alt=>"edit", :title=> "edit"), 
                     edit_forum_path(topic),
                     html_options = {
@@ -56,7 +65,7 @@
                     theme_image_tag("icons/16x16/deleteAction.png", :alt=>"delete", :title=> "delete"),
                     forum_path(topic),
                     html_options = {:confirm => 'Are you sure?', :method => :delete,
-                            :onmouseover => "Tip('Delete this topic')"} ) if forum.can_delete? %>
+                            :onmouseover => "Tip('Delete this topic')"} ) if topic.can_delete? %>
   <% end %>
       </td>
     </tr>
