@@ -46,6 +46,7 @@ class TopicsController < ApplicationController
   
   def show
     @topic = Topic.find(params[:id])
+    @topic.add_user_read(current_user).save
   end
 
   def destroy

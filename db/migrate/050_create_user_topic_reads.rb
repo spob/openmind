@@ -1,6 +1,6 @@
 class CreateUserTopicReads < ActiveRecord::Migration
   def self.up
-    create_table :user_topic_reads, :id => false  do |t|
+    create_table :user_topic_reads  do |t|
       t.column :user_id,  :integer, :null => false
       t.column :topic_id,  :integer, :null => false
       t.column :lock_version, :integer, :default => 0
