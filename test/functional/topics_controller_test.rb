@@ -39,4 +39,34 @@ class TopicsControllerTest < Test::Unit::TestCase
     assert_not_nil topic
     assert 1, topic.comments.count
   end
+
+  def test_edit
+    get :edit, :id => topics(:bug_topic1)
+
+    assert_response :success
+    assert_template 'edit'
+
+    assert_not_nil assigns(:topic)
+    assert assigns(:topic).valid?
+  end
+
+  def test_update
+    put :update, {:id => topics(:bug_topic1)}
+    assert_response :redirect
+    assert_redirected_to forum_path(topics(:bug_topic1).forum)
+  end
+
+  def test_destroy
+    id = topics(:bug_topic1).id
+    assert_nothing_raised {
+      Topic.find(id)
+    }
+    delete :destroy, :id => id
+    assert_response :redirect
+    assert_redirected_to forum_path(topics(:bug_topic1).forum)
+
+    assert_raise(ActiveRecord::RecordNotFound) {
+      Topic.find(id)
+    }
+  end
 end
