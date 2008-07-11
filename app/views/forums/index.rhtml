@@ -21,6 +21,7 @@
 <table cellspacing="0" cellpadding="0" class="cssform">
   <tr>
     <th>Name</th>
+    <th>Last Post</th>
     <th>Topics</th>
     <th>Posts</th>
     <th>Action</th>
@@ -29,8 +30,9 @@
     <% for forum in @forums %>
     <tr>
       <td><b><%= h forum.name %></b><br/><%= h forum.description %></td>
+      <td><%= last_post forum %></td>
       <td><%= h forum.topics.count %></td>
-      <td>todo</td>
+      <td><%= forum.comments.count %></td>
       <td>
         <%= link_to theme_image_tag("icons/16x16/viewAction.png", :alt=>"view", :title=> "view"),
               forum_path(forum), 
