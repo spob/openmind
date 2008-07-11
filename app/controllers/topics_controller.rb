@@ -56,4 +56,18 @@ class TopicsController < ApplicationController
     flash[:notice] = "Topic '#{title}' was successfully deleted."
     redirect_to forum_path(forum)
   end
+
+  def edit
+    @topic = Topic.find(params[:id])
+  end
+
+  def update
+    @topic = Topic.find(params[:id])
+    if @topic.update_attributes(params[:topic])
+      flash[:notice] = "Topic '#{@topic.title}' was successfully updated."
+      redirect_to forum_path(@topic.forum)
+    else
+      render :action => :edit
+    end
+  end
 end

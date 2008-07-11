@@ -38,7 +38,5 @@ class TopicsControllerTest < Test::Unit::TestCase
     topic = Topic.find_by_title(title)
     assert_not_nil topic
     assert 1, topic.comments.count
-    
-    
   end
 end
