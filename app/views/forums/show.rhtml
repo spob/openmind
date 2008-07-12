@@ -43,11 +43,11 @@
   
     <% for topic in @forum.topics %>
     <tr>
-      <td><%= h topic.title %></td>
-      <td><%= h user_display_name(topic.user) %></td>
-      <td><%= topic.comments.count - 1%></td>
-      <td><%= nvl(topic.user_topic_reads.sum(:views), '-') %></td>
-      <td><%= h last_posting_date(topic) %></td>
+      <td><%= bold_text(h(topic.title), topic.unread_comment?(current_user)) %></td>
+      <td><%= bold_text(h(user_display_name(topic.user)), topic.unread_comment?(current_user)) %></td>
+      <td><%= bold_text(topic.comments.count - 1, topic.unread_comment?(current_user)) %></td>
+      <td><%= bold_text(nvl(topic.user_topic_reads.sum(:views), '-'), topic.unread_comment?(current_user)) %></td>
+      <td><%=  bold_text(h(last_posting_date(topic)), topic.unread_comment?(current_user)) %></td>
       <td>
         <%= link_to theme_image_tag("icons/16x16/viewAction.png", :alt=>"view", :title=> "view"),
                 topic_path(topic), 

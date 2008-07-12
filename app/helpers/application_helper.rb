@@ -101,6 +101,11 @@ module ApplicationHelper
     RedCloth.new(text, [:hard_breaks]).to_html
   end
   
+  
+  def bold_text(text, bold)
+    return text unless bold
+    "<strong>#{text}</strong>"
+  end
 
   
   private

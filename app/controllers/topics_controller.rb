@@ -30,6 +30,7 @@ class TopicsController < ApplicationController
       :user_id => current_user.id,
       :body=>@topic.comment_body)
     @topic.comments << comment
+    @topic.add_user_read(current_user)
   
     if @topic.save
       flash[:notice] = "Topic #{@topic.title} was successfully created."

@@ -134,11 +134,6 @@ module IdeasHelper
     ideas
   end
   
-  def bold_text(text, bold)
-    return text unless bold
-    "<strong>#{text}</strong>"
-  end
-  
   def comment_link
     if !@idea.comments.empty?
       link = link_to_remote pluralize(@idea.comments.size, 'comments'), :url => { :action => 'toggle_comments' }
