@@ -20,6 +20,7 @@ class User < ActiveRecord::Base
   has_and_belongs_to_many :roles  
   # This collection is for watches
   has_and_belongs_to_many :watched_ideas, :join_table => 'watches', :class_name => 'Idea'
+  has_and_belongs_to_many :watched_topics, :join_table => 'topic_watches', :class_name => 'Topic'
   has_and_belongs_to_many :poll_options, :join_table => 'poll_user_responses'
   has_and_belongs_to_many :mediated_forums, :join_table => 'forum_mediators', :class_name => 'Forum'
   

@@ -5,6 +5,7 @@ class Topic < ActiveRecord::Base
   has_many :user_topic_reads, :dependent => :delete_all
   has_one :last_comment, :class_name => "TopicComment", :order => "id DESC"
   has_one :main_comment, :class_name => "TopicComment", :order => "id ASC"
+  has_and_belongs_to_many :watchers, :join_table => 'topic_watches', :class_name => 'User'
   
   validates_presence_of :title, :user
   validates_length_of   :title, :maximum => 120

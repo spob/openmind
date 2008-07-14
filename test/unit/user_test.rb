@@ -4,7 +4,7 @@ class UserTest < Test::Unit::TestCase
   # Be sure to include AuthenticatedTestHelper in test/test_helper.rb instead.
   # Then, you can remove it from this and the functional test.
   include AuthenticatedTestHelper
-  fixtures :users, :enterprises, :allocations, :votes, :roles, :roles_users
+  fixtures :users, :enterprises, :allocations, :votes, :roles, :roles_users, :topics
 
   def test_full_name
     user = User.new(:last_name => "xxx")
@@ -192,6 +192,20 @@ class UserTest < Test::Unit::TestCase
     assert User.active_users.size > User.active_voters.size
     assert_not_nil User.active_voters.index(users(:allroles))
     assert_nil User.active_voters.index(users(:user_no_roles))
+  end
+  
+  def test_watch_topic
+    user = users(:quentin)
+    assert user.watched_topics.empty?
+    
+    topic = topics(:bug_topic1)
+    user.watched_topics << topic
+    user.save
+    user = User.find(user.id)
+    assert !user.watched_topics.empty?
+    assert 1, user.watched_topics.count
+    topic2 = user.watched_topics.first
+    assert topic, topic2
   end
 
   protected
