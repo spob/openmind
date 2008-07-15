@@ -28,7 +28,9 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :topics, :collection => { :preview => :get }
   map.resources :user_logons
   map.resources :votes, :collection => { :create_from_show => :post }
-  map.resources :watches, :collection => { :create_from_show => :post }
+  map.resources :watches, :member => { :create_topic_watch => :post,  
+    :destroy_topic_watch => :delete }, 
+    :collection => {:create_from_show => :post }
 
   # Allow downloading Web Service WSDL as a file with an extension
   # instead of a file named 'wsdl'

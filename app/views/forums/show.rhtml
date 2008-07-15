@@ -40,34 +40,5 @@
     <th>Last Post</th>
     <th>Action</th>
   </tr>
-  
-    <% for topic in @forum.topics %>
-    <tr>
-      <td><%= bold_text(h(topic.title), topic.unread_comment?(current_user)) %></td>
-      <td><%= bold_text(h(user_display_name(topic.user)), topic.unread_comment?(current_user)) %></td>
-      <td><%= bold_text(topic.comments.count - 1, topic.unread_comment?(current_user)) %></td>
-      <td><%= bold_text(nvl(topic.user_topic_reads.sum(:views), '-'), topic.unread_comment?(current_user)) %></td>
-      <td><%=  bold_text(h(last_posting_date(topic)), topic.unread_comment?(current_user)) %></td>
-      <td>
-        <%= link_to theme_image_tag("icons/16x16/viewAction.png", :alt=>"view", :title=> "view"),
-                topic_path(topic), 
-                html_options = {
-                :onmouseover => "Tip('View details for this topic')"} 
-        %>
-         <% if can_edit? topic.forum %>
-            <%= link_to theme_image_tag("icons/16x16/editAction.png", :alt=>"edit", :title=> "edit"), 
-                    edit_topic_path(topic),
-                    html_options = {
-                    :onmouseover => "Tip('Edit this topic')"}
-            %>
-
-            <%= link_to(
-                    theme_image_tag("icons/16x16/deleteAction.png", :alt=>"delete", :title=> "delete"),
-                    topic_path(topic),
-                    html_options = {:confirm => 'Are you sure?', :method => :delete,
-                            :onmouseover => "Tip('Delete this topic')"} ) if topic.can_delete? %>
-        <% end %>
-      </td>
-    </tr>
-  <% end %>
+    <%=render(:partial => "topic_item", :collection => @forum.topics)%>
 </table>

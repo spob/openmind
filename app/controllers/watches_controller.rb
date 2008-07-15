@@ -1,12 +1,12 @@
 class WatchesController < ApplicationController
-  helper :idea_action
+  helper :idea_action, :forums
   before_filter :login_required
   
-  verify :method => :post, :only => [:create, :create_from_show ],
+  verify :method => :post, :only => [:create, :create_from_show, :create_topic_watch ],
     :redirect_to =>{ :controller => 'ideas', :action => :index }
   verify :method => :put, :only => [ :update ],
     :redirect_to => { :controller => 'ideas', :action => :list }
-  verify :method => :delete, :only => [ :destroy ],
+  verify :method => :delete, :only => [ :destroy, :destroy_topic_watch ],
     :redirect_to => { :controller => 'ideas', :action => :list }
   
   # collection routes apparently can't take additonal parameters other than id...
@@ -15,6 +15,30 @@ class WatchesController < ApplicationController
   # action to indicate the difference
   def create_from_show
     create "show"  
+  end
+  
+  def create_topic_watch
+    begin
+      @topic = Topic.find(params[:id])
+      @topic.watchers << current_user
+    rescue ActiveRecord::RecordNotFound     
+      logger.error("Attempt to add watch to invalid topic #{params[:id]}")
+      flash[:notice] = "Attempted to add watch to invalid topic"
+      #list
+      
+      respond_to do |format|
+        format.html {render forum_path(@topic.forum) }
+        format.js  { do_action_topic   }
+      end
+      return false
+    else
+      flash[:notice] = "Topic '#{@topic.title}' is being watched."
+    
+      respond_to do |format|
+        format.html {redirect_to forum_path(@topic.forum) }
+        format.js  { do_action_topic }      
+      end 
+    end
   end
   
   def create from="list"
@@ -61,7 +85,30 @@ class WatchesController < ApplicationController
         format.html {redirect_to :controller => 'ideas', :action => 'show', :id  => @idea }
         format.js  { do_action params[:from]  }
       end      
-    end  
+    end 
+  end
+
+  def destroy_topic_watch
+    begin
+      @topic = Topic.find(params[:id])
+      @topic.watchers.delete(current_user)
+    rescue ActiveRecord::RecordNotFound     
+      logger.error("Attempt to remove watch from invalid topic #{params[:id]}")
+      flash[:notice] = "Attempted to remove watch from invalid topic"
+      #list      
+      respond_to do |format|
+        format.html {render  forum_path(@topic.forum) }
+        format.js  { do_action_topic   }
+      end
+      return false
+    else
+      flash[:notice] = %(Watch removed from topic '#{@topic.title}')
+      
+      respond_to do |format|
+        format.html {redirect_to  forum_path(@topic.forum) }
+        format.js  { do_action_topic  }
+      end      
+    end 
   end
     
   private
@@ -77,6 +124,19 @@ class WatchesController < ApplicationController
         :partial => "ideas/list_actions", 
         :object => @idea,
         :locals => { :from => from}
+    end
+  end
+    
+  def do_action_topic
+    render :update do |page|
+      page.replace_html :flash_notice, flash_notice_string(flash[:notice]) 
+      page.replace_html :flash_error,  flash_error_string(flash[:error])
+      flash[:notice].nil? ? (page.hide :flash_notice) : (page.show :flash_notice)
+      flash[:error].nil? ? (page.hide :flash_error) : (page.show :flash_error)
+      flash.discard
+      page.replace "action_buttons#{@topic.id.to_s}", 
+        :partial => "forums/topic_action", 
+        :object => @topic
     end
   end
 end
