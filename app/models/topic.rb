@@ -1,7 +1,8 @@
 class Topic < ActiveRecord::Base
   belongs_to :forum
   belongs_to :user
-  has_many :comments, :dependent => :delete_all , :order => "id ASC"   
+  has_many :comments, :class_name => "TopicComment", :dependent => :delete_all,
+    :order => "id ASC"   
   has_many :user_topic_reads, :dependent => :delete_all
   has_one :last_comment, :class_name => "TopicComment", :order => "id DESC"
   has_one :main_comment, :class_name => "TopicComment", :order => "id ASC"

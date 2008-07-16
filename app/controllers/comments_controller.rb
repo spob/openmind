@@ -85,7 +85,7 @@ class CommentsController < ApplicationController
     @comment = TopicComment.new(params[:comment])
     @comment.user_id = current_user.id
     @comment.topic_id = @topic.id
-    if @comment.save
+    if @topic.save and @comment.save
       flash[:notice] = "Comment for topic '#{@topic.title}' was successfully created."
       redirect_to topic_path(@topic.id)
     else

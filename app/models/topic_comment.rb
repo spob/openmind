@@ -1,5 +1,5 @@
 class TopicComment < Comment
-  belongs_to :topic
+  belongs_to :topic, :counter_cache => true
   
   validates_presence_of :topic_id
   

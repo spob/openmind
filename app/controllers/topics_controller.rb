@@ -26,10 +26,9 @@ class TopicsController < ApplicationController
     @topic.user = current_user
     @topic.save
     
-    comment = TopicComment.new(
+    @topic.comments.build(
       :user_id => current_user.id,
       :body=>@topic.comment_body)
-    @topic.comments << comment
     @topic.add_user_read(current_user)
     @topic.watchers << current_user
   
