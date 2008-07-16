@@ -169,6 +169,15 @@ input.pollTxtField[type="text"]
     width: 550px;
 }
 
+#googlePollChart {
+    float:right; 
+    margin:0; 
+    text-align:center; 
+    padding:15px; 
+    width:30%;
+    border:solid 1px #ccc;    
+}
+
 .req {
     float: none;
     color: red !important;

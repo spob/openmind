@@ -22,23 +22,20 @@
   </div>
 <% end %>
 <div class="formTitle">
-  <%= theme_image_tag("icons/16x16/polls.png", options = {:alt=>"Poll"}) %>
+  <%= theme_image_tag("icons/16x16/polls.png", options = {:alt=>""}) %>
   Poll Detail
 </div>
-<div class="cssform">
+<div class="cssform" style="<% if @poll.total_responses > 0 %>width:65%; float:left<% end %>">
   <p>
-    <label for="name">Title:</label>
+   <label for="title">Title:</label>
     <%= h @poll.title %>
   </p>
+
   <p>
     <label for="close_date">Close Date:</label>
     <%= h format_date(@poll.close_date) %>
   </p>
-  <% if @poll.total_responses > 0 %>
-    <p>
-        <%=google_pie_chart(@chart_data, :width => 626, :height => 300) %>
-    </p>
-  <% end %>
+
   <span class="insideFormTitle">Options</span>
     <% for option in @poll.poll_options %>
         <p>
@@ -78,3 +75,9 @@
     </div>
   <% end %>
 </div>
+
+<% if @poll.total_responses > 0 %>
+  <div id="googlePollChart">
+    <%=google_pie_chart(@chart_data, :width => 300, :height => 150) %>
+  </div>
+<% end %>
