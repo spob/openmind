@@ -17,14 +17,14 @@ module ForumsHelper
       show = link_to_remote theme_image_tag("icons/24x24/watchRemove.png", 
         :alt=>"Remove watch", :title=> "remove watch",
         :onmouseover => "Tip('Stop watching this topic')"), 
-        :url =>  destroy_topic_watch_watch_path(:id => topic, :type => "topic"), 
+        :url =>  destroy_topic_watch_watch_path(:id => topic), 
         :html => { :class=> "button" }, 
         :method => :delete
     else
       show = link_to_remote theme_image_tag("icons/24x24/watchAdd.png", 
         :alt=>"Add watch", :title=> "add watch",
         :onmouseover => "Tip('Watch this topic')"), 
-        :url =>  create_topic_watch_watch_path(topic), 
+        :url =>  create_topic_watch_watch_path(:id => topic),
         :html => { :class=> "button" }, 
         :method => :post
     end

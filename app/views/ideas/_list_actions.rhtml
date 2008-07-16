@@ -19,7 +19,7 @@
                        :confirm => 'Are you sure?', 
                        :method => :post} if show_delete? @idea %>
        
-       <% vote_area @idea do %>
+     <% vote_area @idea do %>
                  <% 
                  url = votes_path(:id => @idea)
                  url = create_from_show_votes_path(:id => @idea) if from == "show" 
@@ -30,9 +30,9 @@
                                        :url => url, 
                                        :html => {:class=> "button" }, 
                                        :method => :post %>
-       <% end %>
+     <% end %>
        
-       <% rescind_vote_area @idea do %>
+     <% rescind_vote_area @idea do %>
                        <%= link_to_remote theme_image_tag("icons/24x24/voteRescind.png", 
                                        :alt=>"rescind vote", :title=> "rescind vote",
                                        :onmouseover => "Tip('Rescind your vote for this idea')"), 
@@ -40,7 +40,7 @@
                                        :html => { :class=> "button" }, 
                                        :method => :delete %>
        
-       <% end %>
+     <% end %>
         <%= link_to theme_image_tag("icons/24x24/commentAdd.png", 
                       :alt=>"add comment", :title=> "add comment"), 
                     new_comment_path(:id => @idea, :type => 'idea'), 
@@ -55,4 +55,4 @@
                              options = {:controller => 'ideas', :action => 'index'},
                              html_options = {:onmouseover => "Tip('List Ideas')"}        
                  %>
-       <% end %>
+     <% end %>

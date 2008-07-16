@@ -27,7 +27,7 @@ class WatchesController < ApplicationController
       #list
       
       respond_to do |format|
-        format.html {render forum_path(@topic.forum) }
+        format.html {render topic_path(@topic) }
         format.js  { do_action_topic   }
       end
       return false
@@ -35,9 +35,9 @@ class WatchesController < ApplicationController
       flash[:notice] = "Topic '#{@topic.title}' is being watched."
     
       respond_to do |format|
-        format.html {redirect_to forum_path(@topic.forum) }
-        format.js  { do_action_topic }      
-      end 
+        format.html {redirect_to topic_path(@topic) }
+        format.js  { do_action_topic }  
+      end        
     end
   end
   
@@ -97,7 +97,7 @@ class WatchesController < ApplicationController
       flash[:notice] = "Attempted to remove watch from invalid topic"
       #list      
       respond_to do |format|
-        format.html {render  forum_path(@topic.forum) }
+        format.html {render forums_path }
         format.js  { do_action_topic   }
       end
       return false
@@ -105,7 +105,7 @@ class WatchesController < ApplicationController
       flash[:notice] = %(Watch removed from topic '#{@topic.title}')
       
       respond_to do |format|
-        format.html {redirect_to  forum_path(@topic.forum) }
+        format.html {redirect_to topic_path(@topic) }
         format.js  { do_action_topic  }
       end      
     end 
