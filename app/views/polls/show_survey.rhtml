@@ -4,10 +4,7 @@
   <%= javascript_include_tag "tablecloth" %>                
 <%end%>
 <%= javascript_include_tag "wz_tooltip.js" %> 
-<div class="formTitle">
-    <%= theme_image_tag("icons/16x16/polls.png", options = {:alt=>"Poll"}) %>
-    <%= h @poll.title %>
-</div>
+<div class="formTitle"><%= theme_image_tag("icons/16x16/polls.png", options = {:alt=>"Poll"}) %><%= h @poll.title %></div>
 
 <%= error_messages_for 'poll' %>
 <% form_for(:poll, :url => take_survey_poll_path(@poll), 
