@@ -11,7 +11,7 @@ module ForumsHelper
   end
   
 
-  def show_watch_button topic
+  def show_topic_watch_button topic
     show = ""
     if topic.watchers.include? current_user
       show = link_to_remote theme_image_tag("icons/24x24/watchRemove.png", 

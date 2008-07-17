@@ -28,7 +28,7 @@ class WatchesController < ApplicationController
       
       respond_to do |format|
         format.html {render topic_path(@topic) }
-        format.js  { do_action_topic   }
+        format.js  { do_topic_action   }
       end
       return false
     else
@@ -36,7 +36,7 @@ class WatchesController < ApplicationController
     
       respond_to do |format|
         format.html {redirect_to topic_path(@topic) }
-        format.js  { do_action_topic }  
+        format.js  { do_topic_action }  
       end        
     end
   end
@@ -52,7 +52,7 @@ class WatchesController < ApplicationController
       
       respond_to do |format|
         format.html {render :controller => 'ideas', :action => 'list' }
-        format.js  { do_action from  }
+        format.js  { do_idea_action from  }
       end
       return false
     else
@@ -60,7 +60,7 @@ class WatchesController < ApplicationController
     
       respond_to do |format|
         format.html {redirect_to :controller => 'ideas', :action => 'show', :id  => @idea }
-        format.js  { do_action  from }      
+        format.js  { do_idea_action  from }      
       end 
     end
   end
@@ -75,7 +75,7 @@ class WatchesController < ApplicationController
       #list      
       respond_to do |format|
         format.html {render :controller => 'ideas', :action => 'list' }
-        format.js  { do_action   }
+        format.js  { do_idea_action   }
       end
       return false
     else
@@ -83,7 +83,7 @@ class WatchesController < ApplicationController
       
       respond_to do |format|
         format.html {redirect_to :controller => 'ideas', :action => 'show', :id  => @idea }
-        format.js  { do_action params[:from]  }
+        format.js  { do_idea_action params[:from]  }
       end      
     end 
   end
@@ -98,7 +98,7 @@ class WatchesController < ApplicationController
       #list      
       respond_to do |format|
         format.html {render forums_path }
-        format.js  { do_action_topic   }
+        format.js  { do_topic_action   }
       end
       return false
     else
@@ -106,14 +106,15 @@ class WatchesController < ApplicationController
       
       respond_to do |format|
         format.html {redirect_to topic_path(@topic) }
-        format.js  { do_action_topic  }
+        format.js  { do_topic_action  }
       end      
     end 
   end
     
   private
     
-  def do_action from="list"
+  def do_idea_action from="list"
+    logger.error "==================================="
     render :update do |page|
       page.replace_html :flash_notice, flash_notice_string(flash[:notice]) 
       page.replace_html :flash_error,  flash_error_string(flash[:error])
@@ -127,7 +128,7 @@ class WatchesController < ApplicationController
     end
   end
     
-  def do_action_topic
+  def do_topic_action
     render :update do |page|
       page.replace_html :flash_notice, flash_notice_string(flash[:notice]) 
       page.replace_html :flash_error,  flash_error_string(flash[:error])

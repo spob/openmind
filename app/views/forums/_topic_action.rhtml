@@ -18,5 +18,5 @@
                   html_options = {:confirm => 'Are you sure?', :method => :delete,
                           :onmouseover => "Tip('Delete this topic')"} ) if topic_action.can_delete? %>
       <% end %>
-      <%= show_watch_button(topic_action) %>
+      <%= show_topic_watch_button(topic_action) %>
      </div>

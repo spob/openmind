@@ -9,7 +9,7 @@
                 new_comment_path(:id => @topic, :type => 'topic'), 
                 html_options = {:class=> "button",
                   :onmouseover => "Tip('Add a comment to discussion forum for this topic')" } %>
-  <%= show_watch_button @topic %>
+  <%= show_topic_watch_button @topic %>
   <% if can_edit? @topic %>
     <%= link_to 'Edit', edit_topic_path(@topic) , html_options = {:class=> "button",
             :onmouseover => "Tip('Edit topic')"}%>

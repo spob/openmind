@@ -79,6 +79,12 @@
     &bull;&nbsp;Allocation of quantity <%=h allocation.quantity %> (<%= pluralize allocation.votes.size, 'vote' %> used) created on <%=om_date_time(allocation.created_at) %><br />
   <% end %>
   </p>
+  <p>
+    <label>Vote History:</label><br />
+  <% for vote in @user.votes %>
+    &bull;&nbsp;Idea <%=h vote.idea.user_friendly_idea_name %>, voted for on <%=om_date_time(vote.created_at) %><br />
+  <% end %>
+  </p>
   <h3>Logons (last 90 days):</h3>
 <% @user.user_logons_90_days.in_groups_of(5) do |row_logons| %>
   <% for logon in row_logons %>

@@ -9,7 +9,7 @@ def can_edit_comment? comment
 end
 
 
-def show_watch_button topic
+def show_topic_watch_button topic
   show = ""
   if topic.watchers.include? current_user
     show = link_to "Remove Watch", 
