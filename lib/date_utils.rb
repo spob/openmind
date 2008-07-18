@@ -5,6 +5,7 @@
 
 class DateUtils
   def self.time_to_datetime t
+    return nil if t.nil?
     # convert to seconds + microseconds into a fractional number of seconds
     seconds = t.sec + Rational(t.usec, 10**6)
     

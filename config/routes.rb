@@ -1,6 +1,4 @@
 ActionController::Routing::Routes.draw do |map|
-  map.resources :polls
-
   # The priority is based upon order of creation: first created -> highest priority.
   
   # Sample of regular route:
@@ -47,5 +45,4 @@ ActionController::Routing::Routes.draw do |map|
 #  map.connect ':id', :controller => 'ideas', :action => 'show'
 
   map.connect ':path', :controller => 'static'
-
 end

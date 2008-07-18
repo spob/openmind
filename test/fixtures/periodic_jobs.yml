@@ -1,0 +1,50 @@
+# test/fixtures/periodic_jobs.yml
+run_once_job:
+  id: 1
+  type: RunOncePeriodicJob
+  job: 'what = "w00t once!"'
+run_interval_job_needs_run:
+  id: 2
+  type: RunIntervalPeriodicJob
+  interval: 60
+  job: 'what = "w00t on the minute dood!"'
+  last_run_at: <%= (Time.now - 5.minutes).to_s(:db) %>
+run_interval_job_does_not_need_run:
+  id: 3
+  type: RunIntervalPeriodicJob
+  interval: 60
+  job: 'what = "w00t on the minute dood!"'
+  last_run_at: <%= (Time.now - 5).to_s(:db) %>
+run_once_job_to_be_deleted:
+  id: 4
+  type: RunOncePeriodicJob
+  job: 'what = "w00t once!"'
+  last_run_at: <%= (Time.now - 8.days).to_s(:db) %>
+run_interval_job_needs_run_never_run_before:
+  id: 5
+  type: RunIntervalPeriodicJob
+  interval: 60
+  job: 'what = "w00t on the minute dood!"'
+run_at_job_never_run:
+  id: 6
+  type: RunAtPeriodicJob
+  run_at_minutes: 360
+  job: 'what = "w00t on the minute dood!"'
+  last_run_at: <%= (Time.now - 2.days).to_s(:db) %>
+run_at_job_2_days_old:
+  id: 7
+  type: RunAtPeriodicJob
+  run_at_minutes: 360
+  job: 'what = "w00t on the minute dood!"'
+run_at_job_just_run:
+  id: 8
+  type: RunAtPeriodicJob
+  run_at_minutes: 360
+  job: 'what = "w00t on the minute dood!"'
+  last_run_at: <%= (Time.now - 2.minutes).to_s(:db) %>
+run_at_job_run_yesterday:
+  id: 9
+  type: RunAtPeriodicJob
+  run_at_minutes: 360
+  job: 'what = "w00t on the minute dood!"'
+  last_run_at: <%= (Time.now - 1.day).to_s(:db) %>

@@ -83,4 +83,31 @@ end
 #    text.gsub!( /(.)\n(?!\n|\Z| *([#*=]+(\s|$)|[{|]))/, "\\1<br />" ) if hard_breaks 
 #  end 
 #end
+ 
+if $t.nil?
+  $t = Thread.new {
+  sleep(60)
+    while true do
+      # Find all Run Once jobs, and run them
+      RunOncePeriodicJob.find_all_need_to_run.each do |job|
+        job.run!
+      end
 
+      # Find all Run on Interval jobs, and run them  
+      RunIntervalPeriodicJob.find_all_need_to_run.each do |job|
+        job.run!
+      end
+
+      # Find all Run At jobs, and run them  
+      RunAtPeriodicJob.find_all_need_to_run.each do |job|
+        job.run!
+      end
+
+      # Cleans up periodic jobs, removes all RunOncePeriodicJobs over one
+      # day old.
+      RunOncePeriodicJob.cleanup
+    end
+  }
+end
+ 
+#t.join # wait for thread to exit (never, in this case)
