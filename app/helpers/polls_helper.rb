@@ -32,10 +32,10 @@ module PollsHelper
     GoogleChart::PieChart.new("#{width}x#{height}", "Pie Chart" ,true) do |pc|
       
       data.each do  |k,v|    
-        pc.data "#{k}", v
+        pc.data "#{k}", v if v > 0
       end
       
-      #      this is a bad hack ... I can't seem to remove the title
+      #this is a bad hack ... I can't seem to remove the title
       complete_url = pc.to_url.to_s.gsub("=Pie+Chart", "")
       return complete_url
     end
