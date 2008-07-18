@@ -21,27 +21,23 @@ module PollsHelper
     return "display:none;" if session[:polls_show_toggle_detail] == action
     "display:block;"
   end
-  
+
   def google_pie_chart(data, options = {})
-    options[:width] ||= 250
-    options[:height] ||= 100
-    options[:colors] = %w(0DB2AC F5DD7E FC8D4D FC694D FABA32 704948 968144 C08FBC ADD97E)
-    dt = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-."
-    options[:divisor] ||= 1
     
-    while (data.map { |k,v| v }.max / options[:divisor] >= 4096) do
-      options[:divisor] *= 10
+    width =  options[:width] ||= 350
+    height = options[:height] ||= 100
+    
+    GoogleChart::PieChart.new("#{width}x#{height}", "Pie Chart" ,true) do |pc|
+      
+      data.each do  |k,v|    
+        pc.data "#{k}", v
+      end
+      
+      #      this is a bad hack ... I can't seem to remove the title
+      complete_url = pc.to_url.to_s.gsub("=Pie+Chart", "")
+      return complete_url
     end
-    
-    opts = {
-      :cht => "p",
-      :chd => "e:#{data.map{|k,v|v=v/options[:divisor];dt[v/64..v/64]+dt[v%64..v%64]}}",
-      :chl => "#{data.map { |k,v| CGI::escape(k + " (#{v})")}.join('|')}",
-      :chs => "#{options[:width]}x#{options[:height]}",
-      :chco => options[:colors].slice(0, data.length).join(',')
-    }
-    
-    image_tag("http://chart.apis.google.com/chart?#{opts.map{|k,v|"#{k}=#{v}"}.join('&')}")
   rescue
   end
+  
 end
