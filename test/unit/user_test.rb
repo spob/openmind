@@ -199,7 +199,7 @@ class UserTest < Test::Unit::TestCase
     assert user.watched_topics.empty?
     
     topic = topics(:bug_topic1)
-    user.watched_topics << topic
+    user.watch_topic(topic)
     user.save
     user = User.find(user.id)
     assert !user.watched_topics.empty?

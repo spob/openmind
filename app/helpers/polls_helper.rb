@@ -2,7 +2,7 @@ module PollsHelper
   require 'rubygems'
   require 'google_chart'
     
-  def add_option_link(name)
+  def add_poll_option_link name
     link_to_function name, :class=> 'insideFormTitle' do |page|
       page.insert_html :bottom, :poll_options, :partial => 'poll_option', 
         :object => PollOption.new(:description => "...")

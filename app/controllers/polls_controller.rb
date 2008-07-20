@@ -1,4 +1,5 @@
 class PollsController < ApplicationController
+  helper :polls
   before_filter :login_required
   access_control [:new,  :edit, :create, :update, :destroy,
     :publish, :unpublish ] => 'prodmgr'

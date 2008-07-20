@@ -20,7 +20,14 @@ class User < ActiveRecord::Base
   has_and_belongs_to_many :roles  
   # This collection is for watches
   has_and_belongs_to_many :watched_ideas, :join_table => 'watches', :class_name => 'Idea'
-  has_and_belongs_to_many :watched_topics, :join_table => 'topic_watches', :class_name => 'Topic'
+  has_many :topic_watches
+  # couldn't get through to work
+  has_many :watched_topics, :class_name => 'Topic',
+    :finder_sql => 'SELECT t.* ' +
+    'from Topics AS t ' +
+    'INNER JOIN topic_watches AS tw ON t.id = tw.topic_id ' +
+    'WHERE tw.user_id = #{id} ' +
+    'ORDER BY t.forum_id, t.updated_at DESC'
   has_and_belongs_to_many :poll_options, :join_table => 'poll_user_responses'
   has_and_belongs_to_many :mediated_forums, :join_table => 'forum_mediators', :class_name => 'Forum'
   
@@ -207,6 +214,10 @@ class User < ActiveRecord::Base
   
   def open_polls
     Poll.open_polls(self)
+  end
+  
+  def watch_topic(topic)
+    topic_watches.create(:topic => topic)
   end
 
   protected

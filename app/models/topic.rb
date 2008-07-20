@@ -6,7 +6,8 @@ class Topic < ActiveRecord::Base
   has_many :user_topic_reads, :dependent => :delete_all
   has_one :last_comment, :class_name => "TopicComment", :order => "id DESC"
   has_one :main_comment, :class_name => "TopicComment", :order => "id ASC"
-  has_and_belongs_to_many :watchers, :join_table => 'topic_watches', :class_name => 'User'
+  has_many :topic_watches
+  has_many :watchers, :through => :topic_watches, :foreign_key => 'user_id'
   
   validates_presence_of :title, :user
   validates_length_of   :title, :maximum => 120
@@ -46,5 +47,9 @@ class Topic < ActiveRecord::Base
     end
     read.views += 1
     read
+  end
+  
+  def self.notify_watchers
+    
   end
 end
