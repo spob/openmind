@@ -1,6 +1,6 @@
 class CreateTopicWatches < ActiveRecord::Migration
   def self.up
-    create_table :topic_watches, :id => false  do |t|
+    create_table :topic_watches  do |t|
       t.column :user_id,  :integer, :null => false
       t.column :topic_id,  :integer, :null => false
       t.column :lock_version, :integer, :default => 0

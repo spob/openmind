@@ -50,6 +50,17 @@ class Topic < ActiveRecord::Base
   end
   
   def self.notify_watchers
-    
+    # Find users who have a comment more recent than the last watch check
+    users = User.find(:all, :conditions => 
+        ["EXISTS " +
+          "(SELECT NULL FROM topic_watches AS tw " +
+          "INNER JOIN topics AS t ON t.id = tw.topic_id " +
+          "WHERE tw.user_id = users.id " +
+          "AND t.updated_at > tw.last_checked_at)"])
+    for user in users
+      topics = TopicWatch.find_all_by_user_id(user, :include => "topic",
+        :conditions => "topics.updated_at > topic_watches.last_checked_at",
+        :order => topics.forum_id)
+    end
   end
 end

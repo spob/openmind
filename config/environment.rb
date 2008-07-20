@@ -86,8 +86,8 @@ end
  
 if $t.nil?
   $t = Thread.new {
-  sleep(60)
     while true do
+      sleep(60)
       # Find all Run Once jobs, and run them
       RunOncePeriodicJob.find_all_need_to_run.each do |job|
         job.run!
