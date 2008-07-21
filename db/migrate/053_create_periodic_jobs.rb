@@ -10,8 +10,8 @@ class CreatePeriodicJobs < ActiveRecord::Migration
     
     
     PeriodicJob.reset_column_information
-#    RunIntervalPeriodicJob.create(:job => 'puts "This job runs every 30 seconds, and it ran: #{Time.now}"', :interval => 30)
-    RunAtPeriodicJob.create(:job => 'puts "This job runs at 3AM, and it ran: #{Time.now}"', :run_at_minutes => 180)
+    RunIntervalPeriodicJob.create(:job => 'Topic.notify_watchers', :interval => 30)
+    RunAtPeriodicJob.create(:job => 'Topic.notify_watchers', :run_at_minutes => 180) # run at 6AM
   end
 
   def self.down

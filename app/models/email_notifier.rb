@@ -97,4 +97,13 @@ class EmailNotifier < ActionMailer::Base
   def set_expiration_date allocation
     @body[:expiration_date] = allocation.expiration_date.strftime("%b %d, %Y")
   end
+  
+  def new_topic_comment_notification(topics, user)
+    puts "Topics #{topics.nil?}"
+    setup_email
+    @body[:topics]  = topics
+    @body[:user] = user
+    @subject    += "New Topic Comments"
+    @recipients = user.email
+  end
 end
