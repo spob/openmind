@@ -169,11 +169,11 @@
                     <table width="100%" style="border-bottom:dotted 1px #999;">
                       <tr>
                         <td align="right"><b>Forum:</b></td>
-                        <td><%= topic.forum.name %></td>
+                        <td><a href="<%= forum_url(topic.forum) %>"><%= topic.forum.name %></a></td>
                       </tr>
                       <tr>
                         <td align="right"><b>Topic:</b></td>
-                        <td><%= topic.title %></td>
+                        <td><a href="<%= topic_url(topic) %>"><%= topic.title %></a></td>
                       </tr>
                       <% for comment in topic.unread_comments(@user) %>
                         <tr>
