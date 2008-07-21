@@ -166,23 +166,27 @@
                   <p>Dear <%= @user.full_name %>,</p>
                   <p>You are watching topics that have new comments.</p>
                   <% for topic in @topics %>
-                    <table>
+                    <table width="100%" style="border-bottom:dotted 1px #999;">
                       <tr>
-                        <td align="right">Forum:</td>
+                        <td align="right"><b>Forum:</b></td>
                         <td><%= topic.forum.name %></td>
                       </tr>
                       <tr>
-                        <td align="right">Topic:</td>
+                        <td align="right"><b>Topic:</b></td>
                         <td><%= topic.title %></td>
                       </tr>
                       <% for comment in topic.unread_comments(@user) %>
                         <tr>
-                          <td align="right">Comment:</td>
-                          <td><%= comment.body %></td>
+                          <td align="right" valign="top">
+                            <b><%= comment.user.display_name %> wrote at<br/><%= comment.created_at.strftime("%b %d, %Y %I:%M%p") %>:</b>
+                          </td>
+                          <td valign="top"><%= comment.body %></td>
                         </tr>
                       <% end %>
                     </table>
                   <% end %>
+                  <br/>
+                  <br/>
                   <!-- END CONTENT HERE -->
                 </td>
               </tr>
