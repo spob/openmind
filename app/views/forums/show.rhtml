@@ -14,6 +14,7 @@
   <% end %>
   <%= link_to 'List Forums', forums_path , html_options = {:class=> "button",
         :onmouseover => "Tip('Return to list forums')"}%>
+  <%= show_forum_watch_button @forum %>
 </div>
 <div class="formTitle">
   <%= theme_image_tag("icons/16x16/forums.png", options = {:alt=>"Forum"}) %>
