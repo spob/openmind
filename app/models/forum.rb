@@ -2,6 +2,7 @@ class Forum < ActiveRecord::Base
   has_many :topics, :order => "pinned ASC, updated_at DESC", :dependent => :delete_all
   has_and_belongs_to_many :mediators, :join_table => 'forum_mediators', 
     :class_name => 'User'     
+  has_and_belongs_to_many :watchers, :join_table => 'forum_watches', :class_name => 'User'
   has_many :comments, :through => :topics, :order => "id DESC"
   
   validates_presence_of :name
