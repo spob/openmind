@@ -21,35 +21,7 @@
     <th>Topics</th>
     <th>Posts</th>
     <th>Action</th>
-  </tr>
-  
-    <% for forum in @forums %>
-    <tr>
-      <td><b><%= h forum.name %></b><br/><%= h forum.description %></td>
-      <td><%= last_post forum %></td>
-      <td><%= h forum.topics.count %></td>
-      <td><%= forum.comments.count %></td>
-      <td>
-        <%= link_to theme_image_tag("icons/16x16/viewAction.png", :alt=>"view", :title=> "view"),
-              forum_path(forum), 
-              html_options = {
-              :onmouseover => "Tip('View details for this forum')"} 
-        %>
-         <% if can_edit? forum %>
-          <%= link_to theme_image_tag("icons/16x16/editAction.png", :alt=>"edit", :title=> "edit"), 
-                edit_forum_path(forum),
-                html_options = {
-                :onmouseover => "Tip('Edit this forum')"}
-          %>
-
-          <%= link_to(
-                theme_image_tag("icons/16x16/deleteAction.png", :alt=>"delete", :title=> "delete"),
-                forum_path(forum),
-                html_options = {:confirm => 'Are you sure?', :method => :delete,
-                      :onmouseover => "Tip('Delete this forum')"} ) if forum.can_delete? %>
-  <% end %>
-      </td>
-    </tr>
-  <% end %>
+  </tr>  
+  <%=render(:partial => "forum_item", :collection => @forums)%>
 </table>
 <p><%= will_paginate @forums %></p>

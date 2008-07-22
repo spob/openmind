@@ -1,0 +1,21 @@
+<div id="action_buttons<%= forum_action.id %>">
+  <%= link_to theme_image_tag("icons/16x16/viewAction.png", :alt=>"view", :title=> "view"),
+        forum_path(forum_action), 
+        html_options = {
+        :onmouseover => "Tip('View details for this forum')"} 
+  %>
+  <% if can_edit? forum_action %>
+      <%= link_to theme_image_tag("icons/16x16/editAction.png", :alt=>"edit", :title=> "edit"), 
+            edit_forum_path(forum_action),
+            html_options = {
+            :onmouseover => "Tip('Edit this forum')"}
+      %>
+
+      <%= link_to(
+            theme_image_tag("icons/16x16/deleteAction.png", :alt=>"delete", :title=> "delete"),
+            forum_path(forum_action),
+            html_options = {:confirm => 'Are you sure?', :method => :delete,
+                  :onmouseover => "Tip('Delete this forum')"} ) if forum_action.can_delete? %>
+  <% end %>
+  <%= show_forum_watch_button forum_action %>
+</div>

@@ -30,4 +30,25 @@ module ForumsHelper
     end
     show
   end
+  
+
+  def show_forum_watch_button forum
+    show = ""
+    if forum.watchers.include? current_user
+      show = link_to_remote theme_image_tag("icons/24x24/watchRemove.png", 
+        :alt=>"Remove watch", :title=> "remove watch",
+        :onmouseover => "Tip('Stop watching this forum')"), 
+        :url =>  destroy_forum_watch_watch_path(:id => forum), 
+        :html => { :class=> "button" }, 
+        :method => :delete
+    else
+      show = link_to_remote theme_image_tag("icons/24x24/watchAdd.png", 
+        :alt=>"Add watch", :title=> "add watch",
+        :onmouseover => "Tip('Watch this forum')"), 
+        :url =>  create_forum_watch_watch_path(:id => forum),
+        :html => { :class=> "button" }, 
+        :method => :post
+    end
+    show
+  end
 end
