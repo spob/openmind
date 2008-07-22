@@ -18,7 +18,22 @@ class Forum < ActiveRecord::Base
     paginate :page => page, :order => 'name ASC', 
       :per_page => per_page
   end
+  
   def can_edit? user
     mediators.include? user
   end  
+
+  def watch_all_topics user
+    for topic in topics
+      topic.watchers << user unless topic.watchers.include? user
+      topic.save
+    end
+  end
+
+  def remove_all_topic_watches user
+    for topic in topics
+      topic.watchers.delete(user) if topic.watchers.include? user
+      topic.save
+    end
+  end
 end

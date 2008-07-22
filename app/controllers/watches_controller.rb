@@ -21,6 +21,7 @@ class WatchesController < ApplicationController
     begin
       @forum = Forum.find(params[:id])
       @forum.watchers << current_user
+      @forum.watch_all_topics current_user
     rescue ActiveRecord::RecordNotFound     
       logger.error("Attempt to add watch to invalid forum #{params[:id]}")
       flash[:notice] = "Attempted to add watch to invalid forum"

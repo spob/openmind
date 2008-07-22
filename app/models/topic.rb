@@ -77,7 +77,7 @@ class Topic < ActiveRecord::Base
         :order => "topics.forum_id")
       topics = tws.collect(&:topic)
       
-    puts "Topics #{topics.nil?}"
+      puts "Topics #{topics.nil?}"
       EmailNotifier.deliver_new_topic_comment_notification(topics, user)
       
       for tw in tws

@@ -34,6 +34,10 @@ class TopicsController < ApplicationController
     
     tw = TopicWatch.find_by_user_id_and_topic_id(current_user, @topic)
     @topic.watchers << current_user if tw.nil?
+    
+    for user in @topic.forum.watchers
+      @topic.watchers << user unless topic.watchers.include? user
+    end
   
     if @topic.save
       flash[:notice] = "Topic #{@topic.title} was successfully created."
