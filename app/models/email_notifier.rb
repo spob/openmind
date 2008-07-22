@@ -99,7 +99,6 @@ class EmailNotifier < ActionMailer::Base
   end
   
   def new_topic_comment_notification(topics, user)
-    puts "Topics #{topics.nil?}"
     setup_email
     @body[:topics]  = topics
     @body[:user] = user
