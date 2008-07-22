@@ -28,9 +28,12 @@ class TopicsController < ApplicationController
     
     @topic.comments.build(
       :user_id => current_user.id,
-      :body=>@topic.comment_body)
+      :body => @topic.comment_body)
     @topic.add_user_read(current_user)
     @topic.watchers << current_user
+    
+    tw = TopicWatch.find_by_user_id_and_topic_id(current_user, @topic)
+    @topic.watchers << current_user if tw.nil?
   
     if @topic.save
       flash[:notice] = "Topic #{@topic.title} was successfully created."

@@ -81,7 +81,6 @@ class Topic < ActiveRecord::Base
       EmailNotifier.deliver_new_topic_comment_notification(topics, user)
       
       for tw in tws
-#        tw = TopicWatch.find_by_user_id_and_topic_id(user, topic) delete me
         tw.last_checked_at = Time.now
         tw.save
       end
