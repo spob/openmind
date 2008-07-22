@@ -17,6 +17,10 @@
       <label for="topic_name">Title:</label>
       <%= form.text_field :title, { :size => 50, :maxlength => 150 } %>
     </p>
+    <p>
+      <label for="topic_pinned">Pinned:</label>
+      <%= form.check_box :pinned %>
+    </p>
       
     <p>
       <label></label>
