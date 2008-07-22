@@ -24,19 +24,19 @@ class TopicsController < ApplicationController
     @topic = Topic.new(params[:topic])
     @topic.forum_id = forum_id
     @topic.user = current_user
-    @topic.save
+    @topic.save!
     
-    @topic.comments.build(
+    @topic.comments.create(
       :user_id => current_user.id,
       :body => @topic.comment_body)
     @topic.add_user_read(current_user)
-    @topic.watchers << current_user
     
+    @topic = Topic.find(@topic.id)
     tw = TopicWatch.find_by_user_id_and_topic_id(current_user, @topic)
     @topic.watchers << current_user if tw.nil?
     
     for user in @topic.forum.watchers
-      @topic.watchers << user unless topic.watchers.include? user
+      @topic.watchers << user unless @topic.watchers.include? user
     end
   
     if @topic.save
