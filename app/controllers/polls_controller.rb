@@ -33,18 +33,19 @@ class PollsController < ApplicationController
     poll = Poll.find(params[:id])
     data = []
     labels = []
+    g = Graph.new
+#    total_responses = poll.poll_options.collect(&:user_responses).size
     for option in poll.poll_options
       if option.user_responses.size > 0
         data << option.user_responses.size
-        labels << "#{option.description} (#{option.user_responses.size})"
+        labels << "#{option.description}"
       end
     end
 
-    g = Graph.new
     g.pie(70, '#505050', '{font-size: 12px; color: #404040;}')
     g.pie_values(data, labels)
     g.pie_slice_colors(%w(#d01fc3 #356aa0 #c79810))
-    g.set_tool_tip("#val#")
+#    g.set_tool_tip("#val#")
 #    g.title("Pie Chart", '{font-size:18px; color: #d01f3c}' )
     render :text => g.render
   end
