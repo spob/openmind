@@ -162,7 +162,6 @@ class WatchesController < ApplicationController
   private
     
   def do_idea_action from="list"
-    logger.error "==================================="
     render :update do |page|
       page.replace_html :flash_notice, flash_notice_string(flash[:notice]) 
       page.replace_html :flash_error,  flash_error_string(flash[:error])
