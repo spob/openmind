@@ -7,7 +7,7 @@
 <%= javascript_include_tag "wz_tooltip.js" %> 
 <%= error_messages_for 'forum' %>
 <h1><%= theme_image_tag("icons/48x48/forums.png", options = {:alt=>"Forum"}) %>Forums</h1>
-<% if sysadmin? %>
+<% if current_user != :false and sysadmin? %>
   <div id="actionButtons">
     <%= link_to 'New Forum', new_forum_path, 
                         html_options = {:class => "button",

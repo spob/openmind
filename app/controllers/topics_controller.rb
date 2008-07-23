@@ -1,5 +1,5 @@
 class TopicsController < ApplicationController
-  before_filter :login_required
+  before_filter :login_required, :except => [:index, :show]
 
   # GETs should be safe (see http://www.w3.org/2001/tag/doc/whenToUseGet.html)
   verify :method => :post, :only => [:create ],

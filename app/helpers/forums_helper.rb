@@ -1,6 +1,6 @@
 module ForumsHelper
   def can_edit? forum
-    sysadmin? or forum.can_edit? current_user
+    sysadmin? or forum.can_edit? current_user unless current_user == :false
   end
   
     
@@ -12,44 +12,54 @@ module ForumsHelper
   
 
   def show_topic_watch_button topic
-    show = ""
-    if topic.watchers.include? current_user
-      show = link_to_remote theme_image_tag("icons/24x24/watchRemove.png", 
+    if current_user == :false
+      link_to theme_image_tag("icons/24x24/watchAdd.png", 
+        :alt=>"Add watch", :title=> "add watch",
+        :onmouseover => "Tip('Watch this topic (requires login)')"), 
+        :url =>  create_topic_watch_watch_path(:id => topic),
+        :html => { :class=> "button" }, 
+        :method => :post
+    elsif topic.watchers.include? current_user
+      link_to_remote theme_image_tag("icons/24x24/watchRemove.png", 
         :alt=>"Remove watch", :title=> "remove watch",
         :onmouseover => "Tip('Stop watching this topic')"), 
         :url =>  destroy_topic_watch_watch_path(:id => topic), 
         :html => { :class=> "button" }, 
         :method => :delete
     else
-      show = link_to_remote theme_image_tag("icons/24x24/watchAdd.png", 
+      link_to_remote theme_image_tag("icons/24x24/watchAdd.png", 
         :alt=>"Add watch", :title=> "add watch",
         :onmouseover => "Tip('Watch this topic')"), 
         :url =>  create_topic_watch_watch_path(:id => topic),
         :html => { :class=> "button" }, 
         :method => :post
     end
-    show
   end
   
 
   def show_forum_watch_icon forum
-    show = ""
-    if forum.watchers.include? current_user
-      show = link_to_remote theme_image_tag("icons/24x24/watchRemove.png", 
+    if current_user == :false
+      link_to theme_image_tag("icons/24x24/watchAdd.png", 
+        :alt=>"Watch this forum and all topics within this forum (requires login)", :title=> "Watch this forum and all topics within this forum (requires login)",
+        :onmouseover => "Tip('Watch this forum and all topics within this forum (requires login)')"), 
+        create_forum_watch_watch_path(:id => forum),
+        :html => { :class=> "button" }, 
+        :method => :post
+    elsif forum.watchers.include? current_user
+      link_to_remote theme_image_tag("icons/24x24/watchRemove.png", 
         :alt=>"Don't automatically watch new topics in this forum", :title=> "Don't automatically watch new topics in this forum",
         :onmouseover => "Tip('Don't automatically watch new topics in this forum')"), 
         :url =>  destroy_forum_watch_watch_path(:id => forum), 
         :html => { :class=> "button" }, 
         :method => :delete
     else
-      show = link_to_remote theme_image_tag("icons/24x24/watchAdd.png", 
+      link_to_remote theme_image_tag("icons/24x24/watchAdd.png", 
         :alt=>"Watch this forum and all topics within this forum", :title=> "Watch this forum and all topics within this forum",
         :onmouseover => "Tip('Watch this forum and all topics within this forum')"), 
         :url =>  create_forum_watch_watch_path(:id => forum),
         :html => { :class=> "button" }, 
         :method => :post
     end
-    show
   end
 
 

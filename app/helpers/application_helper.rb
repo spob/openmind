@@ -3,11 +3,17 @@ module ApplicationHelper
   
     
   def render_menus 
+    @no_menu_screens = [
+      ["account", "login"],
+      ["users", "lost_password"],
+    ]
+      
     @menus = [
+      # Menu Label       # controller url       # role restrictions   # other controllers e.g., aliases
       ["Ideas",           "/ideas"                             ],
       ["Products",        products_path,                       ],
-      ["Releases",        list_releases_path                   ],
-      ["Forums",          forums_path                          ],
+      ["Releases",        list_releases_path,   [],                  [ "releases" ] ],
+      ["Forums",          forums_path,          [],                  [ "topics" ] ],
       ["Lookup Codes",    lookup_codes_path,    ["sysadmin"]   ],
       ["Users",           "/users",             ["sysadmin", "allocmgr"] ],
       ["Enterprises",     enterprises_path,     ["sysadmin", "allocmgr"] ],
@@ -16,10 +22,19 @@ module ApplicationHelper
       ["Announcements",   announcements_path ,  ["sysadmin", "prodmgr"]  ],
       ["Polls",           polls_path ,          ["prodmgr"]  ],
     ]
+    
+    #    puts "controller #{params["controller"]} action: #{params["action"]}"
+    # Don't display the menu if the user is on one of these screens
+    for screen in @no_menu_screens
+      if screen[0] == params["controller"] and screen[1] == params["action"]
+        return
+      end
+    end
+    
     output = ""
     for menu in @menus
-      accessible = menu[2].nil?   # no restrictions specified
-      if !accessible then         # otherwise you'll need to loop through
+      accessible = (menu[2].nil? or menu[2].empty?)  # no restrictions specified
+      if !accessible and logged_in? then         # otherwise you'll need to loop through
         for priviledge in menu[2] # and explicitly see if user has access
           restrict_to priviledge do 
             accessible = true
@@ -30,6 +45,11 @@ module ApplicationHelper
       if accessible then          # should the user see the menu?
         clazz = nil
         clazz = "current" if menu_selected menu[1]
+        if clazz.nil? and !menu[3].nil? # not selected...but check it's aliases
+          for controller_alias in menu[3]
+            clazz = "current" if menu_selected controller_alias
+          end
+        end
         output += "<li>#{link_to(menu[0], menu[1], :class => clazz)}</li>"
       end
     end
@@ -81,7 +101,8 @@ module ApplicationHelper
   
   # Format a date and adjust the timezone for the user's timezone
   def om_date_time(the_date)
-    h format_date_time(current_user.user_time(the_date)) unless the_date.nil?
+    the_date = current_user.user_time(the_date) unless current_user == :false
+    h format_date_time(the_date) unless the_date.nil?
   end
   
   # If value is null, return null_value, else return null
@@ -91,7 +112,7 @@ module ApplicationHelper
   end
   
   def user_display_name user
-    full = prodmgr? or sysadmin? or allocmgr?
+    full = prodmgr? or sysadmin? or allocmgr? unless current_user == :false
     user.display_name full
   end
   
@@ -123,7 +144,11 @@ module ApplicationHelper
   end
   
   def menu_selected path
+    strip_leading_slash(path) == params['controller']
+  end
+  
+  def strip_leading_slash path
     path = path.from(1) if path.index('/') == 0
-    path == params['controller']
+    path
   end
 end

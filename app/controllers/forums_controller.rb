@@ -1,5 +1,5 @@
 class ForumsController < ApplicationController
-  before_filter :login_required
+  before_filter :login_required, :except => [:index, :show]
   access_control [:new, :edit, :create, :update, :destroy ] => 'sysadmin'
 
   # GETs should be safe (see http://www.w3.org/2001/tag/doc/whenToUseGet.html)
@@ -21,7 +21,7 @@ class ForumsController < ApplicationController
   end
   
   def index
-    @forums = Forum.list params[:page], current_user.row_limit
+    @forums = Forum.list params[:page], (current_user == :false ? 10 : current_user.row_limit)
   end
 
   def create

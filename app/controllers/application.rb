@@ -26,6 +26,7 @@ class ApplicationController < ActionController::Base
   end
   
   def prodmgr?
+    return false if current_user == :false
     pmgr = false
     restrict_to 'prodmgr' do 
       pmgr = true
@@ -34,6 +35,7 @@ class ApplicationController < ActionController::Base
   end
   
   def voter?
+    return false if current_user == :false
     voter = false
     restrict_to 'voter' do 
       voter = true
@@ -42,6 +44,7 @@ class ApplicationController < ActionController::Base
   end
   
   def sysadmin?
+    return false if current_user == :false
     sysadmin = false
     restrict_to 'sysadmin' do 
       sysadmin = true
@@ -50,6 +53,7 @@ class ApplicationController < ActionController::Base
   end
   
   def allocmgr?
+    return false if current_user == :false
     allocmgr = false
     restrict_to 'allocmgr' do 
       allocmgr = true

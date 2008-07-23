@@ -26,6 +26,8 @@
               <li><a href="/account/change_password">Change Password</a></li>
               <li><a href="/users/edit_profile">Update Profile</a></li>
               <li><a href="/account/logout">Logout</a></li>
+            <% elsif params[:action] != "login" %>
+              <li><a href="/account/login">Login</a></li>
             <% end %>
           </ul>
         </div>
@@ -43,7 +45,7 @@
             <div id="flash_error" class="flash flashError" style="display:none;"></div>
             <% end %>        
         </div>
-        <% if logged_in? %>
+        <% if true %>
           <ul id="headerLowerNavMenu">
             <%= render_menus  %>
           </ul>
