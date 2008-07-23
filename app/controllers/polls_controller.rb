@@ -20,12 +20,35 @@ class PollsController < ApplicationController
   def show
     session[:polls_show_toggle_detail] ||= "HIDE"
     @poll = Poll.find(params[:id])
-    @chart_data = []
-    for option in @poll.poll_options
-      data_point = [ option.description, option.user_responses.size]
-      @chart_data << data_point
-    end
+    #    @chart_data = []
+    #    for option in @poll.poll_options
+    #      data_point = [ option.description, option.user_responses.size]
+    #      @chart_data << data_point unless option.user_responses.size == 0
+    #    end
+    
+    @graph = open_flash_chart_object(250,250, pie_polls_path(:id => @poll.id), true, '/')     
   end
+
+  def pie
+    poll = Poll.find(params[:id])
+    data = []
+    labels = []
+    for option in poll.poll_options
+      if option.user_responses.size > 0
+        data << option.user_responses.size
+        labels << "#{option.description} (#{option.user_responses.size})"
+      end
+    end
+
+    g = Graph.new
+    g.pie(70, '#505050', '{font-size: 12px; color: #404040;}')
+    g.pie_values(data, labels)
+    g.pie_slice_colors(%w(#d01fc3 #356aa0 #c79810))
+    g.set_tool_tip("#val#")
+#    g.title("Pie Chart", '{font-size:18px; color: #d01f3c}' )
+    render :text => g.render
+  end
+
 
   def new
     @poll = Poll.new
@@ -158,7 +181,7 @@ class PollsController < ApplicationController
   end
   
   def do_rjs_toggle_details  poll
-      render :update do |page|
+    render :update do |page|
       if session[:polls_show_toggle_detail] == "HIDE"
         page.visual_effect :blind_up, "hide_images", :duration => 0.2
         page.visual_effect :blind_down, "show_images", :duration => 1

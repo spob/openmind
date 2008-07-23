@@ -1,6 +1,5 @@
 module PollsHelper
-  require 'rubygems'
-  require 'google_chart'
+#  require 'rubygems'
     
   def add_poll_option_link name
     link_to_function name, :class=> 'insideFormTitle' do |page|
@@ -25,27 +24,26 @@ module PollsHelper
   end
 
   def google_pie_chart(data, options = {})
+    options[:colors] = %w(0DB2AC F5DD7E FC8D4D FC694D FABA32 704948 968144 C08FBC ADD97E)
+    dt = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-."
+    options[:divisor] ||= 1
     
-    width =  options[:width] ||= 350
-    height = options[:height] ||= 100
-    
-    GoogleChart::PieChart.new("#{width}x#{height}", "Pie Chart" ,true) do |pc|
-      
-      data.each do  |k,v|    
-        pc.data "#{k}", v if v > 0
-      end
-      
-      #this is a bad hack ... I can't seem to remove the title
-      complete_url = pc.to_url.to_s.gsub("=Pie+Chart", "")
-
-      puts "complete_url: " +  complete_url
-#      return complete_url
-      
-return      image_tag(complete_url)
-      
-
+    while (data.map { |k,v| v }.max / options[:divisor] >= 4096) do
+      options[:divisor] *= 10
     end
-  rescue
+    
+    opts = {
+      :cht => "p",
+      :chd => "e:#{data.map{|k,v|v=v/options[:divisor];dt[v/64..v/64]+dt[v%64..v%64]}}",
+      :chl => "#{data.map { |k,v| CGI::escape(k + " (#{v})")}.join('|')}",
+      :chs => "#{options[:width]}x#{options[:height]}",
+      :chco => options[:colors].slice(0, data.length).join(',')
+    }
+    
+    image_tag("http://chart.apis.google.com/chart?#{opts.map{|k,v|"#{k}=#{v}"}.join('&')}")
+  rescue Exception => exc
+    STDERR.puts "General error: #{exc.message}"
+    puts ":::::::::Bad voodoo: #{exc.message}"
   end
   
 end

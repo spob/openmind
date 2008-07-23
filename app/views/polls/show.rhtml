@@ -1,5 +1,6 @@
 <%content_for :head do -%>
-  <%= javascript_include_tag "tablecloth" %>                
+  <%= javascript_include_tag "tablecloth" %>   
+  <%= javascript_include_tag "swfobject" %>                
 <%end%>
 <%= javascript_include_tag "wz_tooltip.js" %> 
 <% if prodmgr? %>
@@ -25,7 +26,7 @@
   <%= theme_image_tag("icons/16x16/polls.png", options = {:alt=>""}) %>
   Poll Detail
 </div>
-<div class="cssform" style="<% if @poll.total_responses > 0 %>width:65%; float:left<% end %>">
+<div class="cssform" style="<% if @poll.total_responses > 0 %>width:55%; float:left<% end %>">
   <p>
    <label for="title">Title:</label>
     <%= h @poll.title %>
@@ -78,8 +79,6 @@
 
 <% if @poll.total_responses > 0 %>
   <div id="googlePollChart">
-  <img src="<%=google_pie_chart(@chart_data) %>" alt="<%= h @poll.title  %>" title="<%= h @poll.title  %>" />
-  
-  <%=image_tag("#{h google_pie_chart(@chart_data, :width => 350, :height => 150)}", :alt => "#{h @poll.title}", :title=> "#{h @poll.title}") %>
+     <%= @graph %>
   </div>
 <% end %>
