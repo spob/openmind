@@ -11,7 +11,7 @@ module PollsHelper
     
   def details_button_text
     return "Show Details" if session[:polls_show_toggle_detail] == "HIDE"
-      "Hide Details"
+    "Hide Details"
   end
   
   def details_display_style
@@ -37,7 +37,13 @@ module PollsHelper
       
       #this is a bad hack ... I can't seem to remove the title
       complete_url = pc.to_url.to_s.gsub("=Pie+Chart", "")
-      return complete_url
+
+      puts "complete_url: " +  complete_url
+#      return complete_url
+      
+return      image_tag(complete_url)
+      
+
     end
   rescue
   end

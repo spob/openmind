@@ -78,6 +78,8 @@
 
 <% if @poll.total_responses > 0 %>
   <div id="googlePollChart">
-    <%=image_tag("#{google_pie_chart(@chart_data, :width => 350, :height => 150)}", :alt => "#{h @poll.title}", :title=> "#{h @poll.title}") %>
+  <img src="<%=google_pie_chart(@chart_data) %>" alt="<%= h @poll.title  %>" title="<%= h @poll.title  %>" />
+  
+  <%=image_tag("#{h google_pie_chart(@chart_data, :width => 350, :height => 150)}", :alt => "#{h @poll.title}", :title=> "#{h @poll.title}") %>
   </div>
 <% end %>
