@@ -42,9 +42,10 @@ class PollsController < ApplicationController
       end
     end
 
-    g.pie(70, '#505050', '{font-size: 12px; color: #404040;}')
+    g.pie(70, '#505050', '{background-color:#FFFFFF; font-size: 12px; color: #404040;}')
     g.pie_values(data, labels)
-    g.pie_slice_colors(%w(#d01fc3 #356aa0 #c79810))
+	g.set_bg_color('#FFFFFF')
+    g.pie_slice_colors(%w(#CF2626 #5767AF  #D01FC3 #356AA0 #CF5ACD #CF750C #FF7200 #8F1A1A #ADD700 #57AF9D #C3CF5A #456F4F #C79810))
 #    g.set_tool_tip("#val#")
 #    g.title("Pie Chart", '{font-size:18px; color: #d01f3c}' )
     render :text => g.render
