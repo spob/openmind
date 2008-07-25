@@ -169,7 +169,7 @@ input.pollTxtField[type="text"]
     width: 550px;
 }
 
-#googlePollChart {
+#pollChart {
     float:right; 
     margin:0; 
     text-align:center; 
@@ -310,4 +310,5 @@ form.button-to div {
     width: 0px; 
     border: 1px solid white;
     margin-left: 155px; 
+	max-width:395px;
 }
