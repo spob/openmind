@@ -29,7 +29,8 @@ class EmailNotifier < ActionMailer::Base
       :only_path  => false
   end
   
-  def new_comment_notification(comment)
+  def new_comment_notification(comment_id)
+    comment = Comment.find(comment_id)
     setup_email
     @body[:url]  = url_for :controller => 'ideas',
       :action => 'show', 

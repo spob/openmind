@@ -54,10 +54,6 @@ loop do
   RunAtPeriodicJob.find_all_need_to_run.each do |job|
     job.run!
   end
-
-  # Cleans up periodic jobs, removes all RunOncePeriodicJobs over one
-  # day old.
-  RunOncePeriodicJob.cleanup
   
   sleep(SLEEP_TIME)
 end

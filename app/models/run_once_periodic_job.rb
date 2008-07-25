@@ -7,7 +7,7 @@ class RunOncePeriodicJob < PeriodicJob
 
   # Cleans up all jobs older than a day.
   def self.cleanup
-    self.destroy_all ['last_run_at < ?', 1.day.ago]
+    self.destroy_all ['last_run_at < ?', 7.day.ago]
   end
 
 end

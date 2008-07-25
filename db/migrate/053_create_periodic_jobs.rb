@@ -10,8 +10,14 @@ class CreatePeriodicJobs < ActiveRecord::Migration
     
     
     PeriodicJob.reset_column_information
-    RunIntervalPeriodicJob.create(:job => 'Topic.notify_watchers', :interval => 30)
+    # Send email on new topic comments
+    #    RunIntervalPeriodicJob.create(:job => 'Topic.notify_watchers', :interval => 30)
     RunAtPeriodicJob.create(:job => 'Topic.notify_watchers', :run_at_minutes => 180) # run at 6AM
+    #
+    #
+    # Cleans up periodic jobs, removes all RunOncePeriodicJobs over one
+    # day old.    
+    RunIntervalPeriodicJob.create(:job => 'RunOncePeriodicJob.cleanup', :interval => 3600) #once an hour
   end
 
   def self.down
