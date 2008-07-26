@@ -17,7 +17,7 @@ Rails::Initializer.run do |config|
   # config.frameworks -= [ :action_web_service, :action_mailer ]
 
   #Add load paths to vendor gems
-  config.load_paths += Dir["#{RAILS_ROOT}/vendor/plugins/**"].map do |dir| 
+  config.load_paths += Dir["#{RAILS_ROOT}/vendor/**"].map do |dir| 
     File.directory?(lib = "#{dir}/lib") ? lib : dir
   end
 
