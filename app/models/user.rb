@@ -156,7 +156,7 @@ class User < ActiveRecord::Base
   
   def user_time(time)
     tz = TimeZone[time_zone]
-    time = tz.adjust time unless tz.nil?
+    time = tz.adjust time unless tz.nil? or time.nil?
     time
   end
   
