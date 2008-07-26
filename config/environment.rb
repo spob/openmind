@@ -20,6 +20,7 @@ Rails::Initializer.run do |config|
   config.load_paths += Dir["#{RAILS_ROOT}/vendor/**"].map do |dir| 
     File.directory?(lib = "#{dir}/lib") ? lib : dir
   end
+  config.load_paths += [ "#{RAILS_ROOT}/vendor/RedCloth-3.0.4/lib" ]
 
   # Only load the plugins named here, by default all plugins in vendor/plugins are loaded
   # config.plugins = %W( exception_notification ssl_requirement )
@@ -65,6 +66,7 @@ end
 
 # Include your application configuration below
 # load the base application config file
+require 'redcloth'
 
 # see http://lemurware.blogspot.com/2006/08/ruby-on-rails-configuration-and.html
 # RBS 1/1/2008
