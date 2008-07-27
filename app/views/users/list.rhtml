@@ -32,29 +32,29 @@
     <th>Action</th>
   </tr>
   
-  <% for user in @users %>
+  <% for user_item in @users %>
     <tr>
-      <td><%= h user.email %></td>
-      <td><%= h user.full_name %></td>
-      <td class="center"><%= h user.available_enterprise_votes %></td>
-      <td class="center"><%= h user.available_user_votes %></td>
-      <td><%= h user.enterprise.name %></td>
-      <td class="center"><input type="checkbox" name="active" value="active" <%= "checked" if user.active?  %> disabled ></td>
-      <td><%= h nvl(om_date_time(user.last_logon_date), "-") %></td>
+      <td><%= h user_item.email %></td>
+      <td><%= h user_item.full_name %></td>
+      <td class="center"><%= h user_item.available_enterprise_votes %></td>
+      <td class="center"><%= h user_item.available_user_votes %></td>
+      <td><%= h user_item.enterprise.name %></td>
+      <td class="center"><input type="checkbox" name="active" value="active" <%= "checked" if user_item.active?  %> disabled ></td>
+      <td><%= h nvl(om_date_time(user_item.last_logon_date), "-") %></td>
       <td class="nowrap">
         <%= link_to theme_image_tag("icons/16x16/viewAction.png", 
           options = {:alt=>"view", :title=> "view", :onmouseover => "Tip('View details of this user')"}), 
-          options = { :action => 'show', :id => user  } %>
+          options = { :action => 'show', :id => user_item  } %>
       
         <% restrict_to "sysadmin" do %>
           <%= link_to theme_image_tag("icons/16x16/editAction.png", 
             options = {:alt=>"edit", :title=> "edit", :onmouseover => "Tip('Edit this user')"}), 
-            options = { :action => 'edit', :id => user  } %>
+            options = { :action => 'edit', :id => user_item  } %>
       
           <%= link_to(theme_image_tag("icons/16x16/deleteAction.png", 
               options = {:alt=>"delete", :title=> "delete", :onmouseover => "Tip('Delete this user')"}),  
-            options = {:action => 'destroy', :id => user}, 
-            html_options = {:method => :post , :confirm => 'Are you sure?'}) if user.can_delete? %>
+            options = {:action => 'destroy', :id => user_item}, 
+            html_options = {:method => :post , :confirm => 'Are you sure?'}) if user_item.can_delete? %>
         <% end %>
       </td>
     </tr>
