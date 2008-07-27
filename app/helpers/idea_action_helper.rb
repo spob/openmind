@@ -31,8 +31,7 @@ module IdeaActionHelper
 
   def show_watch_button idea, from
     show = ""
-    if Watch.find(:all, :conditions =>{:idea_id => idea.id, 
-          :user_id => current_user.id}).size > 0
+    if idea.watched? current_user
       show = link_to_remote theme_image_tag("icons/24x24/watchRemove.png", 
         :alt=>"Remove watch", :title=> "remove watch",
         :onmouseover => "Tip('Stop watching this idea')"), 

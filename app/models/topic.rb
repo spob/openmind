@@ -60,6 +60,10 @@ class Topic < ActiveRecord::Base
       :order => "comments.id DESC")
   end
   
+  def watched? user
+  	watchers.include? user
+  end
+  
   def self.notify_watchers
     puts "Checking for topic notifications at #{Time.now.to_s}"
     # Find users who have a comment more recent than the last watch check

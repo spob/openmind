@@ -66,6 +66,7 @@ class WatchesController < ApplicationController
     end
   end
   
+  # Create idea watch
   def create from="list"
     begin
       @idea = Idea.find(params[:id])

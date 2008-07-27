@@ -205,7 +205,11 @@ class Idea < ActiveRecord::Base
   
   def user_friendly_release_name
     "#{release.version} (#{release.release_status.description})" unless release.nil?
-  end  
+  end
+  
+  def watched? user
+  	watchers.include? user
+  end
   
   private
   

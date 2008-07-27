@@ -71,6 +71,9 @@ class CommentsController < ApplicationController
     @comment = IdeaComment.new(params[:comment])
     @comment.user_id = current_user.id
     @comment.idea_id = @idea.id
+    if params[:watch] == 'yes'
+    	@idea.watchers << current_user
+    end
     if @comment.save
       flash[:notice] = "Comment for idea number #{@comment.idea.id} was successfully created."
       redirect_to :controller => 'ideas', :action => 'show', :id => @idea, :selected_tab => "COMMENTS"
@@ -85,6 +88,9 @@ class CommentsController < ApplicationController
     @comment = TopicComment.new(params[:comment])
     @comment.user_id = current_user.id
     @comment.topic_id = @topic.id
+    if params[:watch] == 'yes'
+    	@topic.watchers << current_user
+    end
     if @topic.save and @comment.save
       flash[:notice] = "Comment for topic '#{@topic.title}' was successfully created."
       redirect_to topic_path(@topic.id)

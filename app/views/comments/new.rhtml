@@ -35,6 +35,23 @@
       <%= form.text_area :body,  {:cols => 70, :rows => 8 } %>
       <span style="padding-left:10px;font-size:0.83em;">(supports <a href="http://hobix.com/textile/" target="_blank" onmouseover="Tip('Click here for explanation of textile tags')">textile</a> tags)</span>
     </p>
+    <% if object.class.to_s == "Idea" %>
+    	<% if !@idea.watched? current_user %>
+    		<p>
+      			<label></label>
+      			<%= check_box_tag 'watch', 'yes', true,
+      				{:onmouseover => "Tip('Start watching this idea to be notified whenever the idea is edited or a comment is added')"} %>Watch this idea
+   		 	</p>
+      	<% end %>
+    <% else %>
+    	<% if !@topic.watched? current_user %>
+    		<p>
+      			<label></label>
+      			<%= check_box_tag 'watch', 'yes', true,
+      				{:onmouseover => "Tip('Start watching this topic to be notified whenever a comment is added')"} %>Watch this topic
+   		 	</p>
+      	<% end %>
+    <% end %>
     <p>
       <label></label>
       <% text = "Create this comment for idea ##{@idea.id}" if object.class.to_s == "Idea" %>
