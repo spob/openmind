@@ -1,0 +1,31 @@
+<tr>
+	<td>
+	    <% if prodmgr? %>
+	      <%= link_to h(release_item.product.name), product_path(release_item.product) %>
+	    <% else %>
+	      <%=h release_item.product.name %>
+	    <% end %>
+	</td>
+	<td>
+	  <%= link_to h(release_item.version), release_path(release_item) %>
+	</td>
+	<td><%=h nvl(release_item.user_release_date, '-') %></td>
+	<td>
+	    <% if !release_item.description.nil? and !release_item.description.blank? %>
+	      <b>Description:</b><br/>
+	      <%= textilize(release_item.description).gsub(/<[pP]>/,'<p class="releases">').gsub(/<[uU][lL]>/,'<ul class="releases_desc">') %>
+	    <% end %>
+	    &nbsp;
+	    <% if !release_item.ideas.empty? %>
+	      <b>Scheduled Ideas:</b><br/>
+	      <ul class="releases">
+	      <% for idea in release_item.ideas %>
+	          <li><%= link_to h(idea.user_friendly_idea_name),
+	              :controller => 'ideas',
+	              :action => 'show', 
+	              :id => idea.id %> </li>
+	      <% end %>
+	      </ul>
+	    <% end %>
+  </td>
+</tr>
