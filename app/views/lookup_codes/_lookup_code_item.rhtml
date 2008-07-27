@@ -1,0 +1,18 @@
+<tr>
+      <td><%= lookup_code_item.code_type %></td>
+      <td><%= lookup_code_item.short_name %></td>
+      <td><%= lookup_code_item.description %></td>
+      <td class="center"><%= lookup_code_item.sort_value %></td>
+      <td class="nowrap">
+      
+        <%= link_to theme_image_tag("icons/16x16/editAction.png", 
+          options = {:alt=>"edit", :title=> "edit", :onmouseover => "Tip('Edit this lookup code')"}), 
+          edit_lookup_code_path(lookup_code_item) %>
+      
+        <%= link_to theme_image_tag("icons/16x16/deleteAction.png", 
+          options = {:alt=>"delete", :title=> "delete", :onmouseover => "Tip('Delete this lookup code')"}), 
+          lookup_code_path(lookup_code_item), 
+          :confirm => 'Are you sure?', 
+          :method => :delete if lookup_code_item.can_delete? %>
+      </td>
+    </tr>

@@ -31,45 +31,7 @@
   </tr>
   <% end %>
   
-    <% for poll in @polls %>
-    <tr>
-      <td><%= h poll.title %></td>
-      <td><%= poll.active %></td>
-      <td><%= poll.total_responses %></td>
-      <td><%= format_date(poll.close_date) %></td>
-      <td>
-        <% if prodmgr? %>
-        <%= link_to theme_image_tag("icons/16x16/viewAction.png", :alt=>"view", :title=> "view"),
-          poll_path(poll), 
-          html_options = {
-          :onmouseover => "Tip('View details for this poll')"} 
-        %>
-        <%= link_to theme_image_tag("icons/16x16/editAction.png", :alt=>"edit", :title=> "edit"), 
-          edit_poll_path(poll),
-          html_options = {
-          :onmouseover => "Tip('Edit this poll')"}
-        %>
-      
-        <%= link_to(
-          theme_image_tag("icons/16x16/deleteAction.png", :alt=>"delete", :title=> "delete"),
-          poll_path(poll),
-          html_options = {:confirm => 'Are you sure?', :method => :delete,
-            :onmouseover => "Tip('Delete this poll')"} ) if poll.can_delete? %>
-          
-        <%= link_to(
-         "Publish",
-          publish_poll_path(:id => poll),
-          html_options = { :method => :post, :class=> "button",
-            :onmouseover => "Tip('Publish this poll')"} ) unless poll.active %>
-        
-        <%= link_to(
-         "Unpublish",
-          unpublish_poll_path(:id => poll),
-          html_options = { :method => :post, :class=> "button",
-            :onmouseover => "Tip('Unpublish this poll')"} ) if poll.active %>
-    <% end %>
-      </td>
-  </tr>
-<% end %>
+    <%= render :partial => 'poll_item', :collection => @polls %>
+
 </table>
 <p><%= will_paginate @polls %></p>

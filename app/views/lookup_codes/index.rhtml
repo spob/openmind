@@ -26,25 +26,6 @@
     <%= set_focus_to_id_in_list_form 'lookup_code_short_name' -%>
   </tr>
   
-  <% for lookup_code in @lookup_codes %>
-    <tr>
-      <td><%= lookup_code.code_type %></td>
-      <td><%= lookup_code.short_name %></td>
-      <td><%= lookup_code.description %></td>
-      <td class="center"><%= lookup_code.sort_value %></td>
-      <td class="nowrap">
-      
-        <%= link_to theme_image_tag("icons/16x16/editAction.png", 
-          options = {:alt=>"edit", :title=> "edit", :onmouseover => "Tip('Edit this lookup code')"}), 
-          edit_lookup_code_path(lookup_code) %>
-      
-        <%= link_to theme_image_tag("icons/16x16/deleteAction.png", 
-          options = {:alt=>"delete", :title=> "delete", :onmouseover => "Tip('Delete this lookup code')"}), 
-          lookup_code_path(lookup_code), 
-          :confirm => 'Are you sure?', 
-          :method => :delete if lookup_code.can_delete? %>
-      </td>
-    </tr>
-  <% end %>
+  <%= render :partial => 'lookup_code_item', :collection => @lookup_codes %>
 </table>
 <p><%= will_paginate @lookup_codes %></p>

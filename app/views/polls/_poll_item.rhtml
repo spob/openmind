@@ -1,0 +1,38 @@
+<tr>
+      <td><%= h poll_item.title %></td>
+      <td><%= poll_item.active %></td>
+      <td><%= poll_item.total_responses %></td>
+      <td><%= format_date(poll_item.close_date) %></td>
+      <td>
+        <% if prodmgr? %>
+        <%= link_to theme_image_tag("icons/16x16/viewAction.png", :alt=>"view", :title=> "view"),
+          poll_path(poll_item), 
+          html_options = {
+          :onmouseover => "Tip('View details for this poll')"} 
+        %>
+        <%= link_to theme_image_tag("icons/16x16/editAction.png", :alt=>"edit", :title=> "edit"), 
+          edit_poll_path(poll_item),
+          html_options = {
+          :onmouseover => "Tip('Edit this poll')"}
+        %>
+      
+        <%= link_to(
+          theme_image_tag("icons/16x16/deleteAction.png", :alt=>"delete", :title=> "delete"),
+          poll_path(poll_item),
+          html_options = {:confirm => 'Are you sure?', :method => :delete,
+            :onmouseover => "Tip('Delete this poll')"} ) if poll_item.can_delete? %>
+          
+        <%= link_to(
+         "Publish",
+          publish_poll_path(:id => poll_item),
+          html_options = { :method => :post, :class=> "button",
+            :onmouseover => "Tip('Publish this poll')"} ) unless poll_item.active %>
+        
+        <%= link_to(
+         "Unpublish",
+          unpublish_poll_path(:id => poll_item),
+          html_options = { :method => :post, :class=> "button",
+            :onmouseover => "Tip('Unpublish this poll')"} ) if poll_item.active %>
+    <% end %>
+      </td>
+  </tr>
