@@ -7,7 +7,17 @@ module ForumsHelper
   def last_post forum
     last_comment = forum.comments.first #this isn't very efficient...replace by sql?
     return '-' if last_comment.nil?
-    "<b>#{"RE: " if forum.comments.size > 1}#{last_comment.topic.title}</b><br/>by <b>#{user_display_name last_comment.user}</b><br/>#{om_date_time last_comment.created_at}"
+    subject = ""
+	subject += "RE: " if forum.comments.size > 1
+	subject += link_to last_comment.topic.title, topic_path(last_comment.topic)
+    subject = boldify(subject) if last_comment.topic.unread_comment?(current_user)
+    
+    comment = last_comment.body
+    comment = boldify(comment) if last_comment.topic.unread_comment?(current_user)
+    
+    author = user_display_name last_comment.user
+    author = boldify(author) if last_comment.topic.unread_comment?(current_user)
+    "#{subject}<br/>#{author} wrote \"#{truncate comment, 40}\"<br/>#{om_date_time last_comment.created_at}"
   end
   
 
@@ -77,5 +87,11 @@ module ForumsHelper
         :onmouseover => "Tip('Watch this forum and all topics within this forum')",
         :method => :post                   }
     end
+  end
+  
+  private
+  
+  def boldify(text)
+  	"<b>#{text}</b>"
   end
 end
