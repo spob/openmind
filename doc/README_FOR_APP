@@ -1,19 +1,4 @@
-Use this README file to introduce your application and point to useful places in 
-the API for learning more.
-Run "rake appdoc" to generate API documentation for your models and controllers.
-
-The gems are frozen, so you do not need to install any additional gems for it to
-work.  The following is for historical purposes, to document the additonal gems that
-have been frozen.
-
-This application requires RedCloth be installed. Use the following command:
-
-gem install RedCloth
-
-It also requires fastercsv:
-
-gem install fastercsv
-
-It also requires mail_tls. To install, type:
-
-gem install tlsmail  
+*******************************************************************************
+For OpenMind-specific installation and configuration instructions, look 
+at the file Manual.docx in the doc directory.
+*******************************************************************************
