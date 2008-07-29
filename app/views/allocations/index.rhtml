@@ -38,39 +38,7 @@
     <% end %>
   </tr>
   
-  <% for allocation in @allocations %>
-    <tr>
-      <td><%=h allocated_to(allocation) %></td>
-      <td><%=h allocation.class %></td>
-      <td class="center"><%=h allocation.quantity %></td>
-      <td class="center"><%=h allocation.votes.size %></td>
-      <td class="center"><%=h allocation.quantity - allocation.votes.size %></td>
-      <td><%=om_date_time(allocation.created_at) %></td>
-      <td><%=format_date(allocation.expiration_date) %></td>
-      <td><%=h nvl(allocation.comments, '-') %></td>
-      <% if allocmgr? %>
-        <td style="white-space:nowrap;">
-          <!--
-            <%= link_to theme_image_tag("icons/16x16/viewAction.png", :alt=>"view", :title=> "view"),
-            allocation_path(allocation), 
-            html_options = {
-            :onmouseover => "Tip('View details for this allocation')"} 
-            %>
-            -->
-            <%= link_to theme_image_tag("icons/16x16/editAction.png", :alt=>"edit", :title=> "edit"), 
-            edit_allocation_path(allocation),
-            html_options = {
-            :onmouseover => "Tip('Edit this allocation')"}
-            %>
+  <%= render :partial => 'allocation_item', :collection => @allocations %>
 
-            <%= link_to(
-            theme_image_tag("icons/16x16/deleteAction.png", :alt=>"delete", :title=> "delete"),
-            allocation_path(allocation),
-            html_options = {:confirm => 'Are you sure?', :method => :delete,
-            :onmouseover => "Tip('Delete this allocation')"} ) if allocation.can_delete? %>
-        </td>
-      <% end %>
-    </tr>
-  <% end %>
 </table>
 <p><%= will_paginate @allocations %></p>

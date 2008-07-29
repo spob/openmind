@@ -29,31 +29,6 @@
   <% end %>
   <%= set_focus_to_id_in_list_form 'enterprise_name' -%>
   
-  <% for enterprise in @enterprises %>
-    <tr>
-      <td><%= h enterprise.name%></td>
-      <td class="center"><%= h enterprise.available_votes %></td>
-      <td class="center"><%= h enterprise.users.size %></td>
-      <td class="center"><input type="checkbox" name="active" value="active" <%= "checked" if enterprise.active?  %> disabled ></td>
-      <td>
-        <%= link_to theme_image_tag("icons/16x16/viewAction.png", :alt=>"view", :title=> "view"),
-          enterprise_path(enterprise), 
-          html_options = {
-          :onmouseover => "Tip('View details for this enterprise')"} 
-        %>
-        <%= link_to theme_image_tag("icons/16x16/editAction.png", :alt=>"edit", :title=> "edit"), 
-          edit_enterprise_path(enterprise),
-          html_options = {
-          :onmouseover => "Tip('Edit this enterprise')"}
-        %>
-      
-        <%= link_to(
-          theme_image_tag("icons/16x16/deleteAction.png", :alt=>"delete", :title=> "delete"),
-          enterprise_path(enterprise),
-          html_options = {:confirm => 'Are you sure?', :method => :delete,
-            :onmouseover => "Tip('Delete this enterprise')"} ) if enterprise.can_delete? %>
-      </td>
-    </tr>
-  <% end %>
+    <%= render :partial => 'enterprise_item', :collection => @enterprises %>
 </table>
 <p><%= will_paginate @enterprises %></p>

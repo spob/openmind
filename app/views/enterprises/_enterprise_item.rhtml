@@ -1,0 +1,24 @@
+   <tr>
+      <td><%= h enterprise_item.name%></td>
+      <td class="center"><%= h enterprise_item.available_votes %></td>
+      <td class="center"><%= h enterprise_item.users.size %></td>
+      <td class="center"><input type="checkbox" name="active" value="active" <%= "checked" if enterprise_item.active?  %> disabled ></td>
+      <td>
+        <%= link_to theme_image_tag("icons/16x16/viewAction.png", :alt=>"view", :title=> "view"),
+          enterprise_path(enterprise_item), 
+          html_options = {
+          :onmouseover => "Tip('View details for this enterprise')"} 
+        %>
+        <%= link_to theme_image_tag("icons/16x16/editAction.png", :alt=>"edit", :title=> "edit"), 
+          edit_enterprise_path(enterprise_item),
+          html_options = {
+          :onmouseover => "Tip('Edit this enterprise')"}
+        %>
+      
+        <%= link_to(
+          theme_image_tag("icons/16x16/deleteAction.png", :alt=>"delete", :title=> "delete"),
+          enterprise_path(enterprise_item),
+          html_options = {:confirm => 'Are you sure?', :method => :delete,
+            :onmouseover => "Tip('Delete this enterprise')"} ) if enterprise_item.can_delete? %>
+      </td>
+    </tr>

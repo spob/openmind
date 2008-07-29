@@ -1,0 +1,32 @@
+  <tr>
+      <td><%=h allocated_to(allocation_item) %></td>
+      <td><%=h allocation_item.class %></td>
+      <td class="center"><%=h allocation_item.quantity %></td>
+      <td class="center"><%=h allocation_item.votes.size %></td>
+      <td class="center"><%=h allocation_item.quantity - allocation_item.votes.size %></td>
+      <td><%=om_date_time(allocation_item.created_at) %></td>
+      <td><%=format_date(allocation_item.expiration_date) %></td>
+      <td><%=h nvl(allocation_item.comments, '-') %></td>
+      <% if allocmgr? %>
+        <td style="white-space:nowrap;">
+          <!--
+            <%= link_to theme_image_tag("icons/16x16/viewAction.png", :alt=>"view", :title=> "view"),
+            allocation_path(allocation_item), 
+            html_options = {
+            :onmouseover => "Tip('View details for this allocation')"} 
+            %>
+            -->
+            <%= link_to theme_image_tag("icons/16x16/editAction.png", :alt=>"edit", :title=> "edit"), 
+            edit_allocation_path(allocation_item),
+            html_options = {
+            :onmouseover => "Tip('Edit this allocation')"}
+            %>
+
+            <%= link_to(
+            theme_image_tag("icons/16x16/deleteAction.png", :alt=>"delete", :title=> "delete"),
+            allocation_path(allocation_item),
+            html_options = {:confirm => 'Are you sure?', :method => :delete,
+            :onmouseover => "Tip('Delete this allocation')"} ) if allocation_item.can_delete? %>
+        </td>
+      <% end %>
+    </tr>
