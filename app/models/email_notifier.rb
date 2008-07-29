@@ -70,6 +70,14 @@ class EmailNotifier < ActionMailer::Base
     @bcc = watcher_email_addresses idea
   end
   
+  def new_topic_comment_notification(topics, user)
+    setup_email
+    @body[:topics]  = topics
+    @body[:user] = user
+    @subject    += "New Topic Comments"
+    @recipients = user.email
+  end
+  
   protected
   def setup_email(user=nil)
     @recipients  = "#{user.email}" unless user.nil?
@@ -97,13 +105,5 @@ class EmailNotifier < ActionMailer::Base
   
   def set_expiration_date allocation
     @body[:expiration_date] = allocation.expiration_date.strftime("%b %d, %Y")
-  end
-  
-  def new_topic_comment_notification(topics, user)
-    setup_email
-    @body[:topics]  = topics
-    @body[:user] = user
-    @subject    += "New Topic Comments"
-    @recipients = user.email
   end
 end

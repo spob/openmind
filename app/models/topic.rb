@@ -50,7 +50,8 @@ class Topic < ActiveRecord::Base
   end
   
   def unread_comments user
-    TopicComment.find(:all, 
+    TopicComment.find(:all,
+      :select => "comments.*",
       :joins => ["INNER JOIN topics AS t ON t.id = comments.topic_id ",
         "INNER JOIN topic_watches AS tw ON tw.topic_id = t.id "],
       :conditions => 
@@ -65,7 +66,7 @@ class Topic < ActiveRecord::Base
   end
   
   def self.notify_watchers
-    puts "Checking for topic notifications at #{Time.now.to_s}"
+    # puts "Checking for topic notifications at #{Time.now.to_s}"
     # Find users who have a comment more recent than the last watch check
     users = User.find(:all, :conditions => 
         ["EXISTS " +
@@ -75,7 +76,7 @@ class Topic < ActiveRecord::Base
           "AND t.updated_at > tw.last_checked_at)"])
 
     for user in users
-      puts "user #{user.email}"
+      # puts "user #{user.email}"
       tws = TopicWatch.find_all_by_user_id(user, :include => "topic",
         :conditions => "topics.updated_at > topic_watches.last_checked_at",
         :order => "topics.forum_id")
