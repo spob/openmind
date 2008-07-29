@@ -7,7 +7,7 @@ module ForumsHelper
   def last_post forum
     last_comment = forum.comments.first #this isn't very efficient...replace by sql?
     return '-' if last_comment.nil?
-    "<b>#{last_comment.topic.title}</b><br/>by <b>#{user_display_name last_comment.user}</b><br/>#{om_date_time last_comment.created_at}"
+    "<b>#{"RE: " if forum.comments.size > 1}#{last_comment.topic.title}</b><br/>by <b>#{user_display_name last_comment.user}</b><br/>#{om_date_time last_comment.created_at}"
   end
   
 
