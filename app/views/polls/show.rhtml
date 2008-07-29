@@ -26,7 +26,7 @@
   <%= theme_image_tag("icons/16x16/polls.png", options = {:alt=>""}) %>
   Poll Detail
 </div>
-<div class="cssform" style="<% if @poll.total_responses > 0 %>width:55%; float:left<% end %>">
+<div class="cssform" style="<% if @poll.total_responses > 0 %>width:40%; float:left<% end %>">
   <p>
    <label for="title">Title:</label>
     <%= h @poll.title %>

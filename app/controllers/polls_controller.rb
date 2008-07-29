@@ -26,7 +26,7 @@ class PollsController < ApplicationController
     #      @chart_data << data_point unless option.user_responses.size == 0
     #    end
     
-    @graph = open_flash_chart_object(250,250, pie_polls_path(:id => @poll.id), true, '/')     
+    @graph = open_flash_chart_object(450,450, pie_polls_path(:id => @poll.id), true, '/')     
   end
 
   def pie
