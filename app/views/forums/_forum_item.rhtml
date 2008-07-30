@@ -2,8 +2,8 @@
   <tr>
     <td><b><%= h forum_item.name %></b><br/><%= h forum_item.description %></td>
     <td><%= last_post forum_item %></td>
-    <td><%= h forum_item.topics.count %></td>
-    <td><%= forum_item.comments.count %></td>
+    <td><%= forum_item.topics.count %></td>
+    <td><%= forum_item.comments.count - forum_item.topics.count %></td>
     <td>
         <%=render(:partial => "forum_action", :object => forum_item)%>
     </td>
