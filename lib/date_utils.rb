@@ -13,4 +13,11 @@ class DateUtils
     offset = Rational(t.utc_offset, 60*60*24)
     DateTime.new(t.year, t.month, t.day, t.hour, t.min, seconds, offset)
   end
+  
+  def self.truncate_datetime t
+    return nil if t.nil?
+    # convert to seconds + microseconds into a fractional number of seconds
+    
+    DateTime.new(t.year, t.month, t.day, 0, 0, 0, 0)
+  end
 end

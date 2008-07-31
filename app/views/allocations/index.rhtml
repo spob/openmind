@@ -23,6 +23,13 @@
                     :onmouseover => "Tip('Create multiple new allocations')"} %>
   </div>
 <% end %>
+<% form_tag(allocations_path, :method => :get, :name => 'search' ) do -%>
+  <%= hidden_field_tag 'form_based', 'yes' %>
+  <%= check_box_tag 'active_only', 'yes', session[:active_allocations_only] == 'yes',
+	{:onmouseover => "Tip('Only retrieve allocations that are not expired')",
+	:onchange => 'document.search.submit();'} %>&nbsp;Active Allocations Only
+<% end %>
+<br/>
 <table cellspacing="0" cellpadding="0" class="cssform">
   <tr>
     <th>Allocated To</th>

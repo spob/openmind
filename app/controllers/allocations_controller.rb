@@ -16,12 +16,20 @@ class AllocationsController < ApplicationController
   end
 
   def index
+  	if params[:form_based] == "yes"
+    	session[:active_allocations_only] = (params[:active_only].nil? ? "no" : "yes")
+	else
+    	session[:active_allocations_only] ||= "yes"
+    end
+    
     if params[:by_user].nil? and allocmgr?
-      @allocations = Allocation.list params[:page], current_user.row_limit
+      @allocations = Allocation.list params[:page], current_user.row_limit,
+      	(session[:active_allocations_only] == 'yes')
     else
       @allocations = Allocation.list_all_for_user(current_user,
         params[:page], 
-        current_user.row_limit) 
+        current_user.row_limit,
+      	(session[:active_allocations_only] == 'yes'))
     end
   end
 

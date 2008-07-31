@@ -19,16 +19,19 @@ class Allocation < ActiveRecord::Base
       first_expiration_days(user.enterprise.active_allocations))
   end
   
-  def self.list_all_for_user(user, page, per_page)
+  def self.list_all_for_user(user, page, per_page, active_only)
     paginate :page => page, 
-      :conditions => ["(allocation_type = 'UserAllocation' and allocations.user_id = ?) or (allocation_type = 'EnterpriseAllocation' and enterprise_id = ?)",
-      user.id, user.enterprise.id],
+      :conditions => ["(allocation_type = 'UserAllocation' and allocations.user_id = ?) or (allocation_type = 'EnterpriseAllocation' and enterprise_id = ?) and expiration_date > ?",
+      user.id, user.enterprise.id,
+     (active_only ? DateUtils.truncate_datetime(DateTime.now) : 10.years.ago)],
       :order => 'allocations.created_at DESC,  allocations.enterprise_id ASC, allocations.user_id  ASC' ,
       :per_page => per_page, :include => :votes
   end
 
-  def self.list(page, per_page)
+  def self.list(page, per_page, active_only)
     paginate :page => page, 
+      :conditions => ["expiration_date > ?", 
+      	(active_only ? DateUtils.truncate_datetime(DateTime.now) : 10.years.ago)],
       :order => 'allocations.created_at DESC,  allocations.enterprise_id ASC, allocations.user_id  ASC' ,
       :per_page => per_page, :include => :votes
   end
