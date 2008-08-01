@@ -1,0 +1,28 @@
+<%content_for :head do -%>
+      <%= theme_stylesheet_link_tag 'forms' %>
+      <%= theme_stylesheet_link_tag 'tables' %>
+      <%= javascript_include_tag "tablecloth" %>                
+<%end%>
+<%= javascript_include_tag "wz_tooltip.js" %> 
+<%= error_messages_for 'forum' %>
+<h1><%= theme_image_tag("icons/48x48/forums.png", options = {:alt=>"Search Forum"}) %>Search Forums</h1>
+
+<% form_tag(search_forums_path, :class => 'cssform widerLabel', :name => 'search' ) do -%>
+	<p>
+        <label for="search">Search Forums:</label>
+        <%= text_field_tag 'search', 
+	        session[:forums_search], 
+	        options = { :id => "forum_search", :size => "50" } %>
+        <%= submit_tag 'Search', :name => nil, :class=> "button" %>
+	</p>
+<% end %>
+
+<table cellspacing="0" cellpadding="0" class="cssform">
+  <tr>
+    <th>Name</th>
+    <th>Last Post</th>
+    <th>Topics</th>
+    <th>Posts</th>
+    <th>Action</th>
+  </tr>  
+</table>

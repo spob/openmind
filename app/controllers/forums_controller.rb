@@ -51,6 +51,11 @@ class ForumsController < ApplicationController
       render :action => :edit
     end
   end
+  
+  def search
+  	puts "==============================================================="
+  	puts params[:search]
+  end
 
   def destroy
     forum = Forum.find(params[:id])
