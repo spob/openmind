@@ -17,12 +17,9 @@
 	</p>
 <% end %>
 
-<table cellspacing="0" cellpadding="0" class="cssform">
-  <tr>
-    <th>Name</th>
-    <th>Last Post</th>
-    <th>Topics</th>
-    <th>Posts</th>
-    <th>Action</th>
-  </tr>  
-</table>
+<% for topic in @topics%>
+   ***
+	<%= topic.title if topic.class.to_s == 'Topic' %>
+	<%= topic.body unless topic.class.to_s == 'Topic' %>
+	<br/>
+<% end %>

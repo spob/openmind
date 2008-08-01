@@ -53,8 +53,8 @@ class ForumsController < ApplicationController
   end
   
   def search
-  	puts "==============================================================="
-  	puts params[:search]
+  	session[:forums_search] = params[:search]
+  	@topics = Topic.find_with_index(params[:search]) + Comment.find_with_index(params[:search])
   end
 
   def destroy

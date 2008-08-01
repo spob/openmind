@@ -12,6 +12,8 @@ class Topic < ActiveRecord::Base
   validates_presence_of :title, :user
   validates_length_of   :title, :maximum => 120
   
+  acts_as_indexed :fields => [ :title ]
+  
   attr_accessor :comment_body
   
   def can_delete?

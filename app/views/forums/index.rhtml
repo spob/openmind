@@ -15,17 +15,16 @@
   </div>
 <% end %>
 
-<!-- 
+<!--  -->
 <% form_tag(search_forums_path, :class => 'cssform widerLabel', :name => 'search' ) do -%>
 	<p>
         <label for="search">Search Forums:</label>
         <%= text_field_tag 'search', 
-	        session[:forums_search], 
+	        "", 
 	        options = { :id => "forum_search", :size => "50" } %>
         <%= submit_tag 'Search', :name => nil, :class=> "button" %>
 	</p>
 <% end %>
--->
 
 <table cellspacing="0" cellpadding="0" class="cssform">
   <tr>
