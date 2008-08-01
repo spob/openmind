@@ -53,8 +53,22 @@ class ForumsController < ApplicationController
   end
   
   def search
+  	@hits = {}
   	session[:forums_search] = params[:search]
-  	@topics = Topic.find_with_index(params[:search]) + Comment.find_with_index(params[:search])
+  	Topic.find_with_index(params[:search]).each do |topic|
+  		@hits[topic.id] = TopicHit.new(topic, true)
+  	end
+  	Comment.find_with_index(params[:search]).each do |comment|
+  		# first see if topic hit already exists
+  		topic_hit = @hits[comment.topic.id]
+		if topic_hit.nil?
+	  		hit = TopicHit.new(comment.topic, false)
+	  		hit.comments << comment 
+	  		@hits[comment.topic.id] = hit
+		else
+			topic_hit.comments << comment
+  		end	
+  	end
   end
 
   def destroy

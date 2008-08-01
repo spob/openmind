@@ -4,6 +4,9 @@
       <%= theme_stylesheet_link_tag 'tables' %>
       <%= javascript_include_tag "tablecloth" %>                
 <%end%>
+<%content_for :bodyTag do -%>
+	<%= set_focus_to_id 'forum_search' -%>              
+<%end%>
 <%= javascript_include_tag "wz_tooltip.js" %> 
 <%= error_messages_for 'forum' %>
 <h1><%= theme_image_tag("icons/48x48/forums.png", options = {:alt=>"Forum"}) %>Forums</h1>
@@ -22,7 +25,8 @@
         <%= text_field_tag 'search', 
 	        "", 
 	        options = { :id => "forum_search", :size => "50" } %>
-        <%= submit_tag 'Search', :name => nil, :class=> "button" %>
+        <%= submit_tag 'Search', html_options = {:name => nil, :class=> "button",
+	        	:onmouseover => "Tip('Search topics and topic comments')"} %>
 	</p>
 <% end %>
 
