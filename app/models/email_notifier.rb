@@ -42,14 +42,16 @@ class EmailNotifier < ActionMailer::Base
     @bcc = watcher_email_addresses comment.idea
   end
   
-  def new_user_allocation_notification(allocation)
+  def new_user_allocation_notification(allocation_id)
+  	allocation = UserAllocation.find(allocation_id)
     setup_allocation_email allocation
     @subject   += "You just received a new allocation for #{StringUtils.pluralize(allocation.quantity, 'unit')}"
     @recipients = allocation.user.email
     set_expiration_date allocation
   end
   
-  def new_enterprise_allocation_notification allocation
+  def new_enterprise_allocation_notification allocation_id
+  	allocation = EnterpriseAllocation.find(allocation_id)
     setup_allocation_email allocation
     @subject   += "#{allocation.enterprise.name} just received a new allocation for #{StringUtils.pluralize(allocation.quantity, 'unit')}"
     @recipients = ''
