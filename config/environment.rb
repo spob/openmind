@@ -67,7 +67,7 @@ end
 # Include your application configuration below
 # load the base application config file
 require 'redcloth'
-require "#{File.expand_path(RAILS_ROOT)}/vendor/daemons-1.0.10/lib"
+# require "#{File.expand_path(RAILS_ROOT)}/vendor/daemons-1.0.10/lib"
 
 # see http://lemurware.blogspot.com/2006/08/ruby-on-rails-configuration-and.html
 # RBS 1/1/2008
