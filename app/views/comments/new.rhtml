@@ -79,3 +79,10 @@
       :url => preview_comments_path %>
 
 <div id="live-preview" style="display: none, border => 1px solid"></div>
+<% if object.class.to_s == "Idea"%>
+	<%= "<h3>In Reply To</h3>" unless @idea.comments.empty? %>
+	<%=render(:partial => "comments/comment_item", :collection => @idea.comments)  %>
+<% else %>
+	<%= "<h3>In Reply To</h3>" unless @topic.comments.empty? %>
+	<%=render(:partial => "comments/comment_item", :collection => @topic.comments)  %>
+<% end %>
