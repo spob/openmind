@@ -1,5 +1,5 @@
 class CommentsController < ApplicationController
-  helper :idea_action
+  helper :ideas
   
   before_filter :login_required
   access_control [:edit, :update, :destroy] => 'prodmgr | voter'
