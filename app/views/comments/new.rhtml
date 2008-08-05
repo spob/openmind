@@ -21,15 +21,25 @@
   </div>
   <div class="formTitle">Add Comment</div>
   <div class="cssform widerLabel">
-    <p>
-        <% if object.class.to_s == "Idea" %>
-          <label for="idea">For Idea:</label>
-          <%= h @idea.user_friendly_idea_name %>  
-        <% else %>
-          <label for="topic">For Topic:</label>
-          <%= h @topic.title %>  
-        <% end %>
-    </p>
+    <% if object.class.to_s == "Idea" %>
+    	<p>
+        	<label for="id">Idea #:</label>
+          	<%= @idea.id %>  
+        </p>
+    	<p>
+        	<label for="title">Title:</label>
+          	<%= h @idea.title %>  
+        </p>
+    	<p>
+        	<label for="description">Description:</label>
+          	<%= textilize(@idea.description).gsub(/<[pP]>|<\/[pP]>/, '') %>  
+        </p>
+    <% else %>
+    	<p>
+          	<label for="topic">For Topic:</label>
+          	<%= h @topic.title %>  
+    	</p>
+    <% end %>
     <p>
       <label for="comment">Comment:</label>
       <%= form.text_area :body,  {:cols => 70, :rows => 8 } %>
