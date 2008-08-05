@@ -30,24 +30,24 @@
     <td><%=h release.release_status.description %></td>
     <td><%= h nvl(format_date(release.release_date), '-') %></td>
     <td><%= h nvl(release.user_release_date, '-') %></td>
-        <td>
-          <%= link_to theme_image_tag("icons/16x16/viewAction.png", :alt=>"view", :title=> "view"),
-          release_path(release), 
-          html_options = {
-          :onmouseover => "Tip('View details for this release')"} %>
-          
-          <%= link_to theme_image_tag("icons/16x16/editAction.png", :alt=>"edit", :title=> "edit"), 
-          edit_release_path(release),
-          html_options = {
-          :onmouseover => "Tip('Edit this release')"}
-      %>
-  
-      <%= link_to(
-          theme_image_tag("icons/16x16/deleteAction.png", :alt=>"delete", :title=> "delete"),
-          release_path(release),
-          html_options = {:confirm => 'Are you sure?', :method => :delete,
-              :onmouseover => "Tip('Delete this release')"} ) if release.can_delete? %>
-    </td>
+    <td>
+      <%= link_to theme_image_tag("icons/16x16/viewAction.png", :alt=>"view", :title=> "view"),
+      release_path(release), 
+      html_options = {
+      :onmouseover => "Tip('View details for this release')"} %>
+      
+      <%= link_to theme_image_tag("icons/16x16/editAction.png", :alt=>"edit", :title=> "edit"), 
+      edit_release_path(release),
+      html_options = {
+      :onmouseover => "Tip('Edit this release')"}
+  	  %>
+
+  	  <%= link_to(
+      theme_image_tag("icons/16x16/deleteAction.png", :alt=>"delete", :title=> "delete"),
+      release_path(release),
+      html_options = {:confirm => 'Are you sure?', :method => :delete,
+          :onmouseover => "Tip('Delete this release')"} ) if release.can_delete? %>
+	</td>
   </tr>
 <% end %>
 </table>
