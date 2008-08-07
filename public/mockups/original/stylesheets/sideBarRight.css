@@ -1,0 +1,14 @@
+﻿#main-content {
+    background-image: url(../images/sidebar.gif);
+    background-position: right;
+    background-repeat: repeat-y;
+    margin: 0;
+    padding: 10px 240px 10px 20px;
+}
+
+/********* Side Bar Right ***********/
+#sidebar1 {
+    width: 200px;
+    float: right;
+    padding: 10px;
+}

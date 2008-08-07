@@ -1,0 +1,31 @@
+th{
+    font-size: 0.92em;
+    font-weight: normal;
+    font-family: Trebuchet MS, Verdana, Sans-Serif;
+}
+
+td{
+    font-size: 0.75em;
+}
+
+table {width:100%;border-collapse:collapse;margin:1em 0;}
+
+th, td {text-align:left;padding:.5em;border:1px solid #fff;}
+th {background:#000 url(../images/menus/blockdefault.gif) repeat-x;color:#fff;}
+td {background:#e5f1f4;}
+
+/* tablecloth styles */
+
+tr.even td {background:#efefef;}
+tr.odd td {background:#f8fbfc;}
+
+th.over, tr.even th.over, tr.odd th.over {background:#000;}
+th.down, tr.even th.down, tr.odd th.down {background:#999;}
+th.selected, tr.even th.selected, tr.odd th.selected{}
+
+td.over, tr.even td.over, tr.odd td.over{background:#DFDFDF;}
+td.down, tr.even td.down, tr.odd td.down{background:#000;color:#fff;}
+td.selected, tr.even td.selected, tr.odd td.selected{background:#999;color:#fff;}
+
+/* use this if you want to apply different styleing to empty table cells*/
+td.empty, tr.odd td.empty, tr.even td.empty{background:#fff;}
