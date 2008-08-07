@@ -39,12 +39,14 @@
   <tr>
     <th>Version</th>
     <th>Release Date</th>
+    <th>Release Date Label</th>
     <th>Status</th>
     <th>Action</th>
   </tr>
   <% for release in @product.releases %>
     <tr>
       <td><%= link_to h(release.version), release_path(release) %></td>
+      <td><%= h nvl(format_date(release.release_date), '-') %></td>
       <td><%= h nvl(release.user_release_date, '-') %></td>
       <td><%= h release.release_status.description %></td>
 	    <td>
