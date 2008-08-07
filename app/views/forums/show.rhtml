@@ -3,6 +3,9 @@
       <%= theme_stylesheet_link_tag 'tables' %>
       <%= javascript_include_tag "tablecloth" %>                
 <%end%>
+<%content_for :bodyTag do -%>
+	<%= set_focus_to_id 'forum_search' -%>              
+<%end%>
 <%= javascript_include_tag "wz_tooltip.js" %> 
 <div id="actionButtons2">
   <%= link_to 'Create New Topic', new_topic_path(:forum_id => @forum.id),
@@ -16,6 +19,20 @@
         :onmouseover => "Tip('Return to list forums')"}%>
   <%= show_forum_watch_button @forum %>
 </div>
+
+<br/>
+<% form_tag(search_topics_path, :class => 'cssform widerLabel', :name => 'search' ) do -%>
+	<p>
+        <label for="search">Search Forum:</label>
+        <%= text_field_tag 'search', 
+	        "", 
+	        options = { :id => "forum_search", :size => "50" } %>
+		<%= hidden_field_tag(:forum_id, value = @forum.id) %>
+        <%= submit_tag 'Search', html_options = {:name => nil, :class=> "button",
+	        	:onmouseover => "Tip('Search topics and topic comments')"} %>
+	</p>
+<% end %>
+
 <div class="formTitle">
   <%= theme_image_tag("icons/16x16/forums.png", options = {:alt=>"Forum"}) %>
   Forum: <%= h @forum.name %>

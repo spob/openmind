@@ -79,4 +79,25 @@ class TopicsController < ApplicationController
       render :action => :edit
     end
   end
+  
+  def search
+    @forum = Forum.find(params[:forum_id])
+  	hits = {}
+  	session[:forums_search] = params[:search]
+  	Topic.find_with_index(params[:search]).each do |topic|
+  		hits[topic.id] = TopicHit.new(topic, true)
+  	end
+  	Comment.find_with_index(params[:search]).each do |comment|
+  		# first see if topic hit already exists
+  		topic_hit = hits[comment.topic.id]
+		if topic_hit.nil?
+	  		hit = TopicHit.new(comment.topic, false)
+	  		hit.comments << comment 
+	  		hits[comment.topic.id] = hit
+		else
+			topic_hit.comments << comment
+  		end	
+  	end
+  	@hits = hits.values.find_all{ |hit| hit.topic.forum == @forum }
+  end
 end

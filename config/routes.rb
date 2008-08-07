@@ -23,7 +23,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :products
   map.resources :releases, :member => { :commit => :post },
       :collection => { :preview => :get, :list => :get }
-  map.resources :topics, :collection => { :preview => :get }
+  map.resources :topics, :collection => { :preview => :get, :search => :get }
   map.resources :user_logons
   map.resources :votes, :collection => { :create_from_show => :post }
   map.resources :watches, :member => { :create_topic_watch => :post,  

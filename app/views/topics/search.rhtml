@@ -1,0 +1,35 @@
+<%content_for :head do -%>
+      <%= theme_stylesheet_link_tag 'forms' %>
+      <%= theme_stylesheet_link_tag 'tables' %>
+      <%= javascript_include_tag "tablecloth" %>                
+<%end%>
+<%content_for :bodyTag do -%>
+	<%= set_focus_to_id 'forum_search' -%>              
+<%end%>
+<%= javascript_include_tag "wz_tooltip.js" %> 
+<div id="actionButtons2">
+  <%= link_to 'View Topics', forum_path(@forum), html_options = {:class=> "button",
+          :onmouseover => "Tip('Return to list of topics for this forum')"}%>
+</div>
+<%= error_messages_for 'forum' %>
+<h1><%= theme_image_tag("icons/48x48/forums.png", options = {:alt=>"Search Forum"}) %>Search Topics in Forum: <%= h @forum.name %></h1>
+
+<% form_tag(search_topics_path(:forum_id => @forum), :class => 'cssform widerLabel', :name => 'search' ) do -%>
+	<p>
+        <label for="search">Search Forum:</label>
+        <%= text_field_tag 'search', 
+	        session[:forums_search], 
+	        options = { :id => "forum_search", :size => "50" } %>
+		<%= hidden_field_tag(:forum_id, value = @forum.id) %>
+        <%= submit_tag 'Search', html_options = {:name => nil, :class=> "button",
+	        	:onmouseover => "Tip('Search topics and topic comments')"} %>
+	</p>
+<% end %>
+
+<% @hits.each do |topic_hit| %>
+	<h3><%= link_to topic_hit.topic.title, topic_path(topic_hit.topic.id) %></h3>
+	<%=render(:partial => "comments/comment_item", :collection => topic_hit.comments)%>
+	<br/>
+<% end %>
+
+<%= "No matches" if @hits.empty? %>
