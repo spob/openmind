@@ -1,5 +1,5 @@
 module TopicsHelper
-  def can_edit? topic
+  def can_edit_topic? topic
     sysadmin? or topic.forum.can_edit? current_user
   end  
 end
