@@ -14,7 +14,7 @@
 <%= error_messages_for 'forum' %>
 <h1><%= theme_image_tag("icons/48x48/forums.png", options = {:alt=>"Search Forum"}) %>Search Topics in Forum: <%= h @forum.name %></h1>
 
-<% form_tag(search_topics_path(:forum_id => @forum), :class => 'cssform widerLabel', :name => 'search' ) do -%>
+<% form_tag(search_topics_path(:forum_id => @forum), :class => 'cssform searchform', :name => 'search' ) do -%>
 	<p>
         <label for="search">Search Forum:</label>
         <%= text_field_tag 'search', 
