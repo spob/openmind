@@ -1,6 +1,8 @@
 class TopicComment < Comment
   belongs_to :topic, :counter_cache => true
   
+  acts_as_indexed :fields => [ :body ]
+  
   validates_presence_of :topic_id
   
   def can_edit? current_user, role_override=false

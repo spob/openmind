@@ -87,7 +87,7 @@ class TopicsController < ApplicationController
   	Topic.find_with_index(params[:search]).each do |topic|
   		hits[topic.id] = TopicHit.new(topic, true)
   	end
-  	Comment.find_with_index(params[:search]).each do |comment|
+  	TopicComment.find_with_index(params[:search]).each do |comment|
   		# first see if topic hit already exists
   		topic_hit = hits[comment.topic.id]
 		if topic_hit.nil?
