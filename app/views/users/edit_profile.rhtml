@@ -2,6 +2,8 @@
   <%= set_focus_to_id 'user_first_name' %>
 <%end%>
 
+<%= javascript_include_tag "wz_tooltip.js" %> 
+
 <%= error_messages_for :user %>
 <% form_for :user, :url => { :action => "update_profile", :id => @user } do |f| -%>
   <div class="formTitle">
@@ -30,7 +32,15 @@
     </p>
     <p>
       <label for="hide_contact_info">Hide Contact Info:</label>
-      <%= f.check_box(:hide_contact_info, {}, '1', '0') %>
+      <%= f.check_box(:hide_contact_info,
+        html_options = {
+        :onmouseover => "Tip('Don't show full name or email address to other users')"}, '1', '0') %>
+    </p>
+    <p>
+      <label for="watch_on_vote">Watch Ideas I Vote For:</label>
+      <%= f.check_box(:watch_on_vote,
+        html_options = {
+        :onmouseover => "Tip('Watch ideas for which you vote')"}, '1', '0') %>
     </p>
     <p>  
       <label></label>

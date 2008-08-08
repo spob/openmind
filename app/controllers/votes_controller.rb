@@ -34,9 +34,15 @@ class VotesController < ApplicationController
   def create from="list"
     @idea = Idea.find(params[:id])
     begin
+      watch_string = ""
+      if current_user.watch_on_vote and !@idea.watched? current_user
+      	@idea.watchers << current_user
+      	watch_string = " and idea is being watched"
+  	  end
+  	  
       @idea.vote current_user
       session[:selected_tab] = "VOTES" if from == "show"
-      flash[:notice] = "Vote recorded for idea number #{@idea.id}"
+      flash[:notice] = "Vote recorded for idea number #{@idea.id}#{watch_string}"
     rescue VoteException
       flash[:notice] = "You don't have enough votes available to vote"
     end

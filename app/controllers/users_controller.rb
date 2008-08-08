@@ -116,6 +116,7 @@ class UsersController < ApplicationController
     @user.time_zone = params[:user][:time_zone]
     @user.row_limit = params[:user][:row_limit]
     @user.hide_contact_info = params[:user][:hide_contact_info]
+    @user.watch_on_vote = params[:user][:watch_on_vote]
     if @user.save
       flash[:notice] = "User #{@user.login}'s profile was successfully updated."
       redirect_back_or_default home_path
