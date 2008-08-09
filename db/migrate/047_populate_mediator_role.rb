@@ -17,7 +17,8 @@ class PopulateMediatorRole < ActiveRecord::Migration
   
   def self.assign_user(user_name, role_names)
     user = User.find_by_email(user_name)
-    throw "User not found: '#{user_name}'" if user.nil?
+    # throw "User not found: '#{user_name}'" if user.nil?
+    return if user.nil?
     roles = Role.find :all, :conditions => { :title => role_names }
     user.roles << roles
   end
