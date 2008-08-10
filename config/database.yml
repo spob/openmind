@@ -24,6 +24,7 @@ defaults: &defaults
   username: dev
   password: openmind
   host: localhost
+  encoding: utf8
 
 development:
   database: OpenMind_dev
