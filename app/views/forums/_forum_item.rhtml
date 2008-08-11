@@ -1,7 +1,7 @@
 
   <tr>
     <td><b><%= h forum_item.name %></b><br/><%= h forum_item.description %></td>
-    <td><%= last_post forum_item %></td>
+    <td><%= last_forum_post forum_item %></td>
     <td><%= forum_item.topics.count %></td>
     <td><%= forum_item.comments.count - forum_item.topics.count %></td>
     <td>

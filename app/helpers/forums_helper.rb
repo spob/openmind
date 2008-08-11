@@ -4,7 +4,7 @@ module ForumsHelper
   end
   
     
-  def last_post forum
+  def last_forum_post forum
     last_comment = forum.comments.first #this isn't very efficient...replace by sql?
     return '-' if last_comment.nil?
     subject = ""
@@ -18,6 +18,16 @@ module ForumsHelper
     author = user_display_name last_comment.user
     author = boldify(author) if last_comment.topic.unread_comment?(current_user)
     "#{subject}<br/>#{author} wrote \"#{truncate comment, 40}\"<br/>#{om_date_time last_comment.created_at}"
+  end
+  
+    
+  def last_topic_post topic
+    comment = topic.last_comment.body
+    comment = boldify(comment) if topic.unread_comment?(current_user)
+    
+    author = user_display_name topic.last_comment.user
+    author = boldify(author) if topic.unread_comment?(current_user)
+    "#{author} wrote \"#{truncate comment, 40}\"<br/>#{om_date_time topic.last_comment.created_at}"
   end
   
 
