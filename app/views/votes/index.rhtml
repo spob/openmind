@@ -11,12 +11,10 @@
     </h1>
     <table cellspacing="0" cellpadding="0" class="cssform">
   <tr>
-    <th>Allocation to</th>
+    <th>Allocated to</th>
     <th>Voted By</th>
-    <th>Created</th>
-    <th>Last Updated</th>
+    <th>Voted On</th>
     <th>Idea Number</th>
-    <th>Comments</th>
   </tr>
   
   <% for vote in @votes %>
@@ -24,10 +22,8 @@
       <td><%= h display_allocated_to(vote) %></td>
       <td><%= h user_display_name(vote.user) %></td>
       <td><%= om_date_time vote.created_at %></td>
-      <td><%= om_date_time vote.updated_at %></td>
       <td><%= link_to h(vote.idea.id), 
         options = { :controller => 'ideas', :action => :show, :id => vote.idea} %></td>
-      <td><%= h nvl(vote.comments, '-') %></td>
     </tr>
   <% end %>
 </table>
