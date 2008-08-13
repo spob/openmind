@@ -41,7 +41,7 @@
       <label></label>
         <%= submit_tag 'Create', options = {:class=> "button", :disable_with => "Please wait...",
             :onmouseover => "Tip('Create a new release')"} %>
-        <%= link_to 'List Releases', releases_path(:product_id => @product.id), 
+        <%= link_to 'Cancel', releases_path(:product_id => @product.id), 
             html_options = {:class => "button"} %> 
     </p>
   </div>  
