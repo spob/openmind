@@ -11,4 +11,7 @@ class PeriodicJob < ActiveRecord::Base
     self.save  
   end
 
+  def to_s
+  	"#{self.class.to_s}: #{job}"
+  end
 end
