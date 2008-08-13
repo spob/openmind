@@ -1,9 +1,5 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
-    <title></title>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta http-equiv="Content-Language" content="en-us" />
     <style type="text/css" media="screen">
       /* common
       --------------------------------------------------*/
@@ -142,12 +138,11 @@
         width: 100%;
         text-align: center;
       }
-      
     </style>
   </head>
   <body>
-    <div id="BodyImposter" style="color: #666; background-color: #CCCCCC;">
-      <table id="Box" cellspacing="0" cellpadding="15" width="580" style="color: #666; background-color: #fff;">
+    <div id="BodyImposter" style="text-align:center;color: #666; background-color: #CCCCCC;">
+      <table id="Box" cellspacing="0" cellpadding="15" width="580" style="text-align:left; color: #666; background-color: #fff;">
         <tr>
           <td>
             <table id="Masthead" cellspacing="0" cellpadding="0" width="580">
@@ -166,23 +161,32 @@
                   <p>Dear <%= @user.full_name %>,</p>
                   <p>You are watching topics that have new comments.</p>
                   <% for topic in @topics %>
-                    <table width="100%" style="border-bottom:dotted 1px #999;">
-                      <tr>
-                        <td align="right"><b>Forum:</b></td>
-                        <td><a href="<%= forum_url(topic.forum) %>"><%= topic.forum.name %></a></td>
+                    <table width="100%" style="border:solid 1px #999; padding:0; margin-bottom:15px;" cellpadding="0" cellspacing="0">
+                      <tr style="background-color:#999; color:#efefef;">
+                        <td style="padding:3px 5px; border-bottom:solid 1px #999;font-family: Georgia, Palatino, serif;"><strong>Forum:</strong>&nbsp;<a href="<%= forum_url(topic.forum) %>" style="background-color:#999;"><%= topic.forum.name %></a></td>
                       </tr>
                       <tr>
-                        <td align="right"><b>Topic:</b></td>
-                        <td><a href="<%= topic_url(topic) %>"><%= topic.title %></a></td>
+                        <td style="padding:8px 8px 0 8px" ><strong>Topic:</strong>:<a href="<%= topic_url(topic) %>"><%= topic.title %></a></td>
                       </tr>
-                      <% for comment in topic.unread_comments(@user) %>
-                        <tr>
-                          <td align="right" valign="top">
-                            <b><%= comment.user.display_name %> wrote at<br/><%= comment.created_at.strftime("%b %d, %Y %I:%M%p") %>:</b>
-                          </td>
-                          <td valign="top"><%= comment.body %></td>
-                        </tr>
-                      <% end %>
+                      <tr>
+                        <td style="padding:10px;">
+                            <table>
+                              <% for comment in topic.unread_comments(@user) %>
+                                <tr>
+                                  <td valign="top" style="font-size:11px; padding:0; margin:0;padding:10px 10px 0 10px;border-top:dotted 1px #999;">
+                                    <div style="height:1px; "></div>
+                                    <p style=""><span style="font-style:italic;"><%= comment.body %></span></p>
+                                  </td>
+                                </tr>
+                                <tr>
+                                    <td style="font-size:11px; padding:0 10px 10px 10px; margin:0;" align="right">
+                                    <%= comment.user.display_name %> (<%= comment.created_at.strftime("%b %d, %Y %I:%M%p") %>)
+                                    </td>
+                                </tr>
+                              <% end %>
+                            </table>
+                        </td>
+                      </tr>
                     </table>
                   <% end %>
                   <br/>
