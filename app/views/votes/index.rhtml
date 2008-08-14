@@ -22,7 +22,7 @@
             :onchange => 'document.search.submit();'} %>&nbsp;My Votes&nbsp;&nbsp;&nbsp;
       <%= radio_button_tag 'filter', 'enterprise', session[:votes_filter_type] == 'enterprise',
             {:onmouseover => "Tip('View your votes submitted by users in your enterprise')",
-            :onchange => 'document.search.submit();'} %>&nbsp;My Enterprise Votes
+            :onchange => 'document.search.submit();'} %>&nbsp;Votes by <%= current_user.enterprise.name %> Users
       </p>
     <% end %>
     <br/>
