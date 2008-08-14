@@ -6,22 +6,22 @@ class Vote < ActiveRecord::Base
   
   validates_presence_of :user_id, :allocation_id, :idea_id
 
-  def self.list(page, per_page, enterprise_id = nil, user_id = nil)
+  def self.list(page, per_page, enterprise = nil, user = nil)
     conditions = []
-    enterprise_where = " exists (select null from allocations as a where a.id = votes.allocation_id and a.enterprise_id = ?)"
-    user_where = " exists (select null from allocations as a where a.id = votes.allocation_id and a.user_id = ?)"
-    if enterprise_id.nil? and user_id.nil?
+    enterprise_where = "votes.user_id in (select u.id from users as u where u.enterprise_id = ?)"
+    user_where = "votes.user_id = ?"
+    if enterprise.nil? and user.nil?
       conditions[0] = "true"
-    elsif  !enterprise_id.nil? and user_id.nil?
+    elsif  !enterprise.nil? and user.nil?
       conditions[0] = enterprise_where
-      conditions[1] = enterprise_id
-    elsif  enterprise_id.nil? and !user_id.nil?
+      conditions[1] = enterprise.id
+    elsif  enterprise.nil? and !user.nil?
       conditions[0] = user_where
-      conditions[1] = user_id
-    elsif  !enterprise_id.nil? and !user_id.nil?
+      conditions[1] = user.id
+    elsif  !enterprise.nil? and !user.nil?
       conditions[0] = "(#{enterprise_where}) or (#{user_where})"
-      conditions[1] = enterprise_id
-      conditions[2] = user_id
+      conditions[1] = enterprise.id
+      conditions[2] = user.id
     end
     
     paginate :page => page, 

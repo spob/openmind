@@ -5,28 +5,33 @@
       <div class="countbutton64 red64">
         <div id="user_count" class="count">
           <%= link_to current_user.available_user_votes, 
-            votes_path(:user_id => current_user.id), 
-            html_options = {
-            :onmouseover => "Tip('View votes that consumed your allocations')"} %>
+              allocations_path(:allocations_filter_user => "yes",
+              :allocations_filter_enterprise => "no", 
+              :active_only => "yes"), 
+              html_options = {
+              :onmouseover => "Tip('View my user allocations')"} %>
         </div>
         <div class="description">User</div>
       </div>
       <div class="countbutton64 red64">
         <div id="enterprise_count" class="count">
           <%= link_to current_user.available_enterprise_votes,
-            votes_path(:enterprise_id => current_user.enterprise.id), 
-            html_options = {
-            :onmouseover => "Tip('View votes that consumed allocations for your enterprise')"} %>
-          </div>
-          <div class="description">Enterprise</div>
+              allocations_path(:allocations_filter_user => "no",
+              :allocations_filter_enterprise => "yes", 
+              :active_only => "yes"), 
+              html_options = {
+              :onmouseover => "Tip('View votes that consumed allocations for your enterprise')"} %>
+        </div>
+        <div class="description">Enterprise</div>
       </div>
       <div class="countbutton64 black64">
         <div id="total_count" class="count">           
           <%= link_to current_user.available_votes,
-            votes_path(:enterprise_id => current_user.enterprise.id, 
-                :user_id => current_user.id), 
-            html_options = {
-            :onmouseover => "Tip('View votes that consumed either your allocations or allocations for your enterprise')"} %>
+              allocations_path(:allocations_filter_user => "yes",
+              :allocations_filter_enterprise => "yes", 
+              :active_only => "yes"), 
+              html_options = {
+              :onmouseover => "Tip('View votes that consumed either your allocations or allocations for your enterprise')"} %>
         </div>
         <div class="description">Total</div>
       </div>
@@ -39,7 +44,7 @@
       <label for="goto_id">Idea #:</label>
       <%= text_field_tag 'goto_id', '', { :size => 6 } %>
       <%= submit_tag 'Go', html_options = {:class=> "button"} %>
-    <% end %>
+  <% end %>
   </div>
   
   <div class="sideBarTitle">Announcements</div>

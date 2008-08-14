@@ -6,13 +6,31 @@ class VotesController < ApplicationController
   access_control [:create, :destroy] => 'voter'
 
   def index
-    @selected_user = nil
-    @selected_user = User.find(params[:user_id]) unless params[:user_id].nil?
+    if params[:form_based] == "yes"
+      if params[:filter] == "all"
+        session[:votes_filter_type] = "all"
+      elsif params[:filter] == "user"
+        session[:votes_filter_type] = "user"
+      elsif params[:filter] == "enterprise"
+        session[:votes_filter_type] = "enterprise"
+      end
+    else
+      # todo
+    end
     
-    @selected_enterprise = nil
-    @selected_enterprise = Enterprise.find(params[:enterprise_id]) unless params[:enterprise_id].nil?
+    if session[:votes_filter_type] == "all"
+      @selected_user = nil
+      @selected_enterprise = nil
+    elsif session[:votes_filter_type] == "user"
+      @selected_user = current_user
+      @selected_enterprise = nil
+    elsif session[:votes_filter_type] == "enterprise"
+      @selected_user = nil
+      @selected_enterprise = current_user.enterprise
+    end
+    
     @votes = Vote.list params[:page], current_user.row_limit, 
-      params[:enterprise_id], params[:user_id]
+      @selected_enterprise, @selected_user
   end
 
   # GETs should be safe (see http://www.w3.org/2001/tag/doc/whenToUseGet.html)
@@ -36,9 +54,9 @@ class VotesController < ApplicationController
     begin
       watch_string = ""
       if current_user.watch_on_vote and !@idea.watched? current_user
-      	@idea.watchers << current_user
-      	watch_string = " and idea is being watched"
-  	  end
+        @idea.watchers << current_user
+        watch_string = " and idea is being watched"
+      end
   	  
       @idea.vote current_user
       session[:selected_tab] = "VOTES" if from == "show"

@@ -9,7 +9,24 @@
     <%= " or " unless @selected_user.nil? or @selected_enterprise.nil? %>
     <%= " by Enterprise #{h @selected_enterprise.name}" unless @selected_enterprise.nil? %>
     </h1>
-    <table cellspacing="0" cellpadding="0" class="cssform">
+    <% form_tag(votes_path, :method => :get, :name => 'search' ) do -%>
+      <%= hidden_field_tag 'form_based', 'yes' %>
+      <p>
+        <label for="filter"><b>Filter:</b></label>&nbsp;&nbsp;&nbsp;
+      <%= radio_button_tag 'filter', 'all', 
+        (session[:votes_filter_type] == 'all' or session[:votes_filter_type].nil?),
+            {:onmouseover => "Tip('View all votes')",
+            :onchange => 'document.search.submit();'} %>&nbsp;All Votes&nbsp;&nbsp;&nbsp;
+      <%= radio_button_tag 'filter', 'user', session[:votes_filter_type] == 'user',
+            {:onmouseover => "Tip('View your votes')",
+            :onchange => 'document.search.submit();'} %>&nbsp;My Votes&nbsp;&nbsp;&nbsp;
+      <%= radio_button_tag 'filter', 'enterprise', session[:votes_filter_type] == 'enterprise',
+            {:onmouseover => "Tip('View your votes submitted by your enterprise')",
+            :onchange => 'document.search.submit();'} %>&nbsp;My Enterprise Votes
+      </p>
+    <% end %>
+    <br/>
+ <table cellspacing="0" cellpadding="0" class="cssform">
   <tr>
     <th>Allocated to</th>
     <th>Voted By</th>

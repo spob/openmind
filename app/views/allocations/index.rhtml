@@ -9,12 +9,6 @@
   Allocations</h1>
   <% if allocmgr? %>
   <div id="actionButtons">
-    <% if params[:by_user].nil? %>
-    <%= link_to 'My Allocations', 
-                  allocations_path(:by_user => 'true'), 
-                  html_options = {:class => "button",
-                  :onmouseover => "Tip('View only my allocations or those of my enterprise')"} %>
-    <% end %>
     <%= link_to 'New Allocation', new_allocation_path, 
                     html_options = {:class => "button",
                     :onmouseover => "Tip('Create a new allocation')"} %>
@@ -27,7 +21,13 @@
   <%= hidden_field_tag 'form_based', 'yes' %>
   <%= check_box_tag 'active_only', 'yes', session[:active_allocations_only] == 'yes',
 	{:onmouseover => "Tip('Only retrieve allocations that are not expired')",
-	:onchange => 'document.search.submit();'} %>&nbsp;Active Allocations Only
+	:onchange => 'document.search.submit();'} %>&nbsp;Active Allocations Only&nbsp;&nbsp;&nbsp;
+  <%= check_box_tag 'allocations_filter_user', 'yes', session[:allocations_filter_user] == 'yes',
+	{:onmouseover => "Tip('View my user allocations')",
+	:onchange => 'document.search.submit();'} %>&nbsp;My User Allocations&nbsp;&nbsp;&nbsp;
+  <%= check_box_tag 'allocations_filter_enterprise', 'yes', session[:allocations_filter_enterprise] == 'yes',
+	{:onmouseover => "Tip('View my enterprise allocations')",
+	:onchange => 'document.search.submit();'} %>&nbsp;My Enterprise Allocations
 <% end %>
 <br/>
 <table cellspacing="0" cellpadding="0" class="cssform">

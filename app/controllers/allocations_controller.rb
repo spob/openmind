@@ -16,21 +16,25 @@ class AllocationsController < ApplicationController
   end
 
   def index
-  	if params[:form_based] == "yes"
-    	session[:active_allocations_only] = (params[:active_only].nil? ? "no" : "yes")
-	else
-    	session[:active_allocations_only] ||= "yes"
+    if params[:form_based] == "yes"
+      session[:active_allocations_only] = (params[:active_only].nil? ? "no" : "yes")
+      session[:allocations_filter_user] = params[:allocations_filter_user].nil? ? "no" : "yes"
+      session[:allocations_filter_enterprise] = params[:allocations_filter_enterprise].nil? ? "no" : "yes"
+    else
+      session[:active_allocations_only] ||= "yes"
+      session[:active_allocations_only] = params[:active_only] unless params[:active_only].nil?
+      session[:allocations_filter_user] ||= "yes" unless allocmgr?
+      session[:allocations_filter_user] = params[:allocations_filter_user] unless params[:allocations_filter_user].nil?
+      session[:allocations_filter_enterprise] ||= "yes" unless allocmgr?
+      session[:allocations_filter_enterprise] = params[:allocations_filter_enterprise] unless params[:allocations_filter_enterprise].nil?
     end
     
-    if params[:by_user].nil? and allocmgr?
-      @allocations = Allocation.list params[:page], current_user.row_limit,
-      	(session[:active_allocations_only] == 'yes')
-    else
-      @allocations = Allocation.list_all_for_user(current_user,
-        params[:page], 
-        current_user.row_limit,
-      	(session[:active_allocations_only] == 'yes'))
-    end
+    @allocations = Allocation.list( 
+      (session[:allocations_filter_user] == "yes" ? current_user : nil),
+      (session[:allocations_filter_enterprise] == "yes" ? current_user.enterprise : nil),
+      !allocmgr?,
+      params[:page], current_user.row_limit,
+      (session[:active_allocations_only] == 'yes'))
   end
 
   # GETs should be safe (see http://www.w3.org/2001/tag/doc/whenToUseGet.html)

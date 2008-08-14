@@ -28,10 +28,25 @@ class Allocation < ActiveRecord::Base
       :per_page => per_page, :include => :votes
   end
 
-  def self.list(page, per_page, active_only)
+  def self.list(user, enterprise, must_filter, page, per_page, active_only)
+    where = ""
+    where += "(allocation_type = 'UserAllocation' and allocations.user_id = ?)" unless user.nil?
+    where += " or " unless user.nil? or enterprise.nil?
+    where += "(allocation_type = 'EnterpriseAllocation' and enterprise_id = ?)" unless enterprise.nil?
+    where = "(#{where})" unless user.nil? and enterprise.nil?
+    where += " and "  unless (user.nil? and enterprise.nil?) or !active_only
+    where += "expiration_date > ?" if active_only
+    where = "(true)" if user.nil? and enterprise.nil? and !active_only
+    where = "(false)" if user.nil? and enterprise.nil? and must_filter
+    conditions = []
+    conditions << where
+    conditions << user.id unless user.nil?
+    conditions << enterprise.id unless enterprise.nil?
+    conditions << DateUtils.truncate_datetime(DateTime.now) if active_only
     paginate :page => page, 
-      :conditions => ["expiration_date > ?", 
-      	(active_only ? DateUtils.truncate_datetime(DateTime.now) : 10.years.ago)],
+      :conditions => conditions,
+#      :conditions => [where, 
+#      	(active_only ? DateUtils.truncate_datetime(DateTime.now) : 10.years.ago)],
       :order => 'allocations.created_at DESC,  allocations.enterprise_id ASC, allocations.user_id  ASC' ,
       :per_page => per_page, :include => :votes
   end
