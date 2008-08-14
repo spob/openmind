@@ -166,22 +166,23 @@
                         <td style="padding:3px 5px; border-bottom:solid 1px #999;font-family: Georgia, Palatino, serif;"><strong>Forum:</strong>&nbsp;<a href="<%= forum_url(topic.forum) %>" style="background-color:#999;"><%= topic.forum.name %></a></td>
                       </tr>
                       <tr>
-                        <td style="padding:8px 8px 0 8px" ><strong>Topic:</strong>:<a href="<%= topic_url(topic) %>"><%= topic.title %></a></td>
+                        <td style="padding:14px 8px 0 12px" ><strong>Topic:</strong>:<a href="<%= topic_url(topic) %>"><%= topic.title %></a></td>
                       </tr>
                       <tr>
-                        <td style="padding:10px;">
-                            <table>
+                        <td style="padding:8px 10px 10px 10px;">
+                            <table width="100%">
                               <% for comment in topic.unread_comments(@user) %>
                                 <tr>
-                                  <td valign="top" style="font-size:11px; padding:0; margin:0;padding:10px 10px 0 10px;border-top:dotted 1px #999;">
-                                    <div style="height:1px; "></div>
-                                    <p style=""><span style="font-style:italic;"><%= comment.body %></span></p>
-                                  </td>
+                                    <td colspan="2"><div style="margin:6px 0 0 0;padding:10px 0 0 0; border-top:dotted 1px #999;"></div></td>
+                                 </tr>
+                                 <tr>   
+                                    <td style="vertical-align:top;"><img src="<%= @email_image_url %>/user_48.png" style="padding:0; margin:0;"  /></td>
+                                    <td style="font-size:11px;vertical-align:top;"><%= comment.user.display_name %><br />
+                                    <%= comment.created_at.strftime("%b %d, %Y %I:%M%p") %></td>
                                 </tr>
                                 <tr>
-                                    <td style="font-size:11px; padding:0 10px 10px 10px; margin:0;" align="right">
-                                    <%= comment.user.display_name %> (<%= comment.created_at.strftime("%b %d, %Y %I:%M%p") %>)
-                                    </td>
+                                  <td></td>
+                                  <td valign="top" style="margin:0;padding:0 10px 10px 0;"><span style="font-style:italic;font-size:11px; line-height:12px;"><%= comment.body %></span></td>
                                 </tr>
                               <% end %>
                             </table>
