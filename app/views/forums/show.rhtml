@@ -15,9 +15,9 @@
         <%= link_to 'Edit', edit_forum_url(@forum), html_options = {:class=> "button",
             :onmouseover => "Tip('Edit this forum')"} %>
   <% end %>
+  <%= show_forum_watch_button @forum %>
   <%= link_to 'List Forums', forums_path , html_options = {:class=> "button",
         :onmouseover => "Tip('Return to list forums')"}%>
-  <%= show_forum_watch_button @forum %>
 </div>
 
 <br/>
