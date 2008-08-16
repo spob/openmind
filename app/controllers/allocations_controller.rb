@@ -58,6 +58,8 @@ class AllocationsController < ApplicationController
   end
 
   def create
+    params[:allocation][:user_id] = nil unless params[:allocation][:allocation_type] == "UserAllocation"
+    params[:allocation][:enterprise_id] = nil unless params[:allocation][:allocation_type] == "EnterpriseAllocation"
     command = "#{params[:allocation][:allocation_type]}.new(params[:allocation])"
     @allocation = eval command
     if @allocation.save
