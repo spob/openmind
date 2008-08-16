@@ -1,5 +1,5 @@
 <tr>
-  <td><%= theme_image_tag("icons/14x14/pin-14x14.gif", :border=>0) if topic_item.pinned %>
+  <td><%= theme_image_tag("icons/14x14/pin-14x14.gif", :border=>0, :onmouseover => "Tip('This topic is pinned so it will always appear at the top of the list')") if topic_item.pinned %>
   <%= bold_text(h(topic_item.title), topic_item.unread_comment?(current_user)) %></td>
   <td><%= bold_text(h(user_display_name(topic_item.user)), topic_item.unread_comment?(current_user)) %></td>
   <td><%= bold_text(topic_item.comments.size - 1, topic_item.unread_comment?(current_user)) %></td>

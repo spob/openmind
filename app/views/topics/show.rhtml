@@ -20,7 +20,7 @@
 <div class="formTitle">
   <%= theme_image_tag("icons/16x16/forums.png", options = {:alt=>"Forum"}) %>
   Topic: <%= h @topic.title %>
-    <%= theme_image_tag("icons/14x14/pin-14x14.gif", :border=>0) if @topic.pinned %>
+    <%= theme_image_tag("icons/14x14/pin-14x14.gif", :border=>0, :onmouseover => "Tip('This topic is pinned so it will always appear at the top of the list')") if @topic.pinned %>
 </div>
 <br/>
 <%=render(:partial => "comments/comment_item", :collection => @topic.comments)%>
