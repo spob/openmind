@@ -5,7 +5,7 @@
 <%end%>
 <%= javascript_include_tag "wz_tooltip.js" %> 
 <div id="actionButtons2">
-  <%= link_to "Reply", 
+  <%= link_to "Add Comment", 
                 new_comment_path(:id => @topic, :type => 'topic'), 
                 html_options = {:class=> "button",
                   :onmouseover => "Tip('Add a comment to discussion forum for this topic')" } %>
@@ -24,3 +24,7 @@
 </div>
 <br/>
 <%=render(:partial => "comments/comment_item", :collection => @topic.comments)%>
+  <%= link_to "Add Comment", 
+                new_comment_path(:id => @topic, :type => 'topic'), 
+                html_options = {:class=> "button",
+                  :onmouseover => "Tip('Add a comment to discussion forum for this topic')" } %>
