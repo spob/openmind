@@ -120,17 +120,19 @@ class User < ActiveRecord::Base
   end
   
   def available_user_votes
-    user_allocations = active_allocations.collect(&:quantity).sum
-    user_allocations = 0 if active_allocations.nil?
-    
-    user_allocations - votes.size
+    count = 0
+    for allocation in active_allocations
+      count += allocation.quantity - allocation.votes.size
+    end
+    count
   end
   
   def available_enterprise_votes
-    enterprise_allocations = enterprise.active_allocations.collect(&:quantity).sum
-    enterprise_allocations = 0 if enterprise_allocations.nil?
-    
-    enterprise_allocations - enterprise.votes.size
+    count = 0
+    for allocation in enterprise.active_allocations
+      count += allocation.quantity - allocation.votes.size
+    end
+    count
   end
   
   def available_votes
