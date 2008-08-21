@@ -5,7 +5,7 @@ class Product < ActiveRecord::Base
   validates_length_of :description, :maximum => 200
   
   has_many :releases,
-    :dependent => :destroy
+    :dependent => :destroy, :order => "release_date ASC"
   has_many :ideas,
     :dependent => :destroy
   
