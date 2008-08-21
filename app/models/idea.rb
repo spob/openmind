@@ -176,10 +176,10 @@ class Idea < ActiveRecord::Base
   
   def vote(user)
     # first try to consume the user allocations
-    found = allocation_votes user.allocations(:order => "created_at ASC"),
+    found = allocation_votes user.active_allocations,
       user
     # if that didn't work, try to consume the enterprise allocations
-    found = allocation_votes(user.enterprise.allocations(:order => "created_at ASC"),
+    found = allocation_votes(user.enterprise.active_allocations,
       user) unless found
     raise VoteException unless found
   end
