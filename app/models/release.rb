@@ -1,6 +1,7 @@
 class Release < ActiveRecord::Base
   has_many :ideas,
-    :dependent => :destroy
+    :dependent => :destroy,
+    :order => "id ASC"
   belongs_to :product
   belongs_to :release_status, :class_name => "LookupCode", 
     :foreign_key => "release_status_id"

@@ -34,15 +34,15 @@ class User < ActiveRecord::Base
   
   has_one :last_logon, :class_name => "UserLogon", :order => "created_at DESC"
   has_many :user_logons, :order => "created_at DESC", :dependent => :destroy   
-  has_many :ideas,:dependent => :destroy    
+  has_many :ideas,:dependent => :destroy, :order => "id ASC"   
   has_many :allocations, :dependent => :destroy, :order => "created_at ASC"   
   has_many :active_allocations, :conditions => ["expiration_date > ?", DateTime.now.to_s(:db)], 
     :order => "created_at ASC"   
   # all votes by this user based only on user allocations
-  has_many :votes, :through => :allocations
+  has_many :votes, :through => :allocations, :order => "votes.id ASC"
   # all votes by this user regardless of allocation
-  has_many :all_votes, :class_name => 'Vote', :foreign_key => "user_id"
-  has_many :comments,:dependent => :destroy    
+  has_many :all_votes, :class_name => 'Vote', :foreign_key => "user_id", :order => "votes.id ASC"
+  has_many :comments,:dependent => :destroy, :order => "id ASC"
   has_many :user_idea_reads,:dependent => :destroy
   
   before_create :make_activation_code

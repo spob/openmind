@@ -4,8 +4,8 @@ class Idea < ActiveRecord::Base
   belongs_to :release
   belongs_to :product
   has_one :last_comment, :class_name => "IdeaComment", :order => "id DESC"
-  has_many :votes,:dependent => :destroy     
-  has_many :comments,:dependent => :destroy    
+  has_many :votes,:dependent => :destroy, :order => "id ASC"   
+  has_many :comments,:dependent => :destroy, :order => "id ASC"
   has_many :user_idea_reads,:dependent => :destroy 
   belongs_to :merged_to_idea, :class_name => 'Idea', :foreign_key => :merged_to_idea_id
   has_many :merged_ideas, :class_name => 'Idea', :foreign_key => :merged_to_idea_id

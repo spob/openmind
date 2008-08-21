@@ -7,7 +7,7 @@ class Product < ActiveRecord::Base
   has_many :releases,
     :dependent => :destroy, :order => "release_date ASC"
   has_many :ideas,
-    :dependent => :destroy
+    :dependent => :destroy, :order => "id ASC"
   
   def self.list(page, per_page)
     paginate :page => page, :order => 'name', 

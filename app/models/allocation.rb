@@ -1,5 +1,5 @@
 class Allocation < ActiveRecord::Base
-  has_many :votes,  :dependent => :destroy      
+  has_many :votes,  :dependent => :destroy, :order => "id asc"     
   
   validates_presence_of :quantity
   validates_length_of :comments, :maximum => 255

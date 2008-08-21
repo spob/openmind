@@ -3,11 +3,11 @@ class Enterprise < ActiveRecord::Base
   validates_uniqueness_of :name 
   validates_length_of :name, :maximum => 50
   
-  has_many :users,:dependent => :destroy    
+  has_many :users,:dependent => :destroy, :order => "email ASC"   
   has_many :allocations,:dependent => :destroy, :order => "created_at ASC"  
   has_many :active_allocations, :conditions => ["expiration_date > ?", DateTime.now.to_s(:db)], 
     :order => "created_at ASC"   
-  has_many :votes, :through => :allocations
+  has_many :votes, :through => :allocations, :order => "votes.id ASC"
   
   def self.list(page, per_page)
     paginate :page => page, :order => 'name', 

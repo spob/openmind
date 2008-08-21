@@ -8,12 +8,14 @@ class Poll < ActiveRecord::Base
   
   has_many :poll_options,
     :dependent => :destroy,
-    :conditions => { :selectable => true}
+    :conditions => { :selectable => true},
+    :order => "poll_options.id ASC"
   
   has_many :poll_options_all,
     :class_name => 'PollOption', 
     :foreign_key => "poll_id",
-    :dependent => :destroy
+    :dependent => :destroy,
+    :order => "poll_options.id ASC"
   
   has_one :unselectable_poll_option,
     :class_name => 'PollOption', 
