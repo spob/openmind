@@ -27,8 +27,10 @@ class Poll < ActiveRecord::Base
     total_responses == 0 and !active
   end
   
-  def self.list(page, per_page)
-    paginate :page => page, :order => 'close_date DESC', 
+  def self.list(page, include_unpublished, per_page)
+    paginate :page => page, 
+      :conditions => [ "active = 1 or ? = 1", include_unpublished],
+      :order => 'close_date DESC', 
       :per_page => per_page
   end
   

@@ -4,12 +4,12 @@
       <td><%= poll_item.total_responses %></td>
       <td><%= format_date(poll_item.close_date) %></td>
       <td>
-        <% if prodmgr? %>
         <%= link_to theme_image_tag("icons/16x16/viewAction.png", :alt=>"view", :title=> "view"),
           poll_path(poll_item), 
           html_options = {
           :onmouseover => "Tip('View details for this poll')"} 
         %>
+        <% if prodmgr? %>
         <%= link_to theme_image_tag("icons/16x16/editAction.png", :alt=>"edit", :title=> "edit"), 
           edit_poll_path(poll_item),
           html_options = {

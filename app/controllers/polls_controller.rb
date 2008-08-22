@@ -6,7 +6,7 @@ class PollsController < ApplicationController
   
   def index
     new
-    @polls = Poll.list params[:page], current_user.row_limit
+    @polls = Poll.list params[:page], prodmgr?, current_user.row_limit
   end
 
   # GETs should be safe (see http://www.w3.org/2001/tag/doc/whenToUseGet.html)
