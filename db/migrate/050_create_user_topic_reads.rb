@@ -8,8 +8,7 @@ class CreateUserTopicReads < ActiveRecord::Migration
       t.column :updated_at, :datetime, :null => false
       t.column :views,  :integer, :null => false, :default => 0
     end
-    add_index :user_topic_reads, :user_id, :unique => false
-    add_index :user_topic_reads, :topic_id, :unique => false
+    add_index :user_topic_reads, [:user_id, :topic_id], :unique => true
   end
 
   def self.down

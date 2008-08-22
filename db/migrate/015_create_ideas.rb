@@ -4,8 +4,8 @@ class CreateIdeas < ActiveRecord::Migration
       t.column :user_id, :integer, :null => false
       t.column :product_id, :integer, :null => false
       t.column :release_id, :integer
-      t.column :title, :string, :limit => 100, :null => false
-      t.column :description, :string, :null => false
+      t.column :title, :string, :limit => 100, :null => false, :option => 'charset utf8'
+      t.column :description, :string, :null => false, :option => 'charset utf8'
       t.column :created_at, :datetime, :null => false
       t.column :updated_at, :datetime, :null => false 
       t.column :lock_version, :integer, :default => 0

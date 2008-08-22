@@ -7,9 +7,10 @@ class AddTopicIdToComments < ActiveRecord::Migration
   end
 
   def self.down
-    for comment in TopicComment.find(:all)
-      comment.destroy
-    end
+    execute "Delete from comments where type = 'TopicComment'"
+#    for comment in TopicComment.find(:all)
+#      comment.destroy
+#    end
     remove_index :comments, :topic_id
     
     remove_column(:comments, :topic_id)

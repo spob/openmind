@@ -1,4 +1,4 @@
-class CreateUserTable < ActiveRecord::Migration
+class AddWatchOnVoteToUsers < ActiveRecord::Migration
   def self.up
     add_column(:users, :watch_on_vote, :boolean, :default => true, :null => false)
   end

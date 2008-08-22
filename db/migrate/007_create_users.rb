@@ -8,8 +8,8 @@ class CreateUsers < ActiveRecord::Migration
       t.column :updated_at,                :datetime
       t.column :remember_token,            :string
       t.column :remember_token_expires_at, :datetime
-      t.column :first_name,                :string
-      t.column :last_name,                 :string
+      t.column :first_name,                :string, :option => 'charset utf8'
+      t.column :last_name,                 :string, :option => 'charset utf8'
       t.column :row_limit,                 :integer, :default => 10, :null => false 
       t.column :active,                    :boolean, :default => true, :null => false
       t.column :lock_version,              :integer, :default => 0

@@ -7,8 +7,7 @@ class CreateTopicWatches < ActiveRecord::Migration
       t.column :created_at, :datetime, :null => false
     end
     
-    add_index :topic_watches, :user_id, :unique => false
-    add_index :topic_watches, :topic_id, :unique => false
+    add_index :topic_watches, [:user_id, :topic_id], :unique => true
   end
 
   def self.down

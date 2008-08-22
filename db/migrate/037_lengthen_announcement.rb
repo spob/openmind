@@ -1,6 +1,6 @@
 class LengthenAnnouncement < ActiveRecord::Migration
   def self.up
-    change_column :announcements, :headline, :string, :limit => 120
+    change_column :announcements, :headline, :string, :limit => 120, :option => 'charset utf8'
   end
 
   def self.down

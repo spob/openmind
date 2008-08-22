@@ -27,8 +27,8 @@ class AddUpdatedAtColumns < ActiveRecord::Migration
     change_column :polls, :updated_at, :datetime, :null => false
     change_column :products, :updated_at, :datetime, :null => false
     change_column :releases, :updated_at, :datetime, :null => false
-    change_column :roles, :updated_at, :datetime, :null => false
-    change_column :roles_users, :updated_at, :datetime, :null => false
+#    change_column :roles, :updated_at, :datetime, :null => false
+#    change_column :roles_users, :updated_at, :datetime, :null => false
   end
 
   def self.down

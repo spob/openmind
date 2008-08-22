@@ -9,8 +9,7 @@ class CreateUserIdeaReads < ActiveRecord::Migration
       t.column :lock_version, :integer, :default => 0
     end
     
-    add_index :user_idea_reads, :user_id
-    add_index :user_idea_reads, :idea_id
+    add_index :user_idea_reads, [:user_id, :idea_id], :unique => true
   end
 
   def self.down

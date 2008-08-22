@@ -1,7 +1,7 @@
 class CreateTopics < ActiveRecord::Migration
   def self.up
     create_table :topics do |t|
-      t.column :title, :string, :limit => 120, :null => false
+      t.column :title, :string, :limit => 120, :null => false, :option => 'charset utf8'
       t.column :lock_version, :integer, :default => 0
       t.column :forum_id,  :integer, :null => false
       t.column :user_id,  :integer, :null => false

@@ -7,8 +7,7 @@ class CreateForumWatch < ActiveRecord::Migration
       t.column :created_at, :datetime, :null => false
     end
     
-    add_index :forum_watches, :user_id, :unique => false
-    add_index :forum_watches, :forum_id, :unique => false
+    add_index :forum_watches, [:user_id, :forum_id], :unique => false
   end
 
   def self.down

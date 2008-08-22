@@ -7,8 +7,7 @@ class CreateUsersRoles < ActiveRecord::Migration
       t.column :created_at, :datetime, :null => false
     end
     
-    add_index :roles_users, :user_id, :unique => false
-    add_index :roles_users, :role_id, :unique => false
+    add_index :roles_users, [:user_id, :role_id], :unique => true
   end
 
   def self.down
