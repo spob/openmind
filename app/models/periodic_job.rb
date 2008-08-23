@@ -6,6 +6,7 @@ class PeriodicJob < ActiveRecord::Base
       eval(self.job)
     rescue Exception
       logger.error "'#{self.job}' could not run: #{$!.message}\n#{$!.backtrace}" 
+      puts "'#{self.job}' could not run: #{$!.message}\n#{$!.backtrace}" 
     end
     self.last_run_at = Time.now
     self.save  
