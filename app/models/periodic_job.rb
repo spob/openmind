@@ -4,9 +4,12 @@ class PeriodicJob < ActiveRecord::Base
   def run!
     begin
       eval(self.job)
+      self.last_run_result = "OK"
     rescue Exception
-      logger.error "'#{self.job}' could not run: #{$!.message}\n#{$!.backtrace}" 
-      puts "'#{self.job}' could not run: #{$!.message}\n#{$!.backtrace}" 
+      err_string = "'#{self.job}' could not run: #{$!.message}\n#{$!.backtrace}" 
+      logger.error err_string
+      puts err_string 
+      self.last_run_result = substr(err_string, 1, 500)
     end
     self.last_run_at = Time.now
     self.save  
