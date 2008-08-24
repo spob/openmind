@@ -13,11 +13,11 @@ class SeedRoles < ActiveRecord::Migration
       :description => "Allocations Manager",
       :default_role => false)
     
-    assign_user 'admin@openmind.org', "sysadmin"
-    assign_user 'prodmgr@openmind.org', "prodmgr"
-    assign_user 'voter@openmind.org', "voter"
-    assign_user 'allocmgr@openmind.org', "allocmgr"
-    assign_user 'all@openmind.org', [ "voter", "sysadmin", "prodmgr", "allocmgr"  ]
+    assign_user 'admin@openmindsw.com', "sysadmin"
+    assign_user 'prodmgr@openmindsw.com', "prodmgr"
+    assign_user 'voter@openmindsw.com', "voter"
+    assign_user 'allocmgr@openmindsw.com', "allocmgr"
+    assign_user 'all@openmindsw.com', [ "voter", "sysadmin", "prodmgr", "allocmgr"  ]
   end
 
   def self.down

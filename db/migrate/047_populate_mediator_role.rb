@@ -4,7 +4,7 @@ class PopulateMediatorRole < ActiveRecord::Migration
       :description => "Forum Mediator",
       :default_role => false)
     
-    assign_user 'all@openmind.org', "mediator"
+    assign_user 'all@openmindsw.com', "mediator"
   end
 
   def self.down
