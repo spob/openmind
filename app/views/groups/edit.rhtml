@@ -1,0 +1,32 @@
+<%content_for :bodyTag do -%>
+  <%= set_focus_to_id 'group_name' -%>
+<%end%>
+<%= javascript_include_tag "wz_tooltip.js" %> 
+<%= error_messages_for 'group' %>
+<% form_for :group, :url => group_path(@group), 
+  :html => {:method => :put } do |form| %>
+  <div id="actionButtons2">
+    <%= link_to 'List User Groups', groups_path, html_options = {:class=> "button",
+        :onmouseover => "Tip('List user groups')"} %>
+  </div>
+  <div class="formTitle"><%= theme_image_tag("icons/16x16/users.png", 
+      options = {:alt=>"group"}) %>
+  Edit User Group</div>
+  <div class="cssform">
+    <p>
+      <label for="group_name">Name:</label>
+      <%= form.text_field :name, { :size => 50, :maxlength => 50 } %>
+    </p>
+    <p>
+      <label for="group_name">Description</label>
+      <%= form.text_field :description, { :size => 50, :maxlength => 150 } %>
+    </p>
+    <p>
+      <label></label>
+      <%= submit_tag 'Save', html_options = {:class=> "button", :disable_with => "Please wait...",
+        :onmouseover => "Tip('Save changes to user group')"} %>
+      <%= link_to 'Cancel', group_path(@group), html_options = {:class=> "button",
+        :onmouseover => "Tip('Do not save changes to user group')"} %>
+    </p>
+  </div>
+<% end %>

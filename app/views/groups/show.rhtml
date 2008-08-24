@@ -1,0 +1,25 @@
+<%= javascript_include_tag "wz_tooltip.js" %> 
+<div id="actionButtons2">
+  <%= link_to 'Edit', edit_group_path(@group), html_options = {:class=> "button",
+        :onmouseover => "Tip('Edit this user group')"} %>
+  <%= link_to 'List User Groups', groups_path , html_options = {:class=> "button",
+        :onmouseover => "Tip('List user groups')"} %>
+</div>
+<div class="formTitle"><%= theme_image_tag("icons/16x16/users.png", 
+  options = {:alt=>"User Group"}) %>User Group Detail</div>
+<div class="cssform">
+  <p>
+    <label>Name:</label>
+    <%= @group.name %>
+  </p>
+  <p>
+    <label>Description:</label>
+    <%= @group.description %>
+  </p>
+  <p>
+    <label>Members:</label>
+    <%# for user in @enterprise.users %>
+      <%#*&bull;&nbsp;<%=h user_display_name(user) %><br />
+    <%# end %> 
+  </p>
+</div>

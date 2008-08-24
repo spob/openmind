@@ -1,0 +1,31 @@
+<%content_for :head do -%>
+      <%= theme_stylesheet_link_tag 'forms' %>
+      <%= theme_stylesheet_link_tag 'tables' %>
+      <%= javascript_include_tag "tablecloth" %>                
+<%end%>
+<%content_for :bodyTag do -%>
+	<%= set_focus_to_id 'group_name' -%>              
+<%end%>
+<%= javascript_include_tag "wz_tooltip.js" %> 
+
+<%= error_messages_for 'group' %>
+
+<h1><%= theme_image_tag("icons/48x48/users.png", options = {:alt=>"User Group"}) %>User Groups</h1>
+
+<table cellspacing="0" cellpadding="0" class="cssform">
+  <tr>
+    <th>Group</th>
+    <th>Description</th>
+    <th>Action</th>
+  </tr>  
+  <tr>
+    <% form_for :group, :url => groups_path do |form| %>
+      <td><%= form.text_field :name, { :size => 40, :maxlength => 50 } %></td>
+      <td><%= form.text_field :description, { :size => 60, :maxlength => 150 } %></td>
+      <td><%= submit_tag 'Create', options = {:class=> "button", :disable_with => "Please wait...",
+        :onmouseover => "Tip('Create a new group')"} %></td>
+    <% end %>
+  </tr>
+  <%=render(:partial => "group_item", :collection => @groups)%>
+</table>
+<p><%= will_paginate @groups %></p>

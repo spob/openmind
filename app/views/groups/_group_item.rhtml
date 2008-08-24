@@ -1,0 +1,27 @@
+
+  <tr>
+    <td><%= h group_item.name %></td>
+    <td><%= h group_item.description %></td>
+    <td>
+        <div id="action_buttons<%= group_item.id %>">
+          <%= link_to theme_image_tag("icons/16x16/viewAction.png", :alt=>"view", :title=> "view"),
+                group_path(group_item), 
+                html_options = {
+                :onmouseover => "Tip('View details for this group')"} 
+          %>
+          <% if can_edit? group_item %>
+              <%= link_to theme_image_tag("icons/16x16/editAction.png", :alt=>"edit", :title=> "edit"), 
+                    edit_group_path(group_item),
+                    html_options = {
+                    :onmouseover => "Tip('Edit this group')"}
+              %>
+
+              <%= link_to(
+                    theme_image_tag("icons/16x16/deleteAction.png", :alt=>"delete", :title=> "delete"),
+                    group_path(group_item),
+                    html_options = {:confirm => 'Are you sure?', :method => :delete,
+                          :onmouseover => "Tip('Delete this group')"} ) if group_item.can_delete? %>
+          <% end %>
+        </div>
+    </td>
+  </tr>

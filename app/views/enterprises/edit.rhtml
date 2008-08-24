@@ -1,12 +1,13 @@
 <%content_for :bodyTag do -%>
   <%= set_focus_to_id 'enterprise_name' -%>
 <%end%>
+<%= javascript_include_tag "wz_tooltip.js" %> 
 <%= error_messages_for 'enterprise' %>
 <% form_for :enterprise, :url => enterprise_path(@enterprise), 
   :html => {:method => :put } do |form| %>
   <div id="actionButtons2">
-    <%= link_to 'View Details', enterprise_path(@enterprise), html_options = {:class=> "button"} %>
-    <%= link_to 'List Enterprises', enterprises_path, html_options = {:class=> "button"}%>
+    <%= link_to 'List Enterprises', enterprises_path, html_options = {:class=> "button",
+        :onmouseover => "Tip('List enterprises')"} %>
   </div>
   <div class="formTitle"><%= theme_image_tag("icons/16x16/enterprises.png", 
       options = {:alt=>"Enterprise"}) %>
@@ -22,7 +23,10 @@
     </p>
     <p>
       <label></label>
-      <%= submit_tag 'Save', html_options = {:class=> "button", :disable_with => "Please wait..."} %> 
+      <%= submit_tag 'Save', html_options = {:class=> "button", :disable_with => "Please wait...",
+        :onmouseover => "Tip('Save changes to enterprise')"} %>
+      <%= link_to 'Cancel', enterprise_path(@enterprise), html_options = {:class=> "button",
+        :onmouseover => "Tip('Do not save changes to user group')"} %>
     </p>
   </div>
 <% end %>

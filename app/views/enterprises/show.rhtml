@@ -1,6 +1,9 @@
+<%= javascript_include_tag "wz_tooltip.js" %> 
 <div id="actionButtons2">
-  <%= link_to 'Edit', edit_enterprise_path(@enterprise), html_options = {:class=> "button"} %>
-  <%= link_to 'List Enterprises', enterprises_path , html_options = {:class=> "button"} %>
+  <%= link_to 'Edit', edit_enterprise_path(@enterprise), html_options = {:class=> "button",
+        :onmouseover => "Tip('Edit this enterprise')"} %>
+  <%= link_to 'List Enterprises', enterprises_path , html_options = {:class=> "button",
+        :onmouseover => "Tip('List enterprises')"} %>
 </div>
 <div class="formTitle"><%= theme_image_tag("icons/16x16/enterprises.png", 
   options = {:alt=>"Enterprise"}) %>Enterprise Detail</div>

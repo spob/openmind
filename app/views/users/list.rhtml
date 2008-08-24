@@ -18,6 +18,11 @@
       html_options = {:class=> "button", 
       :onmouseover => "Tip('View logons in the last 90 days')",
       :method => :get } %>
+    <%= button_to 'User Groups', 
+      groups_path, 
+      html_options = {:class=> "button", 
+      :onmouseover => "Tip('View user groups')",
+      :method => :get } %>
     <% end %>
 </div>
 <table cellspacing="0" cellpadding="0" class="cssform">
