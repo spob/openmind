@@ -6,7 +6,7 @@ class Release < ActiveRecord::Base
   belongs_to :release_status, :class_name => "LookupCode", 
     :foreign_key => "release_status_id"
   validates_presence_of :version
-  validates_uniqueness_of :version , :scope => "product_id"
+  validates_uniqueness_of :version, :scope => "product_id"
   validates_length_of :version, :maximum => 20
   
   def self.list(page, product_id, per_page)
