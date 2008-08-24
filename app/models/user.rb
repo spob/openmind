@@ -14,6 +14,9 @@ class User < ActiveRecord::Base
   validates_uniqueness_of   :email, :case_sensitive => false
   validates_email_format_of :email
   validates_numericality_of :row_limit 
+  validates_length_of       :first_name, :maximum => 40
+  validates_length_of       :last_name, :maximum => 40
+  validates_length_of       :activation_code, :maximum => 40
   before_save :encrypt_password
   
   belongs_to :enterprise

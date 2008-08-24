@@ -1,8 +1,8 @@
 class CreateAllocations < ActiveRecord::Migration
   def self.up 
-    create_table :allocations do |t|
+    create_table :allocations, :options => 'DEFAULT CHARSET=utf8' do |t|
       t.column :quantity, :integer, :default => 0, :null => false 
-      t.column :comments, :string, :limit => 255, :option => 'charset utf8'
+      t.column :comments, :string, :limit => 255
       t.column :user_id,:integer
       t.column :enterprise_id,:integer
       t.column :created_at, :datetime, :null => false

@@ -1,9 +1,9 @@
 class CreateComments < ActiveRecord::Migration
   def self.up
-    create_table :comments do |t|
+    create_table :comments, :options => 'DEFAULT CHARSET=utf8' do |t|
       t.column :user_id,:integer, :null => false
       t.column :idea_id,:integer, :null => false
-      t.column :body, :string, :null => false, :option => 'charset utf8'
+      t.column :body, :string, :null => false
       t.column :created_at, :datetime, :null => false 
       t.column :updated_at, :datetime, :null => false
       t.column :lock_version, :integer, :default => 0

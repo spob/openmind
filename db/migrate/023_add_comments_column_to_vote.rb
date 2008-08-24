@@ -1,6 +1,6 @@
 class AddCommentsColumnToVote < ActiveRecord::Migration
   def self.up
-    add_column(:votes, :comments, :string, :null => true, :option => 'charset utf8')
+    add_column(:votes, :comments, :string, :null => true)
   end
 
   def self.down

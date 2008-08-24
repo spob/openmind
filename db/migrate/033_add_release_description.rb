@@ -1,6 +1,6 @@
 class AddReleaseDescription < ActiveRecord::Migration
   def self.up
-    add_column(:releases, :description, :string, :null => true, :option => 'charset utf8')
+    add_column(:releases, :description, :string, :null => true)
     add_column(:releases, :release_date, :datetime, :null => true)
     add_column(:releases, :user_release_date, :string, :null => true)
     
