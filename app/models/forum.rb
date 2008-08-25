@@ -40,8 +40,6 @@ class Forum < ActiveRecord::Base
   end
   
   def can_see? user
-    puts "========================="
-    puts "Group: (#{id}) #{name}"
     can_edit? user or groups.empty? or !groups.select{|group| group.users.include? user}.empty?
   end
 end
