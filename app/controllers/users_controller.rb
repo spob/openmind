@@ -47,6 +47,7 @@ class UsersController < ApplicationController
 
   def create 
     params[:user][:role_ids] ||= []
+    params[:user][:group_ids] ||= []
     @user = User.new(params[:user])
     @user.first_name = @user.first_name.strip unless @user.first_name.nil?
     @user.last_name = @user.last_name.strip unless @user.last_name.nil?
@@ -92,6 +93,7 @@ class UsersController < ApplicationController
 
   def update
     params[:user][:role_ids] ||= []
+    params[:user][:group_ids] ||= []
     @user = User.find(params[:id])
     
     # if the password was updated, force a password change

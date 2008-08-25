@@ -61,6 +61,12 @@
     <% end %>
   <% end %>
   </p>
+  <p>
+    <label>User Groups:</label><br />
+    <% for group in @user.groups %>
+      &bull;&nbsp;<%= h group.name %><br />
+    <% end %>
+  </p>
     <% if !CustomField.users_custom_boolean1.nil? %>
     <p>
       <label for="custom_boolean1"><%= CustomField.users_custom_boolean1 %>:</label>

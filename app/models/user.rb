@@ -24,6 +24,7 @@ class User < ActiveRecord::Base
   # This collection is for watches
   has_and_belongs_to_many :watched_ideas, :join_table => 'watches', :class_name => 'Idea'
   has_and_belongs_to_many :forum_watches, :join_table => 'forum_watches', :class_name => 'Forum'
+  has_and_belongs_to_many :groups, :join_table => 'group_members', :class_name => 'Group'
   has_many :topic_watches
   # couldn't get through to work
   has_many :watched_topics, :class_name => 'Topic',

@@ -18,8 +18,8 @@
   </p>
   <p>
     <label>Members:</label>
-    <%# for user in @enterprise.users %>
-      <%#*&bull;&nbsp;<%=h user_display_name(user) %><br />
-    <%# end %> 
+    <% for user in @group.users %>
+      &bull;&nbsp;<%=h user_display_name(user) %><br />
+    <% end %> 
   </p>
 </div>
