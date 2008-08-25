@@ -46,6 +46,12 @@
         &bull;&nbsp;<%= h user_display_name(user) %><br />
       <% end %>
     </p>
+    <p>
+      <label>User Groups:</label>
+      <% for group in @forum.groups %><br />
+         &bull;&nbsp;<%= h group.name %><br />
+      <% end %>
+    </p>
   <% end %>
 </div>
 <h1>Topics</h1>

@@ -27,13 +27,14 @@ class ForumsController < ApplicationController
 
   def create
     params[:forum][:mediator_ids] ||= []
+    params[:forum][:group_ids] ||= []
     @forum = Forum.new(params[:forum])
     if @forum.save
       flash[:notice] = "Forum #{@forum.name} was successfully created."
       redirect_to forums_path
     else
-      index
-      render :action => :index
+      @mediators = Role.find_users_by_role('mediator')
+      render :action => :new
     end
   end
 
@@ -44,6 +45,7 @@ class ForumsController < ApplicationController
 
   def update
     params[:forum][:mediator_ids] ||= []
+    params[:forum][:group_ids] ||= []
     @forum = Forum.find(params[:id])
     if @forum.update_attributes(params[:forum])
       flash[:notice] = "Forum '#{@forum.name}' was successfully updated."

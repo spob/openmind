@@ -3,6 +3,7 @@ class Forum < ActiveRecord::Base
   has_and_belongs_to_many :mediators, :join_table => 'forum_mediators', 
     :class_name => 'User'     
   has_and_belongs_to_many :watchers, :join_table => 'forum_watches', :class_name => 'User'
+  has_and_belongs_to_many :groups
   has_many :comments, :through => :topics, :order => "id DESC"
   
   validates_presence_of :name
@@ -36,5 +37,11 @@ class Forum < ActiveRecord::Base
       topic.watchers.delete(user) if topic.watchers.include? user
       topic.save
     end
+  end
+  
+  def can_see? user
+    puts "========================="
+    puts "Group: (#{id}) #{name}"
+    can_edit? user or groups.empty? or !groups.select{|group| group.users.include? user}.empty?
   end
 end

@@ -1,4 +1,4 @@
-
+<% if prodmgr? or forum_item.can_see? current_user %>
   <tr>
     <td><b><%= h forum_item.name %></b><br/><%= h forum_item.description %></td>
     <td><%= last_forum_post forum_item %></td>
@@ -8,3 +8,4 @@
         <%=render(:partial => "forum_action", :object => forum_item)%>
     </td>
   </tr>
+<% end %>
