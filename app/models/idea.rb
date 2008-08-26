@@ -19,6 +19,8 @@ class Idea < ActiveRecord::Base
   validates_uniqueness_of :title
   validates_length_of :title, :maximum => 100
   
+  attr_accessor :nondb_tag_list #used for calculating changed email notifications
+  
   def self.list_watched_ideas(page, user, properties)
     list(page, user, properties, 
       " exists (select null from watches as w where w.idea_id = ideas.id and w.user_id = ?)",

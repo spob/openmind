@@ -122,6 +122,7 @@ class IdeasController < ApplicationController
   end
 
   def show
+    TagList.delimiter = " "
     begin
       @idea = Idea.find(params[:id])
       session[:selected_tab] = params[:selected_tab] if !params[:selected_tab].nil?
@@ -159,6 +160,7 @@ class IdeasController < ApplicationController
   end
 
   def edit
+    TagList.delimiter = " "
     @idea = Idea.find(params[:id])
     authorize_edit @idea
   end
@@ -179,6 +181,7 @@ class IdeasController < ApplicationController
     params[:idea][:release_id] = nil if !params[:idea].nil? and params[:idea][:release_id] == "0"
     @idea = Idea.find(params[:id])
     original_idea = Idea.find(@idea.id, :readonly => true)
+    original_idea.nondb_tag_list = original_idea.tag_list
     authorize_edit @idea
     if @idea.update_attributes(params[:idea])
       # did the user change the product, leaving the release invalid?
@@ -189,6 +192,7 @@ class IdeasController < ApplicationController
           merged_idea.update_attributes(:release_id => @idea.release.id) if merged_idea.release.nil? and merged_idea.product.id == @idea.product.id
         end
       end
+      
       
       EmailNotifier.deliver_idea_change_notifications(@idea, 
         generate_change_log(original_idea, @idea)) if !@idea.watchers.empty?
@@ -322,6 +326,7 @@ class IdeasController < ApplicationController
       IdeaTitleChangeLog.new, 
       IdeaDescriptionChangeLog.new,
       IdeaProductChangeLog.new,
+      IdeaTagsChangeLog.new,
       IdeaReleaseChangeLog.new,
     ]
     change_messages = []
@@ -343,6 +348,14 @@ class IdeasController < ApplicationController
     def calc_change_log before_idea, after_idea
       if before_idea.description != after_idea.description
         return "Description was updated"
+      end
+    end
+  end
+  
+  class IdeaTagsChangeLog
+    def calc_change_log before_idea, after_idea
+      if before_idea.nondb_tag_list != after_idea.tag_list
+        return "Tags were updated to #{after_idea.tag_list}"
       end
     end
   end
