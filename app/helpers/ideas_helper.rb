@@ -2,6 +2,7 @@ module IdeasHelper
   
   
   @@view_types = [ 
+    # user name  # view type  # action (null, then remote)
     ["Newest", "all"],
     ["Mine", "my_ideas"],
     ["Unread", "unread"],
@@ -11,6 +12,7 @@ module IdeasHelper
     ["I have commented on", "commented_ideas"],
     ["Most popular", "most_votes"],
     ["Most viewed", "most_views"],
+    ["By tags", "tags", "tag_cloud"],
   ]
   
   def calc_titles_for_lookup
@@ -38,9 +40,15 @@ module IdeasHelper
               #              link_to(view_type[0], 
               #                options = {:action => :index, :view_type => view_type[1]}, 
               #                html_options = {:class=> clazz})
-              link_to_remote(view_type[0], 
-                { :url => {:action => :index, :view_type => view_type[1]}}, 
-                {:class=> clazz})
+              if view_type.length == 2
+                link_to_remote(view_type[0], 
+                  { :url => {:action => :index, :view_type => view_type[1]}}, 
+                  {:class=> clazz})
+              else
+                link_to(view_type[0], 
+                 { :action => view_type[2]},
+                 { :class=> clazz})
+              end
             end 
           end
         end

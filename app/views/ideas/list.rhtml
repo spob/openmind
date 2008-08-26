@@ -22,9 +22,6 @@
   <%end%>    
 
   <div id="actionButtons">
-      <%= button_to 'Tags', option = {:action => 'tag_cloud'}, 
-      html_options = {:class=> "button", 
-      :onmouseover => "Tip('Search by tags')"} %>
     <% if can_create_idea? %>
       <%= button_to 'Create Idea', option = {:action => 'new'}, 
       html_options = {:class=> "button", 

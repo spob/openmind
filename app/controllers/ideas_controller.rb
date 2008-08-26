@@ -113,6 +113,7 @@ class IdeasController < ApplicationController
     @ideas = Idea.paginate_list(Idea.find_tagged_with(params[:id]), 
       params[:page], 
       current_user.row_limit)
+    session[:idea_view_type] = "tags"
     render :action => 'list'
   end
   
