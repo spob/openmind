@@ -24,6 +24,10 @@
         options = { :prompt => true} %>    
     </p>
     <p>
+      <label for="tag_list">Tags:</label>
+      <%= form.text_field :tag_list %>
+    </p>
+    <p>
       <label></label>
       <%= submit_tag 'Create', options = {:class=> "button", :disable_with => "Please wait..."} %>
     </p>

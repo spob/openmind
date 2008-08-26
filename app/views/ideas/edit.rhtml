@@ -56,6 +56,10 @@
         <%= h @idea.release.version unless @idea.release.nil? or allow_schedule_to_release? %>
       </p>
       <p>
+        <label for="tag_list">Tags:</label>
+        <%= form.text_field :tag_list %>
+      </p>
+      <p>
         <%= submit_tag 'Update', html_options = {:class=> "button", :disable_with => "Please wait...",
           :onmouseover => "Tip('Save changes')"} %>
       </p>

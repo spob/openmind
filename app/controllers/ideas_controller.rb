@@ -3,6 +3,10 @@ class IdeasController < ApplicationController
   helper_method :tab_body_partial
   before_filter :login_required, :except => [:rss]
   access_control [:new, :edit, :create, :update, :destroy] => 'prodmgr | voter'
+
+  def tag_cloud
+    @tags = Idea.tag_counts
+  end
   
   def self.view_types
     @@view_types
@@ -105,6 +109,13 @@ class IdeasController < ApplicationController
     end
   end
   
+  def tag
+    @ideas = Idea.paginate_list(Idea.find_tagged_with(params[:id]), 
+      params[:page], 
+      current_user.row_limit)
+    render :action => 'list'
+  end
+  
   def jump_to
     redirect_to :action => :show, :id => params[:goto_id]
   end
@@ -129,6 +140,7 @@ class IdeasController < ApplicationController
   end
 
   def create
+    TagList.delimiter = " "
     @idea = Idea.new(params[:idea])
     @idea.user_id = current_user.id
     # author should watch the idea by default
@@ -162,6 +174,7 @@ class IdeasController < ApplicationController
   end
 
   def update
+    TagList.delimiter = " "
     params[:idea][:release_id] = nil if !params[:idea].nil? and params[:idea][:release_id] == "0"
     @idea = Idea.find(params[:id])
     original_idea = Idea.find(@idea.id, :readonly => true)

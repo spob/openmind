@@ -1,4 +1,5 @@
 class Idea < ActiveRecord::Base
+  acts_as_taggable
   
   belongs_to :user
   belongs_to :release
@@ -120,6 +121,12 @@ class Idea < ActiveRecord::Base
       :per_page => user.row_limit, :include => ['product']
   end
   
+  def self.paginate_list ideas, page, per_page
+    paginate :page => page, 
+      :per_page => per_page,
+      :conditions => ["id in (?)", ideas.collect(&:id)]
+  end
+  
   def user_friendly_idea_name
     "#{id}: #{title}"
   end
@@ -208,7 +215,7 @@ class Idea < ActiveRecord::Base
   end
   
   def watched? user
-  	watchers.include? user
+    watchers.include? user
   end
   
   private

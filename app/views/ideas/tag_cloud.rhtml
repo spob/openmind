@@ -1,0 +1,19 @@
+<%content_for :head do -%>
+      <%= theme_stylesheet_link_tag 'forms' %>
+      <%= theme_stylesheet_link_tag 'tables' %>
+      <%= javascript_include_tag "tablecloth" %>                
+<%end%>
+<%= javascript_include_tag "wz_tooltip.js" %> 
+<%= error_messages_for 'tag_cloud' %>
+  <div id="actionButtons2">
+    <%= link_to 'List Ideas', options = { :action => 'list'}, 
+    html_options = {:class=> "button", 
+      :onmouseover => "Tip('Return to the idea list')"}  %>
+  </div>
+<h1>
+  <%= theme_image_tag("icons/32x32/ideas.png", 
+      options = {:alt=>"Ideas"}) %>Idea Tags
+</h1>
+<% tag_cloud @tags, %w(css1 css2 css3 css4) do |tag, css_class| %>
+    <%= link_to tag.name, { :action => :tag, :id => tag.name }, :class => css_class %>
+<% end %>

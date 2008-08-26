@@ -9,6 +9,10 @@
 <%= h "#{@idea.release.version} (#{@idea.release.release_status.description})" unless @idea.release.nil? %>&nbsp;
 </p>
 <p>
+  <label>Tags:</label>
+  <%= h @idea.tag_list %>
+</p>
+<p>
 <label>Last updated: </label>
 <%= om_date_time @idea.updated_at %>&nbsp;
 </p>
