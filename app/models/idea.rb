@@ -21,27 +21,27 @@ class Idea < ActiveRecord::Base
   
   attr_accessor :nondb_tag_list #used for calculating changed email notifications
   
-  def self.list_watched_ideas(page, user, properties)
-    list(page, user, properties, 
+  def self.list_watched_ideas(page, user, properties, do_paginate)
+    list(page, user, properties, do_paginate, 
       " exists (select null from watches as w where w.idea_id = ideas.id and w.user_id = ?)",
       user.id)
   end
   
-  def self.list_unread_ideas(page, user, properties)
-    list(page, user, properties, 
+  def self.list_unread_ideas(page, user, properties, do_paginate)
+    list(page, user, properties, do_paginate, 
       "not exists (select null from user_idea_reads as uir where uir.idea_id = ideas.id and uir.user_id = ?)",
       user.id)
   end
   
-  def self.list_unread_comments(page, user, properties)
-    list(page, user, properties, 
+  def self.list_unread_comments(page, user, properties, do_paginate)
+    list(page, user, properties, do_paginate, 
       "exists (select null from comments as c where c.idea_id = ideas.id and c.created_at > ifnull(user_idea_reads.last_read, makedate(1900,1)))",
       nil ,
       "LEFT OUTER JOIN user_idea_reads ON user_idea_reads.idea_id = ideas.id and user_idea_reads.user_id = #{user.id}")
   end
   
-  def self.list_most_votes(page, user, properties)
-    list(page, user, properties, 
+  def self.list_most_votes(page, user, properties, do_paginate)
+    list(page, user, properties, do_paginate, 
       nil,
       nil,
       "INNER JOIN votes ON votes.idea_id = ideas.id",
@@ -49,8 +49,8 @@ class Idea < ActiveRecord::Base
       'ideas.id')
   end
   
-  def self.list_most_views(page, user, properties)
-    list(page, user, properties, 
+  def self.list_most_views(page, user, properties, do_paginate)
+    list(page, user, properties, do_paginate, 
       nil,
       nil,
       nil,
@@ -58,34 +58,40 @@ class Idea < ActiveRecord::Base
   end
   
   # list ideas the user has voted on
-  def self.list_voted_ideas(page, user, properties)
-    list(page, user, properties, 
+  def self.list_voted_ideas(page, user, properties, do_paginate)
+    list(page, user, properties, do_paginate, 
       "exists (select null from votes as v where v.idea_id = ideas.id and v.user_id = ?)",
       user.id)
   end
   
   # list ideas the user created
-  def self.list_my_ideas(page, user, properties)
-    list(page, user, properties, 
+  def self.list_my_ideas(page, user, properties, do_paginate)
+    list(page, user, properties, do_paginate, 
       "ideas.user_id = ?",
       user.id)
   end
   
   # list ideas filtered by tags
-  def self.list_by_tags(page, user, properties)
-    list(page, user, properties)
+  def self.list_by_tags(page, user, properties, do_paginate)
+    list(page, user, properties, do_paginate)
   end
   
   # list ideas the user has commented on
-  def self.list_commented_ideas(page, user, properties)
-    list(page, user, properties, 
+  def self.list_commented_ideas(page, user, properties, do_paginate)
+    list(page, user, properties, do_paginate, 
       "exists (select null from comments as c where c.idea_id = ideas.id and c.user_id = ?)",
       user.id)
   end
   
-  def self.list(page, user, properties, 
-      condition_string = nil, pcondition_params = nil, joins = nil,
-      order_by = 'ideas.created_at DESC', group_by = nil)
+  def self.list(page, 
+      user, 
+      properties, 
+      do_paginate,
+      condition_string = nil, 
+      pcondition_params = nil, 
+      joins = nil,
+      order_by = 'ideas.created_at DESC', 
+      group_by = nil)
     condition_params ||= [""]
     
     filter_by_author = properties[:author_filter]
@@ -125,18 +131,21 @@ class Idea < ActiveRecord::Base
     
     # no criteria set...null out the condition_params or you'll get a sql error
     condition_params = nil if condition_params[0] == ""
-    paginate :page => page, 
-      :conditions => condition_params,
-      :joins => joins,
-      :order => order_by, 
-      :group => group_by,
-      :per_page => user.row_limit, :include => ['product']
-  end
-  
-  def self.paginate_list ideas, page, per_page
-    paginate :page => page, 
-      :per_page => per_page,
-      :conditions => ["id in (?)", ideas.collect(&:id)]
+    
+    if do_paginate
+      paginate :page => page, 
+        :conditions => condition_params,
+        :joins => joins,
+        :order => order_by, 
+        :group => group_by,
+        :per_page => user.row_limit, :include => ['product']
+    else
+      Idea.find :all,
+        :conditions => condition_params,
+        :joins => joins,
+        :order => order_by, 
+        :group => group_by, :include => ['product']
+    end
   end
   
   def user_friendly_idea_name
@@ -161,6 +170,15 @@ class Idea < ActiveRecord::Base
   def formatted_description
     r = RedCloth.new description
     r.to_html
+  end
+  
+  def display_status
+    if (!merged_to_idea.nil?)
+      return "Merged"
+    elsif (!release.nil?)
+      return "Scheduled"
+    end
+    "Open"
   end
   
   def last_comment? comment

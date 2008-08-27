@@ -1,3 +1,6 @@
+require 'fastercsv'
+require 'csv'
+
 class IdeasController < ApplicationController
   helper :idea_action
   helper_method :tab_body_partial
@@ -66,42 +69,13 @@ class IdeasController < ApplicationController
       :author_filter => session[:author_filter],
       :tags_filter_ideas => Idea.find_tagged_with(session[:idea_tag_filter])
     }
-    case session[:idea_view_type]
-    when "my_ideas"
-      @ideas = Idea.list_my_ideas params[:page], current_user,
-        filter_properties
-    when "voted_ideas"
-      @ideas = Idea.list_voted_ideas params[:page], current_user,
-        filter_properties
-    when "commented_ideas"
-      @ideas = Idea.list_commented_ideas params[:page], current_user,
-        filter_properties
-    when "unread_comments"
-      @ideas = Idea.list_unread_comments params[:page], current_user,
-        filter_properties
-    when "watched"
-      @ideas = Idea.list_watched_ideas params[:page], current_user,
-        filter_properties
-    when "unread"
-      @ideas = Idea.list_unread_ideas params[:page], current_user,
-        filter_properties
-    when "most_votes"
-      @ideas = Idea.list_most_votes params[:page], current_user,
-        filter_properties
-    when "most_views"
-      @ideas = Idea.list_most_views params[:page], current_user,
-        filter_properties
-    when "tags"
-      @ideas = Idea.list_by_tags params[:page], current_user,
-        filter_properties
-    else
-      @ideas = Idea.list params[:page], current_user,
-        filter_properties
-    end
     
     respond_to do |format|
-      format.html {}
+      format.html {
+        @ideas = fetch_ideas filter_properties, true
+      }
       format.js  { 
+        @ideas = fetch_ideas filter_properties, true
         render :update do |page|
           page.replace "filtermenu", :partial => "filter_tabs"
           page.replace "data", :partial => "ideas_table"
@@ -111,6 +85,19 @@ class IdeasController < ApplicationController
           flash[:error].nil? ? (page.hide :flash_error) : (page.show :flash_error)
           flash.discard
         end
+      }
+      format.csv {
+        @ideas = fetch_ideas filter_properties, false
+        stream_csv do |csv|
+          cols = ["Idea #", "Title","Status","Votes","Product","Release"]
+          csv << cols
+          @ideas.each do |idea|
+            release = idea.release.version unless idea.release.nil?
+            cols = [idea.id, idea.title, idea.display_status, idea.votes.size,
+              idea.product.name, release]
+            csv << cols
+          end
+        end        
       }
     end
   end
@@ -270,6 +257,62 @@ class IdeasController < ApplicationController
   end
   
   private
+  
+  def fetch_ideas filter_properties, do_paginate
+    case session[:idea_view_type]
+    when "my_ideas"
+      @ideas = Idea.list_my_ideas params[:page], current_user,
+        filter_properties, do_paginate
+    when "voted_ideas"
+      @ideas = Idea.list_voted_ideas params[:page], current_user,
+        filter_properties, do_paginate
+    when "commented_ideas"
+      @ideas = Idea.list_commented_ideas params[:page], current_user,
+        filter_properties, do_paginate
+    when "unread_comments"
+      @ideas = Idea.list_unread_comments params[:page], current_user,
+        filter_properties, do_paginate
+    when "watched"
+      @ideas = Idea.list_watched_ideas params[:page], current_user,
+        filter_properties, do_paginate
+    when "unread"
+      @ideas = Idea.list_unread_ideas params[:page], current_user,
+        filter_properties, do_paginate
+    when "most_votes"
+      @ideas = Idea.list_most_votes params[:page], current_user,
+        filter_properties, do_paginate
+    when "most_views"
+      @ideas = Idea.list_most_views params[:page], current_user,
+        filter_properties, do_paginate
+    when "tags"
+      @ideas = Idea.list_by_tags params[:page], current_user,
+        filter_properties, do_paginate
+    else
+      @ideas = Idea.list params[:page], current_user,
+        filter_properties, do_paginate
+    end
+  end
+
+  def stream_csv
+    filename = "ideas.csv"    
+
+    #this is required if you want this to work with IE        
+    if request.env['HTTP_USER_AGENT'] =~ /msie/i
+      headers['Pragma'] = 'public'
+      headers["Content-type"] = "text/plain" 
+      headers['Cache-Control'] = 'private'
+      headers['Content-Disposition'] = "attachment; filename=\"#{filename}\"" 
+      headers['Expires'] = "0" 
+    else
+      headers["Content-Type"] ||= 'text/csv'
+      headers["Content-Disposition"] = "attachment; filename=\"#{filename}\"" 
+    end
+
+    render :text => Proc.new { |response, output|
+      csv = FasterCSV.new(output, :row_sep => "\r\n") 
+      yield csv
+    }
+  end  
   
   def do_rjs_toggle_search_box 
     render :update do |page|

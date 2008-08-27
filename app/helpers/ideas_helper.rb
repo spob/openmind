@@ -100,12 +100,7 @@ module IdeasHelper
 
   
   def status(idea)
-    if (!idea.merged_to_idea.nil?)
-      return "Merged"
-    elsif (!idea.release.nil?)
-      return "Scheduled"
-    end
-    "Open"
+    idea.display_status
   end
   
   def allow_schedule_to_release?
