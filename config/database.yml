@@ -27,7 +27,7 @@ defaults: &defaults
   encoding: utf8
 
 development:
-  database: OpenMind_demo
+  database: OpenMind_dev
   <<: *defaults
 
 # Warning: The database defined as 'test' will be erased and
