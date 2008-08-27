@@ -71,6 +71,11 @@ class Idea < ActiveRecord::Base
       user.id)
   end
   
+  # list ideas filtered by tags
+  def self.list_by_tags(page, user, properties)
+    list(page, user, properties)
+  end
+  
   # list ideas the user has commented on
   def self.list_commented_ideas(page, user, properties)
     list(page, user, properties, 
@@ -108,6 +113,11 @@ class Idea < ActiveRecord::Base
     condition_params = add_criteria(condition_params, 
       "title like ?", 
       "%#{title_filter}%") unless title_filter.nil? or title_filter.length == 0
+    
+    # tag filter
+    condition_params = add_criteria(condition_params,
+      "ideas.id in (?)", 
+      properties[:tags_filter_ideas]) unless properties[:tags_filter_ideas].nil? or properties[:tags_filter_ideas].empty?
     
     condition_params = add_criteria(condition_params, 
       condition_string, 
@@ -225,7 +235,8 @@ class Idea < ActiveRecord::Base
   def self.add_criteria(condition_params, condition_string, values = nil)
     condition_params[0] += " and " if condition_params[0].length > 0
     condition_params[0] += condition_string
-    condition_params += Array(values) unless values.nil?
+    condition_params += Array(values) unless values.nil? or values.is_a? Array
+    condition_params[condition_params.size] = values if !values.nil? and values.is_a? Array
     condition_params
   end
   

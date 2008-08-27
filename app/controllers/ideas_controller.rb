@@ -46,8 +46,10 @@ class IdeasController < ApplicationController
   def list    
     session[:idea_search_box_display] ||= "HIDE"
     session[:idea_view_type] = params[:view_type] unless params[:view_type].nil?
+    session[:idea_view_type] = nil if params[:reset] == "yes" and session[:idea_view_type] == 'tags'
     session[:idea_product_filter] = params[:product] unless params[:product].nil?
     session[:idea_release_filter] = params[:release] unless params[:release].nil?
+    session[:idea_tag_filter] = nil unless session[:idea_view_type] == 'tags'
     # note I test if params[:product].nil? because, if that's true, we're navigating
     # to this page from somewhere else, in case remember what it was before
     session[:title_filter] = params[:title_lookup] unless params[:product].nil?
@@ -61,7 +63,8 @@ class IdeasController < ApplicationController
       :product_filter => session[:idea_product_filter],
       :release_filter => session[:idea_release_filter],
       :title_filter => session[:title_filter],
-      :author_filter => session[:author_filter]        
+      :author_filter => session[:author_filter],
+      :tags_filter_ideas => Idea.find_tagged_with(session[:idea_tag_filter])
     }
     case session[:idea_view_type]
     when "my_ideas"
@@ -88,6 +91,9 @@ class IdeasController < ApplicationController
     when "most_views"
       @ideas = Idea.list_most_views params[:page], current_user,
         filter_properties
+    when "tags"
+      @ideas = Idea.list_by_tags params[:page], current_user,
+        filter_properties
     else
       @ideas = Idea.list params[:page], current_user,
         filter_properties
@@ -110,11 +116,10 @@ class IdeasController < ApplicationController
   end
   
   def tag
-    @ideas = Idea.paginate_list(Idea.find_tagged_with(params[:id]), 
-      params[:page], 
-      current_user.row_limit)
+    #    render :action => 'list'
     session[:idea_view_type] = "tags"
-    render :action => 'list'
+    session[:idea_tag_filter] = params[:id]
+    redirect_to :action => :list
   end
   
   def jump_to

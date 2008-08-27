@@ -40,9 +40,11 @@
         <label></label>
         <%= submit_tag 'Search', :name => nil, :class=> "button" %>
         <%= link_to 'Clear Filters',
-        options = { :product =>0, 
+        options = { :product => 0, 
           :release => 0, 
           :author => nil,
+          :tags => nil,
+          :reset => 'yes',
           :title_lookup => nil}, 
         html_options = {:class=> "button"}
         -%>
