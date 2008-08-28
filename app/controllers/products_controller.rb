@@ -1,6 +1,6 @@
 class ProductsController < ApplicationController
   before_filter :login_required
-  access_control [:new, :commit, :show, :edit, :create, :update, :destroy] => 'prodmgr'
+  access_control [:new, :commit, :edit, :create, :update, :destroy] => 'prodmgr'
   
   def index
     @products = Product.list params[:page], current_user.row_limit

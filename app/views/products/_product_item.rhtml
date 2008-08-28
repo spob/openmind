@@ -20,12 +20,12 @@
         <% end %>
         </td>
       <td>
+        <%= link_to theme_image_tag("icons/16x16/viewAction.png", :alt=>"view", :title=> "view"),
+          product_path(product_item), 
+          html_options = {
+          :onmouseover => "Tip('View details for this product')"} 
+        %>
         <% if prodmgr? %>
-	        <%= link_to theme_image_tag("icons/16x16/viewAction.png", :alt=>"view", :title=> "view"),
-	          product_path(product_item), 
-	          html_options = {
-	          :onmouseover => "Tip('View details for this product')"} 
-	        %>
 	        <%= link_to theme_image_tag("icons/16x16/editAction.png", :alt=>"edit", :title=> "edit"), 
 	          edit_product_path(product_item),
 	          html_options = {

@@ -6,11 +6,11 @@
       :class=> "button", :onmouseover => "Tip('Return to list releases')" }%>
   </div>
 <% end %>
-<div class="formTitle">Release Detail for Product <%= @release.product.name %></div>
+<div class="formTitle">Detail for Release <%=h @release.version %></div>
 <div class="cssform widerLabel">
   <p>
-    <label for="release_version">Version:</label>
-    <%=h @release.version %>
+    <label for="release_product">Product:</label>
+    <%= link_to @release.product.name, product_path(@release.product.id) %>
   </p>
   <p>
     <label for="release_version">Release Status:</label>

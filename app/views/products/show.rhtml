@@ -1,17 +1,21 @@
 <%content_for :head do -%>
-  <%= theme_stylesheet_link_tag 'forms' %>
-  <%= theme_stylesheet_link_tag 'tables' %>
-  <%= javascript_include_tag "tablecloth" %>                
+      <%= theme_stylesheet_link_tag 'forms' %>
+      <%= theme_stylesheet_link_tag 'tables' %>
+      <%= javascript_include_tag "tablecloth" %>                
 <%end%>
 <%= javascript_include_tag "wz_tooltip.js" %> 
 <div id="actionButtons2">
-  <%= link_to 'Edit', edit_product_url(@product), html_options = {:class=> "button",
-  :onmouseover => "Tip('Edit this product')"} %>
-  <%= link_to 'List Products', products_path , html_options = {:class=> "button",
+  <% if prodmgr? %>
+    <%= link_to 'Edit', edit_product_url(@product), html_options = {:class=> "button",
+        :onmouseover => "Tip('Edit this product')"} %>
+<% end %>
+<%= link_to 'List Products', products_path , html_options = {:class=> "button",
     :onmouseover => "Tip('Return to list products')"}%>
+  <% if prodmgr? %>
   <%= link_to 'List Releases', releases_path(:product_id => @product.id),
           html_options = {:class=> "button",
           :onmouseover => "Tip('View releases for this product')"} %>
+<% end %>
 </div>
 <div class="formTitle">Product Detail</div>
 <div class="cssform">
@@ -26,14 +30,14 @@
   <p>
     <label for="description">Active:</label>
     <input type="checkbox" name="active" value="active" <%= "checked" if @product.active?  %> disabled />
-         </p>
+  </p>
 </div>
 <br/>
 <h3><%= link_to 'Releases',
     releases_path(:product_id => @product.id),
     html_options = {
     :onmouseover => "Tip('View releases for this product')"}
-  %>
+%>
 </h3>
 <table cellspacing="0" cellpadding="0" class="cssform" width="25%">
   <tr>
@@ -49,24 +53,24 @@
       <td><%= h nvl(format_date(release.release_date), '-') %></td>
       <td><%= h nvl(release.user_release_date, '-') %></td>
       <td><%= h release.release_status.description %></td>
-	    <td>
-	      <%= link_to theme_image_tag("icons/16x16/viewAction.png", :alt=>"view", :title=> "view"),
-	      release_path(release), 
-	      html_options = {
-	      :onmouseover => "Tip('View details for this release')"} %>
-	      
-	      <%= link_to theme_image_tag("icons/16x16/editAction.png", :alt=>"edit", :title=> "edit"), 
-	      edit_release_path(release),
-	      html_options = {
-	      :onmouseover => "Tip('Edit this release')"}
-	  	  %>
-	
-	  	  <%= link_to(
-	      theme_image_tag("icons/16x16/deleteAction.png", :alt=>"delete", :title=> "delete"),
-	      release_path(release),
-	      html_options = {:confirm => 'Are you sure?', :method => :delete,
-	          :onmouseover => "Tip('Delete this release')"} ) if release.can_delete? %>
-		</td>
+      <td>
+        <%= link_to theme_image_tag("icons/16x16/viewAction.png", :alt=>"view", :title=> "view"),
+            release_path(release), 
+            html_options = {
+            :onmouseover => "Tip('View details for this release')"} %>
+    
+        <%= link_to theme_image_tag("icons/16x16/editAction.png", :alt=>"edit", :title=> "edit"), 
+            edit_release_path(release),
+            html_options = {
+            :onmouseover => "Tip('Edit this release')"}
+            %>
+
+            <%= link_to(
+            theme_image_tag("icons/16x16/deleteAction.png", :alt=>"delete", :title=> "delete"),
+            release_path(release),
+            html_options = {:confirm => 'Are you sure?', :method => :delete,
+                    :onmouseover => "Tip('Delete this release')"} ) if release.can_delete? %>
+      </td>
     </tr>
   <% end %>
 </table>
