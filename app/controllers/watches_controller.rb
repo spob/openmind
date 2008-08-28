@@ -180,6 +180,7 @@ class WatchesController < ApplicationController
     render :update do |page|
       page.replace_html :flash_notice, flash_notice_string(flash[:notice]) 
       page.replace_html :flash_error,  flash_error_string(flash[:error])
+      page.replace_html "topic_watchers#{@topic.id.to_s}", @topic.watchers.size
       flash[:notice].nil? ? (page.hide :flash_notice) : (page.show :flash_notice)
       flash[:error].nil? ? (page.hide :flash_error) : (page.show :flash_error)
       flash.discard
