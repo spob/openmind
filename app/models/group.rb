@@ -4,7 +4,8 @@ class Group < ActiveRecord::Base
   validates_presence_of :description
   validates_length_of   :name, :maximum => 50
   validates_length_of   :description, :maximum => 150
-  has_and_belongs_to_many :users, :join_table => 'group_members', :class_name => 'User'
+  has_and_belongs_to_many :users, :join_table => 'group_members', 
+    :class_name => 'User', :order => 'email ASC'
   has_and_belongs_to_many :forums
   
   def can_delete?
