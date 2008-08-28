@@ -20,6 +20,12 @@ class WatchesController < ApplicationController
   def create_forum_watch
     begin
       @forum = Forum.find(params[:id])
+      
+      unless @forum.can_see? current_user or prodmgr?
+        flash[:error] = "You have insuffient permissions to access forum"
+        redirect_to forums_path
+      end
+      
       @forum.watchers << current_user
       @forum.watch_all_topics current_user
     rescue ActiveRecord::RecordNotFound     
@@ -45,6 +51,12 @@ class WatchesController < ApplicationController
   def create_topic_watch
     begin
       @topic = Topic.find(params[:id])
+      
+      unless @topic.forum.can_see? current_user or prodmgr?
+        flash[:error] = "You have insuffient permissions to access forum"
+        redirect_to forums_path
+      end
+      
       @topic.watchers << current_user
     rescue ActiveRecord::RecordNotFound     
       logger.error("Attempt to add watch to invalid topic #{params[:id]}")
@@ -117,6 +129,12 @@ class WatchesController < ApplicationController
   def destroy_forum_watch
     begin
       @forum = Forum.find(params[:id])
+      
+      unless @forum.can_see? current_user or prodmgr?
+        flash[:error] = "You have insuffient permissions to access forum"
+        redirect_to forums_path
+      end
+      
       @forum.watchers.delete(current_user)
     rescue ActiveRecord::RecordNotFound     
       logger.error("Attempt to remove watch from invalid forum #{params[:id]}")
@@ -140,6 +158,12 @@ class WatchesController < ApplicationController
   def destroy_topic_watch
     begin
       @topic = Topic.find(params[:id])
+      
+      unless @topic.forum.can_see? current_user or prodmgr?
+        flash[:error] = "You have insuffient permissions to access forum"
+        redirect_to forums_path
+      end
+      
       @topic.watchers.delete(current_user)
     rescue ActiveRecord::RecordNotFound     
       logger.error("Attempt to remove watch from invalid topic #{params[:id]}")

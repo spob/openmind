@@ -15,12 +15,19 @@ class TopicsController < ApplicationController
   
   def new
     forum = Forum.find(params[:forum_id])
+    
+    unless forum.can_see? current_user or prodmgr?
+      flash[:error] = "You have insuffient permissions to access forum"
+      redirect_to forums_path
+      return
+    end
+    
     @topic = Topic.new(:forum => forum)
     @comment = TopicComment.new(:topic => @topic)
   end
 
   def create
-    forum_id = params[:forum_id]
+    forum_id = params[:forum_id]      
     @topic = Topic.new(params[:topic])
     @topic.forum_id = forum_id
     @topic.user = current_user
@@ -54,6 +61,10 @@ class TopicsController < ApplicationController
   
   def show
     @topic = Topic.find(params[:id])
+    unless @topic.forum.can_see? current_user or prodmgr?
+      flash[:error] = "You have insuffient permissions to access forum"
+      redirect_to forums_path
+    end
     @topic.add_user_read(current_user).save
   end
 
@@ -68,6 +79,11 @@ class TopicsController < ApplicationController
 
   def edit
     @topic = Topic.find(params[:id])
+    
+    unless @topic.forum.can_see? current_user or prodmgr?
+      flash[:error] = "You have insuffient permissions to access forum"
+      redirect_to forums_path
+    end
   end
 
   def update
@@ -82,22 +98,24 @@ class TopicsController < ApplicationController
   
   def search
     @forum = Forum.find(params[:forum_id])
-  	hits = {}
-  	session[:forums_search] = params[:search]
-  	Topic.find_with_index(params[:search]).each do |topic|
-  		hits[topic.id] = TopicHit.new(topic, true)
-  	end
-  	TopicComment.find_with_index(params[:search]).each do |comment|
-  		# first see if topic hit already exists
-  		topic_hit = hits[comment.topic.id]
-		if topic_hit.nil?
-	  		hit = TopicHit.new(comment.topic, false)
-	  		hit.comments << comment 
-	  		hits[comment.topic.id] = hit
-		else
-			topic_hit.comments << comment
-  		end	
-  	end
-  	@hits = hits.values.find_all{ |hit| hit.topic.forum == @forum }
+    hits = {}
+    session[:forums_search] = params[:search]
+    Topic.find_with_index(params[:search]).each do |topic|
+      hits[topic.id] = TopicHit.new(topic, true) if topic.forum.can_see?(current_user) or prodmgr?
+    end
+    TopicComment.find_with_index(params[:search]).each do |comment|
+      if comment.topic.forum.can_see?(current_user) or prodmgr?
+        # first see if topic hit already exists
+        topic_hit = hits[comment.topic.id]
+        if topic_hit.nil?
+          hit = TopicHit.new(comment.topic, false)
+          hit.comments << comment 
+          hits[comment.topic.id] = hit
+        else
+          topic_hit.comments << comment
+        end	
+      end
+    end
+    @hits = hits.values.find_all{ |hit| hit.topic.forum == @forum }
   end
 end
