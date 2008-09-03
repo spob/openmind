@@ -13,7 +13,24 @@ class UsersController < ApplicationController
     :redirect_to => { :action => :list }
 
   def list
-    @users = User.list params[:page], current_user.row_limit
+    session[:users_start_filter] = params[:start_filter] unless params[:start_filter].nil?
+    session[:users_end_filter] = params[:end_filter] unless params[:end_filter].nil?
+    session[:users_start_filter] = "All" if session[:users_start_filter].nil?
+    session[:users_end_filter] = "All" if session[:users_end_filter].nil?
+    count = User.count
+    if count > 100
+      @tag1_begin = User.find(:first, :select => "email", :order => "email").email
+      @tag1_end = User.find(:first, :select => "email", :offset => count/5, :order => "email").email
+      @tag2_begin = User.find(:first, :select => "email", :offset => count/5 + 1, :order => "email").email
+      @tag2_end = User.find(:first, :select => "email", :offset => 2*count/5, :order => "email").email
+      @tag3_begin = User.find(:first, :select => "email", :offset => 2*count/5 + 1, :order => "email").email
+      @tag3_end = User.find(:first, :select => "email", :offset => 3*count/5, :order => "email").email
+      @tag4_begin = User.find(:first, :select => "email", :offset => 3*count/5 + 1, :order => "email").email
+      @tag4_end = User.find(:first, :select => "email", :offset => 4*count/5, :order => "email").email
+      @tag5_begin = User.find(:first, :select => "email", :offset => 4*count/5 + 1, :order => "email").email
+      @tag5_end = User.find(:first, :select => "email", :offset => count-1, :order => "email").email
+    end
+    @users = User.list params[:page], current_user.row_limit, session[:users_start_filter], session[:users_end_filter]
   end
 
   def show

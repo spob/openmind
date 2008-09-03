@@ -9,9 +9,12 @@ class Enterprise < ActiveRecord::Base
     :order => "created_at ASC"   
   has_many :votes, :through => :allocations, :order => "votes.id ASC"
   
-  def self.list(page, per_page)
+  def self.list(page, per_page, start_filter, end_filter)
     paginate :page => page, :order => 'name', 
-      :per_page => per_page
+      :per_page => per_page,
+      :conditions => ["(name >= ? and name <= ?) or ? = 'All'",
+      start_filter, end_filter, start_filter
+    ]
   end
   
   def self.active_enterprises

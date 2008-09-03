@@ -145,9 +145,12 @@ class User < ActiveRecord::Base
     available_user_votes + available_enterprise_votes
   end
     
-  def self.list(page, per_page)
+  def self.list(page, per_page, start_filter, end_filter)
     paginate :page => page, :order => 'email', 
-      :per_page => per_page, :include => 'enterprise'
+      :per_page => per_page, :include => 'enterprise',
+      :conditions => ["(email >= ? and email <= ?) or ? = 'All'",
+      start_filter, end_filter, start_filter
+    ]
   end
   
   def self.active_users
