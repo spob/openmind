@@ -7,7 +7,6 @@ class ActsAsTaggableMigration < ActiveRecord::Migration
     create_table :taggings do |t|
       t.column :tag_id, :integer
       t.column :taggable_id, :integer
-      t.column :cached_tag_list, :string
 
       
       # You should make sure that the column created is
