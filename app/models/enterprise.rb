@@ -36,10 +36,11 @@ class Enterprise < ActiveRecord::Base
   end  
   
   def available_votes
-    enterprise_allocations = allocations.sum(:quantity)
-    enterprise_allocations ||= 0
-    
-    enterprise_allocations - votes.size
+    enterprise_allocations = 0
+    for allocation in active_allocations
+      enterprise_allocations += allocation.quantity - allocation.votes.size
+    end
+    enterprise_allocations
   end
 
 
