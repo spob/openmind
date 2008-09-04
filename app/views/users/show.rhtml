@@ -87,7 +87,7 @@
   </p>
   <p>
     <label>Vote History:</label><br />
-  <% for vote in @user.votes %>
+  <% for vote in @user.all_votes %>
     &bull;&nbsp;Idea <%=h vote.idea.user_friendly_idea_name %>, voted for on <%=om_date_time(vote.created_at) %><br />
   <% end %>
   </p>
