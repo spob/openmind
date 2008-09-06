@@ -2,6 +2,7 @@
   <tr>
     <td><%= h group_item.name %></td>
     <td><%= h group_item.description %></td>
+    <td><%= group_item.users.count %></td>
     <td>
         <div id="action_buttons<%= group_item.id %>">
           <%= link_to theme_image_tag("icons/16x16/viewAction.png", :alt=>"view", :title=> "view"),

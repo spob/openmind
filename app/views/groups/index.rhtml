@@ -16,12 +16,14 @@
   <tr>
     <th>Group</th>
     <th>Description</th>
+    <th>Members</th>
     <th>Action</th>
   </tr>  
   <tr>
     <% form_for :group, :url => groups_path do |form| %>
       <td><%= form.text_field :name, { :size => 40, :maxlength => 50 } %></td>
       <td><%= form.text_field :description, { :size => 60, :maxlength => 150 } %></td>
+      <td>0</td>
       <td><%= submit_tag 'Create', options = {:class=> "button", :disable_with => "Please wait...",
         :onmouseover => "Tip('Create a new group')"} %></td>
     <% end %>
