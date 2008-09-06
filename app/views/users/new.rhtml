@@ -46,6 +46,15 @@
         </span>
       <% end %>
     </p>
+    <p>
+      <label>User Groups:</label>
+      <% for group in Group.list_all %>
+        <span style="display:block;margin-left:10px;">
+          <%= check_box_tag "user[group_ids][]", group.id, @user.groups.include?(group) %>
+          <%= h group.name %>: <%= h group.description %>
+        </span>
+      <% end %>
+    </p>
     <% if !CustomField.users_custom_boolean1.nil? %>
     <p>
       <label for="custom_boolean1"><%= CustomField.users_custom_boolean1 %>:</label>
