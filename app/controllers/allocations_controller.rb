@@ -102,16 +102,16 @@ class AllocationsController < ApplicationController
     users = User.active_voters
     enterprises = Enterprise.find(:all, :order => "name ASC")
     stream_csv do |csv|
-      cols = ["type", "email","name","enterprise","allocation qty","expire days","comments"]
+      cols = ["type", "email","name","enterprise","user groups", "allocation qty","expire days","comments"]
       cols << CustomField.users_custom_boolean1 unless CustomField.users_custom_boolean1.nil?
       csv << cols
       enterprises.each do |e|
-        cols = ["Enterprise", "","",e.name,0,APP_CONFIG['allocation_expiration_days'],""]
+        cols = ["Enterprise", "","",e.name,"",0,APP_CONFIG['allocation_expiration_days'],""]
         cols << "" unless CustomField.users_custom_boolean1.nil?
         csv << cols
       end
       users.each do |u|
-        cols =  ["User", u.email,u.full_name,u.enterprise.name,0,APP_CONFIG['allocation_expiration_days'],""]
+        cols =  ["User", u.email,u.full_name,u.enterprise.name,array_to_string(u.groups.collect(&:name)), 0,APP_CONFIG['allocation_expiration_days'],""]
         cols << u.custom_boolean1 unless CustomField.users_custom_boolean1.nil?
         csv << cols
       end
@@ -133,7 +133,7 @@ class AllocationsController < ApplicationController
       n += 1
       type = row[0]
       begin
-        qty = Integer(row[4])
+        qty = Integer(row[5])
       rescue ArgumentError
         @errors << "Record #{n}: '#{row[4]}' is an invalid value for allocation qty. Must be an integer"
         next
@@ -143,17 +143,17 @@ class AllocationsController < ApplicationController
         next
       end
       
-      if (row[6].nil? || row[6].empty?)
+      if (row[7].nil? || row[7].empty?)
         comments = base_comments
       else
-        comments = "#{row[6]} (#{base_comments})" 
+        comments = "#{row[7]} (#{base_comments})" 
       end
       next if qty == 0
       
       begin
-        expire_days = Integer(row[5])
+        expire_days = Integer(row[6])
       rescue ArgumentError
-        @errors << "Record #{n}: '#{row[5]}' is an invalid value for expire days. Must be an integer"
+        @errors << "Record #{n}: '#{row[6]}' is an invalid value for expire days. Must be an integer"
         next
       end
       if expire_days <= 0
@@ -261,5 +261,14 @@ class AllocationsController < ApplicationController
         page.visual_effect :blind_down, "hide_images", :duration => 1
       end
     end
+  end
+  
+  def array_to_string(ary)
+    return "" if ary.nil? or ary.size == 0
+    buf = ary.pop
+    for a in ary
+      buf += ", #{a}"
+    end
+    buf
   end
 end
