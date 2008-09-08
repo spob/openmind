@@ -12,7 +12,7 @@ module IdeasHelper
     ["I have commented on", "commented_ideas"],
     ["Most popular", "most_votes"],
     ["Most viewed", "most_views"],
-    ["By tags", "tags", "tag_cloud"],
+    ["By tag", "tags", "tag_cloud"],
   ]
   
   def calc_titles_for_lookup
