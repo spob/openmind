@@ -38,12 +38,27 @@ class EnterprisesController < ApplicationController
   
   def create
     @enterprise = Enterprise.new(params[:enterprise])
+    parse_error = nil
     if allocmgr? and @enterprise.initial_allocation.length > 0
-      puts "=========#{@enterprise.initial_allocation}"
-      qty = @enterprise.initial_allocation.to_i
-      puts qty
+      qty = Integer(@enterprise.initial_allocation) rescue parse_error = "Available votes must be an integer value"
+      parse_error = "Available votes cannot be less than zero" if parse_error.nil? and qty < 0
+      if !parse_error.nil?
+        flash[:error] = parse_error
+        index
+        render :action => 'index'
+        return
+      elsif qty > 0
+        alloc = EnterpriseAllocation.new(
+          :quantity => qty, 
+          :comments => "",
+          :expiration_date => Date.jd(Date.today.jd + APP_CONFIG['allocation_expiration_days']))
+      end
     end
     if @enterprise.save
+      unless alloc.nil?
+        alloc.enterprise = @enterprise
+        alloc.save
+      end
       flash[:notice] = "Enterprise #{@enterprise.name} was successfully created."
       redirect_to enterprises_path
     else
