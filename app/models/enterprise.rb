@@ -3,6 +3,9 @@ class Enterprise < ActiveRecord::Base
   validates_uniqueness_of :name 
   validates_length_of :name, :maximum => 50
   
+  attr_accessor :initial_allocation # to allow user to create an allocation at the
+                                    # same time they create an enterprise
+  
   has_many :users,:dependent => :destroy, :order => "email ASC"   
   has_many :allocations,:dependent => :destroy, :order => "created_at ASC"  
   has_many :active_allocations, :conditions => ["expiration_date > ?", DateTime.now.to_s(:db)], 

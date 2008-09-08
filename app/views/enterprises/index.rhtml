@@ -35,7 +35,13 @@
   <% form_for :enterprise, :url => enterprises_path do |form| %>
     <tr>
       <td> <%= form.text_field :name, { :size => 50, :maxlength => 50 } %></td>
-      <td class="center">0</td>
+      <td class="center">
+        <% if allocmgr? %>
+            <%= form.text_field :initial_allocation, { :size => 3, :maxlength => 3 } %>
+        <% else %>
+          0
+        <% end %>
+      </td>
       <td class="center">0</td>
       <td class="center">Active</td>
       <td><%= submit_tag 'Create', html_options = {:class=> "button", :disable_with => "Please wait...",

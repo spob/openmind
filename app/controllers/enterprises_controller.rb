@@ -10,6 +10,7 @@ class EnterprisesController < ApplicationController
   
   
   def index
+    @enterprise ||= Enterprise.new(:initial_allocation => 0)
     session[:enterprise_start_filter] = params[:start_filter] unless params[:start_filter].nil?
     session[:enterprise_end_filter] = params[:end_filter] unless params[:end_filter].nil?
     session[:enterprise_start_filter] = "All" if session[:enterprise_start_filter].nil?
@@ -37,6 +38,11 @@ class EnterprisesController < ApplicationController
   
   def create
     @enterprise = Enterprise.new(params[:enterprise])
+    if allocmgr? and @enterprise.initial_allocation.length > 0
+      puts "=========#{@enterprise.initial_allocation}"
+      qty = @enterprise.initial_allocation.to_i
+      puts qty
+    end
     if @enterprise.save
       flash[:notice] = "Enterprise #{@enterprise.name} was successfully created."
       redirect_to enterprises_path
