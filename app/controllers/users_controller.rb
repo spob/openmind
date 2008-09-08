@@ -71,10 +71,30 @@ class UsersController < ApplicationController
     @user.login = @user.login.strip
     @user.hide_contact_info = params[:user][:hide_contact_info]
     if CustomField.users_custom_boolean1
-    @user.custom_boolean1 = params[:user][:custom_boolean1]
+      @user.custom_boolean1 = params[:user][:custom_boolean1]
     end
     @user.new_random_password
+    parse_error = nil
+    if allocmgr? and @user.initial_allocation.length > 0
+      qty = Integer(@user.initial_allocation) rescue parse_error = "Initial allocation quantity must be an integer value"
+      parse_error = "Initial allocation quantity cannot be less than zero" if parse_error.nil? and qty < 0
+      if !parse_error.nil?
+        flash[:error] = parse_error
+        setup_session_properties
+        render :action => 'new'
+        return
+      elsif qty > 0
+        alloc = UserAllocation.new(
+          :quantity => qty, 
+          :comments => "",
+          :expiration_date => Date.jd(Date.today.jd + APP_CONFIG['allocation_expiration_days']))
+      end
+    end
     if @user.save
+      unless alloc.nil?
+        alloc.user = @user
+        alloc.save
+      end
       flash[:notice] = "User #{@user.login} was successfully created."
       redirect_to :action => 'list'
     else
@@ -102,7 +122,7 @@ class UsersController < ApplicationController
   end
 
   def new
-    @user = User.new
+    @user = User.new(:initial_allocation => 0)
     # default timezone
     @user.time_zone = TimeZoneUtils.current_timezone.name
     setup_session_properties

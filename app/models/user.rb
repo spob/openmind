@@ -3,6 +3,8 @@ require 'digest/sha1'
 class User < ActiveRecord::Base
   # Virtual attribute for the unencrypted password
   attr_accessor :password
+  attr_accessor :initial_allocation # to allow user to create an allocation at the
+                                    # same time they create a user
   attr_protected :activated_at 
 
   validates_presence_of     :email, :row_limit, :last_name, :enterprise
