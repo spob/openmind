@@ -1,0 +1,27 @@
+<tr>
+  <td><%= h user_request_item.email %></td>
+  <td><%= h "#{user_request_item.first_name} #{user_request_item.last_name}".strip %></td>
+  <td><%= h user_request_item.enterprise_name %></td>
+  <td><%= format_date_time(user_request_item.created_at) %></td>
+  <td><%= h user_request_item.status %></td>
+  <td>
+    <%= link_to theme_image_tag("icons/16x16/viewAction.png", :alt=>"view", :title=> "view"),
+        user_request_path(user_request_item), 
+        html_options = {
+        :onmouseover => "Tip('View details for this account request')"} 
+    %>
+    <% if prodmgr? %>
+      <%= link_to theme_image_tag("icons/16x16/editAction.png", :alt=>"edit", :title=> "edit"), 
+          edit_user_request_path(user_request_item),
+          html_options = {
+          :onmouseover => "Tip('Edit this account request')"}
+      %>
+  
+      <%= link_to(
+          theme_image_tag("icons/16x16/deleteAction.png", :alt=>"delete", :title=> "delete"),
+          user_request_path(user_request_item),
+          html_options = {:confirm => 'Are you sure?', :method => :delete,
+              :onmouseover => "Tip('Delete this account request')"} ) if user_request_item.can_delete? %>
+<% end %>
+  </td>
+</tr>
