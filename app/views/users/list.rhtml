@@ -23,6 +23,11 @@
       html_options = {:class=> "button", 
       :onmouseover => "Tip('View user groups')",
       :method => :get } %>
+    <%= button_to 'Account Requests', 
+      user_requests_path, 
+      html_options = {:class=> "button", 
+      :onmouseover => "Tip('View account requests')",
+      :method => :get } %>
     <% end %>
 </div>
 

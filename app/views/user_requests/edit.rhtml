@@ -1,13 +1,13 @@
 <%content_for :bodyTag do -%>
-    <%= set_focus_to_id 'user_request_email' %>
+      <%= set_focus_to_id 'user_request_email' %>
 <%end%>
 <%= javascript_include_tag "wz_tooltip.js" %> 
 <%= error_messages_for 'user_request' %>
 <% form_for :user_request, :url => user_request_path(@user_request), 
-  :html => {:method => :put } do |form| %>
+    :html => {:method => :put } do |form| %>
   <div id="actionButtons2">
     <%= link_to 'List User Requests', user_requests_path, html_options = {:class=> "button",
-        :onmouseover => "Tip('List user requests')"} %>
+          :onmouseover => "Tip('List user requests')"} %>
   </div>
   <div class="formTitle"><%= theme_image_tag("icons/16x16/users.png", 
       options = {:alt=>"group"}) %>
@@ -25,9 +25,23 @@
       <label for="user_email">Last Name:</label><%= form.text_field :last_name, { } %>
     </p>
     <p>
-      <label for="enterprise_id">Enterprise:</label>
+      <label for="enterprise_id">User Enterprise Name:</label>
       <%= form.text_field :enterprise_name, {}  %>
     </p>
+    <p>
+      <label for="allocation type">Selected Enterprise:</label>
+      <%= form.collection_select :enterprise_id, @enterprises, :id, :name %>
+    </p>
+    <% if allocmgr? %>
+      <p>
+        <label for="initial_enterprise_allocation">Enterprise Allocation:</label>
+        <%= form.text_field :initial_enterprise_allocation, {}  %>
+      </p>
+      <p>
+        <label for="initial_user_allocation">User Allocation:</label>
+        <%= form.text_field :initial_user_allocation, {}  %>
+      </p>
+    <% end %>
     <p>
       <label for="time_zone">User Time Zone:</label>
       <%= form.time_zone_select :time_zone %>
@@ -35,9 +49,9 @@
     <p>
       <label></label>
       <%= submit_tag 'Save', html_options = {:class=> "button", :disable_with => "Please wait...",
-        :onmouseover => "Tip('Save changes to user request')"} %>
+          :onmouseover => "Tip('Save changes to user request')"} %>
       <%= link_to 'Cancel', user_request_path(@user_request), html_options = {:class=> "button",
-        :onmouseover => "Tip('Do not save changes to user request')"} %>
+          :onmouseover => "Tip('Do not save changes to user request')"} %>
     </p>
   </div>
 <% end %>

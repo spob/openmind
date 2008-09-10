@@ -30,7 +30,7 @@ ActionController::Routing::Routes.draw do |map|
       :collection => { :preview => :get, :list => :get }
   map.resources :topics, :collection => { :preview => :get, :search => :get }
   map.resources :user_logons
-  map.resources :user_requests
+  map.resources :user_requests, :member => { :approve => :post, :reject => :post }
   map.resources :votes, :collection => { :create_from_show => :post }
   map.resources :watches, :member => { :create_topic_watch => :post,  
     :destroy_topic_watch => :delete, :create_forum_watch => :post,  

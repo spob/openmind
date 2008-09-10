@@ -2,6 +2,9 @@
   <td><%= h user_request_item.email %></td>
   <td><%= h "#{user_request_item.first_name} #{user_request_item.last_name}".strip %></td>
   <td><%= h user_request_item.enterprise_name %></td>
+  <td><%= h(enterprise_action(user_request_item)) %></td>
+  <td><%= user_request_item.initial_enterprise_allocation %></td>
+  <td><%= user_request_item.initial_user_allocation %></td>
   <td><%= format_date_time(user_request_item.created_at) %></td>
   <td><%= h user_request_item.status %></td>
   <td>
@@ -10,7 +13,7 @@
         html_options = {
         :onmouseover => "Tip('View details for this account request')"} 
     %>
-    <% if prodmgr? %>
+    <% if prodmgr? and user_request_item.status == UserRequest.pending %>
       <%= link_to theme_image_tag("icons/16x16/editAction.png", :alt=>"edit", :title=> "edit"), 
           edit_user_request_path(user_request_item),
           html_options = {
@@ -22,6 +25,19 @@
           user_request_path(user_request_item),
           html_options = {:confirm => 'Are you sure?', :method => :delete,
               :onmouseover => "Tip('Delete this account request')"} ) if user_request_item.can_delete? %>
+      <% if user_request_item.status == UserRequest.pending %>
+      <%= button_to(
+          "Approve",
+          approve_user_request_path(user_request_item),
+          html_options = {:class=> "button", :method => :post,
+              :onmouseover => "Tip('Approve this account request')"} ) %>
+          
+      <%= button_to(
+          "Reject",
+          reject_user_request_path(user_request_item),
+          html_options = {:class=> "button", :confirm => 'Are you sure?', :method => :post,
+              :onmouseover => "Tip('Reject this account request')"} ) %>
+      <% end %>
 <% end %>
   </td>
 </tr>

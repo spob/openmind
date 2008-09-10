@@ -403,7 +403,7 @@ class IdeasController < ApplicationController
   class IdeaTagsChangeLog
     def calc_change_log before_idea, after_idea
       if before_idea.nondb_tag_list != after_idea.tag_list
-        return "Tags were updated to #{after_idea.tag_list}"
+        return "Tags were updated to: #{after_idea.tag_list}"
       end
     end
   end

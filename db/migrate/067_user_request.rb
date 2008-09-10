@@ -9,6 +9,8 @@ class UserRequest < ActiveRecord::Migration
       t.column "lock_version",              :integer,           :default => 0
       t.column "enterprise_name",           :string,            :null => false
       t.column "enterprise_id",             :integer,           :null => true
+      t.column "initial_enterprise_allocation",  :integer, :default => 0, :null => false
+      t.column "initial_user_allocation",   :integer, :default => 0, :null => false
       t.column "time_zone",                 :string,            :null => false
       t.column "status",                    :string,            :null => false, :limit => 10
     end

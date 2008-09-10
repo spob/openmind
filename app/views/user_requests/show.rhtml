@@ -1,40 +1,56 @@
 <%= javascript_include_tag "wz_tooltip.js" %> 
 <div id="actionButtons2">
+  <% if @user_request.status == UserRequest.pending %>
   <%= link_to 'Edit', edit_user_request_path(@user_request), html_options = {:class=> "button",
-            :onmouseover => "Tip('Edit this user request')"} %>
-    <%= link_to 'List Account Requests', user_requests_path , html_options = {:class=> "button",
-            :onmouseover => "Tip('List account requests')"} %>
-  </div>
-  <div class="formTitle">
-    <%= theme_image_tag("icons/16x16/userEdit.png", 
-        options = {:alt=>"OpenMind Account Request Detail"}) %>Account Request Detail</div>
-  <div class="cssform">
+                :onmouseover => "Tip('Edit this user request')"} %>
+          <% end %>
+<%= link_to 'List Account Requests', user_requests_path , html_options = {:class=> "button",
+              :onmouseover => "Tip('List account requests')"} %>
+</div>
+<div class="formTitle">
+  <%= theme_image_tag("icons/16x16/userEdit.png", 
+            options = {:alt=>"OpenMind Account Request Detail"}) %>Account Request Detail</div>
+<div class="cssform">
+  <p>
+    <label for="user_email">Email:</label>
+    <%= @user_request.email %>
+  </p>
+  <p>
+    <label for="user_email">First Name:</label>
+    <%= @user_request.first_name %>
+  </p>
+  <p>
+    <label for="user_email">Last Name:</label>
+    <%= @user_request.last_name %>
+  </p>
+  <p>
+    <label for="enterprise_name">Enterprise Name:</label>
+    <%= @user_request.enterprise_name  %>
+  </p>
+  <p>
+    <label for="enterprise_action">Enterprise Action:</label>
+    <%= h(enterprise_action(@user_request)) %>
+  </p>
+  <% if allocmgr? %>
     <p>
-      <label for="user_email">Email:</label>
-      <%= @user_request.email %>
+      <label for="initial_enterprise_allocation">Enterprise Allocation:</label>
+      <%= @user_request.initial_enterprise_allocation %>
     </p>
     <p>
-      <label for="user_email">First Name:</label>
-      <%= @user_request.first_name %>
+      <label for="initial_user_allocation">User Allocation:</label>
+      <%= @user_request.initial_user_allocation %>
     </p>
-    <p>
-      <label for="user_email">Last Name:</label>
-      <%= @user_request.last_name %>
-    </p>
-    <p>
-      <label for="enterprise_name">Enterprise Name:</label>
-      <%= @user_request.enterprise_name  %>
-    </p>
-    <p>
-      <label for="status">Status:</label>
-      <%= @user_request.status  %>
-    </p>
-    <p>
-      <label for="time_zone">User Time Zone:</label>
-      <%= @user_request.time_zone %>
-    </p>
-    <p>
-      <label for="created_at">Requested At:</label>
-      <%= format_date_time(@user_request.created_at) %>
-    </p>
-  </div>
+  <% end %>
+  <p>
+    <label for="status">Status:</label>
+    <%= @user_request.status  %>
+  </p>
+  <p>
+    <label for="time_zone">User Time Zone:</label>
+    <%= @user_request.time_zone %>
+  </p>
+  <p>
+    <label for="created_at">Requested At:</label>
+    <%= format_date_time(@user_request.created_at) %>
+  </p>
+</div>

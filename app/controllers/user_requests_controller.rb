@@ -3,7 +3,7 @@ class UserRequestsController < ApplicationController
   access_control [:edit, :update, :destroy, :show, :index] => 'sysadmin'
   
   # GETs should be safe (see http://www.w3.org/2001/tag/doc/whenToUseGet.html)
-  verify :method => :post, :only => [:create ],
+  verify :method => :post, :only => [:create, :approve, :reject ],
     :redirect_to => { :action => :index }
   verify :method => :put, :only => [ :update ],
     :redirect_to => { :action => :index }
@@ -19,8 +19,11 @@ class UserRequestsController < ApplicationController
   def create
     @user_request = UserRequest.new(params[:user_request])
     @user_request.status = UserRequest.pending
+    @user_request.enterprise = Enterprise.find_by_active(true, 
+      :conditions => ["name like ?", "%#{@user_request.enterprise_name}%"], 
+      :order => "name ASC")
     if !User.find_by_email(@user_request.email).nil?
-      flash[:notice] = "An account already exists for #{@user_request.email}. Select the 'Forgot your password?' link below to retrieve your password."
+      flash[:error] = "An account already exists for #{@user_request.email}. Select the 'Forgot your password?' link below to retrieve your password."
       redirect_to :controller => 'account', :action => 'login'
     elsif @user_request.save
       flash[:notice] = 'Your account request has been received. You will receive an email when your account has been approved.'
@@ -46,6 +49,7 @@ class UserRequestsController < ApplicationController
 
   def edit
     @user_request = UserRequest.find(params[:id])
+    setup_values
   end
 
   def update
@@ -54,7 +58,71 @@ class UserRequestsController < ApplicationController
       flash[:notice] = 'Account request was successfully updated.'
       redirect_to user_requests_path
     else
+      setup_values
       render :action => 'edit'
     end
+  end
+  
+  def reject
+    @user_request = UserRequest.find(params[:id])
+    @user_request.status = UserRequest.rejected
+    if @user_request.save
+      flash[:notice] = "Account request '#{@user_request.email}' rejected"
+    end
+    redirect_to user_requests_path
+  end
+  
+  def approve
+    @user_request = UserRequest.find(params[:id])
+    
+    unless User.find_by_email(@user_request.email).nil?
+      flash[:error] = "User '#{@user_request.email}' already exists"
+      redirect_to user_requests_path
+      return
+    end
+    
+    if @user_request.enterprise.nil?
+      # is there an exact match?
+      enterprise = Enterprise.find_by_name(@user_request.enterprise_name)
+      if enterprise.nil?
+        Enterprise.new(:name => @user_request.enterprise_name).save! 
+        enterprise = Enterprise.find_by_name(@user_request.enterprise_name)
+      end
+    else
+      enterprise = @user_request.enterprise
+    end
+    
+    if @user_request.initial_enterprise_allocation > 0
+      EnterpriseAllocation.new(:quantity => @user_request.initial_enterprise_allocation,
+        :comments => "",
+        :enterprise => enterprise,
+        :expiration_date => Date.jd(Date.today.jd + APP_CONFIG['allocation_expiration_days'])).save!
+    end
+    
+    user = User.new(:email => @user_request.email, :first_name => @user_request.first_name,
+      :last_name => @user_request.last_name, :enterprise => enterprise)
+    user.new_random_password
+    user.save!
+    
+    if @user_request.initial_user_allocation > 0
+      UserAllocation.new(:quantity => @user_request.initial_user_allocation,
+        :comments => "",
+        :user => User.find_by_email(@user_request.email),
+        :expiration_date => Date.jd(Date.today.jd + APP_CONFIG['allocation_expiration_days'])).save!
+    end
+    
+    @user_request.status = UserRequest.approved
+    if @user_request.save
+      flash[:notice] = "Account request '#{@user_request.email}' approved"
+      redirect_to :controller => 'users', :action => 'show', :id => user
+    end
+  end
+  
+  private
+  
+  def setup_values
+    @enterprises = Enterprise.active_enterprises 
+    enterprise = Enterprise.new(:id => 0, :name => "Create new enterprise...") 
+    @enterprises.insert(0, enterprise)
   end
 end

@@ -20,10 +20,6 @@ class Enterprise < ActiveRecord::Base
     ]
   end
   
-  def self.active_enterprises
-    Enterprise.find_all_by_active(true, :order => "name ASC")
-  end
-  
   def active_allocations
     allocations.find(:all, 
       :conditions => ['expiration_date >= ?', (Date.today).to_s(:db)],
@@ -46,8 +42,7 @@ class Enterprise < ActiveRecord::Base
     enterprise_allocations
   end
 
-
   def self.active_enterprises
-    Enterprise.find_all_by_active(true, :order => "name")
+    Enterprise.find_all_by_active(true, :order => "name ASC")
   end
 end

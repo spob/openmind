@@ -1,19 +1,28 @@
 <%content_for :head do -%>
-      <%= theme_stylesheet_link_tag 'forms' %>
-      <%= theme_stylesheet_link_tag 'tables' %>
-      <%= javascript_include_tag "tablecloth" %>                
+        <%= theme_stylesheet_link_tag 'forms' %>
+        <%= theme_stylesheet_link_tag 'tables' %>
+        <%= javascript_include_tag "tablecloth" %>                
 <%end%>
 <%= javascript_include_tag "wz_tooltip.js" %> 
 <%= error_messages_for 'user_request' %>
 <h1>
   <%= theme_image_tag("icons/32x32/users.png", 
-          options = {:alt=>"OpenMind Account Requests"}) %>OpenMind Account Requests
+            options = {:alt=>"OpenMind Account Requests"}) %>OpenMind Account Requests
 </h1>
+<div id="actionButtons">
+  <%= button_to 'List Users', 
+      option = {:controller => 'users', :action => 'list'}, 
+      html_options = {:class=> "button", 
+      :onmouseover => "Tip('List users')"} %>
+</div>
 <table cellspacing="0" cellpadding="0" class="cssform">
   <tr>
     <th>Email</th>
     <th>Name</th>
     <th>Enterprise</th>
+    <th>Enterprise Action</th>
+    <th>Initial Enterprise Allocation</th>
+    <th>Initial User Allocation</th>
     <th>Requested At</th>
     <th>Status</th>
     <th>Action</th>
