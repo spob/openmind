@@ -1,4 +1,4 @@
-class UserRequest < ActiveRecord::Migration
+class AddUserRequest < ActiveRecord::Migration
   def self.up
     create_table :user_requests, :options => 'DEFAULT CHARSET=utf8', :force => true do |t|
       t.column "email",                     :string,            :null => false
