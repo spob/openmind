@@ -20,6 +20,10 @@ class Role < ActiveRecord::Base
     return false
   end  
   
+  def self.find_default_roles
+    Role.find_all_by_default_role(1)
+  end
+  
   def self.find_users_by_role(role_title)
     if @role_title.nil? or role_title != @role_title
       @role_title = role_title

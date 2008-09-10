@@ -81,40 +81,44 @@ class UserRequestsController < ApplicationController
       return
     end
     
-    if @user_request.enterprise.nil?
-      # is there an exact match?
-      enterprise = Enterprise.find_by_name(@user_request.enterprise_name)
-      if enterprise.nil?
-        Enterprise.new(:name => @user_request.enterprise_name).save! 
+    UserRequest.transaction do
+    
+      if @user_request.enterprise.nil?
+        # is there an exact match?
         enterprise = Enterprise.find_by_name(@user_request.enterprise_name)
+        if enterprise.nil?
+          Enterprise.new(:name => @user_request.enterprise_name).save! 
+          enterprise = Enterprise.find_by_name(@user_request.enterprise_name)
+        end
+      else
+        enterprise = @user_request.enterprise
       end
-    else
-      enterprise = @user_request.enterprise
-    end
     
-    if @user_request.initial_enterprise_allocation > 0
-      EnterpriseAllocation.new(:quantity => @user_request.initial_enterprise_allocation,
-        :comments => "",
-        :enterprise => enterprise,
-        :expiration_date => Date.jd(Date.today.jd + APP_CONFIG['allocation_expiration_days'])).save!
-    end
+      if @user_request.initial_enterprise_allocation > 0
+        EnterpriseAllocation.new(:quantity => @user_request.initial_enterprise_allocation,
+          :comments => "",
+          :enterprise => enterprise,
+          :expiration_date => Date.jd(Date.today.jd + APP_CONFIG['allocation_expiration_days'])).save!
+      end
     
-    user = User.new(:email => @user_request.email, :first_name => @user_request.first_name,
-      :last_name => @user_request.last_name, :enterprise => enterprise)
-    user.new_random_password
-    user.save!
+      user = User.new(:email => @user_request.email, :first_name => @user_request.first_name,
+        :last_name => @user_request.last_name, :enterprise => enterprise)
+      user.new_random_password
+      user.roles << Role.find_default_roles
+      user.save!
     
-    if @user_request.initial_user_allocation > 0
-      UserAllocation.new(:quantity => @user_request.initial_user_allocation,
-        :comments => "",
-        :user => User.find_by_email(@user_request.email),
-        :expiration_date => Date.jd(Date.today.jd + APP_CONFIG['allocation_expiration_days'])).save!
-    end
+      if @user_request.initial_user_allocation > 0
+        UserAllocation.new(:quantity => @user_request.initial_user_allocation,
+          :comments => "",
+          :user => User.find_by_email(@user_request.email),
+          :expiration_date => Date.jd(Date.today.jd + APP_CONFIG['allocation_expiration_days'])).save!
+      end
     
-    @user_request.status = UserRequest.approved
-    if @user_request.save
-      flash[:notice] = "Account request '#{@user_request.email}' approved"
-      redirect_to :controller => 'users', :action => 'show', :id => user
+      @user_request.status = UserRequest.approved
+      if @user_request.save!
+        flash[:notice] = "Account request '#{@user_request.email}' approved"
+        redirect_to :controller => 'users', :action => 'show', :id => user
+      end
     end
   end
   
