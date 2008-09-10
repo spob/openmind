@@ -8,6 +8,7 @@
   <td><%= format_date_time(user_request_item.created_at) %></td>
   <td><%= h user_request_item.status %></td>
   <td>
+    <span class="nobr">
     <%= link_to theme_image_tag("icons/16x16/viewAction.png", :alt=>"view", :title=> "view"),
         user_request_path(user_request_item), 
         html_options = {
@@ -39,5 +40,6 @@
               :onmouseover => "Tip('Reject this account request')"} ) %>
       <% end %>
 <% end %>
+  </span>
   </td>
 </tr>

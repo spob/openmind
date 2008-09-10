@@ -34,7 +34,23 @@ class UserRequestsController < ApplicationController
   end
   
   def index
-    @user_requests = UserRequest.list params[:page], current_user.row_limit
+    if params[:form_based] == "yes"
+      session[:user_requests_pending] = (params[UserRequest.pending].nil? ? "no" : "yes")
+      session[:user_requests_rejected] = (params[UserRequest.rejected].nil? ? "no" : "yes")
+      session[:user_requests_approved] = (params[UserRequest.approved].nil? ? "no" : "yes")
+    else
+      session[:user_requests_pending] ||= "yes"
+      session[:user_requests_pending] = params[UserRequest.pending] unless params[UserRequest.pending].nil?
+      session[:user_requests_rejected] ||= "no"
+      session[:user_requests_rejected] = params[UserRequest.rejected] unless params[UserRequest.rejected].nil?
+      session[:user_requests_approved] ||= "no"
+      session[:user_requests_approved] = params[UserRequest.approved] unless params[UserRequest.approved].nil?
+    end
+    statuses = []
+    statuses << UserRequest.pending if session[:user_requests_pending] == "yes"
+    statuses << UserRequest.approved if session[:user_requests_approved] == "yes"
+    statuses << UserRequest.rejected if session[:user_requests_rejected] == "yes"
+    @user_requests = UserRequest.list params[:page], current_user.row_limit, statuses
   end
 
   def destroy

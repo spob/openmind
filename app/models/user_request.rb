@@ -25,8 +25,9 @@ class UserRequest < ActiveRecord::Base
     "Approved"
   end
   
-  def self.list(page, per_page, limit = :all)
+  def self.list(page, per_page, statuses, limit = :all)
     paginate :page => page, 
+      :conditions => ["status in (?)", statuses],
       :order => 'created_at DESC' ,
       :limit => limit,
       :per_page => per_page
