@@ -9,7 +9,7 @@ class PeriodicJob < ActiveRecord::Base
       err_string = "'#{self.job}' could not run: #{$!.message}\n#{$!.backtrace}" 
       logger.error err_string
       puts err_string 
-      self.last_run_result = substr(err_string, 1, 500)
+      self.last_run_result = err_string.slice(1..500)
     end
     self.last_run_at = Time.now
     self.save  
