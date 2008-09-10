@@ -57,6 +57,13 @@ class User < ActiveRecord::Base
     [10, 25, 50, 100]
   end
   
+  def self.sysadmins
+    User.find(:all, 
+      :include => [:roles], 
+      :conditions => ['users.active = 1 and roles.title = ?', 'sysadmin'], 
+      :order => :email)
+  end
+  
   def user_logons_90_days
     user_logons.find(:all, :conditions => ['created_at > ?', (Time.now - 60*60*24*90).to_s(:db)])
   end

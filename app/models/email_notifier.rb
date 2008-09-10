@@ -42,8 +42,17 @@ class EmailNotifier < ActionMailer::Base
     @bcc = watcher_email_addresses comment.idea
   end
   
+  def new_user_request_notification(user_request_id)
+    setup_email
+    request = UserRequest.find(user_request_id)
+    @body[:email] = request.email
+    @body[:enterprise] = request.enterprise_name
+    @subject    += "User #{request.email} has requested an OpenMind account"
+    @recipients = User.sysadmins.collect(&:email)
+  end
+  
   def new_user_allocation_notification(allocation_id)
-  	allocation = UserAllocation.find(allocation_id)
+    allocation = UserAllocation.find(allocation_id)
     setup_allocation_email allocation
     @subject   += "You just received a new allocation for #{StringUtils.pluralize(allocation.quantity, 'unit')}"
     @recipients = allocation.user.email
@@ -51,7 +60,7 @@ class EmailNotifier < ActionMailer::Base
   end
   
   def new_enterprise_allocation_notification allocation_id
-  	allocation = EnterpriseAllocation.find(allocation_id)
+    allocation = EnterpriseAllocation.find(allocation_id)
     setup_allocation_email allocation
     @subject   += "#{allocation.enterprise.name} just received a new allocation for #{StringUtils.pluralize(allocation.quantity, 'unit')}"
     @recipients = ''
