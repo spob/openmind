@@ -1,0 +1,7 @@
+<tr>
+  <td><%= h periodic_job_item.type %></td>
+  <td><%= h periodic_job_item.job %></td>
+  <td><%= h format_date_time(periodic_job_item.last_run_at) %></td>
+  <td><%= h periodic_job_item.last_run_result %></td>
+  <td><%= h nvl(format_date_time(periodic_job_item.next_run_at), '-') %></td>
+</tr>

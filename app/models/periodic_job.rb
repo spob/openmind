@@ -1,5 +1,19 @@
 class PeriodicJob < ActiveRecord::Base
-
+  
+  def self.list(page, per_page)
+    paginate :page => page, 
+      :order => 'next_run_at DESC, last_run_at DESC',
+      :per_page => per_page
+  end
+  
+  def calc_next_run
+    throw exception
+  end
+  
+  def can_delete?
+    false  
+  end
+  
   # Runs a job and updates the +last_run_at+ field.
   def run!
     begin
@@ -12,10 +26,11 @@ class PeriodicJob < ActiveRecord::Base
       self.last_run_result = err_string.slice(1..500)
     end
     self.last_run_at = Time.now
+    self.calc_next_run
     self.save  
   end
 
   def to_s
-  	"#{self.class.to_s}: #{job}"
+    "#{self.class.to_s}: #{job}"
   end
 end

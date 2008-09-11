@@ -1,0 +1,20 @@
+<%content_for :head do -%>
+              <%= theme_stylesheet_link_tag 'forms' %>
+              <%= theme_stylesheet_link_tag 'tables' %>
+              <%= javascript_include_tag "tablecloth" %>                
+<%end%>
+<%= javascript_include_tag "wz_tooltip.js" %> 
+<h1>Periodic Jobs</h1>
+<table cellspacing="0" cellpadding="0" class="cssform">
+  <tr>
+    <th>Job</th>
+    <th>Command</th>
+    <th>Last Run</th>
+    <th>Last Result</th>
+    <th>Next Run</th>
+  </tr>
+  
+    <%= render :partial => 'periodic_job_item', :collection => @jobs %>
+
+</table>
+<p><%= will_paginate @jobs %></p>

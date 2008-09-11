@@ -1,7 +1,3 @@
-# 
-# To change this template, choose Tools | Templates
-# and open the template in the editor.
- 
 
 class DateUtils
   def self.time_to_datetime t

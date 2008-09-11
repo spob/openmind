@@ -15,6 +15,7 @@ module ApplicationHelper
       ["Releases",        list_releases_path,   [],                  [ "releases" ] ],
       ["Forums",          forums_path,          [],                  [ "topics" ] ],
       ["Lookup Codes",    lookup_codes_path,    ["sysadmin"]   ],
+      ["Jobs",            periodic_jobs_path,    ["sysadmin"]   ],
       ["Users",           "/users",             ["sysadmin", "allocmgr"], ["groups", "user_requests", "user_logons"] ],
       ["Enterprises",     enterprises_path,     ["sysadmin", "allocmgr"] ],
       ["Allocations",     allocations_path,                    ],

@@ -22,6 +22,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :groups
   map.resources :lookup_codes
   map.resources :merge_ideas
+  map.resources :periodic_jobs
   map.resources :polls, :member => { :publish => :post, :unpublish => :post,
     :present_survey => :get, :take_survey => :post}, 
     :collection => {:toggle_details => :get, :pie => :get }
