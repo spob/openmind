@@ -253,8 +253,13 @@ class Idea < ActiveRecord::Base
   def self.add_criteria(condition_params, condition_string, values = nil)
     condition_params[0] += " and " if condition_params[0].length > 0
     condition_params[0] += condition_string
-    condition_params += Array(values) unless values.nil? or values.is_a? Array
-    condition_params[condition_params.size] = values if !values.nil? and values.is_a? Array
+    
+    condition_params += Array(values) unless values.nil?
+#    condition_params += Array(values) unless values.nil? or values.is_a? Array
+#    condition_params[condition_params.size] = values if !values.nil? and values.is_a? Array
+#    (0..condition_params.length).each do |i|
+    #      puts "-->#{condition_params[i]}"
+    #    end
     condition_params
   end
   

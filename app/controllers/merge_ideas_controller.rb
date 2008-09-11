@@ -51,7 +51,7 @@ class MergeIdeasController < ApplicationController
     search_string = "%#{params[:id_title_filter]}%"
     @idea = Idea.find params[:id]
     @ideas = Idea.list params[:page], current_user,
-      {}, sql,
+      {}, true, sql,
       [search_string, search_string, @idea.id, @idea.product.id ]
   end
 end

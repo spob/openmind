@@ -11,10 +11,10 @@
 <%= error_messages_for 'idea' %>
 
 <div id="actionButtons2">
-  <%= link_to "Back to Edit", 
-    options = { :controller => 'ideas',  :action => 'edit', :id => @idea }, 
+  <%= link_to "Back to Show", 
+    options = { :controller => 'ideas',  :action => 'show', :id => @idea }, 
     html_options = {:class=> "button",
-    :onmouseover => "Tip('Return to edit idea for this idea')"} %>
+    :onmouseover => "Tip('Return to viewing details for this idea')"} %>
 </div>
 <h1>Merging idea "<%= @idea.user_friendly_idea_name %>"</h1>
 <h3>Select Idea to Merge into:</h3>
