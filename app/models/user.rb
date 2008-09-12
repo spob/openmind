@@ -64,6 +64,14 @@ class User < ActiveRecord::Base
       :order => :email)
   end
   
+  def sysadmin?
+    roles.collect(&:title).include? 'sysadmin'
+  end
+  
+  def prodmgr?
+    roles.collect(&:title).include? 'prodmgr'
+  end
+  
   def user_logons_90_days
     user_logons.find(:all, :conditions => ['created_at > ?', (Time.now - 60*60*24*90).to_s(:db)])
   end
