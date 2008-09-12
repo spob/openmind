@@ -1,2 +1,6 @@
 <h3>Comment Preview</h3>
-<%= textilize h(params[:comment][:body]) %>
+<% if prodmgr? or sysadmin? %>
+  <%= textilize params[:comment][:body] %>
+<% else %>
+  <%= textilize h(params[:comment][:body]) %>
+<% end %>
