@@ -1,58 +1,58 @@
 
-    <tr>
-      <div id="release_body<%= product_item.id %>" style="display:none;" >
-        <%  tagtip = "" %>
-        <% if product_item.current_release and !product_item.current_release.description.nil? and !product_item.current_release.description.strip.empty? %>        
+<tr>
+  <div id="release_body<%= product_item.id %>" style="display:none;" >
+    <%  tagtip = "" %>
+    <% if product_item.current_release and !product_item.current_release.description.nil? and !product_item.current_release.description.strip.empty? %>        
           <%  tagtip = "TagToTip('release_body#{product_item.id}')" %>
           <%= textilize(truncate(product_item.current_release.description, 500)) %>
-        <% end %>
-      </div>
-      <td><%= product_item.name %></td>
-      <td><%= product_item.description %></td>
-      <td class="center"><input type="checkbox" name="active" value="active" <%= "checked" if product_item.active?  %> disabled ></td>
-      <td class="center">
-        <% if product_item.current_release_version.nil? || product_item.current_release_version.strip.empty? %>
-            &nbsp;
-        <% else %>
+    <% end %>
+  </div>
+  <td><%= product_item.name %></td>
+  <td><%= product_item.description %></td>
+  <td class="center"><input type="checkbox" name="active" value="active" <%= "checked" if product_item.active?  %> disabled ></td>
+  <td class="center">
+    <% if product_item.current_release_version.nil? || product_item.current_release_version.strip.empty? %>
+      &nbsp;
+    <% else %>
             <%= link_to(h(product_item.current_release_version), release_path(product_item.current_release),
-                html_options = {
-                :onmouseover => tagtip } )  %>
-        <% end %>
-        </td>
-      <td>
-        <%= link_to theme_image_tag("icons/16x16/viewAction.png", :alt=>"view", :title=> "view"),
+                    html_options = {
+                        :onmouseover => tagtip } )  %>
+    <% end %>
+  </td>
+  <td style="white-space:nowrap;">
+    <%= link_to theme_image_tag("icons/16x16/viewAction.png", :alt=>"view", :title=> "view"),
           product_path(product_item), 
           html_options = {
           :onmouseover => "Tip('View details for this product')"} 
-        %>
-        <% if prodmgr? %>
-	        <%= link_to theme_image_tag("icons/16x16/editAction.png", :alt=>"edit", :title=> "edit"), 
-	          edit_product_path(product_item),
-	          html_options = {
-	          :onmouseover => "Tip('Edit this product')"}
-	        %>
-	      
-	        <%= link_to(
-	          theme_image_tag("icons/16x16/deleteAction.png", :alt=>"delete", :title=> "delete"),
-	          product_path(product_item),
-	          html_options = {:confirm => 'Are you sure?', :method => :delete,
-	            :onmouseover => "Tip('Delete this product')"} ) if product_item.can_delete? %>
-	      
-	        <%= link_to theme_image_tag("icons/16x16/releasesView.png", :alt=>"view releases", :title=> "view releases"),
-	          releases_path(:product_id => product_item.id),
-	          html_options = {
-	          :onmouseover => "Tip('View releases for this product')"}
-	        %>
-    	<% end %>
-      
-        <% if !product_item.current_release.nil? and !product_item.current_release.download_url.nil? and !product_item.current_release.download_url.strip.empty? %>
+    %>
+    <% if prodmgr? %>
+                 <%= link_to theme_image_tag("icons/16x16/editAction.png", :alt=>"edit", :title=> "edit"), 
+                       edit_product_path(product_item),
+                       html_options = {
+                       :onmouseover => "Tip('Edit this product')"}
+                 %>
+           
+                 <%= link_to(
+                       theme_image_tag("icons/16x16/deleteAction.png", :alt=>"delete", :title=> "delete"),
+                       product_path(product_item),
+                       html_options = {:confirm => 'Are you sure?', :method => :delete,
+                             :onmouseover => "Tip('Delete this product')"} ) if product_item.can_delete? %>
+           
+                 <%= link_to theme_image_tag("icons/16x16/releasesView.png", :alt=>"view releases", :title=> "view releases"),
+                       releases_path(:product_id => product_item.id),
+                       html_options = {
+                       :onmouseover => "Tip('View releases for this product')"}
+                 %>
+     <% end %>
+  
+    <% if !product_item.current_release.nil? and !product_item.current_release.download_url.nil? and !product_item.current_release.download_url.strip.empty? %>
           <%= link_to theme_image_tag("icons/16x16/download.png", :alt=>"download release", :title=> "download release"),
-          product_item.current_release.download_url,
-          html_options = {
-          :onmouseover => "Tip('Download release #{product_item.current_release_version}')"}
+              product_item.current_release.download_url,
+              html_options = {
+              :onmouseover => "Tip('Download release #{product_item.current_release_version}')"}
           %>
-        <% else %>
-            &nbsp;
-        <% end %>
-      </td>
-  </tr>
+    <% else %>
+      &nbsp;
+    <% end %>
+  </td>
+</tr>

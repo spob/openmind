@@ -6,7 +6,7 @@
   <td><%= bold_text(nvl(topic_item.user_topic_reads.sum(:views), '-'), topic_item.unread_comment?(current_user)) %></td>
   <td><div id="topic_watchers<%= topic_item.id %>"><%= topic_item.watchers.size %></div>
   <td><%= last_topic_post topic_item %></td>
-  <td>
+  <td style="white-space:nowrap;">
     <%=render(:partial => "topic_action", :object => topic_item)%>
     </td>
   </tr>

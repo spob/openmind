@@ -4,7 +4,7 @@
     <td><%= last_forum_post forum_item %></td>
     <td><%= forum_item.topics.count %></td>
     <td><%= forum_item.comments.count - forum_item.topics.count %></td>
-    <td>
+    <td style="white-space:nowrap;">
         <%=render(:partial => "forum_action", :object => forum_item)%>
     </td>
   </tr>
