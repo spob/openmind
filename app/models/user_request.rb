@@ -25,6 +25,10 @@ class UserRequest < ActiveRecord::Base
     "Approved"
   end
   
+  def self.pending_requests?
+    !UserRequest.find_by_status(pending).nil?
+  end
+  
   def self.list(page, per_page, statuses, limit = :all)
     paginate :page => page, 
       :conditions => ["status in (?)", statuses],

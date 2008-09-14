@@ -22,9 +22,10 @@ class AccountController < ApplicationController
           :expires => self.current_user.remember_token_expires_at }
       end
       redirect_back_or_default home_path
-      expire_msg = expiration_msg
-      flash[:notice] = "Logged in successfully" if expire_msg.nil?
-      flash[:error] = "Logged in successfully#{expire_msg}" unless expire_msg.nil?
+      login_msg = pending_user_requests_msg
+      login_msg = expiration_msg  if login_msg.nil?
+      flash[:notice] = "Logged in successfully" if login_msg.nil?
+      flash[:error] = "Logged in successfully. #{login_msg}" unless login_msg.nil?
     else
       flash[:error] = "Login failed...please try again"
     end
@@ -93,6 +94,10 @@ class AccountController < ApplicationController
       expiration_days = Allocation.expiring_allocation_days self.current_user
       allocation_expiration_warning_days = APP_CONFIG['allocation_expiration_warning_days'].to_i
       return nil if expiration_days > allocation_expiration_warning_days or allocation_expiration_warning_days == 0
-      ". You have allocations expiring in #{StringUtils.pluralize(expiration_days, 'day')} "
+      "You have allocations expiring in #{StringUtils.pluralize(expiration_days, 'day')} "
+  end
+  
+  def pending_user_requests_msg
+    "You have account requests pending approval. " if sysadmin? and UserRequest.pending_requests?
   end
 end
