@@ -1,4 +1,4 @@
-Instructions for installing RMagick on windows
+Instructions for installing RMagick on Windows
 
 1. Unzip the file RMagick-2.6.0-ImageMagick-6.4.3-6-Q8.zip to a temporary directory
 2. Install ImageMagick by executing the file ImageMagick-6.4.3-6-Q8-windows-dll.exe
