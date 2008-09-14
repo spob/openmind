@@ -1,12 +1,12 @@
 <%content_for :bodyTag do -%>
-    <%= set_focus_to_id 'user_request_email' %>
+      <%= set_focus_to_id 'user_request_email' %>
 <%end%>
 
 <%= error_messages_for 'user_request' %>
 <% form_for :user_request, :url => { :action => "create" } do |form| %>
   <div class="formTitle">
     <%= theme_image_tag("icons/16x16/userEdit.png", 
-        options = {:alt=>"Request OpenMind Account"}) %>
+          options = {:alt=>"Request OpenMind Account"}) %>
   Request OpenMind Account</div>
   <div class="cssform widerLabel">
     <p>
@@ -27,6 +27,10 @@
     <p>
       <label for="time_zone">User Time Zone:</label>
       <%= form.time_zone_select :time_zone %>
+    </p>
+    <p>
+      <label for="verification">Verification:</label>
+      <%= show_simple_captcha(:image_style => 'simply_red', :distortion => 'medium')%>  
     </p>
     <p>
       <label></label>

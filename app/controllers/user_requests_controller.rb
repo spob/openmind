@@ -22,15 +22,21 @@ class UserRequestsController < ApplicationController
     @user_request.enterprise = Enterprise.find_by_active(true, 
       :conditions => ["name like ?", "%#{@user_request.enterprise_name}%"], 
       :order => "name ASC")
-    if !User.find_by_email(@user_request.email).nil?
-      flash[:error] = "An account already exists for #{@user_request.email}. Select the 'Forgot your password?' link below to retrieve your password."
-      redirect_to :controller => 'account', :action => 'login'
-    elsif @user_request.save
-      flash[:notice] = 'Your account request has been received. You will receive an email when your account has been approved.'
-      redirect_to :controller => 'account', :action => 'login'
-    else
-      render :action => 'new'
-    end
+    
+    if simple_captcha_valid? 
+      if !User.find_by_email(@user_request.email).nil?
+        flash[:error] = "An account already exists for #{@user_request.email}. Select the 'Forgot your password?' link below to retrieve your password."
+        redirect_to :controller => 'account', :action => 'login'
+      elsif @user_request.save
+        flash[:notice] = 'Your account request has been received. You will receive an email when your account has been approved.'
+        redirect_to :controller => 'account', :action => 'login'
+      else
+        render :action => 'new'
+      end
+    else  
+      flash[:error] = "Verification failed...please try again"
+      redirect_to :action => 'new'
+    end  
   end
   
   def index

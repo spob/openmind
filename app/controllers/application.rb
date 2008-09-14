@@ -3,6 +3,7 @@
 
 class ApplicationController < ActionController::Base
   include AuthenticatedSystem 
+  include SimpleCaptcha::ControllerHelpers 
   helper_method :prodmgr?, :voter?, :allocmgr?, :sysadmin?, :can_edit_idea?, 
     :can_delete_idea?, :flash_error_string, :flash_notice_string
   filter_parameter_logging :password, :password_confirmation

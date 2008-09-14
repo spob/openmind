@@ -28,7 +28,7 @@ ActionController::Routing::Routes.draw do |map|
     :collection => {:toggle_details => :get, :pie => :get }
   map.resources :products
   map.resources :releases, :member => { :commit => :post },
-      :collection => { :preview => :get, :list => :get }
+    :collection => { :preview => :get, :list => :get }
   map.resources :topics, :collection => { :preview => :get, :search => :get }
   map.resources :user_logons
   map.resources :user_requests, :member => { :approve => :post, :reject => :post }
@@ -51,6 +51,7 @@ ActionController::Routing::Routes.draw do |map|
   map.connect ':controller/:action/:id'
   map.connect ':controller/:action.:format'
   
+  map.simple_captcha '/simple_captcha/:action', :controller => 'simple_captcha'
 #  map.connect ':id', :controller => 'ideas', :action => 'show'
 
   map.connect ':path', :controller => 'static'
