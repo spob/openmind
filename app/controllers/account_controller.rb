@@ -18,6 +18,7 @@ class AccountController < ApplicationController
       self.current_user.user_logons.create
       if params[:remember_me] == "1"
         self.current_user.remember_me
+        cookies.delete :auth_token
         cookies[:auth_token] = { :value => self.current_user.remember_token , 
           :expires => self.current_user.remember_token_expires_at }
       end
@@ -44,7 +45,7 @@ class AccountController < ApplicationController
         flash[:error] = "Unable to activate the account. Please check or enter manually."
       end
     else
-        flash[:error] = "Unable to activate the account: no such activation code '#{activator}'."
+      flash[:error] = "Unable to activate the account: no such activation code '#{activator}'."
     end
   end
 
@@ -60,8 +61,8 @@ class AccountController < ApplicationController
   end
   
   def logout
-    self.current_user.forget_me if logged_in?
-    cookies.delete :auth_token
+    #    self.current_user.forget_me if logged_in?
+    #    cookies.delete :auth_token
     reset_session
     flash[:notice] = "You have been logged out."
     redirect_back_or_default(:controller => '/account', :action => 'login')
