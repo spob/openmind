@@ -34,12 +34,13 @@ class IdeaTest < Test::Unit::TestCase
   
   def test_list_unread_ideas 
     assert_nothing_thrown {
-      Idea.list_unread_ideas(1, users(:allroles), {})
+      Idea.list_unread_ideas(1, users(:allroles), {}, true)
+      Idea.list_unread_ideas(1, users(:allroles), {}, false)
     }
   end
   
   def test_list_by_title_and_id
-    ideas = Idea.list(1, users(:allroles), {}, 
+    ideas = Idea.list(1, users(:allroles), {}, true,
       "ideas.title like ? and ideas.id like ?",
       ["%2%", "%2%"])
     assert_equal 1, ideas.size
@@ -47,7 +48,8 @@ class IdeaTest < Test::Unit::TestCase
 
   def test_list_unread_comments
     assert_nothing_thrown {
-      Idea.list_unread_comments(1, users(:allroles), {})
+      Idea.list_unread_comments(1, users(:allroles), {}, true)
+      Idea.list_unread_comments(1, users(:allroles), {}, false)
     }
   end
   
@@ -56,43 +58,49 @@ class IdeaTest < Test::Unit::TestCase
       Idea.list(1, users(:allroles), 
         { :author_filter => users(:allocation_calculation_test).id.to_s,
           :product_filter => products(:producta).id.to_s,
-          :release_filter => releases(:controller_test).id.to_s})
+          :release_filter => releases(:controller_test).id.to_s}, true)
     }
   end
   
   def test_list_voted_ideas
     assert_nothing_thrown {
-      Idea.list_voted_ideas(1, users(:allroles), {})
+      Idea.list_voted_ideas(1, users(:allroles), {}, true)
+      Idea.list_voted_ideas(1, users(:allroles), {}, false)
     }
   end
   
   def test_list_commented_ideas
     assert_nothing_thrown {
-      Idea.list_commented_ideas(1, users(:allroles), {})
+      Idea.list_commented_ideas(1, users(:allroles), {}, true)
+      Idea.list_commented_ideas(1, users(:allroles), {}, false)
     }
   end
   
   def test_list_most_votes
     assert_nothing_thrown {
-      Idea.list_most_votes(1, users(:allroles), {})
+      Idea.list_most_votes(1, users(:allroles), {}, true)
+      Idea.list_most_votes(1, users(:allroles), {}, false)
     }
   end
   
   def test_list_most_views
     assert_nothing_thrown {
-      Idea.list_most_views(1, users(:allroles), {})
+      Idea.list_most_views(1, users(:allroles), {}, true)
+      Idea.list_most_views(1, users(:allroles), {}, false)
     }
   end
   
   def test_list_watched_ideas
     assert_nothing_thrown {
-      Idea.list_watched_ideas(1, users(:allroles), {})
+      Idea.list_watched_ideas(1, users(:allroles), {}, true)
+      Idea.list_watched_ideas(1, users(:allroles), {}, false)
     }
   end
   
   def test_list_my_ideas
     assert_nothing_thrown {
-      Idea.list_my_ideas(1, users(:allroles), {})
+      Idea.list_my_ideas(1, users(:allroles), {}, true)
+      Idea.list_my_ideas(1, users(:allroles), {}, false)
     }
   end
   

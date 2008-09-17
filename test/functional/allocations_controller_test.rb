@@ -68,9 +68,10 @@ class AllocationsControllerTest < Test::Unit::TestCase
     num_allocations = Allocation.count
     
     post :create, :allocation => {
-      :allocation_type=> allocations(:user_allocation).class,
+      :allocation_type=> allocations(:user_allocation).class.to_s,
       :quantity => allocations(:user_allocation).quantity,
       :comments =>allocations(:user_allocation).comments,
+      :expiration_date => allocations(:user_allocation).expiration_date,
       :user_id =>  allocations(:user_allocation).user_id
     }
 

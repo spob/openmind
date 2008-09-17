@@ -11,28 +11,28 @@ sysadmin:
     user_id: <%= users(:allroles, 'id') %>
     role_id: <%= roles(:sysadmin, 'id') %>
     created_at: <%= 5.days.ago.to_s :db %>
-    updated_at: <%= Time.now.to_s :db %>
   
 prodmgr:
     user_id: <%= users(:allroles, 'id') %>
     role_id: <%= roles(:prodmgr, 'id') %>
     created_at: <%= 5.days.ago.to_s :db %>
-    updated_at: <%= Time.now.to_s :db %>
   
 voter:
     user_id: <%= users(:allroles, 'id') %>
     role_id: <%= roles(:voter, 'id') %>
     created_at: <%= 5.days.ago.to_s :db %>
-    updated_at: <%= Time.now.to_s :db %>
   
 allocmgr:
     user_id: <%= users(:allroles, 'id') %>
     role_id: <%= roles(:allocmgr, 'id') %>
     created_at: <%= 5.days.ago.to_s :db %>
-    updated_at: <%= Time.now.to_s :db %>
   
 force_change_pw:
     user_id: <%= users(:force_change_pw, 'id') %>
     role_id: <%= roles(:sysadmin, 'id') %>
     created_at: <%= 5.days.ago.to_s :db %>
-    updated_at: <%= Time.now.to_s :db %>
+  
+forum_mediatior:
+    user_id: <%= users(:quentin, 'id') %>
+    role_id: <%= roles(:mediator, 'id') %>
+    created_at: <%= 5.days.ago.to_s :db %>

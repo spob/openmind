@@ -39,7 +39,7 @@ class EnterprisesController < ApplicationController
   def create
     @enterprise = Enterprise.new(params[:enterprise])
     parse_error = nil
-    if allocmgr? and @enterprise.initial_allocation.length > 0
+    if allocmgr? and !@enterprise.initial_allocation.nil? and @enterprise.initial_allocation.length > 0
       qty = Integer(@enterprise.initial_allocation) rescue parse_error = "Available votes must be an integer value"
       parse_error = "Available votes cannot be less than zero" if parse_error.nil? and qty < 0
       if !parse_error.nil?

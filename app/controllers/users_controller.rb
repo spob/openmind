@@ -75,7 +75,7 @@ class UsersController < ApplicationController
     end
     @user.new_random_password
     parse_error = nil
-    if allocmgr? and @user.initial_allocation.length > 0
+    if allocmgr? and !@user.initial_allocation.nil? and @user.initial_allocation.length > 0
       qty = Integer(@user.initial_allocation) rescue parse_error = "Initial allocation quantity must be an integer value"
       parse_error = "Initial allocation quantity cannot be less than zero" if parse_error.nil? and qty < 0
       if !parse_error.nil?

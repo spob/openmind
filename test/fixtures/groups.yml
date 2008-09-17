@@ -1,5 +1,7 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
-one:
+group1:
   id: 1
-two:
-  id: 2
+  name: group1
+  description: Group One
+  created_at: <%=Time.now.to_s(:db)%>
+  updated_at: <%= Time.now.to_s :db %>

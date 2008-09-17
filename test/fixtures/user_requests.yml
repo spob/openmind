@@ -1,5 +1,10 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
-one:
-  id: 1
-two:
-  id: 2
+pending:
+    email: pending@openmindsw.com
+    created_at: <%= 5.days.ago.to_s :db %>
+    updated_at: <%= 3.days.ago.to_s :db %>
+    first_name: Pending
+    last_name: Smith
+    enterprise_name: Acme, Inc.
+    time_zone: Atlantic Time (Canada)
+    status: Pending

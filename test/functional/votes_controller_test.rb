@@ -44,8 +44,10 @@ class VotesControllerTest < Test::Unit::TestCase
       post :create, :id => @first_id
       assert_response :redirect
       assert_redirected_to :action => 'show'
+      assert_equal "Vote recorded for idea number 1 and idea is being watched", 
+        flash[:notice] if i == 1
       assert_equal "Vote recorded for idea number 1", 
-        flash[:notice]
+        flash[:notice] unless i == 1
       # force reload of user from the database to get the latest non-cached values
       assert_equal allocations_count - i, 
         User.find(users(:allroles).id).available_votes

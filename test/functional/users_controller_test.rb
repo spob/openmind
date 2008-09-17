@@ -95,6 +95,7 @@ class UsersControllerTest < Test::Unit::TestCase
     post :create, :user => { 
       :email => "prodmgr@example.com",
       :password => "password",
+      :initial_allocation => "",
       :last_name => "smith",
       :password_confirmation => "password"
     }
@@ -124,6 +125,7 @@ class UsersControllerTest < Test::Unit::TestCase
       :password => "password",
       :password_confirmation => "password",
       :enterprise_id => enterprises(:active_enterprise).id,
+      :initial_allocation => "",
       :role_ids => Role.find(:all).collect(&:id) 
     }
 
@@ -189,7 +191,8 @@ class UsersControllerTest < Test::Unit::TestCase
   def test_edit_profile
     post :update_profile, { :id => @first_id, 
       :user => {:last_name => "sturim", :row_limit => 6, 
-        :time_zone => "Mexico City" }}
+        :time_zone => "Mexico City",  
+        :watch_on_vote => "0"      }}
     assert_response :redirect
     user = User.find(@first_id)
     assert_equal "Mexico City", user.time_zone

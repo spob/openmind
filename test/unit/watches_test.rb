@@ -11,13 +11,13 @@ class WatchesTest < Test::Unit::TestCase
     idea.update_attribute(:release_id, nil)
     u = users(:allroles)
     assert_nothing_thrown {
-      Idea.list_watched_ideas(1, u, {})
+      Idea.list_watched_ideas(1, u, {}, true)
     }
     # add a watch
     u.watched_ideas << idea
     
     assert_equal 1, u.watched_ideas.length
-    assert_equal 1, Idea.list_watched_ideas(1, u, {}).length   
+    assert_equal 1, Idea.list_watched_ideas(1, u, {}, false).length   
   end
   
 end

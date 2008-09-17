@@ -95,10 +95,11 @@ class AccountControllerTest < Test::Unit::TestCase
     assert_nil @response.cookies["auth_token"]
   end
   
-  def test_should_delete_token_on_logout
+  # changed logic to not delete on logout
+  def test_should_not_delete_token_on_logout
     login_as :quentin
     get :logout
-    assert_equal @response.cookies["auth_token"], []
+    assert_nil @response.cookies["auth_token"]
   end
 
   def test_should_login_with_cookie
