@@ -123,7 +123,8 @@ class Idea < ActiveRecord::Base
     # tag filter
     condition_params = add_criteria(condition_params,
       "ideas.id in (?)", 
-      properties[:tags_filter_ideas]) unless properties[:tags_filter_ideas].nil? or properties[:tags_filter_ideas].empty?
+      properties[:tags_filter_ideas],
+      true) unless properties[:tags_filter_ideas].nil? or properties[:tags_filter_ideas].empty?
     
     condition_params = add_criteria(condition_params, 
       condition_string, 
@@ -133,6 +134,7 @@ class Idea < ActiveRecord::Base
     condition_params = nil if condition_params[0] == ""
     
     if do_paginate
+      puts "=====>#{condition_params.to_s}"
       paginate :page => page, 
         :conditions => condition_params,
         :joins => joins,
@@ -250,11 +252,12 @@ class Idea < ActiveRecord::Base
   
   private
   
-  def self.add_criteria(condition_params, condition_string, values = nil)
+  def self.add_criteria(condition_params, condition_string, values = nil, flatten = true)
     condition_params[0] += " and " if condition_params[0].length > 0
     condition_params[0] += condition_string
     
-    condition_params += Array(values) unless values.nil?
+    condition_params += Array(values) unless values.nil? or (values.is_a? Array and flatten)
+    condition_params[condition_params.size] = values if !values.nil? and values.is_a? Array and flatten
 #    condition_params += Array(values) unless values.nil? or values.is_a? Array
 #    condition_params[condition_params.size] = values if !values.nil? and values.is_a? Array
 #    (0..condition_params.length).each do |i|
