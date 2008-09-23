@@ -12,7 +12,7 @@ require File.join(File.dirname(__FILE__), 'boot')
 
 Rails::Initializer.run do |config|
   # required gems
-  config.gem 'mislav-will_paginate', :version => '~> 2.3.2', :lib => 'will_paginate', 
+  config.gem 'mislav-will_paginate', :lib => 'will_paginate', 
     :source => 'http://gems.github.com'
 
   # Require the latest version of mysql

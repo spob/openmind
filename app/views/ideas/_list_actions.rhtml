@@ -29,7 +29,7 @@
                                        :alt=>"vote", :title=> "vote",
                                        :onmouseover => "Tip('Vote for this idea')"), 
                                        :url => url, 
-                                       :html => {:class=> "button" }, 
+                                       :html => { }, 
                                        :method => :post %>
      <% end %>
        
@@ -38,7 +38,7 @@
                                        :alt=>"rescind vote", :title=> "rescind vote",
                                        :onmouseover => "Tip('Rescind your vote for this idea')"), 
                                        :url => vote_path(:id => @idea, :from => from), 
-                                       :html => { :class=> "button" }, 
+                                       :html => {  }, 
                                        :method => :delete %>
        
      <% end %>

@@ -37,21 +37,21 @@ module ForumsHelper
         :alt=>"Add watch", :title=> "add watch",
         :onmouseover => "Tip('Watch this topic (requires login)')"), 
         :url =>  create_topic_watch_watch_path(:id => topic),
-        :html => { :class=> "button" }, 
+        :html => { }, 
         :method => :post
     elsif topic.watchers.include? current_user
       link_to_remote theme_image_tag("icons/24x24/watchRemove.png", 
         :alt=>"Remove watch", :title=> "remove watch",
         :onmouseover => "Tip('Stop watching this topic')"), 
         :url =>  destroy_topic_watch_watch_path(:id => topic), 
-        :html => { :class=> "button" }, 
+        :html => {  }, 
         :method => :delete
     else
       link_to_remote theme_image_tag("icons/24x24/watchAdd.png", 
         :alt=>"Add watch", :title=> "add watch",
         :onmouseover => "Tip('Watch this topic')"), 
         :url =>  create_topic_watch_watch_path(:id => topic),
-        :html => { :class=> "button" }, 
+        :html => {  }, 
         :method => :post
     end
   end
@@ -63,21 +63,21 @@ module ForumsHelper
         :alt=>"Watch this forum and all topics within this forum (requires login)", :title=> "Watch this forum and all topics within this forum (requires login)",
         :onmouseover => "Tip('Watch this forum and all topics within this forum (requires login)')"), 
         create_forum_watch_watch_path(:id => forum),
-        :html => { :class=> "button" }, 
+        :html => {  }, 
         :method => :post
     elsif forum.watchers.include? current_user
       link_to_remote theme_image_tag("icons/24x24/watchRemove.png", 
         :alt=>"Don't automatically watch new topics in this forum", :title=> "Don't automatically watch new topics in this forum",
         :onmouseover => "Tip('Don't automatically watch new topics in this forum')"), 
         :url =>  destroy_forum_watch_watch_path(:id => forum), 
-        :html => { :class=> "button" }, 
+        :html => {  }, 
         :method => :delete
     else
       link_to_remote theme_image_tag("icons/24x24/watchAdd.png", 
         :alt=>"Watch this forum and all topics within this forum", :title=> "Watch this forum and all topics within this forum",
         :onmouseover => "Tip('Watch this forum and all topics within this forum')"), 
         :url =>  create_forum_watch_watch_path(:id => forum),
-        :html => { :class=> "button" }, 
+        :html => {  }, 
         :method => :post
     end
   end
@@ -87,13 +87,13 @@ module ForumsHelper
     if forum.watchers.include? current_user
       link_to "Remove Forum Watch", 
         destroy_forum_watch_watch_path(:id => forum), 
-        {:class=> "button",
+        { :class => "button",
         :onmouseover => "Tip('Don't automatically watch new topics in this forum')",
         :method => :delete                }
     else
       link_to "Add Forum Watch", 
         create_forum_watch_watch_path(forum), 
-        {:class=> "button",
+        { :class => "button",
         :onmouseover => "Tip('Watch this forum and all topics within this forum')",
         :method => :post                   }
     end

@@ -36,7 +36,7 @@ module IdeaActionHelper
         :alt=>"Remove watch", :title=> "remove watch",
         :onmouseover => "Tip('Stop watching this idea')"), 
         :url =>  watch_path(:id => @idea, :from => from), 
-        :html => { :class=> "button" }, 
+        :html => {  }, 
         :method => :delete
     else
       url = watches_path(:id => @idea)
@@ -45,7 +45,7 @@ module IdeaActionHelper
         :alt=>"Add watch", :title=> "add watch",
         :onmouseover => "Tip('Watch this idea')"), 
         :url =>  url, 
-        :html => { :class=> "button" }, 
+        :html => { }, 
         :method => :post
     end
     show
