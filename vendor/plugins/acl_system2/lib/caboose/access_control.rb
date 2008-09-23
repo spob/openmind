@@ -33,7 +33,7 @@ module Caboose
             else  
               host = APP_CONFIG['host']
               port = APP_CONFIG['port']
-              c.send(:render_text, "You have insuffient permissions to access #{c.controller_name}/#{c.action_name}. Return <a href='http://#{host}:#{port}'>home</a>")
+              c.send(:render, :text => "You have insuffient permissions to access #{c.controller_name}/#{c.action_name}. Return <a href='http://#{host}:#{port}'>home</a>")
             end
           end
         end
