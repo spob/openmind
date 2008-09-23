@@ -15,6 +15,10 @@ Rails::Initializer.run do |config|
   config.gem 'mislav-will_paginate', :version => '~> 2.3.2', :lib => 'will_paginate', 
     :source => 'http://gems.github.com'
 
+  # Require the latest version of mysql
+  config.gem "mysql"
+
+
   # Default timezone...Set this to the timezone where the server resides
   config.time_zone = 'Eastern Time (US & Canada)'
   
