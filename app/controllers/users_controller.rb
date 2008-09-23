@@ -87,7 +87,7 @@ class UsersController < ApplicationController
         alloc = UserAllocation.new(
           :quantity => qty, 
           :comments => "",
-          :expiration_date => Date.jd(Date.today.jd + APP_CONFIG['allocation_expiration_days']))
+          :expiration_date => Allocation.calculate_expiration_date)
       end
     end
     if @user.save
@@ -124,7 +124,7 @@ class UsersController < ApplicationController
   def new
     @user = User.new(:initial_allocation => 0)
     # default timezone
-    @user.time_zone = TimeZoneUtils.current_timezone.name
+    @user.time_zone = APP_CONFIG['default_user_timezone']
     setup_session_properties
   end
 
@@ -190,7 +190,6 @@ class UsersController < ApplicationController
       csv << ["email",
         "first name", 
         "last name", 
-        "password",
         "enterprise",
         "allocations mgr (Y|N)",
         "voter (Y|N)"
@@ -219,10 +218,9 @@ class UsersController < ApplicationController
       email = row[0]
       first_name = row[1]
       last_name = row[2]
-      password = row[3]
-      enterprise_name = row[4]
-      allocation_mgr = row[5]
-      voter = row[6]
+      enterprise_name = row[3]
+      allocation_mgr = row[4]
+      voter = row[5]
       
       if enterprise_name.blank?
         @errors << "Enterprise must be specified for '#{email}'"
@@ -234,7 +232,7 @@ class UsersController < ApplicationController
       if 
         user = User.new(:email => email, :first_name => first_name,
           :last_name => last_name, :enterprise => enterprise,
-          :password => password, :password_confirmation => password,
+          :password => "Dummy", :password_confirmation => "Dummy",
           :activation_code => "SKIP")
         if yes? allocation_mgr
           user.roles << allocmgr_role

@@ -54,21 +54,24 @@ class Topic < ActiveRecord::Base
   def unread_comments user
     TopicComment.find(:all,
       :select => "comments.*",
-      :joins => ["INNER JOIN topics AS t ON t.id = comments.topic_id ",
-        "INNER JOIN topic_watches AS tw ON tw.topic_id = t.id "],
+      :joins => [:topic],
       :conditions => 
-        ["tw.last_checked_at < comments.created_at " +
-          "and comments.topic_id = ? " +
-          "and tw.user_id = ?", id, user.id],
+        [
+        "comments.topic_id = ? " +
+          "and exists (" +
+          "select null " +
+          "from topic_watches as tw " +
+          "where tw.last_checked_at < comments.created_at " +
+          "and tw.user_id = ?)", id, user.id],
       :order => "comments.id DESC")
   end
   
   def watched? user
-  	watchers.include? user
+    watchers.include? user
   end
   
   def self.notify_watchers
-    # puts "Checking for topic notifications at #{Time.now.to_s}"
+    # puts "Checking for topic notifications at #{Time.zone.now.to_s}"
     # Find users who have a comment more recent than the last watch check
     users = User.find(:all, :conditions => 
         ["EXISTS " +
@@ -87,7 +90,7 @@ class Topic < ActiveRecord::Base
       EmailNotifier.deliver_new_topic_comment_notification(topics, user)
       
       for tw in tws
-        tw.last_checked_at = Time.now
+        tw.last_checked_at = Time.zone.now
         tw.save
       end
     end

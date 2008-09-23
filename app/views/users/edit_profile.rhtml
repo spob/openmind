@@ -24,7 +24,7 @@
     </p>
     <p>  
       <label for="time_zone">User Time Zone:</label>
-      <%= f.time_zone_select :time_zone %>
+      <%= f.time_zone_select :time_zone, TimeZone.us_zones %>
     </p>
     <p> 
       <label for="row_limit">Rows to Display:</label>

@@ -24,7 +24,7 @@ class LookupCodesController < ApplicationController
 
   def create
     command = "#{params[:lookup_code][:code_type]}.new(params[:lookup_code])"
-    print command
+    #    print command
     @lookup_code = eval command
     if @lookup_code.save
       flash[:notice] = "LookupCode #{@lookup_code.short_name} was successfully created."

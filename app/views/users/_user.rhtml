@@ -1,0 +1,25 @@
+<tr>
+  <td><%= h user.email %></td>
+  <td><%= h user.full_name %></td>
+  <td class="center"><%= h user.available_enterprise_votes %></td>
+  <td class="center"><%= h user.available_user_votes %></td>
+  <td><%= link_to h(user.enterprise.name), enterprise_path(user.enterprise) %></td>
+  <td class="center"><input type="checkbox" name="active" value="active" <%= "checked" if user.active?  %> disabled ></td>
+  <td><%= h nvl(om_date_time(user.last_logon_date), "-") %></td>
+  <td class="nowrap">
+    <%= link_to theme_image_tag("icons/16x16/viewAction.png", 
+      options = {:alt=>"view", :title=> "view", :onmouseover => "Tip('View details of this user')"}), 
+      options = { :action => 'show', :id => user  } %>
+  
+    <% restrict_to "sysadmin" do %>
+      <%= link_to theme_image_tag("icons/16x16/editAction.png", 
+        options = {:alt=>"edit", :title=> "edit", :onmouseover => "Tip('Edit this user')"}), 
+        options = { :action => 'edit', :id => user  } %>
+  
+      <%= link_to(theme_image_tag("icons/16x16/deleteAction.png", 
+          options = {:alt=>"delete", :title=> "delete", :onmouseover => "Tip('Delete this user')"}),  
+        options = {:action => 'destroy', :id => user}, 
+        html_options = {:method => :post , :confirm => 'Are you sure?'}) if user.can_delete? %>
+    <% end %>
+  </td>
+</tr>

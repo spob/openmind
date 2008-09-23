@@ -5,7 +5,7 @@ require 'products_controller'
 class ProductsController; def rescue_action(e) raise e end; end
 
 class ProductsControllerTest < Test::Unit::TestCase
-  fixtures :products, :users, :roles_users
+  fixtures :products, :users
 
   def setup
     @controller = ProductsController.new

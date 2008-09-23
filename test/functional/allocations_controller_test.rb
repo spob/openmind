@@ -5,7 +5,7 @@ require 'allocations_controller'
 class AllocationsController; def rescue_action(e) raise e end; end
 
 class AllocationsControllerTest < Test::Unit::TestCase
-  fixtures :allocations, :users, :roles_users, :enterprises
+  fixtures :allocations, :users, :enterprises
 
   def setup
     @controller = AllocationsController.new

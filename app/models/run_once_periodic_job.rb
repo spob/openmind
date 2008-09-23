@@ -11,7 +11,7 @@ class RunOncePeriodicJob < PeriodicJob
   end
   
   def set_initial_next_run
-    self.next_run_at = Time.now
+    self.next_run_at = Time.zone.now
   end
 
   # Cleans up all jobs older than a day.

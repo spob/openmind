@@ -5,7 +5,7 @@ require 'watches_controller'
 class WatchesController; def rescue_action(e) raise e end; end
 
 class WatchesControllerTest < Test::Unit::TestCase
-  fixtures :users, :roles_users, :watches, :ideas
+  fixtures :users, :watches, :ideas
   
   def setup
     @controller = WatchesController.new

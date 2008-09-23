@@ -25,7 +25,7 @@ class PeriodicJob < ActiveRecord::Base
       puts err_string 
       self.last_run_result = err_string.slice(1..500)
     end
-    self.last_run_at = Time.now
+    self.last_run_at = Time.zone.now
     self.calc_next_run
     self.save  
   end

@@ -16,4 +16,14 @@ class DateUtils
     
     DateTime.new(t.year, t.month, t.day, 0, 0, 0, 0)
   end
+  
+  def self.today
+    DateUtils.truncate_datetime Time.zone.now
+  end
+  
+  # Use when operating against date (as opposed to datetime columns) which are
+  # stored in utc
+  def self.today_utc
+    DateUtils.truncate_datetime Time.zone.now.in_time_zone('UTC')
+  end
 end

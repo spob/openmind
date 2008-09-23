@@ -5,7 +5,7 @@ require 'lookup_codes_controller'
 class LookupCodesController; def rescue_action(e) raise e end; end
 
 class LookupCodesControllerTest < Test::Unit::TestCase
-  fixtures :lookup_codes, :users, :roles_users
+  fixtures :lookup_codes, :users
 
   def setup
     @controller = LookupCodesController.new

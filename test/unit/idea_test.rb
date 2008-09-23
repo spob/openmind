@@ -19,7 +19,7 @@ class IdeaTest < Test::Unit::TestCase
   end
   
   def test_can_delete
-    idea = ideas(:first_idea, 'id')
+    idea = ideas(:first_idea)
     # should fail...has votes associated to it
     assert !idea.can_delete?
     
@@ -41,8 +41,8 @@ class IdeaTest < Test::Unit::TestCase
   
   def test_list_by_title_and_id
     ideas = Idea.list(1, users(:allroles), {}, true,
-      "ideas.title like ? and ideas.id like ?",
-      ["%2%", "%2%"])
+      "ideas.title like ? and ideas.id = ?",
+      ["%#{ideas(:unscheduled_idea).title}%", ideas(:unscheduled_idea).id])
     assert_equal 1, ideas.size
   end
 
@@ -234,7 +234,7 @@ class IdeaTest < Test::Unit::TestCase
     user = users(:allocation_calculation_test)
     idea = ideas(:first_idea)
     assert idea.unread?(user)
-    read = idea.user_idea_reads.create(:user_id => user.id, :last_read => Time.now)
+    read = idea.user_idea_reads.create(:user_id => user.id, :last_read => Time.zone.now)
     assert !idea.unread?(user)
     
     assert !idea.unread_comment?(user)
@@ -243,7 +243,7 @@ class IdeaTest < Test::Unit::TestCase
     idea.save
     assert idea.unread_comment?(user)
     sleep 1
-    read.last_read = Time.now
+    read.last_read = Time.zone.now
     read.save
     idea = Idea.find(idea.id)
     assert !idea.unread_comment?(user)

@@ -102,7 +102,6 @@ module ApplicationHelper
   
   # Format a date and adjust the timezone for the user's timezone
   def om_date_time(the_date)
-    the_date = current_user.user_time(the_date) unless current_user == :false
     h format_date_time(the_date) unless the_date.nil?
   end
   

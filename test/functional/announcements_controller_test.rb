@@ -5,7 +5,7 @@ require 'announcements_controller'
 class AnnouncementsController; def rescue_action(e) raise e end; end
 
 class AnnouncementsControllerTest < Test::Unit::TestCase
-  fixtures :announcements, :users, :roles_users
+  fixtures :announcements, :users
 
   def setup
     @controller = AnnouncementsController.new

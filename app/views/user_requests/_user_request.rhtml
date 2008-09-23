@@ -1,0 +1,45 @@
+<tr>
+  <td><%= show_user_link user_request %></td>
+  <td><%= h "#{user_request.first_name} #{user_request.last_name}".strip %></td>
+  <td><%= h user_request.enterprise_name %></td>
+  <td><%= h(enterprise_action(user_request)) %></td>
+  <td><%= user_request.initial_enterprise_allocation %></td>
+  <td><%= user_request.initial_user_allocation %></td>
+  <td><%= format_date_time(user_request.created_at) %></td>
+  <td><%= h user_request.status %></td>
+  <td>
+    <span class="nobr">
+      <%= link_to theme_image_tag("icons/16x16/viewAction.png", :alt=>"view", :title=> "view"),
+            user_request_path(user_request), 
+            html_options = {
+            :onmouseover => "Tip('View details for this account request')"} 
+      %>
+      <% if prodmgr? and user_request.status == UserRequest.pending %>
+          <%= link_to theme_image_tag("icons/16x16/editAction.png", :alt=>"edit", :title=> "edit"), 
+                edit_user_request_path(user_request),
+                html_options = {
+                :onmouseover => "Tip('Edit this account request')"}
+          %>
+    
+          <%= link_to(
+                theme_image_tag("icons/16x16/deleteAction.png", :alt=>"delete", :title=> "delete"),
+                user_request_path(user_request),
+                html_options = {:confirm => 'Are you sure?', :method => :delete,
+                      :onmouseover => "Tip('Delete this account request')"} ) if user_request.can_delete? %>
+          <% if user_request.status == UserRequest.pending %>
+            <%= button_to(
+                  "Approve",
+                  approve_user_request_path(user_request),
+                  html_options = {:class=> "button", :method => :post,
+                        :onmouseover => "Tip('Approve this account request')"} ) %>
+            
+            <%= button_to(
+                  "Reject",
+                  reject_user_request_path(user_request),
+                  html_options = {:class=> "button", :confirm => 'Are you sure?', :method => :post,
+                        :onmouseover => "Tip('Reject this account request')"} ) %>
+          <% end %>
+  <% end %>
+    </span>
+  </td>
+</tr>

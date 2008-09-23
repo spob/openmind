@@ -1,21 +1,12 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 color_poll:
-  id: 1
   title: What is your favor color?
   close_date: <%= 119.days.since.to_s :db %>
-  created_at: <%=5.days.ago.to_s :db %>
-  updated_at: <%= Time.now.to_s :db %>
 
 no_options_poll:
-  id: 2
   title: No options?
   close_date: <%= 119.days.since.to_s :db %>
-  created_at: <%=5.days.ago.to_s :db %>
-  updated_at: <%= Time.now.to_s :db %>
 
 no_votes_poll:
-  id: 3
   title: No votes
   close_date: <%= 119.days.since.to_s :db %>
-  created_at: <%=5.days.ago.to_s :db %>
-  updated_at: <%= Time.now.to_s :db %>

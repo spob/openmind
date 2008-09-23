@@ -128,13 +128,12 @@ class Idea < ActiveRecord::Base
     
     condition_params = add_criteria(condition_params, 
       condition_string, 
-      pcondition_params) unless condition_string.nil?
+      pcondition_params, false) unless condition_string.nil?
     
     # no criteria set...null out the condition_params or you'll get a sql error
     condition_params = nil if condition_params[0] == ""
     
     if do_paginate
-      puts "=====>#{condition_params.to_s}"
       paginate :page => page, 
         :conditions => condition_params,
         :joins => joins,
@@ -200,13 +199,13 @@ class Idea < ActiveRecord::Base
   
   def rescindable_votes?(user_id)
     !votes.find(:first, :conditions => ['created_at > ? and user_id = ?', 
-        (Time.now - Vote.rescind_seconds).to_s(:db), user_id]).nil?
+        (Time.zone.now - Vote.rescind_seconds).to_s(:db), user_id]).nil?
   end
   
   def rescind_vote(user)
     vote = votes.find(:first, 
       :conditions => ['created_at > ? and user_id = ?', 
-        (Time.now - Vote.rescind_seconds).to_s(:db), user.id],
+        (Time.zone.now - Vote.rescind_seconds).to_s(:db), user.id],
       :order => 'created_at DESC')
    
     raise VoteException if vote.nil?
@@ -261,8 +260,8 @@ class Idea < ActiveRecord::Base
 #    condition_params += Array(values) unless values.nil? or values.is_a? Array
 #    condition_params[condition_params.size] = values if !values.nil? and values.is_a? Array
 #    (0..condition_params.length).each do |i|
-    #      puts "-->#{condition_params[i]}"
-    #    end
+#          puts "-->#{condition_params[i]}"
+#        end
     condition_params
   end
   

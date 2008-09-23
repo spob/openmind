@@ -13,7 +13,7 @@ class UserRequestsController < ApplicationController
   def new
     @user_request = UserRequest.new
     
-    @user_request.time_zone = TimeZoneUtils.current_timezone.name
+    @user_request.time_zone = APP_CONFIG['default_user_timezone']
   end
 
   def create
@@ -120,7 +120,7 @@ class UserRequestsController < ApplicationController
         EnterpriseAllocation.new(:quantity => @user_request.initial_enterprise_allocation,
           :comments => "",
           :enterprise => enterprise,
-          :expiration_date => Date.jd(Date.today.jd + APP_CONFIG['allocation_expiration_days'])).save!
+          :expiration_date => Allocation.calculate_expiration_date).save!
       end
     
       user = User.new(:email => @user_request.email, :first_name => @user_request.first_name,
@@ -133,7 +133,7 @@ class UserRequestsController < ApplicationController
         UserAllocation.new(:quantity => @user_request.initial_user_allocation,
           :comments => "",
           :user => User.find_by_email(@user_request.email),
-          :expiration_date => Date.jd(Date.today.jd + APP_CONFIG['allocation_expiration_days'])).save!
+          :expiration_date => Allocation.calculate_expiration_date).save!
       end
     
       @user_request.status = UserRequest.approved

@@ -8,7 +8,7 @@ class Enterprise < ActiveRecord::Base
   
   has_many :users,:dependent => :destroy, :order => "email ASC"   
   has_many :allocations,:dependent => :destroy, :order => "created_at ASC"  
-  has_many :active_allocations, :conditions => ["expiration_date > ?", DateTime.now.to_s(:db)], 
+  has_many :active_allocations, :conditions => ["expiration_date > ?", Date.current.to_s(:db)], 
     :order => "created_at ASC"   
   has_many :votes, :through => :allocations, :order => "votes.id ASC"
   
@@ -22,7 +22,7 @@ class Enterprise < ActiveRecord::Base
   
   def active_allocations
     allocations.find(:all, 
-      :conditions => ['expiration_date >= ?', (Date.today).to_s(:db)],
+      :conditions => ['expiration_date >= ?', (Date.current).to_s(:db)],
       :order => 'expiration_date asc')
   end
   

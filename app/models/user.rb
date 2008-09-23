@@ -42,7 +42,7 @@ class User < ActiveRecord::Base
   has_many :user_logons, :order => "created_at DESC", :dependent => :destroy   
   has_many :ideas,:dependent => :destroy, :order => "id ASC"   
   has_many :allocations, :dependent => :destroy, :order => "created_at ASC"   
-  has_many :active_allocations, :conditions => ["expiration_date > ?", DateTime.now.to_s(:db)], 
+  has_many :active_allocations, :conditions => ["expiration_date > ?", Date.current.to_s(:db)], 
     :order => "created_at ASC"   
   # all votes by this user based only on user allocations
   has_many :votes, :through => :allocations, :order => "votes.id ASC"
@@ -73,12 +73,12 @@ class User < ActiveRecord::Base
   end
   
   def user_logons_90_days
-    user_logons.find(:all, :conditions => ['created_at > ?', (Time.now - 60*60*24*90).to_s(:db)])
+    user_logons.find(:all, :conditions => ['created_at > ?', (Time.zone.now - 60*60*24*90).to_s(:db)])
   end
   
   def active_allocations
     allocations.find(:all, 
-      :conditions => ['expiration_date >= ?', (Date.today).to_s(:db)],
+      :conditions => ['expiration_date >= ?', (Date.current).to_s(:db)],
       :order => 'expiration_date asc')
   end
   
@@ -114,7 +114,7 @@ class User < ActiveRecord::Base
   end
 
   def remember_token?
-    remember_token_expires_at && Time.now.utc < remember_token_expires_at 
+    remember_token_expires_at && Time.zone.now < remember_token_expires_at 
   end
   
   def login
@@ -182,12 +182,6 @@ class User < ActiveRecord::Base
       :order => 'email')
   end
   
-  def user_time(time)
-    tz = TimeZone[time_zone]
-    time = tz.adjust time unless tz.nil? or time.nil?
-    time
-  end
-  
   def full_name
     full_name = ""
     if !self.first_name.nil?
@@ -204,7 +198,7 @@ class User < ActiveRecord::Base
   end
   
   def new_random_password
-    self.salt = Digest::SHA1.hexdigest("--#{Time.now.to_s}--#{email}--")
+    self.salt = Digest::SHA1.hexdigest("--#{Time.zone.now.to_s}--#{email}--")
     self.password=  self.salt[0,6]
     self.password_confirmation = self.password
   end
@@ -212,7 +206,7 @@ class User < ActiveRecord::Base
   # Activates the user in the database.
   def activate
     @activated = true
-    self.activated_at = Time.now
+    self.activated_at = Time.zone.now
     self.activation_code = nil
     self.save!
   end
@@ -253,7 +247,7 @@ class User < ActiveRecord::Base
   # before filter 
   def encrypt_password
     return if password.blank?
-    self.salt = Digest::SHA1.hexdigest("--#{Time.now.to_s}--#{email}--") if new_record?
+    self.salt = Digest::SHA1.hexdigest("--#{Time.zone.now.to_s}--#{email}--") if new_record?
     self.crypted_password = encrypt(password)
   end
     
@@ -270,7 +264,7 @@ class User < ActiveRecord::Base
     if self.activation_code == 'SKIP'
       self.activation_code = nil
     else
-      self.activation_code = Digest::SHA1.hexdigest( Time.now.to_s.split(//).sort_by {rand}.join ) 
+      self.activation_code = Digest::SHA1.hexdigest( Time.zone.now.to_s.split(//).sort_by {rand}.join ) 
     end
   end
 end

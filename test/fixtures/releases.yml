@@ -1,13 +1,5 @@
-# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
-<%
-fixtures :products, :lookup_codes
-id = 0
-%>
 controller_test:
-    id: <%= id += 1 %>
     version: 1.0
-    release_status_id: <%= lookup_codes(:release_status_controller_test, 'id') %>
-    product_id: <%= products(:producta, 'id') %>
-    created_at: <%=Time.now.to_s(:db)%>
-    updated_at: <%= Time.now.to_s :db %>
+    release_status: release_status_controller_test
+    product: producta
 

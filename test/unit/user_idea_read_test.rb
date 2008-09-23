@@ -5,7 +5,7 @@ class UserIdeaReadTest < Test::Unit::TestCase
   
   def test_create
     i = UserIdeaRead.create(:user_id => users(:active_user_inactive_enterprise).id, 
-      :idea_id => ideas(:first_idea).id, :last_read => Time.now)
+      :idea_id => ideas(:first_idea).id, :last_read => Time.zone.now)
     assert i.valid?
   end
 end

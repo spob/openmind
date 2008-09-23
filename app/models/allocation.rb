@@ -23,7 +23,7 @@ class Allocation < ActiveRecord::Base
     paginate :page => page, 
       :conditions => ["(allocation_type = 'UserAllocation' and allocations.user_id = ?) or (allocation_type = 'EnterpriseAllocation' and enterprise_id = ?) and expiration_date > ?",
       user.id, user.enterprise.id,
-     (active_only ? DateUtils.truncate_datetime(DateTime.now) : 10.years.ago)],
+     (active_only ? DateUtils.today_utc : 10.years.ago)],
       :order => 'allocations.created_at DESC,  allocations.enterprise_id ASC, allocations.user_id  ASC' ,
       :per_page => per_page, :include => :votes
   end
@@ -42,7 +42,7 @@ class Allocation < ActiveRecord::Base
     conditions << where
     conditions << user.id unless user.nil?
     conditions << enterprise.id unless enterprise.nil?
-    conditions << DateUtils.truncate_datetime(DateTime.now) if active_only
+    conditions << DateUtils.today_utc if active_only
     paginate :page => page, 
       :conditions => conditions,
 #      :conditions => [where, 
@@ -55,14 +55,21 @@ class Allocation < ActiveRecord::Base
     votes.empty?
   end
   
+  def self.calculate_expiration_date
+    Date.jd(DateUtils.today_utc.jd + APP_CONFIG['allocation_expiration_days'].to_i)
+  end
+  
   private
   
   def self.first_expiration_days(allocations)
+    today_jd = DateUtils.today_utc.jd
+    #    puts "today: #{DateUtils.today_utc}, #{today_jd}"
     expiring_days = 9999
     if !allocations.nil?
       for allocation in allocations
         if allocation.available_quantity > 0
-          l_expiring_days = allocation.expiration_date.jd - Date.today.jd
+#          puts "allocation: #{allocation.expiration_date}, #{allocation.expiration_date.jd}, #{allocation.expiration_date.jd - today_jd}"
+          l_expiring_days = allocation.expiration_date.jd - today_jd
           if l_expiring_days < expiring_days and l_expiring_days >= 0
             expiring_days = l_expiring_days
           end          

@@ -7,7 +7,7 @@ class AddReleaseDescription < ActiveRecord::Migration
     Release.reset_column_information
     
     Release.find(:all).each do |r|
-      r.release_date = Time.now
+      r.release_date = Time.zone.now
       r.user_release_date = r.release_date.strftime("%b %d, %Y")
       r.save
     end

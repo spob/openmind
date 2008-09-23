@@ -1,14 +1,8 @@
-# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 bugs_forum:
-  id: 1
   name: bugs_forum
+  mediators: quentin
   description: A forum to discuss product defects and work arounds
-  updated_at: <%= 119.days.since.to_s :db %>
-  created_at: <%=5.days.ago.to_s :db %>
 
 empty_bugs_forum:
-  id: 2
   name: empty
   description: A forum with no topics
-  updated_at: <%= 119.days.since.to_s :db %>
-  created_at: <%=5.days.ago.to_s :db %>

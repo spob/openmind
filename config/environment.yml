@@ -30,3 +30,8 @@ app_theme: openmind
 # The number of days within which to warn the user of unused allocations
 # about to expire. A value of 0 means never warn the user.
 allocation_expiration_warning_days: 45
+
+# The default timezone for new users. Hint: execute the command:
+#     rake time:zones:local
+# to get a list of timezones local to your location
+default_user_timezone: Eastern Time (US & Canada)

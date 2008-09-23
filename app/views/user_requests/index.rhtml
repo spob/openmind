@@ -42,7 +42,7 @@
     <th>Action</th>
   </tr>
   
-    <%= render :partial => 'user_request_item', :collection => @user_requests %>
+    <%= render :partial => @user_requests %>
 
 </table>
 <p><%= will_paginate @user_requests %></p>

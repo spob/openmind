@@ -360,10 +360,10 @@ class IdeasController < ApplicationController
     user_idea_read = idea.user_idea_reads.find(:first, :conditions => ["user_id = ?",
         current_user.id])
     if user_idea_read.nil?
-      user_idea_read = UserIdeaRead.new(:user_id => current_user.id, :last_read => Time.now)
+      user_idea_read = UserIdeaRead.new(:user_id => current_user.id, :last_read => Time.zone.now)
       idea.user_idea_reads << user_idea_read
     elsif
-      user_idea_read.update_attributes(:last_read => Time.now)
+      user_idea_read.update_attributes(:last_read => Time.zone.now)
     end
   end
   

@@ -12,6 +12,6 @@ class StringUtils
   # only available from within the rhtml or helper file
   def self.pluralize count, noun
     return "#{count} #{noun}" if count == 1
-    "#{count} #{Inflector.pluralize noun}"
+    "#{count} #{ActiveSupport::Inflector.pluralize noun}"
   end
 end

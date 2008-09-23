@@ -1,18 +1,7 @@
-# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
-<% id = 0 %>
-
 producta:
-  id: <%= id += 1 %>
   name: proda
   description: desca
-  created_at: <%=Time.now.to_s(:db)%>
-  updated_at: <%= Time.now.to_s :db %>
 
 available_votes_calc_test1:
-  id: <%= id += 1 %>
   name: calctest
-  description: desca
-  created_at: <%=Time.now.to_s(:db)%>
-  updated_at: <%= Time.now.to_s :db %>
-#two:
-#  id: 2
+  description: descb

@@ -4,7 +4,7 @@ class UserTest < Test::Unit::TestCase
   # Be sure to include AuthenticatedTestHelper in test/test_helper.rb instead.
   # Then, you can remove it from this and the functional test.
   include AuthenticatedTestHelper
-  fixtures :users, :enterprises, :allocations, :votes, :roles, :roles_users, :topics
+  fixtures :users, :enterprises, :allocations, :votes, :roles, :topics
 
   def test_full_name
     user = User.new(:last_name => "xxx")
@@ -57,7 +57,7 @@ class UserTest < Test::Unit::TestCase
   end
   
   def test_should_create_user
-    assert_difference User, :count do
+    assert_difference 'User.count', 1 do
       user = create_user
       assert_equal 10, user.row_limit
       assert !user.new_record?, "#{user.errors.full_messages.to_sentence}"
@@ -71,35 +71,35 @@ class UserTest < Test::Unit::TestCase
   end
 
   def test_should_require_password
-    assert_no_difference User, :count do
+    assert_no_difference 'User.count' do
       u = create_user(:password => nil)
       assert u.errors.on(:password)
     end
   end
 
   def test_should_require_password_confirmation
-    assert_no_difference User, :count do
+    assert_no_difference 'User.count' do
       u = create_user(:password_confirmation => nil)
       assert u.errors.on(:password_confirmation)
     end
   end
 
   def test_should_require_email
-    assert_no_difference User, :count do
+    assert_no_difference 'User.count' do
       u = create_user(:email => nil)
       assert u.errors.on(:email)
     end
   end
 
   def test_should_require_valid_email
-    assert_no_difference User, :count do
+    assert_no_difference 'User.count' do
       u = create_user(:email => "xxx")
       assert u.errors.on(:email)
     end
   end
   
   def test_should_require_row_count_greater_than_one
-    assert_no_difference User, :count do
+    assert_no_difference 'User.count' do
       u = create_user(:row_limit => 0)
       assert u.errors.on(:row_limit)
     end
@@ -145,23 +145,6 @@ class UserTest < Test::Unit::TestCase
     assert_equal 30, alloc_user.available_user_votes
     assert_equal 14, alloc_user.available_enterprise_votes
     assert_equal 44, alloc_user.available_votes
-  end
-  
-#  def test_user_time
-#    user = User.new
-#    user.time_zone = TimeZone['Pacific Time (US & Canada)'].name
-#    est = TimeZone['Eastern Time (US & Canada)']
-#    est_time = est.adjust Time.new
-#    pst_time = user.user_time(est_time)
-#    diff = est_time - pst_time
-#    assert_equal 3 * 60 * 60, diff
-#  end
-  
-  def test_user_time_no_tz
-    user = User.new
-    user.time_zone = "dummy"
-    now = Time.new
-    assert_equal now, user.user_time(now)
   end
   
   def test_votes_has_many

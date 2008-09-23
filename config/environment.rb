@@ -11,6 +11,13 @@
 require File.join(File.dirname(__FILE__), 'boot')
 
 Rails::Initializer.run do |config|
+  # required gems
+  config.gem 'mislav-will_paginate', :version => '~> 2.3.2', :lib => 'will_paginate', 
+    :source => 'http://gems.github.com'
+
+  # Default timezone...Set this to the timezone where the server resides
+  config.time_zone = 'Eastern Time (US & Canada)'
+  
   # Settings in config/environments/* take precedence over those specified here
 
   # Skip frameworks you're not going to use (only works if using vendor/rails)

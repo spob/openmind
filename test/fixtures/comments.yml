@@ -1,40 +1,23 @@
-<%
-fixtures :users, :ideas, :topics
-id = 0;
-%>
-
 first_comment:
-  id: <%= id += 1 %>
-  user_id: <%= users(:quentin, 'id') %>
-  idea_id: <%= ideas(:first_idea, 'id') %>
+  user: quentin
+  idea: first_idea
   body: first comment for first idea
-  created_at: <%=1.days.ago.to_s :db %>
-  updated_at: <%=Time.now.to_s(:db)%>
   type: IdeaComment
 
 second_comment:
-  id: <%= id += 1 %>
-  user_id: <%= users(:aaron, 'id') %>
-  idea_id: <%= ideas(:first_idea, 'id') %>
+  user: aaron
+  idea: first_idea
   body: second comment for first idea
-  created_at: <%=1.days.ago.to_s :db %>
-  updated_at: <%=Time.now.to_s(:db)%>
   type: IdeaComment
 
 third_comment:
-  id: <%= id += 1 %>
-  user_id: <%= users(:prodmgr, 'id') %>
-  idea_id: <%= ideas(:no_votes_idea, 'id') %>
+  user: prodmgr
+  idea: no_votes_idea
   body: third comment for no votes idea
-  created_at: <%=1.days.ago.to_s :db %>
-  updated_at: <%=Time.now.to_s(:db)%>
   type: IdeaComment
 
 topic_comment:
-  id: <%= id += 1 %>
-  user_id: <%= users(:prodmgr, 'id') %>
-  topic_id: <%= topics(:bug_topic1, 'id') %>
+  user: prodmgr
+  topic: bug_topic1
   body: topic comment
-  created_at: <%=1.days.ago.to_s :db %>
-  updated_at: <%=Time.now.to_s(:db)%>
   type: TopicComment

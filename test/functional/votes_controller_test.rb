@@ -8,13 +8,13 @@ class VotesControllerTest < Test::Unit::TestCase
   # BOB -- So, I'm supposed to include this? 
   # I don't think you need it...
   # include AuthenticatedTestHelper
-  fixtures :ideas, :users, :roles_users, :votes, :allocations
+  fixtures :ideas, :users, :votes, :allocations
 
   def setup
     @controller = VotesController.new
     @request    = ActionController::TestRequest.new
     @response   = ActionController::TestResponse.new
-    @first_id = Idea.find(:first)
+    @first_idea = Idea.find(:first)
     login_as 'allroles'
   end
   
@@ -41,12 +41,12 @@ class VotesControllerTest < Test::Unit::TestCase
    
     num_votes = Vote.find(:all).size
     for i in 1..allocations_count
-      post :create, :id => @first_id
+      post :create, :id => @first_idea
       assert_response :redirect
       assert_redirected_to :action => 'show'
-      assert_equal "Vote recorded for idea number 1 and idea is being watched", 
+      assert_equal "Vote recorded for idea number #{@first_idea.id} and idea is being watched", 
         flash[:notice] if i == 1
-      assert_equal "Vote recorded for idea number 1", 
+      assert_equal "Vote recorded for idea number #{@first_idea.id}", 
         flash[:notice] unless i == 1
       # force reload of user from the database to get the latest non-cached values
       assert_equal allocations_count - i, 
@@ -54,7 +54,7 @@ class VotesControllerTest < Test::Unit::TestCase
       assert_equal num_votes + 1, Vote.find(:all).size
       num_votes += 1
     end
-    post :create, :id => @first_id
+    post :create, :id => @first_idea
     assert_response :redirect
     assert_redirected_to :action => 'show'
     assert_equal "You don't have enough votes available to vote", 
@@ -63,10 +63,10 @@ class VotesControllerTest < Test::Unit::TestCase
     assert_equal 0, User.find(users(:allroles).id).available_votes
     
     num_votes = Vote.find(:all).size
-    delete :destroy, :id => @first_id
+    delete :destroy, :id => @first_idea
     assert_response :redirect
     assert_redirected_to :action => 'show'
-    assert_equal "Vote rescinded for idea number 1", 
+    assert_equal "Vote rescinded for idea number #{@first_idea.id}", 
       flash[:notice]
     assert_equal num_votes - 1, Vote.find(:all).size
   end

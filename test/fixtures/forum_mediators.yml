@@ -1,9 +1,0 @@
-<%
-fixtures :forums, :users
-
-id = 0;
-%>
-bugs_mediators:
-  user_id: <%= users(:quentin).id %>
-  forum_id: <%= forums(:bugs_forum) %>
-  created_at: <%=5.days.ago.to_s :db %>

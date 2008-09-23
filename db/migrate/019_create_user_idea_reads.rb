@@ -3,7 +3,7 @@ class CreateUserIdeaReads < ActiveRecord::Migration
     create_table :user_idea_reads do |t|
       t.column :user_id,:integer, :null => false
       t.column :idea_id,:integer, :null => false
-      t.column :last_read, :datetime, :null => false, :default => Time.now
+      t.column :last_read, :datetime, :null => false, :default => Time.zone.now
       t.column :created_at, :datetime, :null => false 
       t.column :updated_at, :datetime, :null => false
       t.column :lock_version, :integer, :default => 0

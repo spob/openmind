@@ -5,7 +5,7 @@ require 'releases_controller'
 class ReleasesController; def rescue_action(e) raise e end; end
 
 class ReleasesControllerTest < Test::Unit::TestCase
-  fixtures :releases, :users, :roles_users
+  fixtures :releases, :users
 
   def setup
     @controller = ReleasesController.new

@@ -51,7 +51,7 @@ class PeriodicJobTest < Test::Unit::TestCase
 
   def test_run_at_job_run_yesterday
     job = periodic_jobs(:run_at_job_run_yesterday)
-    minutes = Time.now.hour * 60 + Time.now.min
+    minutes = Time.zone.now.hour * 60 + Time.zone.now.min
     job.run_at_minutes = minutes + 3
     job.save
     job = PeriodicJob.find(job.id)

@@ -52,8 +52,7 @@ class AllocationsController < ApplicationController
   def new
     if @allocation.nil?
       @allocation = UserAllocation.new
-      expiration_days = APP_CONFIG['allocation_expiration_days'].to_i
-      @allocation.expiration_date = Date.jd(Date.today.jd + expiration_days)
+      @allocation.expiration_date = Allocation.calculate_expiration_date
     end
   end
 
@@ -160,7 +159,8 @@ class AllocationsController < ApplicationController
         @errors << "Record #{n}: invalid expire days '#{expire_days}', must be greater than 0"
         next
       end
-      expiration_date = Date.jd(Date.today.jd + expire_days)
+      expiration_date = 
+        Date.jd(DateUtils.today.jd + expire_days)
       
       if type == "User"
         user = User.find_by_email(row[1])

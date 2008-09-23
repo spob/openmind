@@ -51,7 +51,7 @@ class EnterprisesController < ApplicationController
         alloc = EnterpriseAllocation.new(
           :quantity => qty, 
           :comments => "",
-          :expiration_date => Date.jd(Date.today.jd + APP_CONFIG['allocation_expiration_days']))
+          :expiration_date => Allocation.calculate_expiration_date)
       end
     end
     if @enterprise.save

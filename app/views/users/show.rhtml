@@ -31,7 +31,7 @@
   </p>
   <p>
     <label for="enterprise">Enterprise:</label>
-    <%=h @user.enterprise.name %>
+    <%= link_to h(@user.enterprise.name), enterprise_path(@user.enterprise) %>
   </p>
   <p>
     <label for="active">Active:</label>
@@ -57,9 +57,9 @@
     <label>Roles:</label><br />
     <% for role in @user.roles %>
       <% if @user.roles.include?(role) %>
-      &bull;&nbsp;<%= h role.description %><br />
+        &bull;&nbsp;<%= h role.description %><br />
+      <% end %>
     <% end %>
-  <% end %>
   </p>
   <p>
     <label>User Groups:</label><br />
@@ -67,37 +67,37 @@
       &bull;&nbsp;<%= h group.name %><br />
     <% end %>
   </p>
-    <% if !CustomField.users_custom_boolean1.nil? %>
+  <% if !CustomField.users_custom_boolean1.nil? %>
     <p>
       <label for="custom_boolean1"><%= CustomField.users_custom_boolean1 %>:</label>
       <%= h @user.custom_boolean1 %>
     </p>
-    <% end %>
+  <% end %>
   <p>
     <label>User Allocations:</label><br />
-  <% for allocation in @user.allocations %>
-    &bull;&nbsp;Allocation of quantity <%=h allocation.quantity %> (<%= pluralize allocation.votes.size, 'vote' %> used) created on <%=om_date_time(allocation.created_at) %><br />
-  <% end %>
+    <% for allocation in @user.allocations %>
+      &bull;&nbsp;Allocation of quantity <%=h allocation.quantity %> (<%= pluralize allocation.votes.size, 'vote' %> used) created on <%=om_date_time(allocation.created_at) %><br />
+    <% end %>
   </p>
   <p>
     <label>Enterprise Allocations:</label><br />
-  <% for allocation in @user.enterprise.allocations %>
-    &bull;&nbsp;Allocation of quantity <%=h allocation.quantity %> (<%= pluralize allocation.votes.size, 'vote' %> used) created on <%=om_date_time(allocation.created_at) %><br />
-  <% end %>
+    <% for eallocation in @user.enterprise.allocations %>
+      &bull;&nbsp;Allocation of quantity <%=h eallocation.quantity %> (<%= pluralize eallocation.votes.size, 'vote' %> used) created on <%=om_date_time(eallocation.created_at) %><br />
+    <% end %>
   </p>
   <p>
     <label>Vote History:</label><br />
-  <% for vote in @user.all_votes %>
-    &bull;&nbsp;Idea <%=h vote.idea.user_friendly_idea_name %>, voted for on <%=om_date_time(vote.created_at) %><br />
-  <% end %>
+    <% for vote in @user.all_votes %>
+      &bull;&nbsp;Idea <%=h vote.idea.user_friendly_idea_name %>, voted for on <%=om_date_time(vote.created_at) %><br />
+    <% end %>
   </p>
   <h3>Logons (last 90 days):</h3>
-<% @user.user_logons_90_days.in_groups_of(5) do |row_logons| %>
-  <% for logon in row_logons %>
-    <% if !logon.nil? %>
-    &bull;&nbsp;&nbsp;<%= h om_date_time(logon.created_at) %>&nbsp;&nbsp;&nbsp;
+  <% @user.user_logons_90_days.in_groups_of(5) do |row_logons| %>
+    <% for logon in row_logons %>
+      <% if !logon.nil? %>
+        &bull;&nbsp;&nbsp;<%= h om_date_time(logon.created_at) %>&nbsp;&nbsp;&nbsp;
+      <% end %>
+    <% end %>
+    <br />
   <% end %>
-<% end %>
-  <br />
-<% end %>
 </div>

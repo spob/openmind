@@ -96,10 +96,10 @@ class EmailNotifier < ActionMailer::Base
     @subject     = APP_CONFIG['email_subject_prefix']
     @subject        += ': ' unless @subject =~ /:\s$/
     @subject        += ' ' if @subject =~ /:$/
-    @sent_on     = Time.now
+    @sent_on     = Time.zone.now
     @body[:user] = user unless user.nil?
     @body[:email_image_url] = APP_CONFIG['email_image_url']
-    @body[:date_stamp] = Time.now.strftime "%A, %B %d, %Y"
+    @body[:date_stamp] = Time.zone.now.strftime "%A, %B %d, %Y"
   end
   
   def watcher_email_addresses idea

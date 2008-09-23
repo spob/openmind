@@ -6,12 +6,12 @@ class ApplicationController < ActionController::Base
   include SimpleCaptcha::ControllerHelpers 
   helper_method :prodmgr?, :voter?, :allocmgr?, :sysadmin?, :can_edit_idea?, 
     :can_delete_idea?, :flash_error_string, :flash_notice_string
-  filter_parameter_logging :password, :password_confirmation
+  filter_parameter_logging :password, :password_confirmation# controllers/application.rb
   
   # Pick a unique cookie name to distinguish our session data from others'
   session :session_key => '_OpenMind_session_id'
   
-  before_filter :login_from_cookie
+  before_filter :login_from_cookie, :set_time_zone
 
   def login_from_cookie
     # what it's saying is, if theres no session var but there is the token 
@@ -19,11 +19,15 @@ class ApplicationController < ActionController::Base
     return unless session[:user].nil? && cookies[:auth_token]
     user = User.find_by_remember_token(cookies[:auth_token])
     if !user.nil? 
-      if user.remember_token_expires_at >= Time.now
+      if user.remember_token_expires_at >= Time.zone.now
         self.current_user = user
         self.current_user.user_logons.create
       end
     end
+  end
+
+  def set_time_zone
+    Time.zone = current_user.time_zone if current_user != :false
   end
   
   def prodmgr?

@@ -5,6 +5,6 @@ class RemoveUpdatedAtOnRolesUsers < ActiveRecord::Migration
 
   def self.down
     add_column :roles_users, :updated_at, :datetime, 
-      :default => Time.now.to_s(:db), :null => false
+      :default => Time.zone.now.to_s(:db), :null => false
   end
 end

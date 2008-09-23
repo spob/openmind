@@ -1,28 +1,15 @@
-# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 active_enterprise:
-  id: 1
   name: Enterprise1
   active: true
-  created_at: <%= 5.days.ago.to_s :db %>
-  updated_at: <%= Time.now.to_s :db %>
 
 inactive_enterprise:
-  id: 2
   name: Enterprise2
   active: false
-  created_at: <%= 1.days.ago.to_s :db %>
-  updated_at: <%= Time.now.to_s :db %>
 
 allocation_calculation_test:
-  id: 3
   name: AllocationCalcTest
   active: true
-  created_at: <%= 1.days.ago.to_s :db %>
-  updated_at: <%= Time.now.to_s :db %>
 
 no_users:
-  id: 4
   name: NoUser
   active: true
-  created_at: <%= 1.days.ago.to_s :db %>
-  updated_at: <%= Time.now.to_s :db %>

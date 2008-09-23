@@ -38,11 +38,11 @@ class AllocationTest < Test::Unit::TestCase
     assert_equal 10, allocations(:user_allocation).available_quantity
   end
   
-#  def test_allocated_to
-#    assert_equal "Bob A",
-#      allocations(:user_allocation).allocated_to.display_name
-#    assert_equal "Enterprise1", allocations(:enterprise_allocation).allocated_to.name
-#  end
+  #  def test_allocated_to
+  #    assert_equal "Bob A",
+  #      allocations(:user_allocation).allocated_to.display_name
+  #    assert_equal "Enterprise1", allocations(:enterprise_allocation).allocated_to.name
+  #  end
   
   def test_vote_count    
     assert_equal 1, allocations(:user_allocation).votes.size
@@ -82,6 +82,14 @@ class AllocationTest < Test::Unit::TestCase
   end
   
   def test_user_expiration
+    #        puts "============start users"
+    #        for a in UserAllocation.find_all_by_user_id(users(:alloc_expiring_user))
+    #          puts "#{a.id} #{a.expiration_date} #{a.expiration_date.jd - Date.today.jd}"
+    #        end
+    #        puts "============start enterprise"
+    #        for a in EnterpriseAllocation.find_all_by_enterprise_id(users(:alloc_expiring_user).enterprise)
+    #          puts "#{a.id} #{a.expiration_date} #{a.expiration_date.jd - Date.today.jd}"
+    #        end
     assert_equal 14, Allocation.expiring_allocation_days(users(:alloc_expiring_user))
     assert_equal 119, Allocation.expiring_allocation_days(users(:force_change_pw))
   end

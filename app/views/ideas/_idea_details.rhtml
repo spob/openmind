@@ -2,11 +2,12 @@
 <div class="cssform">
 <p>
 <label>Product:</label>
-<%= h @idea.product.name %>
+<%= link_to h(@idea.product.name), product_path(@idea.product) %>
 </p>
 <p>
 <label>Release:</label>
-<%= h "#{@idea.release.version} (#{@idea.release.release_status.description})" unless @idea.release.nil? %>&nbsp;
+<%= link_to h("#{@idea.release.version} (#{@idea.release.release_status.description})"), 
+  :controller => "releases", :action => "show", :id => @idea.release unless @idea.release.nil? %>&nbsp;
 </p>
 <p>
   <label>Tags:</label>

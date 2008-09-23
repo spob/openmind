@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
 class TopicTest < Test::Unit::TestCase
-  fixtures :topics, :users, :comments
+  fixtures :topics, :users, :comments, :topic_watches
 
   def test_unread_comment
     topic = topics(:bug_topic1)
@@ -27,6 +27,17 @@ class TopicTest < Test::Unit::TestCase
     topic = Topic.find(topic.id)
     assert 2, topic.comments.count
     assert topic.unread_comment?(user)
+  end
+  
+  def test_unread_comments
+    topic = topics(:bug_topic1)
+    assert 0, topic.unread_comments(users(:quentin)).size
+    
+    comment = TopicComment.new(:user_id => users(:aaron).id, :body => 'hello')
+    topic.comments << comment
+    topic.save
+    
+    assert 1, topic.unread_comments(users(:quentin)).size
   end
   
   def test_watch_topic

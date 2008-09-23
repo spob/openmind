@@ -1,2 +1,2 @@
-module WatchHelper
+module WatchesHelper
 end

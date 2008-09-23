@@ -34,7 +34,7 @@ class PollsController < ApplicationController
     data = []
     labels = []
     g = Graph.new
-#    total_responses = poll.poll_options.collect(&:user_responses).size
+    #    total_responses = poll.poll_options.collect(&:user_responses).size
     for option in poll.poll_options
       if option.user_responses.size > 0
         data << option.user_responses.size
@@ -44,17 +44,17 @@ class PollsController < ApplicationController
 
     g.pie(70, '#505050', '{background-color:#FFFFFF; font-size: 12px; color: #404040;}')
     g.pie_values(data, labels)
-	g.set_bg_color('#FFFFFF')
+    g.set_bg_color('#FFFFFF')
     g.pie_slice_colors(%w(#CF2626 #5767AF  #D01FC3 #356AA0 #CF5ACD #CF750C #FF7200 #8F1A1A #ADD700 #57AF9D #C3CF5A #456F4F #C79810))
-#    g.set_tool_tip("#val#")
-#    g.title("Pie Chart", '{font-size:18px; color: #d01f3c}' )
+    #    g.set_tool_tip("#val#")
+    #    g.title("Pie Chart", '{font-size:18px; color: #d01f3c}' )
     render :text => g.render
   end
 
 
   def new
     @poll = Poll.new
-    @poll.close_date = Date.jd(Date.today.jd + 7)
+    @poll.close_date = Date.jd(DateUtils.today_utc.jd + 7)
   end
 
   def create
@@ -146,6 +146,7 @@ class PollsController < ApplicationController
     @poll = Poll.find(params[:id])
     if @poll.taken_survey?(current_user)
       flash[:error] = "You can only answer this survey once"
+      puts "...........here"
       redirect_to poll_path(@poll)
     end
   end

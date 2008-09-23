@@ -1,71 +1,44 @@
-# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
-<%
-id = 0
-fixtures :users, :enterprises
-%>
-
 user_allocation:
-  id: <%= id += 1 %>
   allocation_type: UserAllocation
   quantity: 10
   comments: user allocation comments
-  user_id: <%= users(:allroles, 'id') %>
-  created_at: <%=1.days.ago.to_s :db %>
-  updated_at: <%= Time.now.to_s :db %>
+  user: allroles
 
 enterprise_allocation:
-  id: <%= id += 1 %>
   allocation_type: EnterpriseAllocation
   quantity: 100
   comments: enterprise allocation comments
-  enterprise_id: <%=  enterprises(:active_enterprise, 'id') %>
-  created_at: <%=5.days.ago.to_s :db %>
-  updated_at: <%= Time.now.to_s :db %>
+  enterprise: active_enterprise
 
 allocation_calculation_test1:
-  id: <%= id += 1 %>
   allocation_type: UserAllocation
   quantity: 12
   comments: calc test1
-  user_id: <%= users(:allocation_calculation_test, 'id') %>
-  created_at: <%=5.days.ago.to_s :db %>
-  updated_at: <%= Time.now.to_s :db %>
+  user: allocation_calculation_test
 
 allocation_calculation_test2:
-  id: <%= id += 1 %>
   allocation_type: UserAllocation
   quantity: 20
   comments: calc test2
-  user_id: <%= users(:allocation_calculation_test, 'id') %>
-  created_at: <%=5.days.ago.to_s :db %>
-  updated_at: <%= Time.now.to_s :db %>
+  user: allocation_calculation_test
 
 allocation_calculation_test3:
-  id: <%= id += 1 %>
   allocation_type: EnterpriseAllocation
   quantity: 10
   comments: calc test3
-  enterprise_id: <%=  enterprises(:allocation_calculation_test, 'id') %>
-  created_at: <%=5.days.ago.to_s :db %>
-  updated_at: <%= Time.now.to_s :db %>
+  enterprise: allocation_calculation_test
   expiration_date: <%= 119.days.since.to_s :db %>
 
 allocation_calculation_test4:
-  id: <%= id += 1 %>
   allocation_type: EnterpriseAllocation
   quantity: 5
   comments: calc test4
-  enterprise_id: <%=  enterprises(:allocation_calculation_test, 'id') %>
-  created_at: <%=5.days.ago.to_s :db %>
-  updated_at: <%= Time.now.to_s :db %>
+  enterprise: allocation_calculation_test
   expiration_date: <%= 119.days.since.to_s :db %>
 
 user_exp_allocation:
-  id: <%= id += 1 %>
   allocation_type: UserAllocation
   quantity: 1
   comments: user allocation comments
-  user_id: <%= users(:alloc_expiring_user, 'id') %>
-  created_at: <%=1.days.ago.to_s :db %>
-  updated_at: <%= Time.now.to_s :db %>
-  expiration_date: <%= 2.weeks.since.to_s :db %>
+  user: alloc_expiring_user
+  expiration_date: <%= 14.days.since.to_s :db %>

@@ -5,7 +5,7 @@ require 'merge_ideas_controller'
 class MergeIdeasController; def rescue_action(e) raise e end; end
 
 class MergeIdeasControllerTest < Test::Unit::TestCase
-  fixtures :users, :enterprises, :roles_users, :ideas
+  fixtures :users, :enterprises, :ideas
   
   def setup
     @controller = MergeIdeasController.new

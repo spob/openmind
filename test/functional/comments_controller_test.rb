@@ -5,14 +5,14 @@ require 'comments_controller'
 class CommentsController; def rescue_action(e) raise e end; end
 
 class CommentsControllerTest < Test::Unit::TestCase
-  fixtures :comments, :users, :roles_users, :ideas
+  fixtures :comments, :users, :ideas
 
   def setup
     @controller = CommentsController.new
     @request    = ActionController::TestRequest.new
     @response   = ActionController::TestResponse.new
 
-    @first_id = comments(:first_comment).id
+    @comment_id = comments(:first_comment).id
     @idea_id = comments(:first_comment).idea_id
     @user_id = comments(:first_comment).user_id
     login_as 'allroles'
@@ -24,7 +24,7 @@ class CommentsControllerTest < Test::Unit::TestCase
   end
 
   def test_new
-    get :new, :id => @first_id
+    get :new, :id => @idea_id, :type => 'idea'
 
     assert_response :success
     assert_template 'new'
@@ -33,22 +33,22 @@ class CommentsControllerTest < Test::Unit::TestCase
   end
 
   def test_update
-    put :update, :id => @first_id
+    put :update, :id => @comment_id
     assert_response :redirect
-    assert_redirected_to :action => 'show', :id => @first_id
+    assert_redirected_to :action => 'show', :id => @idea_id
   end
 
   def test_destroy
     assert_nothing_raised {
-      Comment.find(@first_id)
+      Comment.find(@comment_id)
     }
 
-    delete :destroy, :id => @first_id
+    delete :destroy, :id => @comment_id
     assert_response :redirect
     assert_redirected_to :action => 'index'
 
     assert_raise(ActiveRecord::RecordNotFound) {
-      Comment.find(@first_id)
+      Comment.find(@comment_id)
     }
   end
 end

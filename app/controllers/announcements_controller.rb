@@ -3,7 +3,7 @@ class AnnouncementsController < ApplicationController
   access_control [:edit, :update, :destroy, :new, :create] => 'prodmgr | sysadmin'
   
   def index
-    current_user.update_attribute(:last_message_read, Time.now)
+    current_user.update_attribute(:last_message_read, Time.zone.now)
     @announcements = Announcement.list params[:page], current_user.row_limit
   end
 

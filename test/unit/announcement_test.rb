@@ -38,14 +38,14 @@ class AnnouncementTest < Test::Unit::TestCase
     assert user.last_message_read.nil?
     assert user.unread_announcements?
     
-    user.last_message_read = Time.now - 10 * @@day
+    user.last_message_read = Time.zone.now - 10 * @@day
     assert user.unread_announcements?
     
-    user.last_message_read = Time.now
+    user.last_message_read = Time.zone.now
     assert !user.unread_announcements?
     
     Announcement.delete_all 
-    user.last_message_read = Time.now - 10 * @@day
+    user.last_message_read = Time.zone.now - 10 * @@day
     assert !user.unread_announcements?
   end
   
@@ -56,10 +56,10 @@ class AnnouncementTest < Test::Unit::TestCase
     
     assert announcement.unread?(user)
     
-    user.last_message_read = Time.now - 10 * @@day
+    user.last_message_read = Time.zone.now - 10 * @@day
     assert announcement.unread?(user)
     
-    user.last_message_read = Time.now
+    user.last_message_read = Time.zone.now
     assert !announcement.unread?(user)
   end
 end
