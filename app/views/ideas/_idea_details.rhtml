@@ -1,50 +1,62 @@
 <div id="tabBody">
-<div class="cssform">
-<p>
-<label>Product:</label>
-<%= link_to h(@idea.product.name), product_path(@idea.product) %>
-</p>
-<p>
-<label>Release:</label>
-<%= link_to h("#{@idea.release.version} (#{@idea.release.release_status.description})"), 
-  :controller => "releases", :action => "show", :id => @idea.release unless @idea.release.nil? %>&nbsp;
-</p>
-<p>
-  <label>Tags:</label>
-  <%= h @idea.tag_list %>
-</p>
-<p>
-<label>Last updated: </label>
-<%= om_date_time @idea.updated_at %>&nbsp;
-</p>
-<p>
-<label>Watchers: </label>
-<%= h pluralize(@idea.watchers.size, 'person') %>&nbsp;
-</p>
-<p>
-<label>Viewed: </label>
-<%= h pluralize(@idea.view_count, 'time') %>&nbsp;
-</p>
-<!-- Merged Ideas, wasn't sure where to stuff this -->
+  <div class="cssform">
+    <p>
+      <label>Product:</label>
+      <%= link_to h(@idea.product.name), product_path(@idea.product) %>
+    </p>
+    <p>
+      <label>Release:</label>
+      <%= link_to h("#{@idea.release.version} (#{@idea.release.release_status.description})"), 
+          :controller => "releases", :action => "show", :id => @idea.release unless @idea.release.nil? %>&nbsp;
+    </p>
+    <p>
+      <label>Tags:</label>
+      <%= h @idea.tag_list %>
+    </p>
+    <p>
+      <label>Last updated: </label>
+      <%= om_date_time @idea.updated_at %>&nbsp;
+    </p>
+    <p>
+      <label>Watchers: </label>
+      <%= h pluralize(@idea.watchers.size, 'person') %>&nbsp;
+      <% if prodmgr? %>
+        <br/>
+        <% for user in @idea.watchers %>
+          &bull;&nbsp;
+          <% if sysadmin? %>
+            <%=link_to h(user_display_name(user)), :controller => 'users', :action => 'show', :id => user %>
+          <% else %>
+            <%= h user_display_name(user) %>
+          <% end %>
+          <br />
+        <% end %>
+  <% end %>
+    </p>
+    <p>
+      <label>Viewed: </label>
+      <%= h pluralize(@idea.view_count, 'time') %>&nbsp;
+    </p>
+    <!-- Merged Ideas, wasn't sure where to stuff this -->
 <% if !@idea.merged_to_idea.nil? %>
-<p>
-<label for="Merged to Idea">Merged to Idea:</label>
-This idea was merged into
-<%= merged_to_idea(@idea) %>
-</p>
-<% end %>
-<% if !@idea.merged_ideas.empty? %>
-<p>
-<!-- the format is a bit goofy RBS -->
-<label for="Merged Ideas">Merged Ideas:</label>
-The following ideas were merged into this idea:
-<ul>
-<% for idea in @idea.merged_ideas %>
-<li><%= link_to h(idea.user_friendly_idea_name), :action => 'show', 
-:id => idea.id %></li>
-<% end %>
-</ul>
-</p>
-<% end %>
-</div>
+      <p>
+        <label for="Merged to Idea">Merged to Idea:</label>
+        This idea was merged into
+        <%= merged_to_idea(@idea) %>
+      </p>
+    <% end %>
+    <% if !@idea.merged_ideas.empty? %>
+      <p>
+        <!-- the format is a bit goofy RBS -->
+        <label for="Merged Ideas">Merged Ideas:</label>
+        The following ideas were merged into this idea:
+        <ul>
+          <% for idea in @idea.merged_ideas %>
+            <li><%= link_to h(idea.user_friendly_idea_name), :action => 'show', 
+              :id => idea.id %></li>
+          <% end %>
+        </ul>
+      </p>
+    <% end %>
+  </div>
 </div>
