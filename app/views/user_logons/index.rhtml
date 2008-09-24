@@ -8,12 +8,6 @@
 <h1><%= theme_image_tag("icons/32x32/users.png", 
     options = {:alt=>"Logons"}) %>Logons in the Last 90 Days
 </h1>
-<div id="actionButtons">
-  <%= button_to 'List Users', 
-        option = {:controller => 'users', :action => 'list'}, 
-        html_options = {:class=> "button", 
-        :onmouseover => "Tip('List users')"} %>
-</div>
 <table cellspacing="0" cellpadding="0" class="cssform">
   <tr>
     <th>Logon Date</th>
