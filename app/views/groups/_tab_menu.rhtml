@@ -3,8 +3,8 @@
 <%end%>
 <div id="tabs">
   <ul class="tabs">
-    <li class="selected"><%= link_to "Users", option = {:action => :list } %></li>
-    <li><%= link_to "Groups", option = {:controller => 'groups', :action => 'index'}, 
+    <li><%= link_to "Users", option = {:controller => 'users', :action => :list } %></li>
+    <li class="selected"><%= link_to "Groups", option = {:controller => 'groups', :action => 'index'}, 
       html_options = {
       :onmouseover => "Tip('View user groups')",
       :method => :get } %></li>

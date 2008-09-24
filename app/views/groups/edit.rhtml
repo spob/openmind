@@ -2,13 +2,10 @@
   <%= set_focus_to_id 'group_name' -%>
 <%end%>
 <%= javascript_include_tag "wz_tooltip.js" %> 
+<%= render :partial => "tab_menu"%>
 <%= error_messages_for 'group' %>
 <% form_for :group, :url => group_path(@group), 
   :html => {:method => :put } do |form| %>
-  <div id="actionButtons2">
-    <%= link_to 'List User Groups', groups_path, html_options = {:class=> "button",
-        :onmouseover => "Tip('List user groups')"} %>
-  </div>
   <div class="formTitle"><%= theme_image_tag("icons/16x16/users.png", 
       options = {:alt=>"group"}) %>
   Edit User Group</div>

@@ -7,17 +7,11 @@
            <%= set_focus_to_id 'group_name' -%>              
 <%end%>
 <%= javascript_include_tag "wz_tooltip.js" %> 
+<%= render :partial => "tab_menu"%>
 
 <%= error_messages_for 'group' %>
 
 <h1><%= theme_image_tag("icons/48x48/users.png", options = {:alt=>"User Group"}) %>User Groups</h1>
-
-<div id="actionButtons">
-  <%= link_to 'List Users', options = {:controller => 'users', :action => 'list'}, 
-      html_options = { :class=> "button", 
-      :onmouseover => "Tip('Return to List Users')" } %>
-</div>
-
 <table cellspacing="0" cellpadding="0" class="cssform">
   <tr>
     <th>Group</th>
