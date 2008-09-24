@@ -3,7 +3,9 @@
 <%end%>
 <div id="tabs">
   <ul class="tabs">
-    <li><%= link_to "Periodic Jobs", periodic_jobs_path %></li>
+    <li><%= link_to "Periodic Jobs", periodic_jobs_path, 
+      html_options = {
+      :onmouseover => "Tip('View periodic jobs')" } %></li>
     <li class="selected"><%= link_to "Lookup Codes", lookup_codes_path, 
       html_options = {
       :onmouseover => "Tip('View lookup codes')",
