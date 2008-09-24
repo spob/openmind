@@ -1,0 +1,14 @@
+<%content_for :head do -%>
+  <%= theme_stylesheet_link_tag 'ideas' %>
+<%end%>
+<div id="tabs">
+  <ul class="tabs">
+    <li class="selected"><%= link_to "Periodic Jobs", periodic_jobs_path %></li>
+    <li><%= link_to "Lookup Codes", lookup_codes_path, 
+      html_options = {
+      :onmouseover => "Tip('View lookup codes')",
+      :method => :get } %></li>
+  </ul>
+</div>
+<div id="menuline"></div>
+<br/>

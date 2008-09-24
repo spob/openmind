@@ -14,14 +14,13 @@ module ApplicationHelper
       ["Products",        products_path,                       ],
       ["Releases",        list_releases_path,   [],                  [ "releases" ] ],
       ["Forums",          forums_path,          [],                  [ "topics" ] ],
-      ["Lookup Codes",    lookup_codes_path,    ["sysadmin"]   ],
-      ["Jobs",            periodic_jobs_path,    ["sysadmin"]   ],
       ["Users",           "/users",             ["sysadmin", "allocmgr"], ["groups", "user_requests", "user_logons"] ],
       ["Enterprises",     enterprises_path,     ["sysadmin", "allocmgr"] ],
       ["Allocations",     allocations_path,                    ],
       ["Votes",           votes_path                           ],
       ["Announcements",   announcements_path ,  ["sysadmin", "prodmgr"]  ],
       ["Polls",           polls_path ,          ],
+      ["Admin",           periodic_jobs_path,    ["sysadmin"],  ["lookup_codes"] ],
     ]
     
     #    puts "controller #{params["controller"]} action: #{params["action"]}"

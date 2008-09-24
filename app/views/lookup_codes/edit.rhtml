@@ -1,11 +1,9 @@
 <%content_for :bodyTag do -%>
   <%= set_focus_to_id 'lookup_code_short_name' %>
 <%end%>
+<%= render :partial => "tab_menu" %>
 <% form_for(:lookup_code, :url => lookup_code_path(@lookup_code), 
   :html => {:method => :put }) do |form| %>
-  <div id="actionButtons2">
-      <%= link_to 'List Lookup Codes', lookup_codes_path, html_options = {:class=> "button"}%>
-  </div>
   <div class="formTitle">
     <%= theme_image_tag("icons/16x16/lookupCodes.png", 
       options = {:alt=>"Lookup Code"}) %>
@@ -29,6 +27,7 @@
     <p>
       <label></label>
       <%= submit_tag 'Save', html_options = {:class=> "button", :disable_with => "Please wait..."} %> 
+      <%= link_to 'Cancel', lookup_codes_path, html_options = {:class=> "button"}%>
     </p>
   </div>
 <% end %>

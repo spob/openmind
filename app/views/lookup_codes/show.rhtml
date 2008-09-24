@@ -2,6 +2,7 @@
   <%= link_to 'Edit', edit_lookup_code_path(@lookup_code), html_options = {:class=> "button"}%>
   <%= link_to 'List Lookup Codes', lookup_codes_path, html_options = {:class=> "button"}%>
 </div>
+<%= render :partial => "tab_menu" %>
 <div class="formTitle">
     <%= theme_image_tag("icons/16x16/lookupCodes.png", 
       options = {:alt=>"Lookup Code"}) %>
