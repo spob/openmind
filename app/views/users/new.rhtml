@@ -2,6 +2,8 @@
     <%= set_focus_to_id 'user_email' %>
 <%end%>
 
+<%= render :partial => "tab_menu"%>
+
 <%= error_messages_for 'user' %>
 <% form_for :user, :url => { :action => "create" } do |form| %>
   <div class="formTitle">

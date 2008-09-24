@@ -3,12 +3,9 @@
 <%end%>
 <%= javascript_include_tag "wz_tooltip.js" %>
 
+<%= render :partial => "tab_menu"%>
+
 <% form_for :user, :url => { :action => "update", :id => @user } do |form| %>
-  <div id="actionButtons2">
-    <%= link_to 'List Users', options = {:action => 'list'}, 
-      html_options = { :class=> "button", 
-      :onmouseover => "Tip('Return to List Users')" } %>
-  </div>
   <div class="formTitle"><%=theme_image_tag("icons/16x16/userEdit.png", :alt=>"Edit User")%>Edit User</div>
   <div class="cssform widerLabel">
     <p>

@@ -1,4 +1,6 @@
 <%= javascript_include_tag "wz_tooltip.js" %> 
+
+<%= render :partial => "tab_menu"%>
 <div id="actionButtons2">
   <% restrict_to "sysadmin" do %>
     <%= link_to 'New User', option = {:action => 'new'}, 
@@ -14,9 +16,6 @@
       :class => "button",
       :onmouseover => "Tip('Reset the password for this user')"      } %>
   <% end %>
-  <%= link_to 'List Users', option = {:action => 'list'}, 
-    html_options = { :class=> "button",
-    :onmouseover => "Tip('Return to List Users')"} %>
 </div>
 <div class="formTitle"><%=theme_image_tag("icons/16x16/user.png", :alt=>"Edit User")%>User Detail</div>
 
