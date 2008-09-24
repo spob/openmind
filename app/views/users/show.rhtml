@@ -1,6 +1,7 @@
 <%= javascript_include_tag "wz_tooltip.js" %> 
 
 <%= render :partial => "tab_menu"%>
+<div id="tabBody" style="position:relative; padding-top:15px;">
 <div id="actionButtons2">
   <% restrict_to "sysadmin" do %>
     <%= link_to 'New User', option = {:action => 'new'}, 
@@ -19,7 +20,7 @@
 </div>
 <div class="formTitle"><%=theme_image_tag("icons/16x16/user.png", :alt=>"Edit User")%>User Detail</div>
 
-<div class="cssform">
+<div class="cssform" style="margin-top:0;">
   <p>
     <label for="email">Email:</label>
     <%=h @user.email %>
@@ -99,4 +100,5 @@
     <% end %>
     <br />
   <% end %>
+</div>
 </div>

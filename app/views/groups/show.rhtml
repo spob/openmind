@@ -1,12 +1,13 @@
 <%= javascript_include_tag "wz_tooltip.js" %> 
 <%= render :partial => "tab_menu"%>
+<div id="tabBody" style="position:relative; padding-top:15px;">
 <div id="actionButtons2">
   <%= link_to 'Edit', edit_group_path(@group), html_options = {:class=> "button",
         :onmouseover => "Tip('Edit this user group')"} %>
 </div>
 <div class="formTitle"><%= theme_image_tag("icons/16x16/users.png", 
   options = {:alt=>"User Group"}) %>User Group Detail</div>
-<div class="cssform">
+<div class="cssform" style="margin-top:0;">
   <p>
     <label>Name:</label>
     <%= @group.name %>
@@ -21,4 +22,5 @@
       &bull;&nbsp;<%=h user_display_name(user) %><br />
     <% end %> 
   </p>
+</div>
 </div>

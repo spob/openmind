@@ -5,6 +5,7 @@
 <%end%>
 <%= javascript_include_tag "wz_tooltip.js" %> 
 <%= render :partial => "tab_menu" %>
+<div id="tabBody" style="position:relative; padding-top:15px;">
 <h1>Periodic Jobs</h1>
 <table cellspacing="0" cellpadding="0" class="cssform">
   <tr>
@@ -19,3 +20,4 @@
 
 </table>
 <p><%= will_paginate @jobs %></p>
+</div>

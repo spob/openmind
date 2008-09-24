@@ -5,49 +5,53 @@
 <%= javascript_include_tag "wz_tooltip.js" %> 
 
 <%= render :partial => "tab_menu"%>
-<h1><%=theme_image_tag("icons/32x32/users.png", :alt=>"users")%>Users</h1>
-<div id="actionButtons">
-  <% restrict_to "sysadmin" do %>
-    <%= button_to 'Create User', option = {:action => 'new'}, 
-      html_options = {:class=> "button", 
-      :onmouseover => "Tip('Create a new user')"} %>
-    <%= button_to 'Bulk Load', option = {:action => 'export_import'}, 
-      html_options = {:class=> "button", 
-      :onmouseover => "Tip('Bulk load users into the users table')",
-      :method => :get } %>
+<div id="tabBody" style="position:relative; padding-top:15px;">
+  <h1><%=theme_image_tag("icons/32x32/users.png", :alt=>"users")%>Users</h1>
+  <div id="actionButtons" style="top:30px;">
+    <% restrict_to "sysadmin" do %>
+      <%= button_to 'Create User', option = {:action => 'new'}, 
+        html_options = {:class=> "button", 
+        :onmouseover => "Tip('Create a new user')"} %>
+      <%= button_to 'Bulk Load', option = {:action => 'export_import'}, 
+        html_options = {:class=> "button", 
+        :onmouseover => "Tip('Bulk load users into the users table')",
+        :method => :get } %>
     <% end %>
-</div>
-<br/><br/>
-
-<% if @tag1_begin %>
-  <%= user_filter_link "All", "All" %>
-  &nbsp;|&nbsp;
-  <%= user_filter_link @tag1_begin, @tag1_end %>
-  &nbsp;|&nbsp;
-  <%= user_filter_link @tag2_begin, @tag2_end %>
-  &nbsp;|&nbsp;
-  <%= user_filter_link @tag3_begin, @tag3_end %>
-  &nbsp;|&nbsp;
-  <%= user_filter_link @tag4_begin, @tag4_end %>
-  &nbsp;|&nbsp;
-  <%= user_filter_link @tag5_begin, @tag5_end %>
-<% end %>
-
-<table cellspacing="0" cellpadding="0" class="cssform">
-  <tr>
-    <th>Email</th>
-    <th>Name</th>
-    <th class="center">Available Enterprise Votes</th>
-    <th class="center">Available User Votes</th>
-    <th>Enterprise</th>
-    <th>Active</th>
-    <th>Last Logon</th>
-    <th>Action</th>
-  </tr>
+  </div>
   
-<%= render :partial => @users %>
-
-</table>
+  <% if @tag1_begin %>
+    <div style="padding:5px 0; margin:10px; border:solid 1px red;">
+      <%= user_filter_link "All", "All" %>
+      &nbsp;|&nbsp;
+      <%= user_filter_link @tag1_begin, @tag1_end %>
+      &nbsp;|&nbsp;
+      <%= user_filter_link @tag2_begin, @tag2_end %>
+      &nbsp;|&nbsp;
+      <%= user_filter_link @tag3_begin, @tag3_end %>
+      &nbsp;|&nbsp;
+      <%= user_filter_link @tag4_begin, @tag4_end %>
+      &nbsp;|&nbsp;
+      <%= user_filter_link @tag5_begin, @tag5_end %>
+    </div>
+<% end %>
+  
+  <table cellspacing="0" cellpadding="0"  class="cssform" style="padding-top:0; margin-top:0;">
+    <tr>
+      <th>Email</th>
+      <th>Name</th>
+      <th class="center">Available Enterprise Votes</th>
+      <th class="center">Available User Votes</th>
+      <th>Enterprise</th>
+      <th>Active</th>
+      <th>Last Logon</th>
+      <th>Action</th>
+    </tr>
+    
+    <%= render :partial => @users %>
+    
+  </table>
+  
+</div>
 <%= will_paginate @users %>
 <% restrict_to "sysadmin" do %>
 <% end %>

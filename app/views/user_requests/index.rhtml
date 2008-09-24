@@ -5,6 +5,7 @@
 <%end%>
 <%= javascript_include_tag "wz_tooltip.js" %> 
 <%= render :partial => "tab_menu"%>
+<div id="tabBody" style="position:relative; padding-top:15px;">
 <%= error_messages_for 'user_request' %>
 <h1>
   <%= theme_image_tag("icons/32x32/users.png", 
@@ -43,3 +44,4 @@
 
 </table>
 <p><%= will_paginate @user_requests %></p>
+</div>

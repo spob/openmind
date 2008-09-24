@@ -2,6 +2,7 @@
   <%= set_focus_to_id 'lookup_code_short_name' %>
 <%end%>
 <%= render :partial => "tab_menu" %>
+<div id="tabBody" style="position:relative; padding-top:15px;">
 <% form_for(:lookup_code, :url => lookup_code_path(@lookup_code), 
   :html => {:method => :put }) do |form| %>
   <div class="formTitle">
@@ -9,7 +10,7 @@
       options = {:alt=>"Lookup Code"}) %>
     Lookup Codes
   </div>
-  <div class="cssform">
+  <div class="cssform" style="margin-top:0;">
     <p>
       <label for="lookup_code_class">Type:</label>
       <%= @lookup_code.class %>
@@ -31,3 +32,4 @@
     </p>
   </div>
 <% end %>
+</div>

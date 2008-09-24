@@ -4,6 +4,7 @@
 <%end%>
 <%= javascript_include_tag "wz_tooltip.js" %> 
 <%= render :partial => "tab_menu" %>
+<div id="tabBody" style="position:relative; padding-top:15px;">
 <%= error_messages_for 'lookup_code' %>
 <h1><%= theme_image_tag("icons/32x32/lookupCodes.png", 
           options = {:alt=>"Lookup Codes"}) %>Lookup Codes</h1>
@@ -30,3 +31,4 @@
   <%= render :partial => 'lookup_code_item', :collection => @lookup_codes %>
 </table>
 <p><%= will_paginate @lookup_codes %></p>
+</div>

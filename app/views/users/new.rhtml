@@ -3,14 +3,14 @@
 <%end%>
 
 <%= render :partial => "tab_menu"%>
-
+<div id="tabBody" style="position:relative; padding-top:15px;">
 <%= error_messages_for 'user' %>
 <% form_for :user, :url => { :action => "create" } do |form| %>
   <div class="formTitle">
     <%= theme_image_tag("icons/16x16/userEdit.png", 
         options = {:alt=>"Create User"}) %>
   Create User</div>
-  <div class="cssform widerLabel">
+  <div class="cssform widerLabel" style="margin-top:0;">
     <p>
       <label for="user_email">Email:</label>
       <%= form.text_field :email, { } %>
@@ -76,3 +76,4 @@
     </p>
   </div>
 <% end %>
+</div>

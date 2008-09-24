@@ -1,5 +1,6 @@
 <%= javascript_include_tag "wz_tooltip.js" %> 
 <%= render :partial => "tab_menu"%>
+<div id="tabBody" style="position:relative; padding-top:15px;">
 <div id="actionButtons2">
   <% if @user_request.status == UserRequest.pending %>
   <%= link_to 'Edit', edit_user_request_path(@user_request), html_options = {:class=> "button",
@@ -52,4 +53,5 @@
     <label for="created_at">Requested At:</label>
     <%= format_date_time(@user_request.created_at) %>
   </p>
+</div>
 </div>

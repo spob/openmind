@@ -3,13 +3,14 @@
 <%end%>
 <%= javascript_include_tag "wz_tooltip.js" %> 
 <%= render :partial => "tab_menu"%>
+<div id="tabBody" style="position:relative; padding-top:15px;">
 <%= error_messages_for 'group' %>
 <% form_for :group, :url => group_path(@group), 
   :html => {:method => :put } do |form| %>
   <div class="formTitle"><%= theme_image_tag("icons/16x16/users.png", 
       options = {:alt=>"group"}) %>
   Edit User Group</div>
-  <div class="cssform">
+  <div class="cssform" style="margin-top:0;">
     <p>
       <label for="group_name">Name:</label>
       <%= form.text_field :name, { :size => 50, :maxlength => 50 } %>
@@ -27,3 +28,4 @@
     </p>
   </div>
 <% end %>
+</div>

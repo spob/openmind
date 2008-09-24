@@ -8,7 +8,7 @@
 <%end%>
 <%= javascript_include_tag "wz_tooltip.js" %> 
 <%= render :partial => "tab_menu"%>
-
+<div id="tabBody" style="position:relative; padding-top:15px;">
 <%= error_messages_for 'group' %>
 
 <h1><%= theme_image_tag("icons/48x48/users.png", options = {:alt=>"User Group"}) %>User Groups</h1>
@@ -31,3 +31,4 @@
   <%=render(:partial => "group_item", :collection => @groups)%>
   </table>
   <p><%= will_paginate @groups %></p>
+</div>

@@ -4,10 +4,10 @@
 <%= javascript_include_tag "wz_tooltip.js" %>
 
 <%= render :partial => "tab_menu"%>
-
+<div id="tabBody" style="position:relative; padding-top:15px;">
 <% form_for :user, :url => { :action => "update", :id => @user } do |form| %>
   <div class="formTitle"><%=theme_image_tag("icons/16x16/userEdit.png", :alt=>"Edit User")%>Edit User</div>
-  <div class="cssform widerLabel">
+  <div class="cssform widerLabel" style="margin-top:0;">
     <p>
       <label for="user_email">Email:</label>
       <%= form.text_field :email, { } %>
@@ -89,6 +89,7 @@
     </p>
 </div>
 <% end %>
+</div>
 <script type="text/javascript" language="JavaScript"><!--
   function reverseDisplay(d) {
     if(document.getElementById(d).style.display == "none") { 

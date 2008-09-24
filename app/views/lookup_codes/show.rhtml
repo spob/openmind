@@ -3,6 +3,7 @@
   <%= link_to 'List Lookup Codes', lookup_codes_path, html_options = {:class=> "button"}%>
 </div>
 <%= render :partial => "tab_menu" %>
+<div id="tabBody" style="position:relative; padding-top:15px;">
 <div class="formTitle">
     <%= theme_image_tag("icons/16x16/lookupCodes.png", 
       options = {:alt=>"Lookup Code"}) %>
@@ -25,4 +26,5 @@
     <label align="right">Sort Value:</label>
     <%= @lookup_code.sort_value %>
   </p>
+</div>
 </div>
