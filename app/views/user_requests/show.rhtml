@@ -1,11 +1,10 @@
 <%= javascript_include_tag "wz_tooltip.js" %> 
+<%= render :partial => "tab_menu"%>
 <div id="actionButtons2">
   <% if @user_request.status == UserRequest.pending %>
   <%= link_to 'Edit', edit_user_request_path(@user_request), html_options = {:class=> "button",
                 :onmouseover => "Tip('Edit this user request')"} %>
           <% end %>
-<%= link_to 'List Account Requests', user_requests_path , html_options = {:class=> "button",
-              :onmouseover => "Tip('List account requests')"} %>
 </div>
 <div class="formTitle">
   <%= theme_image_tag("icons/16x16/userEdit.png", 

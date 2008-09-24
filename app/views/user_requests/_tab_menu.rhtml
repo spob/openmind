@@ -1,0 +1,23 @@
+<%content_for :head do -%>
+  <%= theme_stylesheet_link_tag 'ideas' %>
+<%end%>
+<div id="tabs">
+  <ul class="tabs">
+    <li><%= link_to "Users", option = {:controller => 'users', :action => :list } %></li>
+    <li><%= link_to "Groups", option = {:controller => 'groups', :action => 'index'}, 
+      html_options = {
+      :onmouseover => "Tip('View user groups')",
+      :method => :get } %></li>
+    <li><%= link_to "Logon History", option = {:controller => 'user_logons', :action => 'index'}, 
+      html_options = {
+      :onmouseover => "Tip('View logons in the last 90 days')",
+      :method => :get } %></li>
+    <li class="selected"><%= link_to "Account Requests",  
+      user_requests_path, 
+      html_options = {
+      :onmouseover => "Tip('View account requests')",
+      :method => :get } %></li>
+  </ul>
+</div>
+<div id="menuline"></div>
+<br/>

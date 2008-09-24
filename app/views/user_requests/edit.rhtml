@@ -2,13 +2,10 @@
       <%= set_focus_to_id 'user_request_email' %>
 <%end%>
 <%= javascript_include_tag "wz_tooltip.js" %> 
+<%= render :partial => "tab_menu"%>
 <%= error_messages_for 'user_request' %>
 <% form_for :user_request, :url => user_request_path(@user_request), 
     :html => {:method => :put } do |form| %>
-  <div id="actionButtons2">
-    <%= link_to 'List User Requests', user_requests_path, html_options = {:class=> "button",
-          :onmouseover => "Tip('List user requests')"} %>
-  </div>
   <div class="formTitle">
   <%= theme_image_tag("icons/16x16/userEdit.png", 
             options = {:alt=>"OpenMind Account Request Detail"}) %>

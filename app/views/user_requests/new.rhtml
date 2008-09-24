@@ -3,6 +3,7 @@
 <%end%>
 
 <%= error_messages_for 'user_request' %>
+<%= render :partial => "tab_menu"%>
 <% form_for :user_request, :url => { :action => "create" } do |form| %>
   <div class="formTitle">
     <%= theme_image_tag("icons/16x16/userEdit.png", 
