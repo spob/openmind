@@ -1,5 +1,4 @@
 <%content_for :head do -%>
-  <%= theme_stylesheet_link_tag 'forms' %>
   <%= theme_stylesheet_link_tag 'tables' %>
   <%= javascript_include_tag "tablecloth" %>                
 <%end%>
@@ -27,9 +26,3 @@
         :onclick => "document.getElementById('unselected').checked = true;this.disabled=true;this.value='Please wait...';this.form.submit();"} %>
   </div>
 <% end %>
-<%content_for :head do -%>
-  <%= theme_stylesheet_link_tag 'forms' %>
-  <%= theme_stylesheet_link_tag 'tables' %>
-  <%= javascript_include_tag "tablecloth" %>                
-<%end%>
-<%= javascript_include_tag "wz_tooltip.js" %> 

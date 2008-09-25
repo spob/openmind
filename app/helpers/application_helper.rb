@@ -63,9 +63,13 @@ module ApplicationHelper
     image_tag("#{@@theme_path}/images/#{image_path}", params)
   end  
   
-  def theme_stylesheet_link_tag stylesheet
+  def theme_stylesheet_link_tag *stylesheets
     assign_theme_path
-    stylesheet_link_tag("#{@@theme_path}/stylesheets/#{stylesheet}")
+    sheets = []
+    for sheet in stylesheets
+      sheets << "#{@@theme_path}/stylesheets/#{sheet}"
+    end
+    stylesheet_link_tag(sheets, :cache => true)
   end  
   
   

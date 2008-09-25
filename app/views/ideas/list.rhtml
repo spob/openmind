@@ -1,9 +1,5 @@
 <%content_for :head do -%>
-  <%= theme_stylesheet_link_tag 'tables' %>
-  <%= theme_stylesheet_link_tag 'forms' %>
-  <%= theme_stylesheet_link_tag 'ideas' %>
-  <%= theme_stylesheet_link_tag 'sideBarRight' %>
-  <%= theme_stylesheet_link_tag 'filtermenu' %>
+  <%= theme_stylesheet_link_tag 'tables', 'ideas', 'sideBarRight', 'filtermenu' %>
 
   <% if !@ideas.empty? %>
   <%= javascript_include_tag "tablecloth" %>  
