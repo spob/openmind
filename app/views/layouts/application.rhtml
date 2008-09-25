@@ -5,10 +5,10 @@
     <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
     <meta http-equiv="Content-Language" content="en-us" />
     <%= theme_stylesheet_link_tag 'global', 'forms' %>
-    <%= javascript_include_tag 'prototype', 'effects', :cache => true %>
+    <%= javascript_include_tag 'prototype', 'effects', :cache => "cache/app" %>
     <%= yield :head %>
     <!--[if lte IE 6]>
-    <%= theme_stylesheet_link_tag 'png_fix','peekaboobug_fix' %>
+    <%= theme_stylesheet_link_tag 'png_fix', 'peekaboobug_fix' %>
     <%= yield :ieOnlyCss-%>
     <![endif]-->
   </head>
