@@ -6,7 +6,7 @@
 <%content_for :bodyTag do -%>
 	<%= set_focus_to_id 'forum_search' -%>              
 <%end%>
-<%= javascript_include_tag "wz_tooltip.js" %> 
+<%= javascript_include_tag "wz_tooltip.js", :cache => true %> 
 <%= error_messages_for 'forum' %>
 <h1><%= theme_image_tag("icons/48x48/forums.png", options = {:alt=>"Forum"}) %>Forums</h1>
 <% if current_user != :false and sysadmin? %>

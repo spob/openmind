@@ -1,9 +1,9 @@
 <%content_for :head do -%>
   <%= theme_stylesheet_link_tag 'tables' %>
-  <%= javascript_include_tag "tablecloth" %>
+  <%= javascript_include_tag "tablecloth", :cache => true %>
   <%= auto_discovery_link_tag(:rss, url_options = {:action=>'rss'}, tag_options = {:title=>'OpenMind: Announcements'})%>
 <%end%>
-<%= javascript_include_tag "wz_tooltip.js" %> 
+<%= javascript_include_tag "wz_tooltip.js", :cache => true %> 
 
 <h1><%= theme_image_tag("icons/32x32/announcements1.png", 
           options = {:alt=>"Announcements"}) %>Announcements</h1>

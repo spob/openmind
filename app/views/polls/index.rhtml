@@ -1,9 +1,9 @@
 <%= calendar_date_select_includes "blue" %>
 <%content_for :head do -%>
     <%= theme_stylesheet_link_tag 'tables' %>
-    <%= javascript_include_tag "tablecloth" %>                
+    <%= javascript_include_tag "tablecloth", :cache => true %>                
 <%end%>
-<%= javascript_include_tag "wz_tooltip.js" %> 
+<%= javascript_include_tag "wz_tooltip.js", :cache => true %> 
 <%= error_messages_for 'poll' %>
 <h1><%= theme_image_tag("icons/32x32/polls.png", options = {:alt=>"Poll"}) %>Polls</h1>
 <table cellspacing="0" cellpadding="0" class="cssform">

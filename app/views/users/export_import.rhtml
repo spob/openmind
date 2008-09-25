@@ -1,4 +1,4 @@
-<%= javascript_include_tag "wz_tooltip.js" %> 
+<%= javascript_include_tag "wz_tooltip.js", :cache => true %> 
 <div id="actionButtons2">  
   <%= link_to 'List Users', option = {:action => 'list'}, 
           html_options = { :class=> "button",

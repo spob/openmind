@@ -1,7 +1,7 @@
 <%content_for :bodyTag do -%>
   <%= set_focus_to_id 'enterprise_name' -%>
 <%end%>
-<%= javascript_include_tag "wz_tooltip.js" %> 
+<%= javascript_include_tag "wz_tooltip.js", :cache => true %> 
 <%= error_messages_for 'enterprise' %>
 <% form_for :enterprise, :url => enterprise_path(@enterprise), 
   :html => {:method => :put } do |form| %>

@@ -2,7 +2,7 @@
   <%= theme_stylesheet_link_tag 'tables' %>\
   <%= javascript_include_tag "tablecloth" %>
 <%end%>
-<%= javascript_include_tag "wz_tooltip.js" %> 
+<%= javascript_include_tag "wz_tooltip.js", :cache => true %> 
 <%= error_messages_for 'enterprise' %>
 <h1><%= theme_image_tag("icons/32x32/enterprises.png", 
       options = {:alt=>"Enterprises"}) %>Enterprises</h1>

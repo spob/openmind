@@ -1,7 +1,7 @@
 <%content_for :bodyTag do -%>
   <%= set_focus_to_id 'group_name' -%>
 <%end%>
-<%= javascript_include_tag "wz_tooltip.js" %> 
+<%= javascript_include_tag "wz_tooltip.js", :cache => true %> 
 <%= render :partial => "tab_menu"%>
 <div id="tabBody" style="position:relative; padding-top:15px;">
 <%= error_messages_for 'group' %>

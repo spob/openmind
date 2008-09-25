@@ -2,7 +2,7 @@
   <%= set_focus_to_id 'user_first_name' %>
 <%end%>
 
-<%= javascript_include_tag "wz_tooltip.js" %> 
+<%= javascript_include_tag "wz_tooltip.js", :cache => true %> 
 
 <%= error_messages_for :user %>
 <% form_for :user, :url => { :action => "update_profile", :id => @user } do |f| -%>
