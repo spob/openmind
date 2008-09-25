@@ -69,7 +69,7 @@ module ApplicationHelper
     for sheet in stylesheets
       sheets << "#{@@theme_path}/stylesheets/#{sheet}"
     end
-    stylesheet_link_tag(sheets, :cache => "cache/#{stylesheets.first}")
+    stylesheet_link_tag(sheets, :cache => "..#{@@theme_path}/cache/#{stylesheets.first}")
   end  
   
   

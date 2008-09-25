@@ -1,5 +1,6 @@
 <%content_for :head do -%>
-  <%= theme_stylesheet_link_tag 'tables', 'ideas', 'sideBarRight', 'filtermenu' %>
+  <%= theme_stylesheet_link_tag 'tables' %>
+  <%= theme_stylesheet_link_tag 'ideas', 'sideBarRight', 'filtermenu' %>
 
   <% if !@ideas.empty? %>
   <%= javascript_include_tag "tablecloth", :cache => true %>  
