@@ -1,5 +1,5 @@
 
-<%= javascript_include_tag "wz_tooltip.js", :cache => true %> 
+<%= javascript_include_tag "wz_tooltip.js", :cache => "cache/tooltip" %> 
 <%= calendar_date_select_includes "blue" %>
 <%content_for :bodyTag do -%>
 <%= set_focus_to_id 'release_version' %>

@@ -1,8 +1,8 @@
 <%content_for :head do -%>
-  <%= javascript_include_tag "tablecloth", :cache => true %>   
+  <%= javascript_include_tag "tablecloth", :cache => "cache/tablecloth" %>   
   <%= javascript_include_tag "swfobject" %>                
 <%end%>
-<%= javascript_include_tag "wz_tooltip.js", :cache => true %> 
+<%= javascript_include_tag "wz_tooltip.js", :cache => "cache/tooltip" %> 
 <% if prodmgr? %>
   <div id="actionButtons2">
     <%= link_to 'Edit', edit_poll_url(@poll), html_options = {:class=> "button",

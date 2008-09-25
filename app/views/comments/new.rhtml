@@ -1,7 +1,7 @@
 <%content_for :bodyTag do -%>
       <%= set_focus_to_id 'comment_body' -%>
 <%end%>
-<%= javascript_include_tag "wz_tooltip.js", :cache => true %> 
+<%= javascript_include_tag "wz_tooltip.js", :cache => "cache/tooltip" %> 
 
 <% object = @idea unless @idea.nil? %>
 <% object = @topic unless @topic.nil? %>

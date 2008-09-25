@@ -1,8 +1,8 @@
 <%content_for :head do -%>
         <%= theme_stylesheet_link_tag 'tables' %>
-        <%= javascript_include_tag "tablecloth", :cache => true %>                
+        <%= javascript_include_tag "tablecloth", :cache => "cache/tablecloth" %>                
 <%end%>
-<%= javascript_include_tag "wz_tooltip.js", :cache => true %> 
+<%= javascript_include_tag "wz_tooltip.js", :cache => "cache/tooltip" %> 
 <div id="actionButtons2">
   <%= link_to "Add Comment", 
                 new_comment_path(:id => @topic, :type => 'topic'), 

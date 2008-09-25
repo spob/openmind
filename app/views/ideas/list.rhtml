@@ -3,11 +3,11 @@
   <%= theme_stylesheet_link_tag 'ideas', 'sideBarRight', 'filtermenu' %>
 
   <% if !@ideas.empty? %>
-  <%= javascript_include_tag "tablecloth", :cache => true %>  
+  <%= javascript_include_tag "tablecloth", :cache => "cache/tablecloth" %>  
   <% end %>
   <%= auto_discovery_link_tag(:rss, url_options = {:action=>'rss'}, tag_options = {:title=>'OpenMind: Ideas'})%>
 <%end%>
-<%= javascript_include_tag "wz_tooltip.js", :cache => true %> 
+<%= javascript_include_tag "wz_tooltip.js", :cache => "cache/tooltip" %> 
 <%= error_messages_for 'idea' %>
 
 <%content_for :sidebar1 do -%>

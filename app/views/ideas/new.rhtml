@@ -1,12 +1,9 @@
 <%content_for :bodyTag do -%>
   <%= set_focus_to_id 'idea_title' -%>
 <%end%>
+<%= javascript_include_tag "wz_tooltip.js", :cache => "cache/tooltip" %> 
 <%= error_messages_for 'idea' %>
 <% form_for :idea, :html => {:id => "new-idea"}, :url => { :action => "create" } do |form| %>
-  <div id="actionButtons2">
-    <%= link_to 'List Ideas', options = {:action => 'list'}, 
-      html_options = { :class=> "button" } %>
-  </div>
   <div class="formTitle">New Idea</div>
   <div class="cssform widerLabel">
     <p>
@@ -30,7 +27,12 @@
     </p>
     <p>
       <label></label>
-      <%= submit_tag 'Create', options = {:class=> "button", :disable_with => "Please wait..."} %>
+      <%= submit_tag 'Create', options = {:class=> "button", 
+        :disable_with => "Please wait...",
+                :onmouseover => "Tip('Create new idea')" } %>
+    <%= link_to 'Cancel', options = {:action => 'list'}, 
+      html_options = { :class=> "button", 
+                :onmouseover => "Tip('Cancel new idea, return to ideas list')"    } %>
     </p>
   </div>  
 <% end %>
