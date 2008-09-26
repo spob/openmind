@@ -14,6 +14,7 @@ class RunIntervalPeriodicJob < PeriodicJob
   # RunIntervalPeriodicJobs run if PeriodicJob#last_run_at time plus 
   # PeriodicJob#interval (in seconds) is past the current time (Time.zone.now).
   def self.find_all_need_to_run
+    TaskServerLogger.instance.debug("Checking for RunIntervalPeriodicJob jobs to be run...")
     self.find(:all).select {|job| job.last_run_at.nil? || 
         (job.last_run_at + job.interval <= Time.zone.now)}
   end

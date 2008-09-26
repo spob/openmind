@@ -33,6 +33,7 @@ class RunAtPeriodicJob < PeriodicJob
   # RunIntervalPeriodicJobs run if PeriodicJob#last_run_at time plus 
   # PeriodicJob#interval (in seconds) is past the current time (Time.zone.now).
   def self.find_all_need_to_run
+    TaskServerLogger.instance.debug("Checking for RunAtPeriodicJob jobs to be run...")
     self.find(:all).select {|job| 
       lastrun = DateUtils.time_to_datetime(job.last_run_at)
       job.last_run_at.nil? || # it's never run

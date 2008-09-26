@@ -3,6 +3,7 @@ class RunOncePeriodicJob < PeriodicJob
 
   # RunOncePeriodicJobs run if they have no PeriodicJob#last_run_at time.
   def self.find_all_need_to_run
+    TaskServerLogger.instance.debug("Checking for RunOncePeriodicJob jobs to be run...")
     self.find(:all, :conditions => ["last_run_at IS NULL"])
   end
   

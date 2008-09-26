@@ -16,12 +16,14 @@ class PeriodicJob < ActiveRecord::Base
   
   # Runs a job and updates the +last_run_at+ field.
   def run!
+    TaskServerLogger.instance.info "Executing job id #{self.id}, #{self.to_s}..."
     begin
       eval(self.job)
       self.last_run_result = "OK"
+      TaskServerLogger.instance.info "Job completed successfully"
     rescue Exception
       err_string = "'#{self.job}' could not run: #{$!.message}\n#{$!.backtrace}" 
-      logger.error err_string
+      TaskServerLogger.instance.error err_string
       puts err_string 
       self.last_run_result = err_string.slice(1..500)
     end
