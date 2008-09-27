@@ -1,4 +1,5 @@
 class PeriodicJob < ActiveRecord::Base
+  before_create :set_initial_next_run
   
   def self.list(page, per_page)
     paginate :page => page, 
@@ -23,6 +24,10 @@ class PeriodicJob < ActiveRecord::Base
   
   def can_delete?
     false  
+  end
+  
+  def set_initial_next_run
+    self.next_run_at = Time.zone.now
   end
   
   # Runs a job and updates the +last_run_at+ field.
