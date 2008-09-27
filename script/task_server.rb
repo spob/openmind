@@ -40,23 +40,8 @@ else
 end
 
 loop do
-  # Find all Run Once jobs, and run them
-  RunOncePeriodicJob.find_all_need_to_run.each do |job|
-  	puts "#{DateTime.now.strftime('%b %d, %Y %I:%M:%S%p')} executing #{job.to_s}"
-    job.run!
-  end
-
-  # Find all Run on Interval jobs, and run them  
-  RunIntervalPeriodicJob.find_all_need_to_run.each do |job|
-  	puts "#{DateTime.now.strftime('%b %d, %Y %I:%M:%S%p')} executing #{job.to_s}"
-    job.run!
-  end
-
-  # Find all Run At jobs, and run them  
-  RunAtPeriodicJob.find_all_need_to_run.each do |job|
-  	puts "#{DateTime.now.strftime('%b %d, %Y %I:%M:%S%p')} executing #{job.to_s}"
-    job.run!
-  end
+  # Find all jobs waiting to run and run them
+  PeriodicJob.run_jobs
   
   sleep(SLEEP_TIME)
 end

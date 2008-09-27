@@ -6,8 +6,19 @@ class PeriodicJob < ActiveRecord::Base
       :per_page => per_page
   end
   
+  def self.find_jobs_to_run
+    PeriodicJob.find(:all, :conditions => ['next_run_at < ?',
+      Time.zone.now.to_s(:db)], :order => "next_run_at ASC")
+  end
+  
+  def self.run_jobs
+    PeriodicJob.find_jobs_to_run.each do |job|
+      job.run!
+    end
+  end
+  
   def calc_next_run
-    throw exception
+    nil
   end
   
   def can_delete?
@@ -28,7 +39,7 @@ class PeriodicJob < ActiveRecord::Base
       self.last_run_result = err_string.slice(1..500)
     end
     self.last_run_at = Time.zone.now
-    self.calc_next_run
+    self.next_run_at = self.calc_next_run
     self.save  
   end
 

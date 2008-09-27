@@ -3,7 +3,7 @@ class RunIntervalPeriodicJob < PeriodicJob
   
   def calc_next_run
     begin
-    self.next_run_at = Time.zone.now + interval
+      return Time.zone.now + interval
     
     rescue NoMethodError
       # Won't work if run during migration -- column is added later, so swallow it
