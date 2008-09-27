@@ -13,6 +13,7 @@ class PeriodicJob < ActiveRecord::Base
   end
   
   def self.run_jobs
+    TaskServerLogger.instance.debug("Checking for periodic jobs to run...") if TaskServerLogger.instance.debug?
     PeriodicJob.find_jobs_to_run.each do |job|
       job.run!
     end
