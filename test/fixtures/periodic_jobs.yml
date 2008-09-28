@@ -2,6 +2,7 @@
 run_once_job_null_next_run:
   type: RunOncePeriodicJob
   job: 'puts "hello"'
+  next_run_at: <%= (Time.zone.now - 1.minutes).to_s(:db) %>
 run_once_job_future_next_run:
   type: RunOncePeriodicJob
   job: 'what = "w00t once!"'
