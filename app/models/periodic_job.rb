@@ -45,10 +45,19 @@ class PeriodicJob < ActiveRecord::Base
       self.last_run_result = err_string.slice(1..500)
     end
     self.last_run_at = Time.zone.now
-    self.next_run_at = self.calc_next_run
+    self.next_run_at = nil
     self.save  
+    
+    # ...and persist the next run of this job if one exists
+    next_job = self.calc_next_run
+    next_job.save unless next_job.nil?
   end
 
+  # Cleans up all jobs older than a day.
+  def self.cleanup
+    self.destroy_all ['last_run_at < ?', 7.day.ago]
+  end
+  
   def to_s
     "#{self.class.to_s}: #{job}"
   end

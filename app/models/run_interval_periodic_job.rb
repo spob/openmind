@@ -1,21 +1,20 @@
 class RunIntervalPeriodicJob < PeriodicJob
-  before_create :calc_next_run
+  before_create :set_next_run_at_date
   
   def calc_next_run
     begin
-      return Time.zone.now + interval
+      #      puts "Calc next run #{Time.zone.now}, #{self.interval} #{(Time.zone.now + self.interval)}"
+      return RunIntervalPeriodicJob.new(:job => self.job,
+        :interval => self.interval,
+        :next_run_at => (Time.zone.now + self.interval))
     
     rescue NoMethodError
       # Won't work if run during migration -- column is added later, so swallow it
       raise unless ActiveRecord::Migrator.current_version.to_i < 68
     end
   end
-
-  # RunIntervalPeriodicJobs run if PeriodicJob#last_run_at time plus 
-  # PeriodicJob#interval (in seconds) is past the current time (Time.zone.now).
-  def self.find_all_need_to_run
-    TaskServerLogger.instance.debug("Checking for RunIntervalPeriodicJob jobs to be run...")
-    self.find(:all).select {|job| job.last_run_at.nil? || 
-        (job.last_run_at + job.interval <= Time.zone.now)}
+  
+  def set_next_run_at_date
+    self.next_run_at = Time.zone.now + self.interval
   end
 end

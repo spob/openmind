@@ -16,7 +16,10 @@ class PeriodicJobTest < Test::Unit::TestCase
   
   def test_calc_next_date_run_interval
     # within a second
-    assert periodic_jobs(:run_interval_job_past_last_run_30).calc_next_run.between?(Time.zone.now + 29, Time.zone.now + 31)
+    next_job = periodic_jobs(:run_interval_job_past_last_run_30).calc_next_run
+    assert next_job.next_run_at.between?(Time.zone.now + 29, Time.zone.now + 31)
+    assert_equal periodic_jobs(:run_interval_job_past_last_run_30).interval, next_job.interval
+    assert_equal periodic_jobs(:run_interval_job_past_last_run_30).job, next_job.job
   end
   
   def test_calc_next_date_run_at
@@ -29,10 +32,20 @@ class PeriodicJobTest < Test::Unit::TestCase
     end
     #    puts "#{"%02d" % hours}:#{"%02d" % minutes}"
     time = Time.parse("#{"%02d" % hours}:#{"%02d" % minutes}")
-    assert_equal time,
-      periodic_jobs(:run_interval_job_never_run_at_future).calc_next_run
-    assert_equal time,
-      periodic_jobs(:run_interval_job_recently_run_at_future).calc_next_run
+    next_job = periodic_jobs(:run_interval_job_never_run_at_future).calc_next_run
+    assert_equal time, next_job.next_run_at
+    assert_equal periodic_jobs(:run_interval_job_never_run_at_future).run_at_minutes, 
+      next_job.run_at_minutes
+    assert_equal periodic_jobs(:run_interval_job_never_run_at_future).job, 
+      next_job.job
+    
+    next_job = periodic_jobs(:run_interval_job_recently_run_at_future).calc_next_run
+    assert_equal time, next_job.next_run_at
+    assert_equal periodic_jobs(:run_interval_job_recently_run_at_future).run_at_minutes,
+      next_job.run_at_minutes
+    assert_equal periodic_jobs(:run_interval_job_recently_run_at_future).job, 
+      next_job.job
+    
     time = 1.days.since
     hours = (periodic_jobs(:run_interval_job_run_at_past).run_at_minutes)/60
     minutes = periodic_jobs(:run_interval_job_run_at_past).run_at_minutes - hours * 60
@@ -44,12 +57,14 @@ class PeriodicJobTest < Test::Unit::TestCase
     #    puts "#{"%02d" % hours}:#{"%02d" % minutes}"
     time = Time.parse("#{"%02d" % hours}:#{"%02d" % minutes}", time)
     #    puts "#{time}"
-    assert_equal time.day,
-      periodic_jobs(:run_interval_job_run_at_past).calc_next_run.day
-    assert_equal time.hour,
-      periodic_jobs(:run_interval_job_run_at_past).calc_next_run.hour
-    assert_equal time.min,
-      periodic_jobs(:run_interval_job_run_at_past).calc_next_run.min
+    next_job = periodic_jobs(:run_interval_job_run_at_past).calc_next_run
+    assert_equal time.day, next_job.next_run_at.day
+    assert_equal time.hour, next_job.next_run_at.hour
+    assert_equal time.min, next_job.next_run_at.min
+    assert_equal periodic_jobs(:run_interval_job_run_at_past).run_at_minutes,
+      next_job.run_at_minutes
+    assert_equal periodic_jobs(:run_interval_job_run_at_past).job, 
+      next_job.job
   end
   
   def test_run
