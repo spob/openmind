@@ -1,0 +1,216 @@
+--- !ruby/object:Gem::Specification 
+name: ruby-openid
+version: !ruby/object:Gem::Version 
+  version: 1.1.4
+platform: ruby
+authors: 
+- Brian Ellin (JanRain, Inc)
+autorequire: openid
+bindir: bin
+cert_chain: 
+date: 2007-01-04 00:00:00 -05:00
+default_executable: 
+dependencies: 
+- !ruby/object:Gem::Dependency 
+  name: ruby-yadis
+  type: :runtime
+  version_requirement: 
+  version_requirements: !ruby/object:Gem::Requirement 
+    requirements: 
+    - - ">="
+      - !ruby/object:Gem::Version 
+        version: 0.3.4
+    version: 
+description: 
+email: brian@janrian.com
+executables: []
+
+extensions: []
+
+extra_rdoc_files: 
+- README
+- INSTALL
+- COPYING
+- LICENSE
+files: 
+- examples/consumer.rb
+- examples/rails_server
+- examples/README
+- examples/rails_openid_login_generator
+- examples/active_record_openid_store
+- examples/rails_server/app
+- examples/rails_server/components
+- examples/rails_server/config
+- examples/rails_server/db
+- examples/rails_server/doc
+- examples/rails_server/lib
+- examples/rails_server/log
+- examples/rails_server/public
+- examples/rails_server/script
+- examples/rails_server/test
+- examples/rails_server/vendor
+- examples/rails_server/Rakefile
+- examples/rails_server/README
+- examples/rails_server/app/controllers
+- examples/rails_server/app/helpers
+- examples/rails_server/app/models
+- examples/rails_server/app/views
+- examples/rails_server/app/controllers/server_controller.rb
+- examples/rails_server/app/controllers/login_controller.rb
+- examples/rails_server/app/controllers/application.rb
+- examples/rails_server/app/helpers/server_helper.rb
+- examples/rails_server/app/helpers/login_helper.rb
+- examples/rails_server/app/helpers/application_helper.rb
+- examples/rails_server/app/views/layouts
+- examples/rails_server/app/views/login
+- examples/rails_server/app/views/server
+- examples/rails_server/app/views/layouts/server.rhtml
+- examples/rails_server/app/views/login/index.rhtml
+- examples/rails_server/app/views/server/decide.rhtml
+- examples/rails_server/config/environments
+- examples/rails_server/config/database.yml
+- examples/rails_server/config/routes.rb
+- examples/rails_server/config/environment.rb
+- examples/rails_server/config/boot.rb
+- examples/rails_server/config/environments/test.rb
+- examples/rails_server/config/environments/production.rb
+- examples/rails_server/config/environments/development.rb
+- examples/rails_server/doc/README_FOR_APP
+- examples/rails_server/lib/tasks
+- examples/rails_server/public/images
+- examples/rails_server/public/javascripts
+- examples/rails_server/public/stylesheets
+- examples/rails_server/public/favicon.ico
+- examples/rails_server/public/robots.txt
+- examples/rails_server/public/dispatch.rb
+- examples/rails_server/public/dispatch.fcgi
+- examples/rails_server/public/dispatch.cgi
+- examples/rails_server/public/500.html
+- examples/rails_server/public/404.html
+- examples/rails_server/public/images/rails.png
+- examples/rails_server/public/javascripts/prototype.js
+- examples/rails_server/public/javascripts/effects.js
+- examples/rails_server/public/javascripts/dragdrop.js
+- examples/rails_server/public/javascripts/controls.js
+- examples/rails_server/script/performance
+- examples/rails_server/script/process
+- examples/rails_server/script/generate
+- examples/rails_server/script/server
+- examples/rails_server/script/runner
+- examples/rails_server/script/plugin
+- examples/rails_server/script/breakpointer
+- examples/rails_server/script/destroy
+- examples/rails_server/script/console
+- examples/rails_server/script/about
+- examples/rails_server/script/performance/benchmarker
+- examples/rails_server/script/performance/profiler
+- examples/rails_server/script/process/spinner
+- examples/rails_server/script/process/spawner
+- examples/rails_server/script/process/reaper
+- examples/rails_server/test/fixtures
+- examples/rails_server/test/functional
+- examples/rails_server/test/mocks
+- examples/rails_server/test/unit
+- examples/rails_server/test/test_helper.rb
+- examples/rails_server/test/functional/server_controller_test.rb
+- examples/rails_server/test/functional/login_controller_test.rb
+- examples/rails_server/test/mocks/development
+- examples/rails_server/test/mocks/test
+- examples/rails_openid_login_generator/templates
+- examples/rails_openid_login_generator/gemspec
+- examples/rails_openid_login_generator/USAGE
+- examples/rails_openid_login_generator/openid_login_generator.rb
+- examples/rails_openid_login_generator/openid_login_generator-0.1.gem
+- examples/rails_openid_login_generator/templates/controller.rb
+- examples/rails_openid_login_generator/templates/README
+- examples/rails_openid_login_generator/templates/user_test.rb
+- examples/rails_openid_login_generator/templates/helper.rb
+- examples/rails_openid_login_generator/templates/user.rb
+- examples/rails_openid_login_generator/templates/view_login.rhtml
+- examples/rails_openid_login_generator/templates/users.yml
+- examples/rails_openid_login_generator/templates/view_logout.rhtml
+- examples/rails_openid_login_generator/templates/view_welcome.rhtml
+- examples/rails_openid_login_generator/templates/controller_test.rb
+- examples/rails_openid_login_generator/templates/openid_login_system.rb
+- examples/active_record_openid_store/lib
+- examples/active_record_openid_store/test
+- examples/active_record_openid_store/init.rb
+- examples/active_record_openid_store/README
+- examples/active_record_openid_store/XXX_add_open_id_store_to_db.rb
+- examples/active_record_openid_store/lib/association.rb
+- examples/active_record_openid_store/lib/nonce.rb
+- examples/active_record_openid_store/lib/open_id_setting.rb
+- examples/active_record_openid_store/lib/openid_ar_store.rb
+- examples/active_record_openid_store/test/store_test.rb
+- lib/openid
+- lib/hmac-sha2.rb
+- lib/hmac.rb
+- lib/hmac-sha1.rb
+- lib/hmac-rmd160.rb
+- lib/hmac-md5.rb
+- lib/openid.rb
+- lib/openid/htmltokenizer.rb
+- lib/openid/consumer.rb
+- lib/openid/dh.rb
+- lib/openid/fetchers.rb
+- lib/openid/filestore.rb
+- lib/openid/parse.rb
+- lib/openid/stores.rb
+- lib/openid/util.rb
+- lib/openid/association.rb
+- lib/openid/trustroot.rb
+- lib/openid/server.rb
+- lib/openid/urinorm.rb
+- lib/openid/discovery.rb
+- lib/openid/service.rb
+- test/storetestcase.rb
+- test/linkparse.rb
+- test/assoc.rb
+- test/dh.rb
+- test/teststore.rb
+- test/data
+- test/util.rb
+- test/trustroot.rb
+- test/runtests.rb
+- test/extensions.rb
+- test/server2.rb
+- test/consumer.rb
+- test/service.rb
+- test/urinorm.rb
+- test/data/urinorm.txt
+- test/data/brian.xrds
+- test/data/brianellin.mylid.xrds
+- README
+- INSTALL
+- COPYING
+- LICENSE
+has_rdoc: true
+homepage: http://www.openidenabled.com/openid/libraries/ruby
+post_install_message: 
+rdoc_options: 
+- --main
+- README
+require_paths: 
+- bin
+- lib
+required_ruby_version: !ruby/object:Gem::Requirement 
+  requirements: 
+  - - ">"
+    - !ruby/object:Gem::Version 
+      version: 0.0.0
+  version: 
+required_rubygems_version: !ruby/object:Gem::Requirement 
+  requirements: 
+  - - ">="
+    - !ruby/object:Gem::Version 
+      version: "0"
+  version: 
+requirements: []
+
+rubyforge_project: 
+rubygems_version: 1.2.0
+signing_key: 
+specification_version: 1
+summary: A library for consuming and serving OpenID identities.
+test_files: 
+- test/runtests.rb

@@ -1,0 +1,96 @@
+OpenIdAuthentication
+====================
+
+This is a rewrite and complete clean up of the original open_id_authnetication
+located here:
+
+  http://svn.rubyonrails.org/rails/plugins/open_id_authentication/
+
+Provides a thin wrapper around the excellent ruby-openid gem from JanRan. 
+Be sure to install that first:
+
+  gem install ruby-openid
+
+To understand what OpenID is about and how it works, it helps to read the 
+documentation for lib/openid/consumer.rb from that gem.
+
+The specification used is http://openid.net/specs/openid-authentication-1_1.html 
+(not the 2.0 draft).
+
+
+Prerequisites
+=============
+
+OpenID authentication uses the session, so be sure that you haven't turned that off. 
+It also relies on a number of database tables to store the authentication keys. 
+So you'll have to run the migration to create these before you get started:
+
+  rake open_id_authentication:db:create
+
+This code is completely decoupled from and user model and will simply return results 
+upon success. It's up to you how to handle those results. Maybe somebody can extend 
+this code to be more like restful_authentication with all generation support.
+
+Example
+=======
+
+This example is just to meant to demonstrate how you could use OpenID authentication.
+
+config/routes.rb
+
+  map.open_id '/openid/:action', :controller => 'openid'
+
+
+app/views/openid/login.rhtml
+
+  <%= flash[:error] %>
+  
+  <% form_tag do %>
+    <p>
+      <label for="openid_url">OpenID:</label>
+      <%= text_field_tag "openid_url", params[:openid_url] %>
+    </p>
+    <p>
+      <%= submit_tag 'Sign in', :disable_with => "Signing in..." %>
+    </p>
+  <% end %>
+
+
+app/controllers/openid_controller.rb
+  class OpenidController < ApplicationController
+    include OpenIdAuthentication
+  
+    def login
+      return unless request.post?
+      
+      status = begin_openid_authentication(params[:openid_url], open_id_path(:continue))
+      
+      flash[:error] = case status 
+        when :missing : 'Something is missing.'
+        when :timeout : 'Timed out.'
+        when :unknown : 'Not sure what happened.'
+        end
+    end
+    
+    def continue
+      result = complete_openid_authentication
+      
+      case result
+      when :missing   : failed_login("Sorry, the OpenID server couldn't be found.")
+      when :canceled  : failed_login("OpenID verification was canceled.")
+      when :failed    : failed_login("Sorry, the OpenID verification failed.")
+      when :unknown   : failed_login("Not sure what happened.")
+      when :success
+       	# Handle User lookup or creation here...
+        render(:text => "okay! #{openid_result[:identity_url]} + #{openid_result[:info]}")
+      end
+    end
+  
+  private
+  
+    def failed_login(message)
+      flash[:error] = message
+      redirect_to(open_id_path(:login))
+    end
+    
+  end

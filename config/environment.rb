@@ -17,7 +17,10 @@ Rails::Initializer.run do |config|
 
   # Require the latest version of mysql
   config.gem "mysql"
-
+  
+  config.gem "ruby-yadis",  :lib => 'yadis',  :version => '0.3.4'
+  
+  config.gem "ruby-openid", :lib => 'openid', :version => '1.1.4'
 
   # Default timezone...Set this to the timezone where the server resides
   config.time_zone = 'Eastern Time (US & Canada)'

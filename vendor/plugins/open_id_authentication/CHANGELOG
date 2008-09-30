@@ -1,0 +1,3 @@
+June 10th, 2007
+ - Fixed undefined method `add_extension_arg' for #<OpenID::FailureRequest>
+ - Failed request now returns :failed instead of :missing

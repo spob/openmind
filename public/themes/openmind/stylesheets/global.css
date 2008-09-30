@@ -524,4 +524,9 @@ div.progressBar div.background {
 
 .nobr {white-space:nowrap;}
 
+#openid_url {
+  background: url(../images/icons/14x14/openid-14x14.gif) no-repeat #FFF 5px;
+  padding-left: 25px;
+}
+
 /********* End original ***********/

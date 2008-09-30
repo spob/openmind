@@ -34,6 +34,10 @@
     <%= link_to h(@user.enterprise.name), enterprise_path(@user.enterprise) %>
   </p>
   <p>
+    <label for="openid_url">Open Id:</label>
+    <%= h @user.identity_url %>
+  </p>
+  <p>
     <label for="active">Active:</label>
     <%=h @user.active %>
   </p>

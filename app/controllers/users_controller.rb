@@ -73,6 +73,7 @@ class UsersController < ApplicationController
     if CustomField.users_custom_boolean1
       @user.custom_boolean1 = params[:user][:custom_boolean1]
     end
+    @user.identity_url = add_trailing_slash params[:user][:identity_url]
     @user.new_random_password
     parse_error = nil
     if allocmgr? and !@user.initial_allocation.nil? and @user.initial_allocation.length > 0
@@ -135,6 +136,8 @@ class UsersController < ApplicationController
     
     # if the password was updated, force a password change
     params[:user][:force_change_password] = 1 unless params[:user][:password].nil? or params[:user][:password].length == 0
+    params[:user][:identity_url] = add_trailing_slash params[:user][:identity_url]
+    
     if @user.update_attributes(params[:user])
       flash[:notice] = "User #{@user.login} was successfully updated."
       redirect_to :action => 'show', :id => @user
@@ -154,6 +157,7 @@ class UsersController < ApplicationController
     @user.last_name = params[:user][:last_name]
     @user.time_zone = params[:user][:time_zone]
     @user.row_limit = params[:user][:row_limit]
+    @user.identity_url = add_trailing_slash params[:user][:identity_url]
     @user.hide_contact_info = params[:user][:hide_contact_info]
     @user.watch_on_vote = params[:user][:watch_on_vote]
     if @user.save
@@ -345,5 +349,10 @@ class UsersController < ApplicationController
   def yes? str
     return false if str.nil?
     str.upcase == "Y" || str.upcase == "YES" || str.upcase == "T" || str.upcase == "TRUE"
+  end
+  
+  def add_trailing_slash str
+    str = str + '/' unless str.blank? or str =~ /\/$/
+    str
   end
 end

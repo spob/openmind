@@ -22,6 +22,10 @@
       <label for="last_name">Last Name:</label>
       <%= f.text_field :last_name %>
     </p>
+    <p>
+      <label for="Open Id">Open Id:</label>
+      <%= f.text_field :identity_url %>
+    </p>
     <p>  
       <label for="time_zone">User Time Zone:</label>
       <%= f.time_zone_select :time_zone, TimeZone.us_zones %>

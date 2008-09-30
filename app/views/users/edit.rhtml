@@ -25,6 +25,10 @@
       <%= form.collection_select :enterprise_id, @enterprises, :id, :name %>
     </p>
     <p>
+      <label for="identity_url">Open Id:</label>
+      <%= form.text_field :identity_url, { } %>
+    </p>
+    <p>
       <label for="user_active">Active:</label>
       <%= form.check_box :active %>
     </p>

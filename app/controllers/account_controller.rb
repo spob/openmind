@@ -1,6 +1,8 @@
 class AccountController < ApplicationController
   # Be sure to include AuthenticationSystem in Application Controller instead
   include AuthenticatedSystem
+  include OpenIdAuthentication
+  
   # If you want "remember me" functionality, add this before_filter to Application Controller
   before_filter :login_from_cookie
   before_filter :login_required, :only => [ :logout ]
@@ -15,20 +17,45 @@ class AccountController < ApplicationController
     @login = params[:login] # needed to remember login info in login fails
     self.current_user = User.authenticate(params[:login], params[:password])
     if logged_in?
-      self.current_user.user_logons.create
-      if params[:remember_me] == "1"
-        self.current_user.remember_me
-        cookies.delete :auth_token
-        cookies[:auth_token] = { :value => self.current_user.remember_token , 
-          :expires => self.current_user.remember_token_expires_at }
-      end
-      redirect_back_or_default home_path
-      login_msg = pending_user_requests_msg
-      login_msg = expiration_msg  if login_msg.nil?
-      flash[:notice] = "Logged in successfully" if login_msg.nil?
-      flash[:error] = "Logged in successfully. #{login_msg}" unless login_msg.nil?
+      logged_in
     else
       flash[:error] = "Login failed...please try again"
+    end
+  end
+
+  def login_openid
+    return unless request.post?   
+    
+    @openid_url = add_trailing_slash params[:openid_url] 
+    
+    user = User.find_by_identity_url(@openid_url)
+    if user.nil?
+      flash[:error] = "No OpenMind user associated to this Open Id. Edit your user profile to update your Open Id."
+      return
+    end
+    
+    status = begin_openid_authentication(@openid_url, '/account/continue_openid')
+      
+    flash[:error] = case status 
+    when :missing : 'Sorry, the OpenID is missing.'
+    when :failed  : 'Sorry, the OpenID verification failed.'
+    when :timeout : 'Timed out.'
+    when :unknown : 'Not sure what happened.'
+    end
+  end
+    
+  def continue_openid
+    status = complete_openid_authentication
+      
+    case status 
+    when :missing   : failed_login('Sorry, the OpenID server couldn\'t be found.')
+    when :canceled  : failed_login('OpenID verification was canceled.')
+    when :failed    : failed_login('Sorry, the OpenID verification failed.')
+    when :unknown   : failed_login('Not sure what happened.')
+    when :success
+      self.current_user = User.find_by_identity_url(openid_result[:identity_url])
+      logged_in
+      return
     end
   end
   
@@ -91,14 +118,40 @@ class AccountController < ApplicationController
   
   private
   
+  def failed_login(message)
+    flash[:error] = message
+    #      redirect_to(open_id_path(:login))
+  end
+
+  
+  def logged_in
+    self.current_user.user_logons.create
+    if params[:remember_me] == "1"
+      self.current_user.remember_me
+      cookies.delete :auth_token
+      cookies[:auth_token] = { :value => self.current_user.remember_token , 
+        :expires => self.current_user.remember_token_expires_at }
+    end
+    redirect_back_or_default home_path
+    login_msg = pending_user_requests_msg
+    login_msg = expiration_msg  if login_msg.nil?
+    flash[:notice] = "Logged in successfully" if login_msg.nil?
+    flash[:error] = "Logged in successfully. #{login_msg}" unless login_msg.nil?
+  end
+  
   def expiration_msg
-      expiration_days = Allocation.expiring_allocation_days self.current_user
-      allocation_expiration_warning_days = APP_CONFIG['allocation_expiration_warning_days'].to_i
-      return nil if expiration_days > allocation_expiration_warning_days or allocation_expiration_warning_days == 0
-      "You have allocations expiring in #{StringUtils.pluralize(expiration_days, 'day')} "
+    expiration_days = Allocation.expiring_allocation_days self.current_user
+    allocation_expiration_warning_days = APP_CONFIG['allocation_expiration_warning_days'].to_i
+    return nil if expiration_days > allocation_expiration_warning_days or allocation_expiration_warning_days == 0
+    "You have allocations expiring in #{StringUtils.pluralize(expiration_days, 'day')} "
   end
   
   def pending_user_requests_msg
     "You have account requests pending approval. " if sysadmin? and UserRequest.pending_requests?
+  end
+  
+  def add_trailing_slash str
+    str = str + '/' unless str.blank? or str =~ /\/$/
+    str
   end
 end
