@@ -4,11 +4,6 @@
 <%end%>
 <%= error_messages_for 'forum' %>
 
-<div id="actionButtons2">
-  <%= link_to 'List forums', forums_path, 
-      html_options = { :class => "button" } %>
-</div>
-
 <% form_for :forum, :url => forums_path do |form| %>
   <div class="formTitle"><%= theme_image_tag("icons/16x16/forums.png", options = {:alt=>"Forums"}) %>New Forum</div>
   <div class="cssform widerLabel">
@@ -42,6 +37,8 @@
       <label></label>
       <%= submit_tag 'Create', options = {:class=> "button", :disable_with => "Please wait...",
             :onmouseover => "Tip('Create a new forum')"} %>
+      <%= link_to 'Cancel', forums_path, 
+        html_options = { :class => "button" } %>
     </p>
   </div>  
 <% end %>
