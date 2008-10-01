@@ -55,7 +55,6 @@ class AccountController < ApplicationController
     when :success
       self.current_user = User.find_by_identity_url(openid_result[:identity_url])
       logged_in
-      return
     end
   end
   
