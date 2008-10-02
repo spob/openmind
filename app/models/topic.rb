@@ -10,7 +10,7 @@ class Topic < ActiveRecord::Base
   has_many :watchers, :through => :topic_watches, :foreign_key => 'user_id'
   
   validates_presence_of :title, :user
-  validates_length_of   :title, :maximum => 120
+  validates_length_of   :title, :maximum => 200
   
   acts_as_indexed :fields => [ :title ]
   
