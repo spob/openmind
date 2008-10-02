@@ -6,6 +6,7 @@ class EmailNotifier < ActionMailer::Base
   def reset_notification(user)
     setup_email(user)
     @subject    += 'Password reset, please activate your new account'
+    @body[:help_url] = url_for :controller => 'static', :action => 'help', :anchor => "OpenId", :only_path  => false
     @body[:url]  = url_for :controller => 'account',
       :action => 'activate',
       :id => user.activation_code,
@@ -15,6 +16,7 @@ class EmailNotifier < ActionMailer::Base
   def signup_notification(user)
     setup_email(user)
     @subject    += 'Please activate your new account'
+    @body[:help_url] = url_for :controller => 'static', :action => 'help', :anchor => "OpenId", :only_path  => false
     @body[:url]  = url_for :controller => 'account',
       :action => 'activate',
       :id => user.activation_code,

@@ -23,12 +23,18 @@
   <br/>
 
   <h4><a name="OpenId">Can I use Open ID authentication?</a></h4>
-  <p>Yes. First, you will need to create an Open ID if you do not aleady have one. View the 
-  <a href="http://openid.net/get/">Open ID</a> web site for a list of providers. Second,
-  you need to update your user profile to associate your Open ID to your OpenMind
-  account. Third, when logging in to OpenMind, click the link 
+  <p>Yes. Perform the following steps:</p>
+  <ol>
+    <li>You will need to create an Open ID if you do not aleady have one. View the 
+    <a href="http://openid.net/get/">Open ID</a> web site for a list of providers.</li>
+    <li>You need to update your user profile to associate your Open ID to your OpenMind
+    account. To do so, select  <%= link_to "Update Profile", "/users/edit_profile" %> in the top right
+    hand corner of the page (once you have logged on). Update your profile to associate your 
+    Open ID with your OpenMind account</li> 
+    <li>When logging in to OpenMind, click the link 
   <%= link_to 'Login using Open ID', { :controller => 'account', :action => 'login_openid' } %> on the
-  OpenMind login screen.</p>
+OpenMind login screen.</li>
+</ol>
   <br/>
 
   <h4>What is an enterprise?</h4>
