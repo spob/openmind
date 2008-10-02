@@ -10,7 +10,7 @@
 <%= error_messages_for 'forum' %>
 <h1><%= theme_image_tag("icons/48x48/forums.png", options = {:alt=>"Forum"}) %>Forums</h1>
 <% if current_user != :false and sysadmin? %>
-  <div id="actionButtons">
+  <div id="actionButtons2">
     <%= link_to 'New Forum', new_forum_path, 
                         html_options = {:class => "button",
                         :onmouseover => "Tip('Create a new forum')"} %>
