@@ -6,8 +6,6 @@
 <% form_for(:topic, :url => topic_path(@topic), 
   :html => {:method => :put }) do |form| %>
   <div id="actionButtons2">
-    <%= link_to 'View Details', topic_path(@topic), 
-      html_options = { :class => "button" } %>
     <%= link_to 'List topics', forum_path(@topic.forum), 
       html_options = { :class => "button" } %>
   </div>
@@ -25,6 +23,8 @@
     <p>
       <label></label>
       <%= submit_tag 'Save', html_options = {:class=> "button", :disable_with => "Please wait..."} %>
+    <%= link_to 'Cancel', topic_path(@topic), 
+      html_options = { :class => "button" } %>
     </p>
   </div>
 <% end %>
