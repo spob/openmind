@@ -17,7 +17,7 @@
   <% if prodmgr? %>
     <tr>
       <% form_for :poll, :url => polls_path do |form| %>
-        <td><%= form.text_field :title, { :size => 40, :maxlength => 120 } %></td>
+        <td><%= form.text_field :title, { :size => 40, :maxlength => 200 } %></td>
         <td>false</td>
         <td>0</td>
         <td style="white-space:nowrap;">
