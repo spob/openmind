@@ -21,8 +21,11 @@
   </table>
   <div class="separator"></div>
   <div class="countbutton64 black64 votes">
-    <div id="vote_count<%= @idea.id %>" class="count"><%= h @idea.votes.size %></div>
-      <div class="description">Votes</div>
+    <div id="vote_count<%= @idea.id %>" class="count">
+        <%= link_to_remote @idea.votes.size, :url=> {:controller => :ideas, :action=> 'select_votes', :id => @idea } if @idea.votes.size > 0 %>
+        <%= 0 unless @idea.votes.size > 0 %>
+    </div>
+    <div class="description">Votes</div>
     </div>
     <%= textilize(h(@idea.description)) %>
   </div>
