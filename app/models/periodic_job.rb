@@ -9,11 +9,11 @@ class PeriodicJob < ActiveRecord::Base
   
   def self.find_jobs_to_run
     PeriodicJob.find(:all, :conditions => ['next_run_at < ?',
-      Time.zone.now.to_s(:db)], :order => "next_run_at ASC")
+        Time.zone.now.to_s(:db)], :order => "next_run_at ASC")
   end
   
   def self.run_jobs
-    TaskServerLogger.instance.debug("Checking for periodic jobs to run...") if TaskServerLogger.instance.debug?
+    TaskServerLogger.instance.debug("Checking for periodic jobs to run...")
     PeriodicJob.find_jobs_to_run.each do |job|
       job.run!
     end
@@ -28,7 +28,12 @@ class PeriodicJob < ActiveRecord::Base
   end
   
   def set_initial_next_run
-    self.next_run_at = Time.zone.now
+    begin
+      self.next_run_at = Time.zone.now    
+    rescue NoMethodError
+      # Won't work if run during migration -  - column is added later, so swallow it
+      raise unless ActiveRecord::Migrator.current_version.to_i < 68
+    end
   end
   
   # Runs a job and updates the +last_run_at+ field.

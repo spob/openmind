@@ -13,6 +13,7 @@
     <p>
       <label for="description:"> Description:</label>
       <%= form.text_area :description,  {:cols => 70, :rows => 8 } %>
+      <br/>
       (supports <a href="http://hobix.com/textile/" target="_blank">textile</a> tags)
     </p>
     <p>
@@ -23,6 +24,7 @@
     <p>
       <label for="tag_list">Tags:</label>
       <%= form.text_field :tag_list %>
+      <br/>
       (separate with spaces, use quotes for multi-word tags)
     </p>
     <p>
