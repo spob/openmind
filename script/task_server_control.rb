@@ -9,7 +9,7 @@ require 'daemons'
 
 options = {}
 
-default_pid_dir = "/var/run/task_server" 
+default_pid_dir = File.dirname(__FILE__) + '/../tmp/pids'
 
 if File.exists?(default_pid_dir)
   options[:dir_mode] = :normal
