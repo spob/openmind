@@ -8,8 +8,23 @@ class PeriodicJob < ActiveRecord::Base
   end
   
   def self.find_jobs_to_run
-    PeriodicJob.find(:all, :conditions => ['next_run_at < ?',
-        Time.zone.now.to_s(:db)], :order => "next_run_at ASC")
+    # first grab all rows that are ready to run...we do this (with a lock)
+    # to ensure that other threads or task_schedulers won't try to run 
+    # the same jobs
+    run_counter = TaskSchedulerBatch.get_next_count
+    jobs = []
+    PeriodicJob.transaction do
+      jobs = PeriodicJob.find(:all, 
+        :conditions => ['next_run_at < ?', Time.zone.now.to_s(:db)], 
+        :order => "next_run_at ASC",
+        :lock => true) 
+      for job in jobs
+        job.update_attribute(:run_counter, run_counter)
+      end
+    end
+    # okay, transaction should be committed (and lock freed at this point)
+    # ...and this instance has grabbed the jobs it wants so no one else can
+    jobs
   end
   
   def self.run_jobs

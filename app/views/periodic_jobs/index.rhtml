@@ -2,6 +2,9 @@
 <%= render :partial => "tab_menu" %>
 <div id="tabBody" style="position:relative; padding-top:15px;">
 <h1>Periodic Jobs</h1>
+  <div id="actionButtons2">
+    Last Check: <%= format_date_time TaskSchedulerBatch.get_batch.updated_at %>
+  </div>
 <table cellspacing="0" cellpadding="0" class="cssform">
   <tr>
     <th>Job</th>
