@@ -15,7 +15,8 @@ class PeriodicJob < ActiveRecord::Base
     jobs = []
     PeriodicJob.transaction do
       jobs = PeriodicJob.find(:all, 
-        :conditions => ['next_run_at < ?', Time.zone.now.to_s(:db)], 
+        :conditions => ['next_run_at < ? and run_counter is null', 
+          Time.zone.now.to_s(:db)], 
         :order => "next_run_at ASC",
         :lock => true) 
       for job in jobs
