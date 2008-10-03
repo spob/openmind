@@ -17,6 +17,10 @@
       <%= form.text_field :name, { :size => 50, :maxlength => 50 } %>
     </p>
     <p>
+      <label for="description">Description</label>
+      <%= form.text_field :description, { :size => 30, :maxlength => 150 } %>
+    </p>
+    <p>
       <label>Mediators:</label>
       <% for user in @mediators %>
         <span style="display:block;margin-left:10px;">
