@@ -25,7 +25,7 @@
       <% end %>
     </p>
     <p>
-      <label>User Groups:</label>
+      <label>Restrict to User Groups:</label>
       <% for group in Group.list_all %>
         <span style="display:block;margin-left:10px;">
           <%= check_box_tag "forum[group_ids][]", group.id, @forum.groups.include?(group) %>
