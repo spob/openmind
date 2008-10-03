@@ -21,6 +21,7 @@
     <p>
       <label for="comment">Comment:</label>
       <%= form.text_area :comment_body,  {:cols => 70, :rows => 8 } %>
+      <br/>
       <span style="padding-left:10px;font-size:0.83em;">(supports <a href="http://hobix.com/textile/" target="_blank" onmouseover="Tip('Click here for explanation of textile tags')">textile</a> tags)</span>
     </p>
     <% if @topic.forum.mediators.include? current_user %>
