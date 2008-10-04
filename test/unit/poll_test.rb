@@ -11,10 +11,16 @@ class PollTest < Test::Unit::TestCase
   end
   
   def test_invalid_too_long
+    title = "12345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890"
+    assert_equal 200, title.length
+    
+    poll = Poll.new(:title => title, :close_date => Time.zone.now)
+    assert poll.valid?
+    
     poll = Poll.new(
-      :title => "0123456789001234567890012345678900123456789001234567890123456789012345678901234567890123456789012345678901234567890123456789x")
+      :title => title + "X", :close_date => Time.zone.now)
     assert !poll.valid?
-    assert_equal "is too long (maximum is 120 characters)", 
+    assert_equal "is too long (maximum is 200 characters)", 
       poll.errors.on(:title)
   end
   
