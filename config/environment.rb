@@ -18,6 +18,8 @@ Rails::Initializer.run do |config|
   # Require the latest version of mysql
   config.gem "mysql"
   
+  config.gem "RedCloth", :source => "http://code.whytheluckystiff.net/"
+  
   config.gem "ruby-yadis",  :lib => 'yadis',  :version => '0.3.4'
   
   config.gem "ruby-openid", :lib => 'openid', :version => '1.1.4'

@@ -11,7 +11,7 @@
 </tr>  
 
 <% for @idea in @ideas %>
-  <div id="idea_body<%= @idea.id %>" style="display:none;" ><%= textilize(h(truncate(@idea.description, 500))) %></div>
+  <div id="idea_body<%= @idea.id %>" style="display:none;" ><%= textilize(truncate(@idea.description, 500)) %></div>
   <tr class="<%= cycle("even", "odd") %>">
       <td class="center"><%= h @idea.id %></td>
     <td><div onmouseover="TagToTip('idea_body<%= @idea.id %>')"><%= bold_text(@idea.title, @idea.unread?(current_user)) %></div></td>

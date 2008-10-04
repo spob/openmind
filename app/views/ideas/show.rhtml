@@ -27,7 +27,7 @@
     </div>
     <div class="description">Votes</div>
     </div>
-    <%= textilize(h(@idea.description)) %>
+    <%= textilize(@idea.description) %>
   </div>
   <div style="clear: both;"></div>
   <div id="rightFooter">Posted by: <%= h user_display_name(@idea.user) %><br /><%= om_date_time @idea.created_at %></div>

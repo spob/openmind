@@ -1,13 +1,9 @@
 <div class="commentbox">
-  <% if comment_item.user.prodmgr? or comment_item.user.sysadmin? %>
-    <%= textilize comment_item.body %>
-  <% else %>
-    <%= textilize h(comment_item.body) %>
-  <% end %>
+  <%= textilize comment_item.body %>
   <%= link_to '[Edit]', edit_comment_path(comment_item), 
     html_options = { :class=> "btTxt editButton",
     :onmouseover => "Tip('Edit this comment')"} if can_edit_comment? comment_item %>
-    
+      
 </div>
 <div class="commentfooter">
   Posted by <%= "#{user_display_name comment_item.user}" %> 
