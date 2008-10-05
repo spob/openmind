@@ -25,7 +25,7 @@ class CommentsController < ApplicationController
   end
 
   def new
-    if params[:type] == 'idea'
+    if params[:type] == 'Idea'
       @idea = Idea.find(params[:id]) 
       @comment ||= IdeaComment.new
     else
