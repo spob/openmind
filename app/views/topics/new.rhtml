@@ -2,6 +2,9 @@
   <%= set_focus_to_id 'topic_title' -%>
 <%end%>
 <%= error_messages_for 'topic' %>
+<%content_for :head do -%>
+  <%= javascript_include_tag :fckeditor %>
+<% end  %>
 
 <div id="actionButtons2">
   <%= link_to 'List topics', forum_path(@topic.forum), 
@@ -20,9 +23,7 @@
     </p>
     <p>
       <label for="comment">Comment:</label>
-      <%= form.text_area :comment_body,  {:cols => 70, :rows => 8 } %>
-      <br/>
-      <span style="padding-left:10px;font-size:0.83em;">(supports <a href="http://hobix.com/textile/" target="_blank" onmouseover="Tip('Click here for explanation of textile tags')">textile</a> tags)</span>
+      <%=  fckeditor_textarea :topic, :comment_body, :height => '250' unless @comment.textiled %>
     </p>
     <% if @topic.forum.mediators.include? current_user %>
       <p>
@@ -37,11 +38,3 @@
     </p>
   </div>  
 <% end %>
-
-<%= observe_form "new-topic",
-      :frequency => 1,
-      :update => "live-preview",
-      :complete => "Element.show('live-preview')",
-      :url => preview_topics_path %>
-
-<div id="live-preview" style="display: none, border => 1px solid"></div>

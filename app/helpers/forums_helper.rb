@@ -17,7 +17,7 @@ module ForumsHelper
     
     author = user_display_name last_comment.user
     author = boldify(author) if last_comment.topic.unread_comment?(current_user)
-    "#{subject}<br/>#{author} wrote \"#{truncate comment, 40}\"<br/>#{om_date_time last_comment.created_at}"
+    "#{subject}<br/>#{author} wrote \"#{truncate comment.gsub(/<\/?[^>]*>/, ""), 40}\"<br/>#{om_date_time last_comment.created_at}"
   end
   
     
@@ -27,7 +27,7 @@ module ForumsHelper
     
     author = user_display_name topic.last_comment.user
     author = boldify(author) if topic.unread_comment?(current_user)
-    "#{author} wrote \"#{truncate comment, 40}\"<br/>#{om_date_time topic.last_comment.created_at}"
+    "#{author} wrote \"#{truncate comment.gsub(/<\/?[^>]*>/, ""), 40}\"<br/>#{om_date_time topic.last_comment.created_at}"
   end
   
 
