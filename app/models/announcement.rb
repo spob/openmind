@@ -2,6 +2,8 @@ class Announcement < ActiveRecord::Base
   validates_presence_of :headline, :description
   validates_length_of :headline, :maximum => 80
   
+  xss_terminate :except => [:description]
+  
   def self.list(page, per_page, limit = :all)
     paginate :page => page, 
       :order => 'announcements.created_at DESC' ,

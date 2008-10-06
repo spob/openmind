@@ -9,6 +9,8 @@ class Release < ActiveRecord::Base
   validates_uniqueness_of :version, :scope => "product_id"
   validates_length_of :version, :maximum => 20
   
+  xss_terminate :except => [:description]
+  
   def self.list(page, product_id, per_page)
     paginate :page => page, 
         :conditions => ['product_id = ?', product_id],

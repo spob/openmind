@@ -21,6 +21,8 @@ class Idea < ActiveRecord::Base
   
   attr_accessor :nondb_tag_list #used for calculating changed email notifications
   
+  xss_terminate :except => [:description]
+  
   def self.list_watched_ideas(page, user, properties, do_paginate)
     list(page, user, properties, do_paginate, 
       " exists (select null from watches as w where w.idea_id = ideas.id and w.user_id = ?)",
