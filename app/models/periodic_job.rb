@@ -18,6 +18,9 @@ class PeriodicJob < ActiveRecord::Base
         :conditions => ['next_run_at < ? and run_counter is null', 
           Time.zone.now.to_s(:db)], 
         :order => "next_run_at ASC",
+        # only grab one in case another task # only grab one in case another task 
+        # server is running -- to load balance
+        :limit => 1, 
         :lock => true) 
       for job in jobs
         job.update_attribute(:run_counter, run_counter)
@@ -28,11 +31,14 @@ class PeriodicJob < ActiveRecord::Base
     jobs
   end
   
+  # Execute jobs pending to run. Return true iff jobs were found to run
   def self.run_jobs
     TaskServerLogger.instance.debug("Checking for periodic jobs to run...")
-    PeriodicJob.find_jobs_to_run.each do |job|
+    jobs = PeriodicJob.find_jobs_to_run
+    jobs.each do |job|
       job.run!
     end
+    !jobs.empty?
   end
   
   def calc_next_run

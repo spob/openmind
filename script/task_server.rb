@@ -41,7 +41,7 @@ end
 
 loop do
   # Find all jobs waiting to run and run them
-  PeriodicJob.run_jobs
-  
-  sleep(SLEEP_TIME)
+  jobs_not_found = PeriodicJob.run_jobs
+  # only sleep if no jobs were found to run
+  sleep(SLEEP_TIME) if !jobs_not_found
 end
