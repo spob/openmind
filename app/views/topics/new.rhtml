@@ -1,10 +1,11 @@
+<%content_for :head do -%>
+  <%= javascript_include_tag :fckeditor %>
+<% end  %>
+
 <%content_for :bodyTag do -%>
   <%= set_focus_to_id 'topic_title' -%>
 <%end%>
 <%= error_messages_for 'topic' %>
-<%content_for :head do -%>
-  <%= javascript_include_tag :fckeditor %>
-<% end  %>
 
 <div id="actionButtons2">
   <%= link_to 'List topics', forum_path(@topic.forum), 

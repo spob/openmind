@@ -26,7 +26,8 @@
   </p>
   <p>
     <label for="release_description">Description:</label>
-    <%=textilize @release.description unless @release.description.nil? %>
+    <%=textilize @release.description unless @release.description.nil? || !@release.textiled %>
+    <%=@release.description unless @release.description.nil? || @release.textiled %>
   </p>
   <% unless @release.download_url.nil? %>
   <p>

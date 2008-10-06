@@ -1,3 +1,7 @@
+<%content_for :head do -%>
+  <%= javascript_include_tag :fckeditor %>
+<% end  %>
+
 <%= calendar_date_select_includes "blue" %>
 <%content_for :bodyTag do -%>
 <%= set_focus_to_id 'release_version' -%>
@@ -30,9 +34,7 @@
     </p>
     <p>
       <label for="description">Description:</label>
-      <%= form.text_area :description %>
-      <br/>
-      <span style="padding-left:10px;font-size:0.83em;">(supports <a href="http://hobix.com/textile/" target="_blank" onmouseover="Tip('Click here for explanation of textile tags')">textile</a> tags)</span>
+      <%=  fckeditor_textarea :release, :description, :height => '250' %>
     </p>
     <p>
       <label for="download_url">Download URL:</label>
@@ -47,11 +49,3 @@
     </p>
   </div>  
 <% end %>
-
-<%= observe_form "new-release",
-      :frequency => 1,
-      :update => "live-preview",
-      :complete => "Element.show('live-preview')",
-      :url => preview_releases_path %>
-
-<div id="live-preview" style="display: none; border: 1px solid"></div>
