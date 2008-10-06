@@ -1,3 +1,7 @@
+<%content_for :head do -%>
+  <%= javascript_include_tag :fckeditor %>
+<% end  %>
+
 <%content_for :bodyTag do -%>
   <%= set_focus_to_id 'idea_title' -%>
 <%end%>
@@ -12,9 +16,7 @@
     </p>
     <p>
       <label for="description:"> Description:</label>
-      <%= form.text_area :description,  {:cols => 70, :rows => 8 } %>
-      <br/>
-      (supports <a href="http://hobix.com/textile/" target="_blank">textile</a> tags)
+      <%=  fckeditor_textarea :idea, :description, :height => '250'  %>
     </p>
     <p>
       <label for="product">Product:</label>
@@ -38,11 +40,3 @@
     </p>
   </div>  
 <% end %>
-
-<%= observe_form "new-idea",
-  :frequency => 1,
-  :update => "live-preview",
-  :complete => "Element.show('live-preview')",
-  :url => { :action => "preview" } %>
-
-<div id="live-preview" style="display: none, border => 1px solid"></div>

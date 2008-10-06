@@ -14,15 +14,6 @@
 <% form_for :comment, :html => {:id => "new-comment"}, 
   :url => comments_path(:id => object.id) do |form| %>
   <input type="hidden" value="<%= object.class.to_s %>" name="type"/>
-  <div id="actionButtons2">
-    <%= link_to theme_image_tag("icons/24x24/ideasList.png", 
-      :alt=>"Show Idea", :title=> "Show Idea"),
-      options = { :controller=> 'ideas', :action => 'show', :id => @idea},
-      html_options = {:onmouseover => "Tip('Return to idea ##{@idea.id}')"} if object.class.to_s == "Idea" %>
-  
-    <%=  link_to 'View Topic', topic_path(@topic.id) , html_options = {:class=> "button",
-      :onmouseover => "Tip('Return to topic ##{@topic.title}')"} if object.class.to_s == "Topic" %>
-  </div>
   <div class="formTitle">Add Comment</div>
   <div class="cssform widerLabel">
     <% if object.class.to_s == "Idea" %>
@@ -36,7 +27,8 @@
       </p>
       <p>
         <label for="description">Description:</label>
-        <%= textilize(@idea.description).gsub(/<[pP]>|<\/[pP]>/, '') %>  
+        <%= textilize(@idea.description).gsub(/<[pP]>|<\/[pP]>/, '') if @idea.textiled? %> 
+        <%= @idea.description unless @idea.textiled? %>  
       </p>
     <% else %>
       <p>
@@ -71,6 +63,13 @@
       <% text = "Create this comment for topic '#{@topic.title}'" if object.class.to_s == "Topic" %>
       <%= submit_tag 'Create', html_options = {:class=> "button", :disable_with => "Please wait...",
         :onmouseover => "Tip('#{text}')"}  %>
+    <%= link_to "Cancel",
+      options = { :controller=> 'ideas', :action => 'show', :id => @idea},
+      html_options = {:class=> "button", 
+      :onmouseover => "Tip('Return to idea ##{@idea.id}')"} if object.class.to_s == "Idea" %>
+  
+    <%=  link_to 'Cancel', topic_path(@topic.id) , html_options = {:class=> "button",
+      :onmouseover => "Tip('Return to topic ##{@topic.title}')"} if object.class.to_s == "Topic" %>
     </p>
   </div>  
 <% end %>

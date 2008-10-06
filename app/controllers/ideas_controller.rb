@@ -176,6 +176,9 @@ class IdeasController < ApplicationController
     original_idea.nondb_tag_list = original_idea.tag_list
     authorize_edit @idea
     if @idea.update_attributes(params[:idea])
+      # convert to use fckedit if was previously using textiled
+      @idea.update_attributes(:textiled => false) if @idea.textiled
+      
       # did the user change the product, leaving the release invalid?
       @idea.update_attributes(:release_id => nil) if !@idea.release.nil? and @idea.release.product.id != @idea.product.id
       # do any merged ideas need to have their releases updated as well

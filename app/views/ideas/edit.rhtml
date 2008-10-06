@@ -1,4 +1,8 @@
 <%content_for :head do -%>
+  <%= javascript_include_tag :fckeditor %>
+<% end  %>
+
+<%content_for :head do -%>
   <%= theme_stylesheet_link_tag 'ideas' %>
   <%= theme_stylesheet_link_tag 'sideBarRight' %>
 <%end%>
@@ -12,66 +16,56 @@
 
 <%content_for :sidebar2 do -%>
   <%=render(:partial => "sidebar1", :object => @current_user)%>
-  <%end%>
-  <div id="actionButtons2">
-    <%= link_to 'View Details', options = { :action => 'show', :id => @idea }, 
+<%end%>
+<div id="actionButtons2">
+  <%= link_to 'List Ideas', options = { :action => 'list'}, 
     html_options = {:class=> "button", 
-      :onmouseover => "Tip('View details for this idea')"} %>
-    <%= link_to 'List Ideas', options = { :action => 'list'}, 
-    html_options = {:class=> "button", 
-      :onmouseover => "Tip('Return to the idea list')"}  %>
-  </div>
+    :onmouseover => "Tip('Return to the idea list')"}  %>
+</div>
 
 
-  <% form_for :idea, :html => {:id => "edit-idea"}, 
+<% form_for :idea, :html => {:id => "edit-idea"}, 
   :url => { :action => "update", :id => @idea} do |form| %>
-    <div class="formTitle"><%= theme_image_tag("icons/16x16/ideasEdit.png", 
-      options = {:alt=>"Idea"}) %>Edit Idea #<%= @idea.id %></div>
-    <div class="cssform widerLabel">
-      <p>
-        <label for="title"> Title: </label>
-        <%= form.text_field :title, { :size => 60, :maxlength => 100 } %>
-      </p>
-      <p>
-        <label for="description:"> Description:</label>
-        <%= form.text_area :description,  {:cols => 50, :rows => 5 } %>
-        <br/>
-        (supports <a href="http://hobix.com/textile/" target="_blank">textile</a> tags)
-      </p>
-      <p>
-        <label for="product_id">Product:</label>
-        <%= form.collection_select(:product_id, Product.find(:all, :order => "name ASC" ), :id, :name) %>
-      </p> 
-      <p>
-        <label for="release_id">Release:</label>
-        <span id="releases_container">
-          <%= form.select(:release_id,
-            all_releases_with_misc(@idea.product.id, "Not scheduled")) if allow_schedule_to_release? %>
-          <%= h @idea.release.version unless @idea.release.nil? or allow_schedule_to_release? %>       
-        </span>
-        <%= observe_field("idea_product_id",
-          :frequency => 0.25,
-          :update => "releases_container",
-          :url => { :action => :filtered_product_select},
-          :with => "'product_id=' + value") if allow_schedule_to_release? %>
-        <%= h @idea.release.version unless @idea.release.nil? or allow_schedule_to_release? %>
-      </p>
-      <p>
-        <label for="tag_list">Tags:</label>
-        <%= form.text_field :tag_list %>
+  <div class="formTitle"><%= theme_image_tag("icons/16x16/ideasEdit.png", 
+    options = {:alt=>"Idea"}) %>Edit Idea #<%= @idea.id %></div>
+  <div class="cssform widerLabel">
+    <p>
+      <label for="title"> Title: </label>
+      <%= form.text_field :title, { :size => 60, :maxlength => 100 } %>
+    </p>
+    <p>
+      <label for="description:"> Description:</label>
+      <%=  fckeditor_textarea :idea, :description, :height => '250'  %>
+    </p>
+    <p>
+      <label for="product_id">Product:</label>
+      <%= form.collection_select(:product_id, Product.find(:all, :order => "name ASC" ), :id, :name) %>
+    </p> 
+    <p>
+      <label for="release_id">Release:</label>
+      <span id="releases_container">
+        <%= form.select(:release_id,
+          all_releases_with_misc(@idea.product.id, "Not scheduled")) if allow_schedule_to_release? %>
+        <%= h @idea.release.version unless @idea.release.nil? or allow_schedule_to_release? %>       
+      </span>
+      <%= observe_field("idea_product_id",
+        :frequency => 0.25,
+        :update => "releases_container",
+        :url => { :action => :filtered_product_select},
+        :with => "'product_id=' + value") if allow_schedule_to_release? %>
+      <%= h @idea.release.version unless @idea.release.nil? or allow_schedule_to_release? %>
+    </p>
+    <p>
+      <label for="tag_list">Tags:</label>
+      <%= form.text_field :tag_list %>
       (separate with spaces, use quotes for multi-word tags)
-      </p>
-      <p>
-        <%= submit_tag 'Update', html_options = {:class=> "button", :disable_with => "Please wait...",
-          :onmouseover => "Tip('Save changes')"} %>
-      </p>
-    </div>  
-  <% end %>
-
-  <%= observe_form "edit-idea",
-  :frequency => 1,
-  :update => "live-preview",
-  :complete => "Element.show('live-preview')",
-  :url => { :action => "preview" } %>
-
-  <div id="live-preview" style="display: none, border => 1px solid"></div>
+    </p>
+    <p>
+      <%= submit_tag 'Update', html_options = {:class=> "button", :disable_with => "Please wait...",
+        :onmouseover => "Tip('Save changes')"} %>
+      <%= link_to 'Cancel', options = { :action => 'show', :id => @idea }, 
+        html_options = {:class=> "button", 
+        :onmouseover => "Tip('Cancel edit without saving changes')"} %>
+    </p>
+  </div>  
+<% end %>
