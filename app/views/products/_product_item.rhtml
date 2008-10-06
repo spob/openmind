@@ -4,7 +4,8 @@
     <%  tagtip = "" %>
     <% if product_item.current_release and !product_item.current_release.description.nil? and !product_item.current_release.description.strip.empty? %>        
           <%  tagtip = "TagToTip('release_body#{product_item.id}')" %>
-          <%= textilize(truncate(product_item.current_release.description, 500)) %>
+          <%= truncate(product_item.current_release.description.gsub(/<\/?[^>]*>/, ""), 500) if product_item.current_release.textiled %>
+          <%= truncate(product_item.current_release.description.gsub(/<\/?[^>]*>/, ""), 500) unless product_item.current_release.textiled %>
     <% end %>
   </div>
   <td><%= product_item.name %></td>
