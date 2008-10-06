@@ -1,6 +1,6 @@
 <div class="commentbox">
-  <%= comment_item.body unless comment_item.textiled %>
-  <%= textilize comment_item.body if comment_item.textiled %>
+  <%= white_list(comment_item.body) unless comment_item.textiled %>
+  <%= textilize(white_list(comment_item.body)) if comment_item.textiled %>
   <%= link_to '[Edit]', edit_comment_path(comment_item), 
     html_options = { :class=> "btTxt editButton",
     :onmouseover => "Tip('Edit this comment')"} if can_edit_comment? comment_item %>

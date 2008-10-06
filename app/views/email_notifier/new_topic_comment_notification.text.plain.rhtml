@@ -7,7 +7,7 @@ Forum:      <%= topic.forum.name %>
 Topic:      <%= topic.title %>
   <% for comment in topic.unread_comments(@user) %>
 <%= comment.user.display_name %> wrote at <%= comment.created_at.strftime("%b %d, %Y %I:%M%p") %>:
-<%= comment.body.gsub(/<\/?[^>]*>/, "") %>
+<%= StringUtils.strip_html(comment.body) %>
 
   <% end %>
 ------------------------------------------------------------------------

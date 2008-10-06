@@ -14,4 +14,20 @@ class StringUtils
     return "#{count} #{noun}" if count == 1
     "#{count} #{ActiveSupport::Inflector.pluralize noun}"
   end
+  
+  def self.strip_html str
+    str.gsub(/<\/?[^>]*>/, "")
+  end
+  
+#  def self.strip_html_tags html    
+#    #remove <script ...>...</script> tags
+#    html = html.gsub(/<script(.*)>(.*)<\/script(.*)>/, "")
+#
+#    html = html.gsub(/(:on(blur|c(hange|lick)|dblclick|focus|keypress|(key|mouse)(down|up)|(un)?load|mouse(move|o(ut|ver))|reset|s(elect|ubmit)))/, "");
+#    html = html.gsub(/<(.*?)$event_attribs=(.*?)(\s*?)(.*?)>/, "")
+#
+#    #remove href=javascript:
+#    html = html.gsub(/<(.*?)javascript\:(.*?)/, "")
+#    html
+#  end
 end

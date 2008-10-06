@@ -27,8 +27,8 @@
     </div>
     <div class="description">Votes</div>
     </div>
-    <%= textilize(@idea.description) if @idea.textiled %>
-    <%= @idea.description unless @idea.textiled %>
+    <%= textilize(white_list(@idea.description)) if @idea.textiled %>
+    <%= white_list(@idea.description) unless @idea.textiled %>
   </div>
   <div style="clear: both;"></div>
   <div id="rightFooter">Posted by: <%= h user_display_name(@idea.user) %><br /><%= om_date_time @idea.created_at %></div>

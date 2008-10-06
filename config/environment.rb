@@ -99,6 +99,8 @@ if File.exists?(path) && (env_config = YAML.load_file(path))
   APP_CONFIG.merge!(env_config)
 end
 
+WhiteListHelper.tags.merge %w(u table tbody tr td)
+WhiteListHelper.attributes.merge %w(id class style)
 
 # Required to support hard line breaks
 # See http://wiki.rubyonrails.org/rails/pages/RedCloth for a discussion

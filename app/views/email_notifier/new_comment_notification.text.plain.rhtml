@@ -4,6 +4,6 @@ You are watching idea # <%= @comment.idea.id %>:
 
 A new comment was recently created for this idea:
 
-<%= @comment.body.gsub(/<\/?[^>]*>/, "") %>
+<%= StringUtils.strip_html(@comment.body) %>
 
 Logon at <%= @url %>

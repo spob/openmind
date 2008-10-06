@@ -1,8 +1,8 @@
 <div class="commentbox">
   <b><a name="<%= announcement_item.id %>"><%= h announcement_item.headline %></a></b> 
   
-  <%= announcement_item.description unless announcement_item.textiled %>
-  <%= textilize announcement_item.description if announcement_item.textiled %>
+  <%= white_list(announcement_item.description) unless announcement_item.textiled %>
+  <%= textilize(white_list(announcement_item.description)) if announcement_item.textiled %>
 </div>
 <div class="commentfooter">
   Posted on <%=om_date_time announcement_item.created_at%> 
