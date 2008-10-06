@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
 class TopicTest < Test::Unit::TestCase
-  fixtures :topics, :users, :comments, :topic_watches
+  fixtures :topics, :forums, :users, :comments, :topic_watches
 
   def test_unread_comment
     topic = topics(:bug_topic1)
@@ -52,5 +52,17 @@ class TopicTest < Test::Unit::TestCase
     assert 1, topic.watchers.count
     user2 = topic.watchers.first
     assert user, user2
+  end
+  
+  def test_valid_with_attributes
+    topic = Topic.new(:title => "test", :user => users(:quentin), :forum => forums(:bugs_forum))
+    assert topic.valid?
+  end
+  
+  def test_missing_title
+    topic = Topic.new(:user => users(:quentin), :forum => forums(:bugs_forum))
+    assert !topic.valid?
+    assert_equal "can't be blank", 
+      topic.errors.on(:title)
   end
 end

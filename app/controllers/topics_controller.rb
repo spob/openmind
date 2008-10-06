@@ -14,16 +14,16 @@ class TopicsController < ApplicationController
   end
   
   def new
-    forum = Forum.find(params[:forum_id])
+    @forum ||= Forum.find(params[:forum_id])
     
-    unless forum.can_see? current_user or prodmgr?
+    unless @forum.can_see? current_user or prodmgr?
       flash[:error] = "You have insuffient permissions to access forum"
       redirect_to forums_path
       return
     end
     
-    @topic = Topic.new(:forum => forum)
-    @comment = TopicComment.new(:topic => @topic)
+    @topic ||= Topic.new(:forum => @forum)
+    @comment ||= TopicComment.new(:topic => @topic)
   end
 
   def create
@@ -31,26 +31,25 @@ class TopicsController < ApplicationController
     @topic = Topic.new(params[:topic])
     @topic.forum_id = forum_id
     @topic.user = current_user
-    @topic.save!
+    if @topic.save   
+      @topic.comments << TopicComment.new(
+        :user_id => current_user.id,
+        :body => @topic.comment_body)
+      @topic.add_user_read(current_user)
     
-    @topic.comments.create(
-      :user_id => current_user.id,
-      :body => @topic.comment_body)
-    @topic.add_user_read(current_user)
-    
-    @topic = Topic.find(@topic.id)
-    tw = TopicWatch.find_by_user_id_and_topic_id(current_user, @topic)
-    @topic.watchers << current_user if tw.nil?
-    
-    for user in @topic.forum.watchers
-      @topic.watchers << user unless @topic.watchers.include? user
-    end
-  
-    if @topic.save
+      #      @topic = Topic.find(@topic.id)
+      for user in @topic.forum.watchers
+        @topic.watchers << user unless @topic.watchers.include? user
+      end
+        
+      tw = TopicWatch.find_by_user_id_and_topic_id(current_user, @topic)
+      @topic.watchers << current_user if tw.nil?
+      @topic.save!
       flash[:notice] = "Topic #{@topic.title} was successfully created."
       redirect_to forum_path(forum_id)
     else
       @forum = Forum.find(forum_id)
+      new
       render :action => 'new', :forum_id => forum_id
     end
   end

@@ -10,7 +10,8 @@ class Topic < ActiveRecord::Base
   has_many :watchers, :through => :topic_watches, :foreign_key => 'user_id'
   
   validates_presence_of :title, :user
-  validates_length_of   :title, :maximum => 200
+  validates_presence_of :comment_body, :on => :create
+  validates_length_of   :title, :within => 5..200, :allow_blank => true
   
   acts_as_indexed :fields => [ :title ]
   

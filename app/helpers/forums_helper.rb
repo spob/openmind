@@ -22,6 +22,7 @@ module ForumsHelper
   
     
   def last_topic_post topic
+    return if topic.last_comment.nil?
     comment = topic.last_comment.body
     comment = boldify(comment) if topic.unread_comment?(current_user)
     
