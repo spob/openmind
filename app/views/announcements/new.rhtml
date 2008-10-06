@@ -1,3 +1,7 @@
+<%content_for :head do -%>
+  <%= javascript_include_tag :fckeditor %>
+<% end  %>
+
 <%content_for :bodyTag do -%>
   <%= set_focus_to_id 'announcement_headline' -%>
 <%end%>
@@ -14,9 +18,7 @@
     </p>
     <p>
       <label for="headline">Description:</label>
-      <%= form.text_area :description %>
-      <br/>
-      <span style="padding-left:10px;font-size:0.83em;">(supports <a href="http://hobix.com/textile/" target="_blank" onmouseover="Tip('Click here for explanation of textile tags')">textile</a> tags)</span>
+      <%=  fckeditor_textarea :announcement, :description, :height => '250'  %>
     </p>
     <p>
       <label></label>
