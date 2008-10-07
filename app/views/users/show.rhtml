@@ -80,7 +80,13 @@
   <p>
     <label>User Allocations:</label><br />
     <% for allocation in @user.allocations %>
-      &bull;&nbsp;Allocation of quantity <%=h allocation.quantity %> (<%= pluralize allocation.votes.size, 'vote' %> used) created on <%=om_date_time(allocation.created_at) %><br />
+      <% if allocation.expiration_date <= DateUtils.today_utc %>
+        <strike>
+        <% end %>
+        &bull;&nbsp;Allocation of quantity <%=h allocation.quantity %> (<%= pluralize allocation.votes.size, 'vote' %> used) expires on <%=om_date_time(allocation.expiration_date) %><br />
+        <% if allocation.expiration_date <= DateUtils.today_utc %>
+        </strike>
+      <% end %>
     <% end %>
   </p>
   <p>

@@ -22,7 +22,7 @@
       <% if allocation.expiration_date <= DateUtils.today_utc %>
         <strike>
         <% end %>
-        &bull;&nbsp;Allocation of quantity <%=h allocation.quantity %> (<%= pluralize allocation.votes.size, 'vote' %> used) expires on on <%=om_date_time(allocation.expiration_date) %><br />
+        &bull;&nbsp;Allocation of quantity <%=h allocation.quantity %> (<%= pluralize allocation.votes.size, 'vote' %> used) expires on <%=om_date_time(allocation.expiration_date) %><br />
         <% if allocation.expiration_date <= DateUtils.today_utc %>
         </strike>
       <% end %>
