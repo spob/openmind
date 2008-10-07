@@ -86,6 +86,10 @@ class CommentsController < ApplicationController
 
   def create_topic_comment
     @topic = Topic.find(params[:id])
+    # touch counter exists to force an update on the topic so that updated_at
+    # column is updated, so that topics are sorted properly
+    @topic.touch_counter = @topic.touch_counter + 1
+    
     @comment = TopicComment.new(params[:comment])
     @comment.user_id = current_user.id
     @comment.topic_id = @topic.id
