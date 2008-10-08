@@ -8,7 +8,7 @@
     <%= "My " unless params[:by_user].nil? %>
   Allocations</h1>
   <% if allocmgr? %>
-  <div id="actionButtons">
+  <div id="actionButtons" style="right:0">
     <%= link_to 'New Allocation', new_allocation_path, 
                     html_options = {:class => "button",
                     :onmouseover => "Tip('Create a new allocation')"} %>

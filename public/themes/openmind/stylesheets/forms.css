@@ -1,7 +1,8 @@
 .formContainer {
     float: left;
     width: 100%;
-}
+    position:relative;
+  }
 
 .formContainer li
 {
@@ -269,10 +270,11 @@ form p:hover .instructions {
 #actionButtons
 {
     position:absolute;
-    top:25px;
+    top:15px;
     right:17px;
     white-space:nowrap;
     display:inline;
+    padding-bottom:1px
 }
 
 #actionButtons img
