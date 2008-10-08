@@ -1,0 +1,27 @@
+<%=render(:partial => "show_hide_forum_details", :object => @forum)%>
+
+<div id="forum_details" class="cssform" style="<%= forum_details_box_display_style %>">
+  <p>
+    <label>Description:</label>
+    <%= h @forum.description %>
+  </p>
+  <% if can_edit? @forum %>
+    <p>
+      <label>Mediators:</label>
+      <% for user in @forum.mediators %><br />
+        &bull;&nbsp;<%= h user_display_name(user) %><br />
+      <% end %>
+    </p>
+    <p>
+      <label>Access:</label>
+      <% if  @forum.groups.empty? %>
+        Public
+      <% else  %>
+        Restricted to the following User Groups:
+        <% for group in @forum.groups %><br />
+          &bull;&nbsp;<%= h group.name %><br />
+        <% end %>
+      <% end  %>
+    </p>
+  <% end %>
+</div>

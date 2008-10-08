@@ -87,4 +87,34 @@ class ForumsController < ApplicationController
     flash[:notice] = "Forum #{name} was successfully deleted."
     redirect_to forums_url
   end
+  
+  def toggle_forum_details_box
+    @forum = Forum.find(params[:id])
+    if session[:forum_details_box_display] == "SHOW"
+      session[:forum_details_box_display] = "HIDE"
+    else
+      session[:forum_details_box_display] = "SHOW"
+    end
+    
+    respond_to do |format|
+      format.html { 
+        index
+      }
+      format.js  { do_rjs_toggle_forum_details_box }
+    end
+  end
+  
+  private
+  
+  def do_rjs_toggle_forum_details_box 
+    render :update do |page|
+      page.replace "forum_details_area", 
+        :partial => "show_hide_forum_details"
+      if session[:forum_details_box_display] == "HIDE"
+        page.visual_effect :blind_up, :forum_details, :duration => 0.5
+      else
+        page.visual_effect :blind_down, :forum_details, :duration => 1
+      end
+    end
+  end
 end

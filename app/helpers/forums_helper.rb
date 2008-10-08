@@ -100,6 +100,21 @@ module ForumsHelper
     end
   end
   
+  def expand_contract_box_image
+    image = "show.png"
+    help = "Show forum details"
+    if session[:forum_details_box_display] == "SHOW"
+      image = "hide.png" 
+      help = "Hide forum details"
+    end
+    theme_image_tag("icons/16x16/#{image}", :alt=> help, :title=> help,:onmouseover => "Tip('#{help}')")
+  end
+  
+  def forum_details_box_display_style
+    return "display:block;" if session[:forum_details_box_display] == "SHOW"
+    return "display:none;"
+  end
+  
   private
   
   def boldify(text)
