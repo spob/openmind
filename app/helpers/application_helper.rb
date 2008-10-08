@@ -130,6 +130,11 @@ module ApplicationHelper
     return text unless bold
     "<strong>#{text}</strong>"
   end
+  
+  def strike_text(text, strike)
+    return text unless strike
+    "<strike>#{text}</strike>"
+  end
 
   
   private

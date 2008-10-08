@@ -1,11 +1,15 @@
-<% if prodmgr? or forum_item.can_see? current_user %>
+<% if prodmgr? or forum_item.can_edit? current_user or (forum_item.can_see? current_user and forum_item.active) %>
   <tr>
-    <td><b><%= h forum_item.name %></b><br/><%= h forum_item.description %></td>
+    <td>
+      <b><%= strike_text(forum_item.name, !forum_item.active) %></b>
+      <br/>
+      <%= h forum_item.description %>
+    </td>
     <td><%= last_forum_post forum_item %></td>
     <td><%= forum_item.topics.count %></td>
     <td><%= forum_item.comments.count - forum_item.topics.count %></td>
     <td style="white-space:nowrap;">
-        <%=render(:partial => "forum_action", :object => forum_item)%>
+      <%=render(:partial => "forum_action", :object => forum_item)%>
     </td>
   </tr>
 <% end %>

@@ -40,6 +40,8 @@ class Forum < ActiveRecord::Base
   end
   
   def can_see? user
-    can_edit? user or groups.empty? or !groups.select{|group| group.users.include? user}.empty?
+    can_edit? user or 
+      ((groups.empty? or 
+          !groups.select{|group| group.users.include? user}.empty?) and active)
   end
 end
