@@ -15,7 +15,9 @@
     :onmouseover => "Tip('Return to list forums')"}%>
 </div>
 
-<br/>
+
+  <%=render(:partial => "forum_heading")%>
+
 <% form_tag(search_topics_path, :class => 'cssform searchform', :name => 'search' ) do -%>
   <p>
     <label for="search">Search Forum:</label>
@@ -28,7 +30,6 @@
   </p>
 <% end %>
 
-  <%=render(:partial => "forum_heading")%>
 <h1>Topics</h1>
 <table cellspacing="0" cellpadding="0" class="cssform">
   <tr>
