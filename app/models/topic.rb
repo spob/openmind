@@ -63,6 +63,7 @@ class Topic < ActiveRecord::Base
           "select null " +
           "from topic_watches as tw " +
           "where tw.last_checked_at < comments.created_at " +
+          " and tw.topic_id = comments.topic_id " +
           "and tw.user_id = ?)", id, user.id],
       :order => "comments.id DESC")
   end
