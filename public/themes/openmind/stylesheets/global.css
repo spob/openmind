@@ -530,3 +530,17 @@ div.progressBar div.background {
 }
 
 /********* End original ***********/
+
+/********* openID login form ***********/
+#id_selector {
+  padding-left:3px;
+}
+
+#id_selector button {
+  height:24px;
+  width:40px;
+}
+
+#openid_url {
+  width:210px;
+}

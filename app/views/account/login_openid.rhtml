@@ -10,15 +10,12 @@
     <script type="text/javascript" id="__openidselector" src="https://www.idselector.com/selector/d87bfb01bf6d4068d6bf00c39377a52f77da1cf6" charset="utf-8"></script>
 <!-- END ID SELECTOR -->
 <%end%>
-<div style="width:450px;">
+<div style="width:470px;">
   <div class="formTitle">Login</div>
     <% form_tag('/account/login_openid', {:class => "cssform"}) do -%>
       <p>
         <label for="openid">Open ID:</label>
-        <span nowrap>
-          <%= text_field_tag 'openid_url' %>
-          <div id="id_selector"></div>
-        </span>
+          <%= text_field_tag 'openid_url' %><span id="id_selector"></span>
       </p>
       <p>
         <%= submit_tag 'Sign in', html_options = {:class=> "button"} %>
