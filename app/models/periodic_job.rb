@@ -39,7 +39,7 @@ class PeriodicJob < ActiveRecord::Base
         :limit => 1, 
         :lock => true) 
       for job in jobs
-        job.update_attribute(:run_counter, run_counter)
+        job.update_attributes(:run_counter => run_counter, :last_run_result => 'Running')
       end
     end
     # okay, transaction should be committed (and lock freed at this point)
