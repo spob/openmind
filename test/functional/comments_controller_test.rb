@@ -24,7 +24,7 @@ class CommentsControllerTest < Test::Unit::TestCase
   end
 
   def test_new
-    get :new, :id => @idea_id, :type => 'idea'
+    get :new, :id => @idea_id, :type => 'Idea'
 
     assert_response :success
     assert_template 'new'

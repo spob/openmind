@@ -1,3 +1,16 @@
+# == Schema Information
+# Schema version: 20081008013631
+#
+# Table name: groups
+#
+#  id           :integer(4)      not null, primary key
+#  name         :string(50)      not null
+#  description  :string(150)     not null
+#  lock_version :integer(4)      default(0)
+#  created_at   :datetime        not null
+#  updated_at   :datetime        not null
+#
+
 class Group < ActiveRecord::Base
   validates_presence_of :name
   validates_uniqueness_of :name 

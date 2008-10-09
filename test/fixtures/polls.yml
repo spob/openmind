@@ -1,3 +1,17 @@
+# == Schema Information
+# Schema version: 20081008013631
+#
+# Table name: polls
+#
+#  id           :integer(4)      not null, primary key
+#  title        :string(200)     not null
+#  close_date   :date            not null
+#  lock_version :integer(4)      default(0)
+#  created_at   :datetime        not null
+#  active       :boolean(1)      not null
+#  updated_at   :datetime        not null
+#
+
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 color_poll:
   title: What is your favor color?

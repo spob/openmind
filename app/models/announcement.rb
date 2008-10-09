@@ -1,3 +1,17 @@
+# == Schema Information
+# Schema version: 20081008013631
+#
+# Table name: announcements
+#
+#  id           :integer(4)      not null, primary key
+#  headline     :string(120)     not null
+#  description  :text
+#  lock_version :integer(4)      default(0)
+#  created_at   :datetime        not null
+#  updated_at   :datetime        not null
+#  textiled     :boolean(1)      not null
+#
+
 class Announcement < ActiveRecord::Base
   validates_presence_of :headline, :description
   validates_length_of :headline, :maximum => 80

@@ -1,3 +1,17 @@
+# == Schema Information
+# Schema version: 20081008013631
+#
+# Table name: products
+#
+#  id           :integer(4)      not null, primary key
+#  name         :string(30)      not null
+#  description  :string(200)     not null
+#  active       :boolean(1)      default(TRUE), not null
+#  created_at   :datetime        not null
+#  lock_version :integer(4)      default(0)
+#  updated_at   :datetime        not null
+#
+
 class Product < ActiveRecord::Base
   validates_presence_of :name, :description
   validates_uniqueness_of :name 

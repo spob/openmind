@@ -1,3 +1,17 @@
+# == Schema Information
+# Schema version: 20081008013631
+#
+# Table name: forums
+#
+#  id           :integer(4)      not null, primary key
+#  name         :string(50)      not null
+#  description  :string(150)     not null
+#  lock_version :integer(4)      default(0)
+#  created_at   :datetime        not null
+#  updated_at   :datetime        not null
+#  active       :boolean(1)      default(TRUE), not null
+#
+
 class Forum < ActiveRecord::Base
   has_many :topics, :order => "pinned DESC, updated_at DESC", :dependent => :delete_all
   has_and_belongs_to_many :mediators, :join_table => 'forum_mediators', 

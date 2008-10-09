@@ -1,3 +1,14 @@
+# == Schema Information
+# Schema version: 20081008013631
+#
+# Table name: task_scheduler_batches
+#
+#  id          :integer(4)      not null, primary key
+#  run_counter :integer(4)      default(0), not null
+#  created_at  :datetime
+#  updated_at  :datetime
+#
+
 class TaskSchedulerBatch < ActiveRecord::Base
   
   validates_presence_of :run_counter

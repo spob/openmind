@@ -1,3 +1,18 @@
+# == Schema Information
+# Schema version: 20081008013631
+#
+# Table name: votes
+#
+#  id            :integer(4)      not null, primary key
+#  user_id       :integer(4)      not null
+#  allocation_id :integer(4)
+#  idea_id       :integer(4)
+#  created_at    :datetime        not null
+#  updated_at    :datetime        not null
+#  lock_version  :integer(4)      default(0)
+#  comments      :text
+#
+
 class Vote < ActiveRecord::Base
   
   belongs_to :idea

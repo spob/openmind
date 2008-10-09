@@ -1,3 +1,20 @@
+# == Schema Information
+# Schema version: 20081008013631
+#
+# Table name: topics
+#
+#  id                   :integer(4)      not null, primary key
+#  title                :string(200)     not null
+#  lock_version         :integer(4)      default(0)
+#  forum_id             :integer(4)      not null
+#  user_id              :integer(4)      not null
+#  pinned               :boolean(1)      not null
+#  created_at           :datetime        not null
+#  updated_at           :datetime        not null
+#  topic_comments_count :integer(4)      default(0)
+#  touch_counter        :integer(4)      default(0), not null
+#
+
 class Topic < ActiveRecord::Base
   belongs_to :forum
   belongs_to :user

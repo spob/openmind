@@ -1,3 +1,22 @@
+# == Schema Information
+# Schema version: 20081008013631
+#
+# Table name: releases
+#
+#  id                :integer(4)      not null, primary key
+#  version           :string(20)      not null
+#  product_id        :integer(4)      not null
+#  release_status_id :integer(4)      not null
+#  created_at        :datetime        not null
+#  lock_version      :integer(4)      default(0)
+#  description       :text
+#  release_date      :datetime
+#  user_release_date :string(255)
+#  download_url      :string(300)
+#  updated_at        :datetime        not null
+#  textiled          :boolean(1)      not null
+#
+
 controller_test:
     version: 1.0
     release_status: release_status_controller_test

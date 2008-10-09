@@ -1,3 +1,23 @@
+# == Schema Information
+# Schema version: 20081008013631
+#
+# Table name: ideas
+#
+#  id                :integer(4)      not null, primary key
+#  user_id           :integer(4)      not null
+#  product_id        :integer(4)      not null
+#  release_id        :integer(4)
+#  title             :string(100)     not null
+#  description       :text
+#  created_at        :datetime        not null
+#  updated_at        :datetime        not null
+#  lock_version      :integer(4)      default(0)
+#  merged_to_idea_id :integer(4)
+#  view_count        :integer(4)      default(0), not null
+#  cached_tag_list   :string(255)
+#  textiled          :boolean(1)      not null
+#
+
 class Idea < ActiveRecord::Base
   acts_as_taggable
   

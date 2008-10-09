@@ -1,3 +1,14 @@
+# == Schema Information
+# Schema version: 20081008013631
+#
+# Table name: watches
+#
+#  user_id      :integer(4)      not null
+#  idea_id      :integer(4)      not null
+#  lock_version :integer(4)      default(0)
+#  created_at   :datetime        not null
+#
+
 class Watch < ActiveRecord::Base
   belongs_to :user
   belongs_to :idea

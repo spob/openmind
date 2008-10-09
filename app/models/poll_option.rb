@@ -1,3 +1,17 @@
+# == Schema Information
+# Schema version: 20081008013631
+#
+# Table name: poll_options
+#
+#  id           :integer(4)      not null, primary key
+#  description  :string(80)      not null
+#  poll_id      :integer(4)      not null
+#  lock_version :integer(4)      default(0)
+#  created_at   :datetime        not null
+#  selectable   :boolean(1)      default(TRUE), not null
+#  updated_at   :datetime        not null
+#
+
 class PollOption < ActiveRecord::Base
   validates_presence_of :description
   validates_length_of :description, :maximum => 120

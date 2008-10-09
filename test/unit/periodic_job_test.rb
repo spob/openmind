@@ -5,7 +5,7 @@ class PeriodicJobTest < Test::Unit::TestCase
 
   def test_jobs_should_run
     jobs = PeriodicJob.find_jobs_to_run
-    assert jobs.include?(periodic_jobs(:run_once_job_null_next_run))
+    assert !jobs.include?(periodic_jobs(:run_once_job_null_next_run))
     assert !jobs.include?(periodic_jobs(:run_once_job_future_next_run))    
     assert jobs.include?(periodic_jobs(:run_once_job_past_next_run))    
   end

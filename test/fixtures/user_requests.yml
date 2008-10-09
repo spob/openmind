@@ -1,3 +1,23 @@
+# == Schema Information
+# Schema version: 20081008013631
+#
+# Table name: user_requests
+#
+#  id                            :integer(4)      not null, primary key
+#  email                         :string(255)     not null
+#  created_at                    :datetime
+#  updated_at                    :datetime
+#  first_name                    :string(255)
+#  last_name                     :string(255)     not null
+#  lock_version                  :integer(4)      default(0)
+#  enterprise_name               :string(255)     not null
+#  enterprise_id                 :integer(4)
+#  initial_enterprise_allocation :integer(4)      default(0), not null
+#  initial_user_allocation       :integer(4)      default(0), not null
+#  time_zone                     :string(255)     not null
+#  status                        :string(10)      not null
+#
+
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 pending:
     email: pending@openmindsw.com
