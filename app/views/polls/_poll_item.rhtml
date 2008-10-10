@@ -3,7 +3,7 @@
       <td><%= poll_item.active %></td>
       <td><%= poll_item.total_responses %></td>
       <td><%= format_date(poll_item.close_date) %></td>
-      <td>
+      <td style="white-space:nowrap;">
         <%= link_to theme_image_tag("icons/16x16/viewAction.png", :alt=>"view", :title=> "view"),
           poll_path(poll_item), 
           html_options = {

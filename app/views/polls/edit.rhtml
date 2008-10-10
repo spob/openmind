@@ -7,8 +7,6 @@
 <% form_for(:poll, :url => poll_path(@poll), 
   :html => {:method => :put }) do |form| %>
   <div id="actionButtons2">
-    <%= link_to 'View Details', poll_path(@poll), 
-      html_options = { :class => "button" } %>
     <%= link_to 'List polls', polls_path, 
       html_options = { :class => "button" } %>
   </div>
@@ -20,18 +18,19 @@
     </p>
     <p>
       <label for="close_date">Close Date:</label>
-        <%= calendar_date_select :poll, :close_date, :popup => :force, :time => false, :class=> 'pollTxtField' %>
+      <%= calendar_date_select :poll, :close_date, :popup => :force, :time => false, :class=> 'pollTxtField' %>
     </p>
-   
-   <span class="insideFormTitle" style="margin-left:92px;">Options</span>
+  
+    <span class="insideFormTitle" style="margin-left:92px;">Options</span>
     <div id="poll_options">
       <%= render :partial => 'poll_option', :collection => @poll.poll_options %>
     </div>
     <%= add_poll_option_link "Add a choice" %>
-      
+        
     <p>
       <label></label>
       <%= submit_tag 'Save', html_options = {:class=> "button", :disable_with => "Please wait..."} %>
+      <%= link_to 'Cancel', poll_path(@poll), html_options = { :class => "button" } %>
     </p>
   </div>
 <% end %>
