@@ -27,5 +27,11 @@
         <% end %>
       <% end  %>
     </p>
+    <p>
+      <label>Watchers:</label>
+      <% for user in @forum.watchers %><br />
+        &bull;&nbsp;<%= h user_display_name(user) %><br />
+      <% end %>
+    </p>
   <% end %>
 </div>
