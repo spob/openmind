@@ -17,7 +17,7 @@
       html_options = {:confirm => 'Are you sure?', :method => :delete,
         :onmouseover => "Tip('Delete this topic')"} ) if topic_action.can_delete? %>
   <% end %>
-  <%= show_topic_watch_button(topic_action) %>
+  <%= show_topic_watch_icon(topic_action) %>
   <%= link_to theme_image_tag("icons/24x24/commentAdd.png", 
     :alt=>"add comment", :title=> "add comment"), 
     new_comment_path(:id => topic_action, :type => 'Topic'), 

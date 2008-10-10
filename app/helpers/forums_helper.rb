@@ -32,7 +32,7 @@ module ForumsHelper
   end
   
 
-  def show_topic_watch_button topic
+  def show_topic_watch_icon topic
     if current_user == :false
       link_to theme_image_tag("icons/24x24/watchAdd.png", 
         :alt=>"Add watch", :title=> "add watch",
