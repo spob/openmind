@@ -55,7 +55,10 @@ class TopicTest < Test::Unit::TestCase
   end
   
   def test_valid_with_attributes
-    topic = Topic.new(:title => "test", :user => users(:quentin), :forum => forums(:bugs_forum))
+    topic = Topic.new(:title => "test123", 
+      :user => users(:quentin), 
+      :forum => forums(:bugs_forum),
+      :comment_body => "one, two, three, four")
     assert topic.valid?
   end
   
