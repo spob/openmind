@@ -16,11 +16,7 @@
   <%= link_to 'View Topics', forum_path(@topic.forum.id) , html_options = {:class=> "button",
           :onmouseover => "Tip('Return to list of topics')"}%>
 </div>
-<div class="formTitle">
-  <%= theme_image_tag("icons/16x16/forums.png", options = {:alt=>"Forum"}) %>
-  Topic: <%= h @topic.title %>
-    <%= theme_image_tag("icons/14x14/pin-14x14.gif", :border=>0, :onmouseover => "Tip('This topic is pinned so it will always appear at the top of the list')") if @topic.pinned %>
-</div>
+  <%=render(:partial => "topic_heading")%>
 <br/>
 <%=render(:partial => "comments/comment_item", :collection => @topic.comments)%>
   <%= link_to "Add Comment", 

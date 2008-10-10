@@ -1,0 +1,13 @@
+<%=render(:partial => "show_hide_topic_details", :object => @topic)%>
+
+
+<div id="topic_details" class="cssform" style="<%= topic_details_box_display_style %>">
+  <% if @topic.forum.can_edit? current_user %>
+    <p>
+      <label>Watchers:</label>
+      <% for user in @topic.watchers %><br />
+        &bull;&nbsp;<%= h user_display_name(user) %><br />
+      <% end %>
+    </p>
+  <% end %>
+</div>

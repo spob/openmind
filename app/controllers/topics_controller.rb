@@ -117,4 +117,34 @@ class TopicsController < ApplicationController
     end
     @hits = hits.values.find_all{ |hit| hit.topic.forum == @forum }
   end
+  
+  def toggle_topic_details_box
+    @topic = Topic.find(params[:id])
+    if session[:topic_details_box_display] == "SHOW"
+      session[:topic_details_box_display] = "HIDE"
+    else
+      session[:topic_details_box_display] = "SHOW"
+    end
+    
+    respond_to do |format|
+      format.html { 
+        index
+      }
+      format.js  { do_rjs_toggle_topic_details_box }
+    end
+  end
+  
+  private
+  
+  def do_rjs_toggle_topic_details_box 
+    render :update do |page|
+      page.replace "topic_details_area", 
+        :partial => "show_hide_topic_details"
+      if session[:topic_details_box_display] == "HIDE"
+        page.visual_effect :blind_up, :topic_details, :duration => 0.5
+      else
+        page.visual_effect :blind_down, :topic_details, :duration => 1
+      end
+    end
+  end
 end
