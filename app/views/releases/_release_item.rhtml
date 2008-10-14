@@ -10,7 +10,7 @@
     <%= link_to h(release_item.version), release_path(release_item) %>
   </td>
   <td><%=h nvl(release_item.user_release_date, '-') %></td>
-  <td>
+  <td class="release_description">
     <% if !release_item.description.nil? and !release_item.description.blank? %>
       <b>Description:</b><br/>
       <%= textilize(white_list(release_item.description)).gsub(/<[pP]>/,'<p class="releases">').gsub(/<[uU][lL]>/,'<ul class="releases_desc">') if release_item.textiled %>

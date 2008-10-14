@@ -324,3 +324,16 @@ form.button-to div {
     margin-left: 155px; 
 	max-width:395px;
 }
+
+.cssform .release_description p
+{
+  margin:0;
+  padding:10px
+}
+
+.cssform .release_description ul
+{
+  margin:5px 10px 5px 30px ;
+  padding:0;
+}
+  
