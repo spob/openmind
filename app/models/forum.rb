@@ -38,6 +38,12 @@ class Forum < ActiveRecord::Base
   def can_edit? user
     mediators.include? user
   end  
+  
+  # Return a list of topics for this forum that have comments which have not
+  # yet been read by the specified user
+  def unread_topics user
+    topics.find_all{|topic| topic.unread_comment?(user) }
+  end
 
   def watch_all_topics user
     for topic in topics
