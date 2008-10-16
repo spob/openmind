@@ -2,113 +2,115 @@
 
 <%= render :partial => "tab_menu"%>
 <div id="tabBody" style="position:relative; padding-top:15px;">
-<div id="actionButtons2">
-  <% restrict_to "sysadmin" do %>
-    <%= link_to 'New User', option = {:action => 'new'}, 
-      html_options = { :class=> "button",
-      :onmouseover => "Tip('Create a new user')"} %>
-    <%= link_to 'Edit', option = {:action => 'edit', :id => @user}, 
-      html_options = { :class=> "button",
-      :onmouseover => "Tip('Edit this user')"} %>
-  <% end %>
-  <% restrict_to "sysadmin" do %>
-    <%= link_to 'Reset Password', options = { :action => 'reset_password', :id => @user },
-      html_options = {:method => :post, 
-      :class => "button",
-      :onmouseover => "Tip('Reset the password for this user')"      } %>
-  <% end %>
-</div>
-<div class="formTitle"><%=theme_image_tag("icons/16x16/user.png", :alt=>"Edit User")%>User Detail</div>
-
-<div class="cssform" style="margin-top:0;">
-  <p>
-    <label for="email">Email:</label>
-    <%=h @user.email %>
-  </p>
-  <p>
-    <label for="full_name">Name:</label>
-    <%=h @user.full_name %>
-  </p>
-  <p>
-    <label for="enterprise">Enterprise:</label>
-    <%= link_to h(@user.enterprise.name), enterprise_path(@user.enterprise) %>
-  </p>
-  <p>
-    <label for="openid_url">Open Id:</label>
-    <%= h @user.identity_url %>
-  </p>
-  <p>
-    <label for="active">Active:</label>
-    <%=h @user.active %>
-  </p>
-  <p>
-    <label for="activated_at">Activation Date:</label>
-    <%=h om_date_time(@user.activated_at) %>&nbsp;
-  </p>
-  <p>
-    <label for="activation_code">Activation Code:</label>
-    <%=h @user.activation_code %>
-  </p>
-  <p>
-    <label for="time_zone">User Time Zone:</label>
-    <%=h @user.time_zone %>
-  </p>
-  <p>
-    <label for="row_limit">Rows to Display:</label>
-    <%=h @user.row_limit %>
-  </p>
-  <p>
-    <label>Roles:</label><br />
-    <% for role in @user.roles %>
-      <% if @user.roles.include?(role) %>
-        &bull;&nbsp;<%= h role.description %><br />
-      <% end %>
+  <div id="actionButtons2">
+    <% restrict_to "sysadmin" do %>
+      <%= link_to 'New User', option = {:action => 'new'}, 
+        html_options = { :class=> "button",
+        :onmouseover => "Tip('Create a new user')"} %>
+      <%= link_to 'Edit', option = {:action => 'edit', :id => @user}, 
+        html_options = { :class=> "button",
+        :onmouseover => "Tip('Edit this user')"} %>
     <% end %>
-  </p>
-  <p>
-    <label>User Groups:</label><br />
-    <% for group in @user.groups %>
-      &bull;&nbsp;<%= h group.name %><br />
+    <% restrict_to "sysadmin" do %>
+      <%= link_to 'Reset Password', options = { :action => 'reset_password', :id => @user },
+        html_options = {:method => :post, 
+        :class => "button",
+        :onmouseover => "Tip('Reset the password for this user')"      } %>
     <% end %>
-  </p>
-  <% if !CustomField.users_custom_boolean1.nil? %>
+  </div>
+  <div class="formTitle"><%=theme_image_tag("icons/16x16/user.png", :alt=>"Edit User")%>User Detail</div>
+  
+  <div class="cssform" style="margin-top:0;">
     <p>
-      <label for="custom_boolean1"><%= CustomField.users_custom_boolean1 %>:</label>
-      <%= h @user.custom_boolean1 %>
+      <label for="email">Email:</label>
+      <%=h @user.email %>
     </p>
-  <% end %>
-  <p>
-    <label>User Allocations:</label><br />
-    <% for allocation in @user.allocations %>
-      <% if allocation.expiration_date <= DateUtils.today_utc %>
-        <strike>
+    <p>
+      <label for="full_name">Name:</label>
+      <%=h @user.full_name %>
+    </p>
+    <p>
+      <label for="enterprise">Enterprise:</label>
+      <%= link_to h(@user.enterprise.name), enterprise_path(@user.enterprise) %>
+    </p>
+    <p>
+      <label for="openid_url">Open Id:</label>
+      <%= h @user.identity_url %>
+    </p>
+    <p>
+      <label for="active">Active:</label>
+      <%=h @user.active %>
+    </p>
+    <p>
+      <label for="activated_at">Activation Date:</label>
+      <%=h om_date_time(@user.activated_at) %>&nbsp;
+    </p>
+    <p>
+      <label for="activation_code">Activation Code:</label>
+      <%=h @user.activation_code %>
+    </p>
+    <p>
+      <label for="time_zone">User Time Zone:</label>
+      <%=h @user.time_zone %>
+    </p>
+    <p>
+      <label for="row_limit">Rows to Display:</label>
+      <%=h @user.row_limit %>
+    </p>
+    <p>
+      <label>Roles:</label><br />
+      <% for role in @user.roles %>
+        <% if @user.roles.include?(role) %>
+          &bull;&nbsp;<%= h role.description %><br />
         <% end %>
-        &bull;&nbsp;Allocation of quantity <%=h allocation.quantity %> (<%= pluralize allocation.votes.size, 'vote' %> used) expires on <%=om_date_time(allocation.expiration_date) %><br />
-        <% if allocation.expiration_date <= DateUtils.today_utc %>
-        </strike>
       <% end %>
-    <% end %>
-  </p>
-  <p>
-    <label>Enterprise Allocations:</label><br />
-    <% for eallocation in @user.enterprise.allocations %>
-      &bull;&nbsp;Allocation of quantity <%=h eallocation.quantity %> (<%= pluralize eallocation.votes.size, 'vote' %> used) created on <%=om_date_time(eallocation.created_at) %><br />
-    <% end %>
-  </p>
-  <p>
-    <label>Vote History:</label><br />
-    <% for vote in @user.all_votes %>
-      &bull;&nbsp;Idea <%=h vote.idea.user_friendly_idea_name %>, voted for on <%=om_date_time(vote.created_at) %><br />
-    <% end %>
-  </p>
-  <h3>Logons (last 90 days):</h3>
-  <% @user.user_logons_90_days.in_groups_of(5) do |row_logons| %>
-    <% for logon in row_logons %>
-      <% if !logon.nil? %>
-        &bull;&nbsp;&nbsp;<%= h om_date_time(logon.created_at) %>&nbsp;&nbsp;&nbsp;
+    </p>
+    <p>
+      <label>User Groups:</label><br />
+      <% for group in @user.groups %>
+        &bull;&nbsp;<%= h group.name %><br />
       <% end %>
+    </p>
+    <% if !CustomField.users_custom_boolean1.nil? %>
+      <p>
+        <label for="custom_boolean1"><%= CustomField.users_custom_boolean1 %>:</label>
+        <%= h @user.custom_boolean1 %>
+      </p>
     <% end %>
-    <br />
-  <% end %>
-</div>
+    <p>
+      <label>User Allocations:</label><br />
+      <% for allocation in @user.allocations %>
+        &bull;&nbsp;
+        <%= strike_text(
+          "Allocation of quantity #{allocation.quantity} (#{pluralize allocation.votes.size, 'vote'} used) expires on #{om_date_time(allocation.expiration_date)}", 
+          allocation.expiration_date <= DateUtils.today_utc) %>
+        <br/>
+      <% end %>
+    </p>
+    <p>
+      <label>Enterprise Allocations:</label><br />
+      <% for eallocation in @user.enterprise.allocations %>
+        &bull;&nbsp;
+        <%= strike_text(
+          "Allocation of quantity #{eallocation.quantity} (#{pluralize eallocation.votes.size, 'vote'} used) expires on #{om_date_time(eallocation.expiration_date)}", 
+          eallocation.expiration_date <= DateUtils.today_utc) %>
+        <br/>
+      <% end %>
+    </p>
+    <p>
+      <label>Vote History:</label><br />
+      <% for vote in @user.all_votes %>
+        &bull;&nbsp;Idea <%=h vote.idea.user_friendly_idea_name %>, voted for on <%=om_date_time(vote.created_at) %><br />
+      <% end %>
+    </p>
+    <h3>Logons (last 90 days):</h3>
+    <% @user.user_logons_90_days.in_groups_of(5) do |row_logons| %>
+      <% for logon in row_logons %>
+        <% if !logon.nil? %>
+          &bull;&nbsp;&nbsp;<%= h om_date_time(logon.created_at) %>&nbsp;&nbsp;&nbsp;
+        <% end %>
+      <% end %>
+      <br />
+    <% end %>
+  </div>
 </div>

@@ -18,15 +18,13 @@
   </p>
   <p>
     <label>Allocations:</label>
-    <% for allocation in @enterprise.allocations %>
-      <% if allocation.expiration_date <= DateUtils.today_utc %>
-        <strike>
-        <% end %>
-        &bull;&nbsp;Allocation of quantity <%=h allocation.quantity %> (<%= pluralize allocation.votes.size, 'vote' %> used) expires on <%=om_date_time(allocation.expiration_date) %><br />
-        <% if allocation.expiration_date <= DateUtils.today_utc %>
-        </strike>
+      <% for allocation in @enterprise.allocations %>
+        &bull;&nbsp;
+        <%= strike_text(
+          "Allocation of quantity #{allocation.quantity} (#{pluralize allocation.votes.size, 'vote'} used) expires on #{om_date_time(allocation.expiration_date)}", 
+          allocation.expiration_date <= DateUtils.today_utc) %>
+        <br/>
       <% end %>
-    <% end %>
   </p>
   <p>
     <label>Users:</label>
