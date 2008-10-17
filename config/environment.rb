@@ -18,7 +18,7 @@ Rails::Initializer.run do |config|
   # Require the latest version of mysql
   config.gem "mysql"
   
-  config.gem "RedCloth", :source => "http://code.whytheluckystiff.net/"
+  config.gem "RedCloth", :lib => 'redcloth', :source => "http://code.whytheluckystiff.net/"
   
   config.gem "ruby-yadis",  :lib => 'yadis',  :version => '0.3.4'
   
@@ -36,7 +36,6 @@ Rails::Initializer.run do |config|
   config.load_paths += Dir["#{RAILS_ROOT}/vendor/**"].map do |dir| 
     File.directory?(lib = "#{dir}/lib") ? lib : dir
   end
-  config.load_paths += [ "#{RAILS_ROOT}/vendor/RedCloth-3.0.4/lib" ]
 
   # Only load the plugins named here, by default all plugins in vendor/plugins are loaded
   # config.plugins = %W( exception_notification ssl_requirement )
