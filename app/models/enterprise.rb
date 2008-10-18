@@ -1,29 +1,31 @@
 # == Schema Information
 # Schema version: 20081008013631
-#
+# 
 # Table name: enterprises
-#
+# 
 #  id           :integer(4)      not null, primary key
 #  name         :string(50)      not null
 #  active       :boolean(1)      default(TRUE), not null
 #  lock_version :integer(4)      default(0)
 #  created_at   :datetime        not null
 #  updated_at   :datetime        not null
-#
+# 
 
 class Enterprise < ActiveRecord::Base
   validates_presence_of :name
   validates_uniqueness_of :name 
   validates_length_of :name, :maximum => 50
   
-  attr_accessor :initial_allocation # to allow user to create an allocation at the
-                                    # same time they create an enterprise
+  # to allow user to create an allocation at the same time they create an
+  # enterprise
+  attr_accessor :initial_allocation 
   
-  has_many :users,:dependent => :destroy, :order => "email ASC"   
-  has_many :allocations,:dependent => :destroy, :order => "created_at ASC"  
+  has_many :users, :dependent => :destroy, :order => "email ASC"   
+  has_many :allocations, :dependent => :destroy, :order => "created_at ASC"  
   has_many :active_allocations, :conditions => ["expiration_date > ?", Date.current.to_s(:db)], 
     :order => "created_at ASC"   
   has_many :votes, :through => :allocations, :order => "votes.id ASC"
+  belongs_to :enterprise_type
   
   def self.list(page, per_page, start_filter, end_filter)
     paginate :page => page, :order => 'name', 

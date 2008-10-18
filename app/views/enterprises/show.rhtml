@@ -17,6 +17,10 @@
     <input type="checkbox" name="active" value="active" <%= "checked" if @enterprise.active?  %> disabled >
   </p>
   <p>
+    <label>Type:</label>
+    <%= @enterprise.enterprise_type.short_name unless @enterprise.enterprise_type.nil? %>
+  </p>
+  <p>
     <label>Allocations:</label>
       <% for allocation in @enterprise.allocations %>
         &bull;&nbsp;

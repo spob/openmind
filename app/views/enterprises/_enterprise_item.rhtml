@@ -1,5 +1,8 @@
    <tr>
       <td><%= h enterprise_item.name%></td>
+      <td>
+        <%= enterprise_item.enterprise_type.short_name unless enterprise_item.enterprise_type.nil? %>
+      </td>
       <td class="center"><%= h enterprise_item.available_votes %></td>
       <td class="center"><%= h enterprise_item.users.size %></td>
       <td class="center"><input type="checkbox" name="active" value="active" <%= "checked" if enterprise_item.active?  %> disabled ></td>

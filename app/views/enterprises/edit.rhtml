@@ -22,6 +22,11 @@
       <%= form.check_box :active %>
     </p>
     <p>
+      <label for="enterprise_type">Type:</label>
+      <%= form.collection_select :enterprise_type_id, 
+        EnterpriseType.findall(true), :id, :short_name %>
+    </p>
+    <p>
       <label></label>
       <%= submit_tag 'Save', html_options = {:class=> "button", :disable_with => "Please wait...",
         :onmouseover => "Tip('Save changes to enterprise')"} %>

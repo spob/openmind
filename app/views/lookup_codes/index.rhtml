@@ -18,7 +18,7 @@
   </tr>
   <tr>
     <% form_for :lookup_code, :url => lookup_codes_path do |form| %>
-      <td><%= form.select :code_type, @types %></td>
+      <td><%= form.select :code_type, @types, { :prompt => "Please select..." } %></td>
       <td><%= form.text_field :short_name, { :size => 20, :maxlength => 40 } %></td>
       <td><%= form.text_field :description, { :size => 50, :maxlength => 50 } %></td>
       <td class="center"><%= form.text_field :sort_value, { :size => 5 } %></td>

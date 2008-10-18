@@ -4,6 +4,7 @@ class LookupCodesController < ApplicationController
   
   def index
     @types = [
+      ["Enterprise Type",  "EnterpriseType"],
       ["Release Status",  "ReleaseStatus"],
       ["Custom Field",  "CustomField"]
     ]
@@ -23,6 +24,12 @@ class LookupCodesController < ApplicationController
   end
 
   def create
+    if params[:lookup_code][:code_type].blank?
+      flash[:error] = "Please select a Lookup Type"
+      index
+      render :action => 'index'
+      return
+    end
     command = "#{params[:lookup_code][:code_type]}.new(params[:lookup_code])"
     #    print command
     @lookup_code = eval command

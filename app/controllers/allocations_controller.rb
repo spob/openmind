@@ -6,6 +6,14 @@ class AllocationsController < ApplicationController
   access_control [:create, :new, :export, :import, :update, :destroy, :export_import, :edit] => 'allocmgr'
   helper_method :toggle_image_button
   
+  # GETs should be safe (see http://www.w3.org/2001/tag/doc/whenToUseGet.html)
+  verify :method => :post, :only => [:create, :export, :import ],
+    :redirect_to => { :action => :index }
+  verify :method => :put, :only => [ :update ],
+    :redirect_to => { :action => :index }
+  verify :method => :delete, :only => [ :destroy ],
+    :redirect_to => { :action => :index }
+  
   @@types = [
     ["User Allocation",  "UserAllocation"],
     ["Enterprise Allocation",  "EnterpriseAllocation"]
@@ -36,14 +44,6 @@ class AllocationsController < ApplicationController
       params[:page], current_user.row_limit,
       (session[:active_allocations_only] == 'yes'))
   end
-
-  # GETs should be safe (see http://www.w3.org/2001/tag/doc/whenToUseGet.html)
-  verify :method => :post, :only => [:create, :export, :import ],
-    :redirect_to => { :action => :index }
-  verify :method => :put, :only => [ :update ],
-    :redirect_to => { :action => :index }
-  verify :method => :delete, :only => [ :destroy ],
-    :redirect_to => { :action => :index }
  
   def show
     @allocation = Allocation.find(params[:id])
@@ -101,16 +101,30 @@ class AllocationsController < ApplicationController
     users = User.active_voters
     enterprises = Enterprise.find(:all, :order => "name ASC")
     stream_csv do |csv|
-      cols = ["type", "email","name","enterprise","user groups", "allocation qty","expire days","comments"]
+      cols = ["type", "email","name","enterprise","enterprise type/user group(s)", "allocation qty","expire days","comments"]
       cols << CustomField.users_custom_boolean1 unless CustomField.users_custom_boolean1.nil?
       csv << cols
       enterprises.each do |e|
-        cols = ["Enterprise", "","",e.name,"",0,APP_CONFIG['allocation_expiration_days'],""]
+        cols = ["Enterprise", 
+          "",
+          "",
+          e.name,
+          (e.enterprise_type.short_name unless e.enterprise_type.nil?),
+          0,
+          APP_CONFIG['allocation_expiration_days'],
+          ""]
         cols << "" unless CustomField.users_custom_boolean1.nil?
         csv << cols
       end
       users.each do |u|
-        cols =  ["User", u.email,u.full_name,u.enterprise.name,array_to_string(u.groups.collect(&:name)), 0,APP_CONFIG['allocation_expiration_days'],""]
+        cols =  ["User",
+          u.email,
+          u.full_name,
+          u.enterprise.name,
+          array_to_string(u.groups.collect(&:name)),
+          0,
+          APP_CONFIG['allocation_expiration_days'],
+          ""]
         cols << u.custom_boolean1 unless CustomField.users_custom_boolean1.nil?
         csv << cols
       end
