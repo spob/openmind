@@ -119,6 +119,7 @@ class IdeasController < ApplicationController
       @idea = Idea.find(params[:id])
       session[:selected_tab] = params[:selected_tab] if !params[:selected_tab].nil?
       session[:selected_tab] = "DETAILS" if session[:selected_tab] == "VOTES" && @idea.votes.empty?
+      session[:selected_tab] = "DETAILS" if session[:selected_tab] == "CHANGES" && !
       session[:selected_tab] = "DETAILS" if session[:selected_tab] == "COMMENTS" && @idea.comments.empty?
       session[:selected_tab] ||= "DETAILS"
     rescue ActiveRecord::RecordNotFound
@@ -187,10 +188,8 @@ class IdeasController < ApplicationController
           merged_idea.update_attributes(:release_id => @idea.release.id) if merged_idea.release.nil? and merged_idea.product.id == @idea.product.id
         end
       end
-      
-      
-      EmailNotifier.deliver_idea_change_notifications(@idea, 
-        generate_change_log(original_idea, @idea)) if !@idea.watchers.empty?
+       
+      generate_change_log(original_idea, @idea)
       
       flash[:notice] = "Idea number #{@idea.id} was successfully updated."      
       redirect_to :action => 'show', :id => @idea.id
@@ -220,10 +219,14 @@ class IdeasController < ApplicationController
     session[:selected_tab] = "DETAILS"
     render_tab_bodies
   end
-
-
+  
   def select_comments
     session[:selected_tab] = "COMMENTS"
+    render_tab_bodies
+  end
+  
+  def select_changes
+    session[:selected_tab] = "CHANGES"
     render_tab_bodies
   end
 
@@ -238,6 +241,8 @@ class IdeasController < ApplicationController
       partial = "comments/comments"
     elsif session[:selected_tab] == "VOTES"
       partial = "votes/votes"
+    elsif session[:selected_tab] == "CHANGES"
+      partial = "ideas/idea_changes"
     else   # Details
       partial = "ideas/idea_details"
     end    
@@ -380,54 +385,69 @@ class IdeasController < ApplicationController
       IdeaTagsChangeLog.new,
       IdeaReleaseChangeLog.new,
     ]
-    change_messages = []
-    for change_logger in @@change_loggers
-      change_messages << change_logger.calc_change_log(before_idea, after_idea)
+    for change_logger in @@change_loggers 
+      change_log = change_logger.calc_change_log(before_idea, after_idea, current_user)
+      after_idea.change_logs << change_log unless change_log.nil?
     end
-    change_messages.compact
+    RunOncePeriodicJob.create(
+      :job => "Idea.send_change_notifications(#{after_idea.id})")
   end
   
   class IdeaTitleChangeLog
-    def calc_change_log before_idea, after_idea
+    def calc_change_log before_idea, after_idea, current_user
       if before_idea.title != after_idea.title
-        return "Title was updated to '#{after_idea.title}'"
+        return IdeaChangeLog.new(
+          :message => "Title was changed from '#{before_idea.title}' to '#{after_idea.title}'", 
+          :user => current_user)
       end
     end
   end
   
   class IdeaDescriptionChangeLog
-    def calc_change_log before_idea, after_idea
+    def calc_change_log before_idea, after_idea, current_user
       if before_idea.description != after_idea.description
-        return "Description was updated"
+        return IdeaChangeLog.new(
+          :message =>  "Description was updated", 
+          :user => current_user)
       end
     end
   end
   
   class IdeaTagsChangeLog
-    def calc_change_log before_idea, after_idea
+    def calc_change_log before_idea, after_idea, current_user
       if before_idea.nondb_tag_list != after_idea.tag_list
-        return "Tags were updated to: #{after_idea.tag_list}"
+        return IdeaChangeLog.new(
+          :message => "Tags were updated to: #{after_idea.tag_list}", 
+          :user => current_user)
       end
     end
   end
   
   class IdeaProductChangeLog
-    def calc_change_log before_idea, after_idea
+    def calc_change_log before_idea, after_idea, current_user
       if before_idea.product.id != after_idea.product.id
-        return "Product was updated from '#{before_idea.product.name}' to '#{after_idea.product.name}'"
+        return IdeaChangeLog.new(
+          :message => "Product was updated from '#{before_idea.product.name}' to '#{after_idea.product.name}'", 
+          :user => current_user)
       end
     end
   end
   
   class IdeaReleaseChangeLog
-    def calc_change_log before_idea, after_idea
+    def calc_change_log before_idea, after_idea, current_user
       if before_idea.release.nil? and !after_idea.release.nil?
-        return "Idea was scheduled for release #{after_idea.release.version}"
+        return IdeaChangeLog.new(
+          :message => "Idea was scheduled for release #{after_idea.release.version}", 
+          :user => current_user)
       elsif !before_idea.release.nil? and after_idea.release.nil?
-        return "Idea was previously scheduled for release #{before_idea.release.version} and is now unscheduled"
+        return IdeaChangeLog.new(
+          :message => "Idea was previously scheduled for release #{before_idea.release.version} and is now unscheduled", 
+          :user => current_user)
       elsif !before_idea.release.nil? and !after_idea.release.nil? and
           before_idea.release.id != after_idea.release.id
-        return "Idea was previously scheduled for release #{before_idea.release.version} and is now scheduled for release #{after_idea.release.version}"
+        return IdeaChangeLog.new(
+          :message =>  "Idea was previously scheduled for release #{before_idea.release.version} and is now scheduled for release #{after_idea.release.version}", 
+          :user => current_user)
       end
     end
   end

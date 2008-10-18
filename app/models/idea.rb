@@ -24,9 +24,23 @@ class Idea < ActiveRecord::Base
   belongs_to :user
   belongs_to :release
   belongs_to :product
-  has_one :last_comment, :class_name => "IdeaComment", :order => "id DESC"
-  has_many :votes,:dependent => :destroy, :order => "id ASC"   
-  has_many :comments,:dependent => :destroy, :order => "id ASC"
+  has_one :last_comment, 
+    :class_name => "IdeaComment", 
+    :order => "id DESC"
+  has_many :votes,
+    :dependent => :destroy, 
+    :order => "id ASC"   
+  has_many :comments,
+    :dependent => :destroy, 
+    :order => "id ASC"
+  has_many :change_logs,
+    :class_name => "IdeaChangeLog",
+    :order => "id ASC",
+    :dependent => :destroy 
+  has_many :unprocessed_change_logs, 
+    :conditions => ["processed_at is null"], 
+    :class_name => "IdeaChangeLog",
+    :order => "id ASC"
   has_many :user_idea_reads,:dependent => :destroy 
   belongs_to :merged_to_idea, :class_name => 'Idea', :foreign_key => :merged_to_idea_id
   has_many :merged_ideas, :class_name => 'Idea', :foreign_key => :merged_to_idea_id
@@ -171,6 +185,14 @@ class Idea < ActiveRecord::Base
     end
   end
   
+  def self.send_change_notifications idea_id
+    idea = Idea.find(idea_id)
+    EmailNotifier.deliver_idea_change_notifications(idea) unless idea.unprocessed_change_logs.empty?
+    for change_log in idea.unprocessed_change_logs
+      change_log.update_attribute(:processed_at, Time.zone.now)
+    end
+  end
+  
   def user_friendly_idea_name
     "#{id}: #{title}"
   end
@@ -279,11 +301,11 @@ class Idea < ActiveRecord::Base
     
     condition_params += Array(values) unless values.nil? or (values.is_a? Array and flatten)
     condition_params[condition_params.size] = values if !values.nil? and values.is_a? Array and flatten
-#    condition_params += Array(values) unless values.nil? or values.is_a? Array
-#    condition_params[condition_params.size] = values if !values.nil? and values.is_a? Array
-#    (0..condition_params.length).each do |i|
-#          puts "-->#{condition_params[i]}"
-#        end
+    #    condition_params += Array(values) unless values.nil? or values.is_a? Array
+    #    condition_params[condition_params.size] = values if !values.nil? and values.is_a? Array
+    #    (0..condition_params.length).each do |i|
+    #          puts "-->#{condition_params[i]}"
+    #        end
     condition_params
   end
   

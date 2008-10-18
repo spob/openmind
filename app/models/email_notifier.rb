@@ -70,13 +70,15 @@ class EmailNotifier < ActionMailer::Base
     set_expiration_date allocation
   end
   
-  def idea_change_notifications(idea, change_notices)
+  def idea_change_notifications(idea)
+    return if idea.watchers.empty?
+    
     setup_email
     @body[:url]  = url_for :controller => 'ideas',
       :action => 'show', 
       :id => idea.id,
       :only_path  => false
-    @body[:change_notices] = change_notices
+    @body[:change_notices] = idea.unprocessed_change_logs.collect(&:message)
     @body[:idea] = idea
     @subject    += "Idea ##{idea.id} was updated"
     @recipients = ''
