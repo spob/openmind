@@ -13,9 +13,17 @@
     <%= link_to 'Edit', edit_topic_path(@topic) , html_options = {:class=> "button",
       :onmouseover => "Tip('Edit topic')"}%>
   <% end %>
-  <%= link_to 'Back to Topics', forum_path(@topic.forum.id) , html_options = {:class=> "button",
-    :onmouseover => "Tip('Return to list of topics for the #{@topic.forum.name} forum')"}%>
 </div>
+
+
+<%= link_to "All Forums", forums_path , html_options = {
+  :onmouseover => "Tip('Return to list forums')"}%>
+->
+<%= link_to "Forum: #{@topic.forum.name}", forum_path(@topic.forum.id) , html_options = {
+  :onmouseover => "Tip('Return to list of topics for the #{@topic.forum.name} forum')"}%>
+->
+Topic: <%= @topic.title %>
+
 <%=render(:partial => "topic_heading")%>
 <br/>
 <%=render(:partial => "comments/comment_item", :collection => @topic.comments)%>

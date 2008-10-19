@@ -1,9 +1,9 @@
 <div id="topic_details_area" class="formTitle">
   <% if can_edit_topic? @topic %>
     <%= link_to_remote(expand_contract_box_image,
-    {:url => { :action => :toggle_topic_details_box, :id => @topic}}) %>
+      {:url => { :action => :toggle_topic_details_box, :id => @topic}}) %>
   <% end %>
   <%= theme_image_tag("icons/16x16/forums.png", options = {:alt=>"Forum"}) %>
-  Topic: <%= h @topic.title %>
+  Topic: "<%= h @topic.title %>" 
   <%= theme_image_tag("icons/14x14/pin-14x14.gif", :border=>0, :onmouseover => "Tip('This topic is pinned so it will always appear at the top of the list')") if @topic.pinned %>
 </div>
