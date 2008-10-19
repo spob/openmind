@@ -182,9 +182,9 @@ module IdeasHelper
   end
 
   def announcement_link announcement
-    text = truncate(announcement.headline, 26)
+    text = truncate(announcement.headline, 25)
     if announcement.unread?(current_user)
-      text = "<b>#{truncate(announcement.headline, 22)}</b>"
+      text = "<b>#{truncate(announcement.headline, 21)}</b>"
     end
     link_to text, "#{announcements_path}##{announcement.id}"
   end  
