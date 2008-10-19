@@ -31,6 +31,8 @@
 require 'digest/sha1'
 
 class User < ActiveRecord::Base
+  acts_as_ordered :order => 'email' 
+  
   # Virtual attribute for the unencrypted password
   attr_accessor :password
   attr_accessor :initial_allocation # to allow user to create an allocation at the

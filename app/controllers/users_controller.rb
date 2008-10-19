@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
   before_filter :login_required, :except => [:lost_password]
   access_control [:new, :edit, :create, :update, :destroy, :reset_password] => 'sysadmin',
-    [:index, :list, :show, :export, :export_import, :import, :process_imported] => '(sysadmin | allocmgr)'
+    [:index, :list, :show, :next, :previous, :export, :export_import, :import, :process_imported] => '(sysadmin | allocmgr)'
   
   def index
     list
@@ -35,6 +35,16 @@ class UsersController < ApplicationController
 
   def show
     @user = User.find(params[:id])
+  end
+
+  def next
+    @user = User.find(params[:id]).next
+    render :action => 'show'
+  end
+
+  def previous
+    @user = User.find(params[:id]).previous
+    render :action => 'show'
   end
   
   def process_imported

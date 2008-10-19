@@ -3,6 +3,12 @@
 <%= render :partial => "tab_menu"%>
 <div id="tabBody" style="position:relative; padding-top:15px;">
   <div id="actionButtons2">
+    <%= link_to '<', option = { :action => 'previous', :id => @user }, 
+      html_options = {:class=> "button",
+      :onmouseover => "Tip('View the previous user')"} %>
+    <%= link_to '>', option = { :action => 'next', :id => @user }, 
+      html_options = {:class=> "button",
+      :onmouseover => "Tip('View the next enterprise')"} %>
     <% restrict_to "sysadmin" do %>
       <%= link_to 'New User', option = {:action => 'new'}, 
         html_options = { :class=> "button",
