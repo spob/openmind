@@ -1,25 +1,27 @@
 <%content_for :head do -%>
-       
-                       
+
+
 <%end%>
 <%= javascript_include_tag "wz_tooltip.js", :cache => "cache/tooltip" %> 
 <div id="actionButtons2">
   <%= link_to "Add Comment", 
-                new_comment_path(:id => @topic, :type => 'Topic'), 
-                html_options = {:class=> "button",
-                  :onmouseover => "Tip('Add a comment to discussion forum for this topic')" } %>
+    new_comment_path(:id => @topic, :type => 'Topic'), 
+    html_options = {:class=> "button",
+    :onmouseover => "Tip('Add a comment to discussion forum for this topic')" } %>
   <%= show_topic_watch_button @topic %>
   <% if can_edit_topic? @topic %>
     <%= link_to 'Edit', edit_topic_path(@topic) , html_options = {:class=> "button",
-            :onmouseover => "Tip('Edit topic')"}%>
+      :onmouseover => "Tip('Edit topic')"}%>
   <% end %>
-  <%= link_to 'View Topics', forum_path(@topic.forum.id) , html_options = {:class=> "button",
-          :onmouseover => "Tip('Return to list of topics')"}%>
+  <%= link_to 'Back to Topics', forum_path(@topic.forum.id) , html_options = {:class=> "button",
+    :onmouseover => "Tip('Return to list of topics for the #{@topic.forum.name} forum')"}%>
 </div>
-  <%=render(:partial => "topic_heading")%>
+<%=render(:partial => "topic_heading")%>
 <br/>
 <%=render(:partial => "comments/comment_item", :collection => @topic.comments)%>
-  <%= link_to "Add Comment", 
-                new_comment_path(:id => @topic, :type => 'Topic'), 
-                html_options = {:class=> "button",
-                  :onmouseover => "Tip('Add a comment to discussion forum for this topic')" } %>
+<%= link_to "Add Comment", 
+  new_comment_path(:id => @topic, :type => 'Topic'), 
+  html_options = {:class=> "button",
+  :onmouseover => "Tip('Add a comment to discussion forum for this topic')" } %>
+<%= link_to 'Back to Topics', forum_path(@topic.forum.id) , html_options = {:class=> "button",
+  :onmouseover => "Tip('Return to list of topics for the #{@topic.forum.name} forum')"}%>

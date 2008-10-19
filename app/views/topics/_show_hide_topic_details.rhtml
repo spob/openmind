@@ -1,5 +1,5 @@
 <div id="topic_details_area" class="formTitle">
-  <% if @topic.forum.can_edit? current_user %>
+  <% if can_edit_topic? @topic %>
     <%= link_to_remote(expand_contract_box_image,
     {:url => { :action => :toggle_topic_details_box, :id => @topic}}) %>
   <% end %>
