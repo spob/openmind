@@ -1,6 +1,7 @@
 class EnterprisesController < ApplicationController
   before_filter :login_required
   access_control :DEFAULT => 'sysadmin | allocmgr'
+  
   verify :method => :post, :only => [:create ],
     :redirect_to => { :action => :index }
   verify :method => :put, :only => [ :update ],
@@ -34,6 +35,16 @@ class EnterprisesController < ApplicationController
 
   def show
     @enterprise = Enterprise.find(params[:id])
+  end
+
+  def next
+    @enterprise = Enterprise.find(params[:id]).next
+    render :action => 'show'
+  end
+
+  def previous
+    @enterprise = Enterprise.find(params[:id]).previous
+    render :action => 'show'
   end
   
   def create

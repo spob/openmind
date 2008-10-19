@@ -17,7 +17,7 @@ ActionController::Routing::Routes.draw do |map|
     :export => :post, :import => :post, :toggle_pix => :get }
   map.resources :announcements, :collection => { :preview => :get, :rss => :get }
   map.resources :comments, :collection => { :preview => :get }
-  map.resources :enterprises
+  map.resources :enterprises, :member => { :next => :get, :previous => :get }
   map.resources :forums, :collection => { :search => :get }
   map.resources :groups
   map.resources :lookup_codes
