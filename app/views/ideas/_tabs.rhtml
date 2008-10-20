@@ -4,9 +4,7 @@
         :url=> {:controller => :ideas, :action=> 'select_details', :id => @idea }%></li>
       <%= show_toggle_votes_link @idea %>
       <%= show_toggle_comments_link @idea %>
-      <% if prodmgr? %>
       <li <%= tab_class("CHANGES")%>><%= link_to_remote "Changes", 
           :url=> {:controller => :ideas, :action=> 'select_changes', :id => @idea }%></li>
-      <% end %>
   </ul>
 </div>
