@@ -19,6 +19,7 @@
 #
 
 class Idea < ActiveRecord::Base
+  acts_as_ordered :order => 'id' 
   acts_as_taggable
   
   belongs_to :user

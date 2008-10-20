@@ -53,8 +53,9 @@ class IdeasController < ApplicationController
     session[:idea_product_filter] = params[:product] unless params[:product].nil?
     session[:idea_release_filter] = params[:release] unless params[:release].nil?
     session[:idea_tag_filter] = nil unless session[:idea_view_type] == 'tags'
-    # note I test if params[:product].nil? because, if that's true, we're navigating
-    # to this page from somewhere else, in case remember what it was before
+    # note I test if params[:product].nil? because, if that's true, we're
+    # navigating to this page from somewhere else, in case remember what it was
+    # before
     session[:title_filter] = params[:title_lookup] unless params[:product].nil?
     session[:author_filter] = params[:author] unless params[:product].nil?
     
@@ -128,6 +129,18 @@ class IdeasController < ApplicationController
     else
       mark_as_read @idea
     end
+  end
+
+  def next
+    @idea = Idea.find(params[:id]).next
+    mark_as_read @idea
+    render :action => 'show'
+  end
+
+  def previous
+    @idea = Idea.find(params[:id]).previous
+    mark_as_read @idea
+    render :action => 'show'
   end
 
   def new
@@ -213,7 +226,7 @@ class IdeasController < ApplicationController
   end
 
   
-  #  THESE ARE NEW 
+  #  THESE ARE NEW
     
   def select_details
     session[:selected_tab] = "DETAILS"
@@ -304,7 +317,7 @@ class IdeasController < ApplicationController
   def stream_csv
     filename = "ideas.csv"    
 
-    #this is required if you want this to work with IE        
+    # #this is required if you want this to work with IE
     if request.env['HTTP_USER_AGENT'] =~ /msie/i
       headers['Pragma'] = 'public'
       headers["Content-type"] = "text/plain" 
