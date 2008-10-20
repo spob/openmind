@@ -100,7 +100,7 @@ module ForumsHelper
     end
   end
   
-  def expand_contract_box_image
+  def expand_contract_forum_box_image
     image = "show.png"
     help = "Show forum details"
     if session[:forum_details_box_display] == "SHOW"
