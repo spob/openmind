@@ -1,5 +1,5 @@
 <div id="forum_details_area" class="formTitle">
-  <%= link_to_remote(expand_contract_box_image,
+  <%= link_to_remote(expand_contract_forum_box_image,
     {:url => { :action => :toggle_forum_details_box, :id => @forum}}) %>
   <%= theme_image_tag("icons/16x16/forums.png", options = {:alt=>"Forum"}) %>
   Forum: <%= h @forum.name %>
