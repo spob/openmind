@@ -1,8 +1,8 @@
 # == Schema Information
 # Schema version: 20081008013631
-#
+# 
 # Table name: forums
-#
+# 
 #  id           :integer(4)      not null, primary key
 #  name         :string(50)      not null
 #  description  :string(150)     not null
@@ -10,7 +10,7 @@
 #  created_at   :datetime        not null
 #  updated_at   :datetime        not null
 #  active       :boolean(1)      default(TRUE), not null
-#
+# 
 
 class Forum < ActiveRecord::Base
   has_many :topics, :order => "pinned DESC, updated_at DESC", :dependent => :delete_all
@@ -18,6 +18,7 @@ class Forum < ActiveRecord::Base
     :class_name => 'User'     
   has_and_belongs_to_many :watchers, :join_table => 'forum_watches', :class_name => 'User'
   has_and_belongs_to_many :groups
+  has_and_belongs_to_many :enterprise_types
   has_many :comments, :through => :topics, :order => "id DESC"
   
   validates_presence_of :name
@@ -39,8 +40,8 @@ class Forum < ActiveRecord::Base
     mediators.include? user
   end  
   
-  # Return a list of topics for this forum that have comments which have not
-  # yet been read by the specified user
+  # Return a list of topics for this forum that have comments which have not yet
+  # been read by the specified user
   def unread_topics user
     topics.find_all{|topic| topic.unread_comment?(user) }
   end
@@ -61,7 +62,8 @@ class Forum < ActiveRecord::Base
   
   def can_see? user
     can_edit? user or 
-      ((groups.empty? or 
-          !groups.select{|group| group.users.include? user}.empty?) and active)
+      (((groups.empty? and enterprise_types.empty?) or 
+          !groups.select{|group| group.users.include? user}.empty? or
+          !enterprise_types.select{|enterprise_type| enterprise_type.users.include? user}.empty?) and active)
   end
 end

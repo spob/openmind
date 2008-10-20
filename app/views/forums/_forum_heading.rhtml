@@ -18,12 +18,21 @@
     </p>
     <p>
       <label>Access:</label>
-      <% if  @forum.groups.empty? %>
+      <% if  @forum.groups.empty? and @forum.enterprise_types.empty? %>
         Public
       <% else  %>
-        Restricted to the following User Groups:
-        <% for group in @forum.groups %><br />
-          &bull;&nbsp;<%= h group.name %><br />
+        <% unless @forum.groups.empty?  %>
+          Restricted to the following User Groups:
+          <% for group in @forum.groups %><br />
+            &bull;&nbsp;<%= h group.name %><br />
+          <% end %>
+        <% end %>
+        <% unless @forum.enterprise_types.empty?  %>
+          <%= "<br/>" unless @forum.groups.empty? %>
+          Restricted to the following Enterprise Types:
+          <% for etype in @forum.enterprise_types %><br />
+            &bull;&nbsp;<%= h etype.short_name %><br />
+          <% end %>
         <% end %>
       <% end  %>
     </p>

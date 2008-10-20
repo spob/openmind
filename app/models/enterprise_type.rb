@@ -16,6 +16,11 @@
 class EnterpriseType < LookupCode  
   has_many :enterprises,
     :dependent => :destroy
+  has_many :users, :through => :enterprises
+  
+  def self.list_all
+    EnterpriseType.find(:all, :order => 'short_name ASC')
+  end
   
   def can_delete?
     enterprises.empty?

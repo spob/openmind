@@ -32,6 +32,7 @@ class ForumsController < ApplicationController
   def create
     params[:forum][:mediator_ids] ||= []
     params[:forum][:group_ids] ||= []
+    params[:forum][:enterprise_type_ids] ||= []
     @forum = Forum.new(params[:forum])
     if @forum.save
       flash[:notice] = "Forum #{@forum.name} was successfully created."
@@ -50,10 +51,11 @@ class ForumsController < ApplicationController
   def update
     params[:forum][:mediator_ids] ||= []
     params[:forum][:group_ids] ||= []
+    params[:forum][:enterprise_type_ids] ||= []
     @forum = Forum.find(params[:id])
     if @forum.update_attributes(params[:forum])
       flash[:notice] = "Forum '#{@forum.name}' was successfully updated."
-      redirect_to forums_path
+      redirect_to forum_path(@forum)
     else
       render :action => :edit
     end

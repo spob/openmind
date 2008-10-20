@@ -42,6 +42,15 @@
         </span>
       <% end %>
     </p>
+    <p>
+      <label>Restrict to Enterprise Types:</label>
+      <% for etype in EnterpriseType.list_all %>
+        <span style="display:block;margin-left:10px;">
+          <%= check_box_tag "forum[enterprise_type_ids][]", etype.id, @forum.enterprise_types.include?(etype) %>
+          <%= h etype.short_name %>: <%= h etype.description %>
+        </span>
+      <% end %>
+    </p>
   
     <p>
       <label></label>
