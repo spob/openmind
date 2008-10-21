@@ -2,30 +2,29 @@
 <%content_for :bodyTag do -%>
   <%= set_focus_to_id 'link_set_name' %>
 <%end%>
-<%= error_messages_for 'link_set' %>
-<% form_for(:link_set, :url => link_set_path(@link_set), 
-  :html => {:method => :put }) do |form| %>
-  <div id="actionButtons2">
-    <%= link_to 'List Link Sets', link_sets_path, 
-      html_options = { :class => "button" } %>
-  </div>
-  <div class="formTitle"><%=theme_image_tag("icons/16x16/polls.png", :alt=>"edit link set")%>Edit Link Set</div>
-  <div class="cssform widerLabel">
-    <p>
-      <label for="link_set_name">Name:</label>
-      <%= form.text_field :name, { :size => 30, :maxlength => 30, :class=> 'pollTxtField' } %>
-    </p>
-  
-    <span class="insideFormTitle" style="margin-left:92px;">Links</span>
-    <div id="links">
-      <%= render :partial => 'link', :collection => @link_set.links %>
+<%= render :partial => "tab_menu" %>
+<div id="tabBody" style="position:relative; padding-top:15px;">
+  <%= error_messages_for 'link_set' %>
+  <% form_for(:link_set, :url => link_set_path(@link_set), 
+    :html => {:method => :put }) do |form| %>
+    <div class="formTitle"><%=theme_image_tag("icons/16x16/polls.png", :alt=>"edit link set")%>Edit Link Set</div>
+    <div class="cssform widerLabel">
+      <p>
+        <label for="link_set_name">Name:</label>
+        <%= form.text_field :name, { :size => 30, :maxlength => 30, :class=> 'pollTxtField' } %>
+      </p>
+    
+      <span class="insideFormTitle" style="margin-left:92px;">Links</span>
+      <div id="links">
+        <%= render :partial => 'link', :collection => @link_set.links %>
+      </div>
+      <%= add_link "Add a URL" %>
+                
+      <p>
+        <label></label>
+        <%= submit_tag 'Save', html_options = {:class=> "button", :disable_with => "Please wait..."} %>
+        <%= link_to 'Cancel', link_set_path(@link_set), html_options = { :class => "button" } %>
+      </p>
     </div>
-    <%= add_link "Add a URL" %>
-          
-    <p>
-      <label></label>
-      <%= submit_tag 'Save', html_options = {:class=> "button", :disable_with => "Please wait..."} %>
-      <%= link_to 'Cancel', link_set_path(@link_set), html_options = { :class => "button" } %>
-    </p>
-  </div>
-<% end %>
+  <% end %>
+</div>

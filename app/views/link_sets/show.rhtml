@@ -1,27 +1,30 @@
 <%content_for :head do -%>
 <%end%>
 <%= javascript_include_tag "wz_tooltip.js", :cache => "cache/tooltip" %> 
-<div id="actionButtons2">
-  <%= link_to 'Edit', edit_link_set_url(@link_set), html_options = {:class=> "button",
-    :onmouseover => "Tip('Edit this link set')"} %>
-  <%= link_to 'List Polls', link_sets_path , html_options = {:class=> "button",
-    :onmouseover => "Tip('Return to list link sets')"}%>
-</div>
-<div class="formTitle">
-  <%= theme_image_tag("icons/16x16/polls.png", options = {:alt=>""}) %>
-  Link Set Detail
-</div>
-<div class="cssform">
-  <p>
-    <label for="name">Name:</label>
-    <%= h @link_set.name %>
-  </p>
-  
-  <span class="insideFormTitle">Links</span>
-  <% for link in @link_set.links %>
+<%= render :partial => "tab_menu" %>
+<div id="tabBody" style="position:relative; padding-top:15px;">
+  <div id="actionButtons2">
+    <%= link_to 'Edit', edit_link_set_url(@link_set), html_options = {:class=> "button",
+      :onmouseover => "Tip('Edit this link set')"} %>
+    <%= link_to 'List Link Sets', link_sets_path , html_options = {:class=> "button",
+      :onmouseover => "Tip('Return to list link sets')"}%>
+  </div>
+  <div class="formTitle">
+    <%= theme_image_tag("icons/16x16/polls.png", options = {:alt=>""}) %>
+    Link Set Detail
+  </div>
+  <div class="cssform">
     <p>
-      <label for="link_name">&bull;</label>
-      <%= h link.name %> (<%= link_to link.url, link.url %>)
+      <label for="name">Name:</label>
+      <%= h @link_set.name %>
     </p>
-  <% end %>
+    
+    <span class="insideFormTitle">Links</span>
+    <% for link in @link_set.links %>
+      <p>
+        <label for="link_name">&bull;</label>
+        <%= h link.name %> (<%= link_to link.url, link.url %>)
+      </p>
+    <% end %>
+  </div>
 </div>

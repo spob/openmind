@@ -1,5 +1,7 @@
 <%= javascript_include_tag "wz_tooltip.js", :cache => "cache/tooltip" %> 
 <%= error_messages_for 'link_set' %>
+<%= render :partial => "tab_menu" %>
+<div id="tabBody" style="position:relative; padding-top:15px;">
 <h1><%= theme_image_tag("icons/32x32/polls.png", options = {:alt=>"Link Sets"}) %>Link Sets</h1>
 <table cellspacing="0" cellpadding="0" class="cssform">
   <tr>
@@ -21,3 +23,4 @@
   
 </table>
 <p><%= will_paginate @link_sets %></p>
+</div>

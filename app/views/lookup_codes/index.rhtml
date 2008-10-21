@@ -1,34 +1,30 @@
-<%content_for :head do -%>
- 
-  
-<%end%>
 <%= javascript_include_tag "wz_tooltip.js", :cache => "cache/tooltip" %> 
 <%= render :partial => "tab_menu" %>
 <div id="tabBody" style="position:relative; padding-top:15px;">
-<%= error_messages_for 'lookup_code' %>
-<h1><%= theme_image_tag("icons/32x32/lookupCodes.png", 
-          options = {:alt=>"Lookup Codes"}) %>Lookup Codes</h1>
-        <table cellspacing="0" cellpadding="0" class="cssform">
-  <tr>
-    <th align="left">Type</th>
-    <th align="left">Short Name</th>
-    <th align="left">Description</th>
-    <th align="left">Sort Value</th>
-    <th align="left">Action</th>
-  </tr>
-  <tr>
-    <% form_for :lookup_code, :url => lookup_codes_path do |form| %>
-      <td><%= form.select :code_type, @types, { :prompt => "Please select..." } %></td>
-      <td><%= form.text_field :short_name, { :size => 20, :maxlength => 40 } %></td>
-      <td><%= form.text_field :description, { :size => 50, :maxlength => 50 } %></td>
-      <td class="center"><%= form.text_field :sort_value, { :size => 5 } %></td>
-      <td class="nowrap"><%= submit_tag 'Create', html_options = {:class=> "button", :disable_with => "Please wait...",
-        :onmouseover => "Tip('Create a new lookup code')"} %></td>
-    <% end %>
-    <%= set_focus_to_id_in_list_form 'lookup_code_short_name' -%>
-  </tr>
-  
-  <%= render :partial => 'lookup_code_item', :collection => @lookup_codes %>
-</table>
-<p><%= will_paginate @lookup_codes %></p>
+  <%= error_messages_for 'lookup_code' %>
+  <h1><%= theme_image_tag("icons/32x32/lookupCodes.png", 
+    options = {:alt=>"Lookup Codes"}) %>Lookup Codes</h1>
+  <table cellspacing="0" cellpadding="0" class="cssform">
+    <tr>
+      <th align="left">Type</th>
+      <th align="left">Short Name</th>
+      <th align="left">Description</th>
+      <th align="left">Sort Value</th>
+      <th align="left">Action</th>
+    </tr>
+    <tr>
+      <% form_for :lookup_code, :url => lookup_codes_path do |form| %>
+        <td><%= form.select :code_type, @types, { :prompt => "Please select..." } %></td>
+        <td><%= form.text_field :short_name, { :size => 20, :maxlength => 40 } %></td>
+        <td><%= form.text_field :description, { :size => 50, :maxlength => 50 } %></td>
+        <td class="center"><%= form.text_field :sort_value, { :size => 5 } %></td>
+        <td class="nowrap"><%= submit_tag 'Create', html_options = {:class=> "button", :disable_with => "Please wait...",
+          :onmouseover => "Tip('Create a new lookup code')"} %></td>
+      <% end %>
+      <%= set_focus_to_id_in_list_form 'lookup_code_short_name' -%>
+    </tr>
+    
+    <%= render :partial => 'lookup_code_item', :collection => @lookup_codes %>
+  </table>
+  <p><%= will_paginate @lookup_codes %></p>
 </div>
