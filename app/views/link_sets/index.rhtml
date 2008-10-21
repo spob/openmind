@@ -6,12 +6,14 @@
 <table cellspacing="0" cellpadding="0" class="cssform">
   <tr>
     <th>Name</th>
+    <th>Label</th>
     <th>Links</th>
     <th>Action</th>
   </tr>
   <tr>
     <% form_for :link_set, :url => link_sets_path do |form| %>
       <td><%= form.text_field :name, { :size => 30, :maxlength => 30 } %></td>
+      <td><%= form.text_field :label, { :size => 30, :maxlength => 30 } %></td>
       <td>0</td>
       <td><%= submit_tag 'Create', options = {:class=> "button", :disable_with => "Please wait...",
         :onmouseover => "Tip('Create a new link_set')"} %></td>

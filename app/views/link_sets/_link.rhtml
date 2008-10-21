@@ -1,7 +1,7 @@
 <div class="option">
   <% fields_for "link_set[link_attributes][]", link do |link_form| %>
     <p>
-        <label for="link_name">Label:</label>
+        <label for="link_name">Link Label:</label>
         <%= link_form.text_field :name, { :index => nil, :size => 30, :maxlength => 30, :class => 'pollTxtField' } %>
       </p>
       <p>

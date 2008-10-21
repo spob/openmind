@@ -1,9 +1,9 @@
 class LinkSet < ActiveRecord::Base
   after_update :save_links
   
-  validates_presence_of :name
+  validates_presence_of :name, :label
   validates_uniqueness_of :name 
-  validates_length_of :name, :maximum => 30
+  validates_length_of :name, :label, :maximum => 30
   
   has_many :links, :dependent => :destroy
   has_many :forums

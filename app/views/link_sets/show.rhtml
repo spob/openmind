@@ -6,8 +6,6 @@
   <div id="actionButtons2">
     <%= link_to 'Edit', edit_link_set_url(@link_set), html_options = {:class=> "button",
       :onmouseover => "Tip('Edit this link set')"} %>
-    <%= link_to 'List Link Sets', link_sets_path , html_options = {:class=> "button",
-      :onmouseover => "Tip('Return to list link sets')"}%>
   </div>
   <div class="formTitle">
     <%= theme_image_tag("icons/16x16/polls.png", options = {:alt=>""}) %>
@@ -17,6 +15,10 @@
     <p>
       <label for="name">Name:</label>
       <%= h @link_set.name %>
+    </p>
+    <p>
+      <label for="name">Label:</label>
+      <%= h @link_set.label %>
     </p>
     
     <span class="insideFormTitle">Links</span>
