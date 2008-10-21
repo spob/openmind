@@ -20,7 +20,7 @@ module ApplicationHelper
       ["Votes",           votes_path                           ],
       ["Announcements",   announcements_path ,  ["sysadmin", "prodmgr"]  ],
       ["Polls",           polls_path ,          ],
-      ["Admin",           periodic_jobs_path,    ["sysadmin"],  ["lookup_codes"] ],
+      ["Admin",           periodic_jobs_path,    ["sysadmin"],  ["lookup_codes", "link_sets"] ],
     ]
     
     #    puts "controller #{params["controller"]} action: #{params["action"]}"
