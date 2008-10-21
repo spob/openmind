@@ -102,6 +102,14 @@ module ApplicationHelper
     #    Reverted back to the above way RBS 1/15/2008
     "onload=\"document.getElementById('#{id}').focus();\""    
   end
+
+  def announcement_link announcement
+    text = truncate(announcement.headline, 25)
+    if announcement.unread?(current_user)
+      text = "<b>#{truncate(announcement.headline, 21)}</b>"
+    end
+    link_to text, "#{announcements_path}##{announcement.id}"
+  end  
   
   # Format a date and adjust the timezone for the user's timezone
   def om_date_time(the_date)

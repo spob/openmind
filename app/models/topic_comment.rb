@@ -1,8 +1,8 @@
 # == Schema Information
 # Schema version: 20081008013631
-#
+# 
 # Table name: comments
-#
+# 
 #  id           :integer(4)      not null, primary key
 #  user_id      :integer(4)      not null
 #  idea_id      :integer(4)
@@ -13,7 +13,7 @@
 #  type         :string(255)     not null
 #  topic_id     :integer(4)
 #  textiled     :boolean(1)      not null
-#
+# 
 
 class TopicComment < Comment
   belongs_to :topic, :counter_cache => true
@@ -25,5 +25,18 @@ class TopicComment < Comment
   def can_edit? current_user, role_override=false
     return true if role_override
     topic.last_comment?(self) and user.id == current_user.id
+  end
+  
+  def self.top_users
+    sql = %Q{
+        select u.id, u.first_name, u.last_name, u.email, u.hide_contact_info, count(*)
+        from users as u
+        inner join comments as c on u.id = c.user_id
+        where c.type = 'TopicComment'
+        group by u.id, u.first_name, u.last_name, u.email, u.hide_contact_info
+        order by count(*) desc
+        limit 5
+    }
+    User.find(:all, :conditions => ["id in (?)", User.find_by_sql(sql).collect(&:id)]).sort_by{|u| u.topic_comments.size * -1}
   end
 end

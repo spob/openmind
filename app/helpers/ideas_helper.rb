@@ -180,14 +180,6 @@ module IdeasHelper
     end
     releases
   end
-
-  def announcement_link announcement
-    text = truncate(announcement.headline, 25)
-    if announcement.unread?(current_user)
-      text = "<b>#{truncate(announcement.headline, 21)}</b>"
-    end
-    link_to text, "#{announcements_path}##{announcement.id}"
-  end  
   
   def tab_class type
     class_string = 'class="selected"' if session[:selected_tab] == type

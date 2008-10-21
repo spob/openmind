@@ -1,6 +1,5 @@
 <%content_for :head do -%>
-
-
+  <%= theme_stylesheet_link_tag 'sideBarRight' %>
 <%end%>
 <%= javascript_include_tag "wz_tooltip.js", :cache => "cache/tooltip" %> 
 <div id="actionButtons2">
@@ -14,6 +13,10 @@
       :onmouseover => "Tip('Edit topic')"}%>
   <% end %>
 </div>
+
+<%content_for :sidebar1 do -%>
+  <%=render(:partial => "sidebar1", :object => @current_user)%>
+<%end%>  
 
 
 <%= link_to "All Forums", forums_path , html_options = {

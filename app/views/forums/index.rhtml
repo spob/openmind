@@ -1,9 +1,10 @@
 <%= calendar_date_select_includes "blue" %>
 <%content_for :head do -%>     
-      <%= javascript_include_tag "tablecloth" %>                
+  <%= theme_stylesheet_link_tag 'sideBarRight' %>
+  <%= javascript_include_tag "tablecloth" %>                
 <%end%>
 <%content_for :bodyTag do -%>
-	<%= set_focus_to_id 'forum_search' -%>              
+  <%= set_focus_to_id 'forum_search' -%>              
 <%end%>
 <%= javascript_include_tag "wz_tooltip.js", :cache => "cache/tooltip" %> 
 <%= error_messages_for 'forum' %>
@@ -11,21 +12,25 @@
 <% if current_user != :false and sysadmin? %>
   <div id="actionButtons2" style="float:right; margin-top:-40px;">
     <%= link_to 'New Forum', new_forum_path, 
-                        html_options = {:class => "button",
-                        :onmouseover => "Tip('Create a new forum')"} %>
+      html_options = {:class => "button",
+      :onmouseover => "Tip('Create a new forum')"} %>
   </div>
 <% end %>
 
+<%content_for :sidebar1 do -%>
+  <%=render(:partial => "sidebar1", :object => @current_user)%>
+<%end%>  
+
 <!--  -->
 <% form_tag(search_forums_path, :class => 'cssform searchform', :name => 'search' ) do -%>
-	<p>
-        <label for="search">Search Forums:</label>
-        <%= text_field_tag 'search', 
-	        "", 
-	        options = { :id => "forum_search", :size => "50" } %>
-        <%= submit_tag 'Search', html_options = {:name => nil, :class=> "button",
-	        	:onmouseover => "Tip('Search topics and topic comments')"} %>
-	</p>
+  <p>
+    <label for="search">Search Forums:</label>
+    <%= text_field_tag 'search', 
+      "", 
+      options = { :id => "forum_search", :size => "50" } %>
+    <%= submit_tag 'Search', html_options = {:name => nil, :class=> "button",
+      :onmouseover => "Tip('Search topics and topic comments')"} %>
+  </p>
 <% end %>
 
 <table cellspacing="0" cellpadding="0" class="cssform">

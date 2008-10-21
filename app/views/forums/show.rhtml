@@ -1,7 +1,11 @@
+<%content_for :head do -%>
+  <%= theme_stylesheet_link_tag 'sideBarRight' %>
+<%end%>
 <%content_for :bodyTag do -%>
   <%= set_focus_to_id 'forum_search' -%>              
 <%end%>
 <%= javascript_include_tag "wz_tooltip.js", :cache => "cache/tooltip" %> 
+
 <div id="actionButtons2">
   <%= link_to 'Create New Topic', new_topic_path(:forum_id => @forum.id),
     html_options = {:class=> "button",
@@ -29,6 +33,10 @@
       :onmouseover => "Tip('Search topics and topic comments')"} %>
   </p>
 <% end %>
+
+<%content_for :sidebar1 do -%>
+  <%=render(:partial => "sidebar1", :object => @current_user)%>
+<%end%>  
 
 <h1>Topics</h1>
 <table cellspacing="0" cellpadding="0" class="cssform">

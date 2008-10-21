@@ -81,6 +81,7 @@ class User < ActiveRecord::Base
   # all votes by this user regardless of allocation
   has_many :all_votes, :class_name => 'Vote', :foreign_key => "user_id", :order => "votes.id ASC"
   has_many :comments,:dependent => :destroy, :order => "id ASC"
+  has_many :topic_comments,:dependent => :destroy, :order => "id ASC"
   has_many :user_idea_reads,:dependent => :destroy
   
   before_create :make_activation_code
