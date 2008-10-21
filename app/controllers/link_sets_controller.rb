@@ -31,7 +31,7 @@ class LinkSetsController < ApplicationController
       flash[:notice] = "Link Set #{@link_set.name} was successfully created."
       redirect_to edit_link_set_path(@link_set)
     else
-      index
+      @link_sets = LinkSet.list params[:page], current_user.row_limit
       render :action => :index
     end
   end

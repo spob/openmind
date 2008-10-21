@@ -35,7 +35,7 @@ class LinkSet < ActiveRecord::Base
   end
   
   def can_delete?
-    forums.empty?
+    forums.empty? && !self.default_link_set
   end
   
   def can_edit?
