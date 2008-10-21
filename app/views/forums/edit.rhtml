@@ -51,6 +51,10 @@
         </span>
       <% end %>
     </p>
+    <p>
+      <label>Link Set:</label>
+      <%= form.collection_select :link_set_id, LinkSet.list_all(true), :id, :name %>
+    </p>
   
     <p>
       <label></label>
