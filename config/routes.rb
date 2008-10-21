@@ -1,7 +1,4 @@
 ActionController::Routing::Routes.draw do |map|
-  map.resources :user_requests
-
-  map.resources :groups
 
   # The priority is based upon order of creation: first created -> highest priority.
   
@@ -20,6 +17,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :enterprises, :member => { :next => :get, :previous => :get }
   map.resources :forums, :collection => { :search => :get }
   map.resources :groups
+  map.resources :link_sets
   map.resources :lookup_codes
   map.resources :merge_ideas
   map.resources :periodic_jobs

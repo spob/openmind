@@ -3,11 +3,6 @@ class PollsController < ApplicationController
   before_filter :login_required
   access_control [:new,  :edit, :create, :update, :destroy,
     :publish, :unpublish ] => 'prodmgr'
-  
-  def index
-    new
-    @polls = Poll.list params[:page], prodmgr?, current_user.row_limit
-  end
 
   # GETs should be safe (see http://www.w3.org/2001/tag/doc/whenToUseGet.html)
   verify :method => :post, :only => [:create, :publish, :unpublish, :take_survey ],
@@ -16,6 +11,11 @@ class PollsController < ApplicationController
     :redirect_to => { :action => :index }
   verify :method => :delete, :only => [ :destroy ],
     :redirect_to => { :action => :index }
+  
+  def index
+    new
+    @polls = Poll.list params[:page], prodmgr?, current_user.row_limit
+  end
 
   def show
     session[:polls_show_toggle_detail] ||= "HIDE"

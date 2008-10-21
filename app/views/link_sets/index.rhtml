@@ -1,0 +1,23 @@
+<%= javascript_include_tag "wz_tooltip.js", :cache => "cache/tooltip" %> 
+<%= error_messages_for 'link_set' %>
+<h1><%= theme_image_tag("icons/32x32/polls.png", options = {:alt=>"Link Sets"}) %>Link Sets</h1>
+<table cellspacing="0" cellpadding="0" class="cssform">
+  <tr>
+    <th>Name</th>
+    <th>Links</th>
+    <th>Action</th>
+  </tr>
+  <tr>
+    <% form_for :link_set, :url => link_sets_path do |form| %>
+      <td><%= form.text_field :name, { :size => 30, :maxlength => 30 } %></td>
+      <td>0</td>
+      <td><%= submit_tag 'Create', options = {:class=> "button", :disable_with => "Please wait...",
+        :onmouseover => "Tip('Create a new link_set')"} %></td>
+      <%= set_focus_to_id_in_list_form 'link_set_name' -%>
+    </tr>
+  <% end %>
+  
+  <%= render :partial => @link_sets %>
+  
+</table>
+<p><%= will_paginate @link_sets %></p>

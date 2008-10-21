@@ -1,5 +1,4 @@
 module PollsHelper
-#  require 'rubygems'
     
   def add_poll_option_link name
     link_to_function name, :class=> 'insideFormTitle' do |page|

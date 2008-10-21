@@ -1,0 +1,22 @@
+<tr>
+  <td><%= h link_set.name %></td>
+  <td><%= link_set.links.size %></td>
+  <td style="white-space:nowrap;">
+    <%= link_to theme_image_tag("icons/16x16/viewAction.png", :alt=>"view", :title=> "view"),
+      link_set_path(link_set), 
+      html_options = {
+      :onmouseover => "Tip('View details for this link set')"} 
+  %>
+    <%= link_to theme_image_tag("icons/16x16/editAction.png", :alt=>"edit", :title=> "edit"), 
+      edit_link_set_path(link_set),
+      html_options = {
+      :onmouseover => "Tip('Edit this link set')"}
+  %>
+    
+    <%= link_to(
+      theme_image_tag("icons/16x16/deleteAction.png", :alt=>"delete", :title=> "delete"),
+      link_set_path(link_set),
+      html_options = {:confirm => 'Are you sure?', :method => :delete,
+        :onmouseover => "Tip('Delete this link set')"} ) if link_set.can_delete? %>
+  </td>
+</tr>

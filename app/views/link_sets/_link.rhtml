@@ -1,0 +1,19 @@
+<div class="option">
+  <% fields_for "link_set[link_attributes][]", link do |link_form| %>
+    <p>
+        <label for="link_name">Label:</label>
+        <%= link_form.text_field :name, { :index => nil, :size => 30, :maxlength => 30, :class => 'pollTxtField' } %>
+      </p>
+      <p>
+        <label for="link_url">URL:</label>
+        <%= link_form.text_field :url, { :index => nil, :class => 'pollTxtField' } %>
+        <% if link.new_record? %>
+            <%= link_to_function "Remove", "this.up('.option').remove()" %>
+        <% else %>
+          <%= link_to_function "Remove", "mark_for_destroy(this)" %>
+          <%= link_form.hidden_field :id, :index => nil %>
+          <%= link_form.hidden_field :should_destroy, :index => nil, :class => 'should_destroy' %>
+        <% end %>
+    </p>
+  <% end %>
+</div>
