@@ -20,6 +20,7 @@ class Forum < ActiveRecord::Base
   has_and_belongs_to_many :groups
   has_and_belongs_to_many :enterprise_types
   has_many :comments, :through => :topics, :order => "id DESC"
+  belongs_to :link_set
   
   validates_presence_of :name
   validates_uniqueness_of :name 

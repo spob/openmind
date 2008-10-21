@@ -6,7 +6,13 @@ class LinkSet < ActiveRecord::Base
   validates_length_of :name, :maximum => 30
   
   has_many :links, :dependent => :destroy
+  has_many :forums
   
+  def self.list_all include_empty
+    list = LinkSet.find(:all, :order => 'name ASC')
+    list.insert(0, LinkSet.new(:id => 0, :name => "")) if include_empty
+    list
+  end
   
   def save_links
     links.each do |o|
@@ -19,7 +25,7 @@ class LinkSet < ActiveRecord::Base
   end
   
   def can_delete?
-    true
+    forums.empty?
   end
   
   def can_edit?

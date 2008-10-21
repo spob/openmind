@@ -7,11 +7,6 @@
 <%end%>
 <%= error_messages_for 'topic' %>
 
-<div id="actionButtons2">
-  <%= link_to 'List topics', forum_path(@topic.forum), 
-      html_options = { :class => "button" } %>
-</div>
-
 <% form_for :topic, :html => {:id => "new-topic"}, :url => topics_path do |form| %>
   <input type="hidden" value="<%= @topic.forum.id %>" name="forum_id"/>
   <div class="formTitle"><%= theme_image_tag("icons/16x16/polls.png", 
@@ -35,7 +30,9 @@
     <p>
       <label></label>
       <%= submit_tag 'Create', options = {:class=> "button", :disable_with => "Please wait...",
-            :onmouseover => "Tip('Create a new topic')"} %>
+        :onmouseover => "Tip('Create a new topic')"} %>
+      <%= link_to 'Cancel', forum_path(@topic.forum), 
+        html_options = { :class => "button", :onmouseover => "Tip('Do not save changes')" } %>
     </p>
   </div>  
 <% end %>

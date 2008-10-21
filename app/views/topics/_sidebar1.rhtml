@@ -12,6 +12,22 @@
     </div>
   </div>
   
+  <% unless @topic.forum.link_set.nil? %>
+    
+    <div class="sideBarTitle"><%= @topic.forum.link_set.name %> </div>
+    <div class="sideBarItem">
+      <div class="unorderListNavContainer">
+        <ul class="navlist2">
+          <% for link in @topic.forum.link_set.links %>
+            <li>
+              <%= link_to link.name, link.url %>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+  <% end %>
+    
   <div class="sideBarTitle">Announcements</div>
   <div class="sideBarItem">
     <div class="unorderListNavContainer">
