@@ -1,5 +1,6 @@
 class LinkSet < ActiveRecord::Base
   after_update :save_links
+  before_save  :unset_default_link_sets
   
   validates_presence_of :name, :label
   validates_uniqueness_of :name 
@@ -24,12 +25,25 @@ class LinkSet < ActiveRecord::Base
     end
   end
   
+  def unset_default_link_sets
+    # if this link set is set to true, then unset the previous default link sets
+    if self.default_link_set
+      for linkset in LinkSet.find_all_by_default_link_set(true)
+        linkset.update_attribute(:default_link_set, false)
+      end
+    end
+  end
+  
   def can_delete?
     forums.empty?
   end
   
   def can_edit?
     true
+  end
+  
+  def self.get_default_link_set
+    LinkSet.find_by_default_link_set true
   end
   
   def link_attributes=(link_attributes)

@@ -12,13 +12,13 @@
     </div>
   </div>
   
-  <% unless @topic.forum.link_set.nil? %>
-    
-    <div class="sideBarTitle"><%= @topic.forum.link_set.label %> </div>
+  <% link_set = nvl(@topic.forum.link_set, LinkSet.get_default_link_set) %>
+  <% unless link_set.nil? %>  
+    <div class="sideBarTitle"><%= link_set.label %> </div>
     <div class="sideBarItem">
       <div class="unorderListNavContainer">
         <ul class="navlist2">
-          <% for link in @topic.forum.link_set.links %>
+          <% for link in link_set.links %>
             <li>
               <%= link_to link.name, link.url %>
             </li>

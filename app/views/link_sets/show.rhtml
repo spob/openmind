@@ -20,6 +20,10 @@
       <label for="name">Label:</label>
       <%= h @link_set.label %>
     </p>
+    <p>
+      <label for="default">Default:</label>
+        <%= check_box_tag 'default_link_set', '1', @link_set.default_link_set, :disabled => true %>
+    </p>
     
     <span class="insideFormTitle">Links</span>
     <% for link in @link_set.links %>

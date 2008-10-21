@@ -17,13 +17,17 @@
         <label for="link_set_name">Label:</label>
         <%= form.text_field :label, { :size => 30, :maxlength => 30, :class=> 'pollTxtField' } %>
       </p>
+      <p>
+        <label for="link_set_name">Default Link Set:</label>
+        <%= form.check_box :default_link_set %>
+      </p>
     
       <span class="insideFormTitle" style="margin-left:92px;">Links</span>
       <div id="links">
         <%= render :partial => 'link', :collection => @link_set.links %>
       </div>
       <%= add_link "Add a URL" %>
-                
+                    
       <p>
         <label></label>
         <%= submit_tag 'Save', html_options = {:class=> "button", :disable_with => "Please wait..."} %>
