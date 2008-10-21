@@ -42,5 +42,9 @@
         &bull;&nbsp;<%= h user_display_name(user) %><br />
       <% end %>
     </p>
+    <p>
+      <label>Link Set:</label>
+      <%= @forum.link_set.name %> (<%= @forum.link_set.label %>)
+    </p>
   <% end %>
 </div>
