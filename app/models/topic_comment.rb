@@ -1,8 +1,8 @@
 # == Schema Information
-# Schema version: 20081008013631
-# 
+# Schema version: 20081021172636
+#
 # Table name: comments
-# 
+#
 #  id           :integer(4)      not null, primary key
 #  user_id      :integer(4)      not null
 #  idea_id      :integer(4)
@@ -13,7 +13,7 @@
 #  type         :string(255)     not null
 #  topic_id     :integer(4)
 #  textiled     :boolean(1)      not null
-# 
+#
 
 class TopicComment < Comment
   belongs_to :topic, :counter_cache => true

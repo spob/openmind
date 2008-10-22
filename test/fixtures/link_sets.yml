@@ -1,3 +1,16 @@
+# == Schema Information
+# Schema version: 20081021172636
+#
+# Table name: link_sets
+#
+#  id               :integer(4)      not null, primary key
+#  name             :string(30)      not null
+#  created_at       :datetime
+#  updated_at       :datetime
+#  label            :string(30)      not null
+#  default_link_set :boolean(1)      not null
+#
+
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 
 # one:

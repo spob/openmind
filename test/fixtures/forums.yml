@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 20081008013631
+# Schema version: 20081021172636
 #
 # Table name: forums
 #
@@ -10,6 +10,7 @@
 #  created_at   :datetime        not null
 #  updated_at   :datetime        not null
 #  active       :boolean(1)      default(TRUE), not null
+#  link_set_id  :integer(4)
 #
 
 bugs_forum:

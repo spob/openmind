@@ -1,8 +1,8 @@
 # == Schema Information
-# Schema version: 20081008013631
-# 
+# Schema version: 20081021172636
+#
 # Table name: forums
-# 
+#
 #  id           :integer(4)      not null, primary key
 #  name         :string(50)      not null
 #  description  :string(150)     not null
@@ -10,7 +10,8 @@
 #  created_at   :datetime        not null
 #  updated_at   :datetime        not null
 #  active       :boolean(1)      default(TRUE), not null
-# 
+#  link_set_id  :integer(4)
+#
 
 class Forum < ActiveRecord::Base
   has_many :topics, :order => "pinned DESC, updated_at DESC", :dependent => :delete_all

@@ -1,15 +1,16 @@
 # == Schema Information
-# Schema version: 20081008013631
-# 
+# Schema version: 20081021172636
+#
 # Table name: enterprises
-# 
-#  id           :integer(4)      not null, primary key
-#  name         :string(50)      not null
-#  active       :boolean(1)      default(TRUE), not null
-#  lock_version :integer(4)      default(0)
-#  created_at   :datetime        not null
-#  updated_at   :datetime        not null
-# 
+#
+#  id                 :integer(4)      not null, primary key
+#  name               :string(50)      not null
+#  active             :boolean(1)      default(TRUE), not null
+#  lock_version       :integer(4)      default(0)
+#  created_at         :datetime        not null
+#  updated_at         :datetime        not null
+#  enterprise_type_id :integer(4)
+#
 
 class Enterprise < ActiveRecord::Base
   acts_as_ordered :order => 'name' 
