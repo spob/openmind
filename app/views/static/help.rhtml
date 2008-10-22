@@ -28,13 +28,13 @@
     <li>You will need to create an Open ID if you do not aleady have one. View the 
     <a href="http://openid.net/get/">Open ID</a> web site for a list of providers.</li>
     <li>You need to update your user profile to associate your Open ID to your OpenMind
-    account. To do so, select  <%= link_to "Update Profile", "/users/edit_profile" %> in the top right
-    hand corner of the page (once you have logged on). Update your profile to associate your 
+      account. To do so, select  <%= link_to "Update Profile", "/users/edit_profile" %> in the top right
+      hand corner of the page (once you have logged on). Update your profile to associate your 
     Open ID with your OpenMind account</li> 
     <li>When logging in to OpenMind, click the link 
-  <%= link_to 'Login using Open ID', { :controller => 'account', :action => 'login_openid' } %> on the
-OpenMind login screen.</li>
-</ol>
+      <%= link_to 'Login using Open ID', { :controller => 'account', :action => 'login_openid' } %> on the
+    OpenMind login screen.</li>
+  </ol>
   <br/>
 
   <h4>What is an enterprise?</h4>
@@ -114,4 +114,27 @@ OpenMind login screen.</li>
   <p>Yes, if you're a product manager or system administrator, or you're the author of the
   comment and the comment you wish to edit was the last comment entered for that idea.</p>
   <br/>
+
+  <h4>What is a Link Set?</h4>
+  <p>A link set is a collection of hyperlinks. If they are defined, link sets appear in side bars on
+    screens that include side parts (Ideas, Discussion Forums). 
+    <% if sysadmin? %>
+      You can view and maintain link sets in the <%=  link_to "Link Set", link_sets_path %> screen.
+    <% end %>
+    <br/>
+    You specify a link set by naming the link set, specifying a label (which will appear in the title of the section
+    in the side bar (for example, you might create label "Helpful Links"), and defining one more more hyperlinks.
+    <br/>
+    Each forum allows the mediator to specify a link set. That link set will be displayed in the sidebar when
+    viewing topics in that forum. In this manner, link sets can be context-sensitive. You are also able to
+    define one link set as the default link set. This link set will be displayed in the ideas screen, in the
+    forums list screen, and when viewing the topics for any forum for which you have not defined a specific
+    link set.
+  </p>
+  <br/>
+
+  <h4>How can I re-order the links in a link set?</h4>
+  <p>Link sets support drag-n-drop sorting. In the Link Set Details screen for a specific link set, simply 
+    drag the links into whichever order you prefer.
+  </p>
 <% end %>
