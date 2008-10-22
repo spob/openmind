@@ -1,3 +1,16 @@
+# == Schema Information
+# Schema version: 20081021172636
+#
+# Table name: link_sets
+#
+#  id               :integer(4)      not null, primary key
+#  name             :string(30)      not null
+#  created_at       :datetime
+#  updated_at       :datetime
+#  label            :string(30)      not null
+#  default_link_set :boolean(1)      not null
+#
+
 class LinkSet < ActiveRecord::Base
   after_update :save_links
   before_save  :unset_default_link_sets
@@ -6,7 +19,7 @@ class LinkSet < ActiveRecord::Base
   validates_uniqueness_of :name 
   validates_length_of :name, :label, :maximum => 30
   
-  has_many :links, :dependent => :destroy
+  has_many :links, :order => :position, :dependent => :destroy
   has_many :forums
   
   def self.list_all include_empty
