@@ -1,11 +1,12 @@
-<div id="sidebar1" class="sidebar">    
-  <div class="sideBarTitle">Most Active Users</div>
+<div id="sidebar1" class="sidebar"> 
+    
+  <div class="sideBarTitle">Announcements</div>
   <div class="sideBarItem">
     <div class="unorderListNavContainer">
       <ul class="navlist2">
-        <% for user in TopicComment.top_users %>
+        <% for announcement in Announcement.list(1, 5, 5) %>
           <li>
-            <%= user_display_name user %> (<%= pluralize user.topic_comments.size, "post"  %>)
+            <%= announcement_link announcement %>
           </li>
         <% end %>
       </ul>
@@ -27,18 +28,20 @@
       </div>
     </div>
   <% end %>
-    
-  <div class="sideBarTitle">Announcements</div>
+
+  
+  <div class="sideBarTitle">Most Active Users</div>
   <div class="sideBarItem">
     <div class="unorderListNavContainer">
       <ul class="navlist2">
-        <% for announcement in Announcement.list(1, 5, 5) %>
+        <% for user in TopicComment.top_users %>
           <li>
-            <%= announcement_link announcement %>
+            <%= user_display_name user %> (<%= pluralize user.topic_comments.size, "post"  %>)
           </li>
         <% end %>
       </ul>
     </div>
   </div>
+  
   <div style="clear: left"></div>
 </div>
