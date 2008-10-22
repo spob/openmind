@@ -12,12 +12,10 @@ class LinkSetsController < ApplicationController
   
   def index
     new
-    puts "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
     @link_sets = LinkSet.list params[:page], current_user.row_limit
   end
 
   def show
-    puts "==========================================="
     @link_set = LinkSet.find(params[:id])
   end
 
@@ -60,7 +58,6 @@ class LinkSetsController < ApplicationController
   end
   
   def update_sort
-    puts ".....................................here"
     @link_set = LinkSet.find(params[:id])
     @link_set.links.each do |link|      
       # we must add one to compensate for the zero based index.
