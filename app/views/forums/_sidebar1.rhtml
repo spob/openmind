@@ -15,20 +15,8 @@
   
   <% forum_link_set = @forum.link_set unless @forum.nil? %>
   <% link_set = nvl(forum_link_set, LinkSet.get_default_link_set) %>
-  <% unless link_set.nil? %>  
-    <div class="sideBarTitle"><%= link_set.label %> </div>
-    <div class="sideBarItem">
-      <div class="unorderListNavContainer">
-        <ul class="navlist2">
-          <% for link in link_set.links %>
-            <li>
-              <%= link_to link.name, link.url %>
-            </li>
-          <% end %>
-        </ul>
-      </div>
-    </div>
-  <% end %>
+  
+  <%=render(:partial => "link_sets/link_sidebar", :locals => {:link_set => link_set})%>
    
   <div class="sideBarTitle">Most Active Users</div>
   <div class="sideBarItem">

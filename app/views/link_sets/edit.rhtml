@@ -7,7 +7,7 @@
   <%= error_messages_for 'link_set' %>
   <% form_for(:link_set, :url => link_set_path(@link_set), 
     :html => {:method => :put }) do |form| %>
-    <div class="formTitle"><%=theme_image_tag("icons/16x16/polls.png", :alt=>"edit link set")%>Edit Link Set</div>
+    <div class="formTitle"><%=theme_image_tag("icons/16x16/linkset.png", :alt=>"edit link set")%>Edit Link Set</div>
     <div class="cssform widerLabel">
       <p>
         <label for="link_set_name">Name:</label>
@@ -27,7 +27,11 @@
         <%= render :partial => 'link', :collection => @link_set.links %>
       </div>
       <%= add_link "Add a URL" %>
-                    
+      <p>
+        <label>Note:</label> 
+        A link with an empty URL will be considered as a Link Group
+      </p>
+                        
       <p>
         <label></label>
         <%= submit_tag 'Save', html_options = {:class=> "button", :disable_with => "Please wait..."} %>

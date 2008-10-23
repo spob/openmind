@@ -1,0 +1,22 @@
+<% unless link_set.nil? %>
+  <% first = true %>
+  <div class="sideBarTitle"><%= link_set.label %> </div>
+  <div class="sideBarItem">
+    <div class="unorderListNavContainer">
+      <ul class="navlist2">
+        <% for link in link_set.links %>
+          <% if link.url.nil? or link.url.empty? %>
+          </ul></div>
+        <%= link.name %>
+          <div class="unorderListNavContainer"><ul class="navlist2">
+          <% else %>
+            <li>
+              <%= link_to link.name, link.url %>
+            </li>
+          <% end %>
+          <% first = false %>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+<% end %>

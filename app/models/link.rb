@@ -13,7 +13,7 @@
 
 class Link < ActiveRecord::Base
   acts_as_list :scope => :link_set
-  validates_presence_of :name, :url
+  validates_presence_of :name
   validates_uniqueness_of :name, :scope => "link_set_id"
   validates_length_of :name, :maximum => 30
   

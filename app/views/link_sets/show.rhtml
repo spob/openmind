@@ -9,7 +9,7 @@
       :onmouseover => "Tip('Edit this link set')"} %>
   </div>
   <div class="formTitle">
-    <%= theme_image_tag("icons/16x16/polls.png", options = {:alt=>""}) %>
+    <%= theme_image_tag("icons/16x16/linkset.png", options = {:alt=>""}) %>
     Link Set Detail
   </div>
   <div class="cssform">
@@ -30,8 +30,12 @@
     <div id="linklist">
       <% for link in @link_set.links %>
         <p id="link_<%= link.id %>">
-          <label for="link_name">&bull;</label>
-          <%= h link.name %> (<%= link_to link.url, link.url %>)
+          <% if link.url.nil? or link.url.blank? %>
+            <strong><%= h link.name %></strong>
+          <% else %>
+            <label for="link_name">&bull;</label>
+            <%= h link.name %> (<%= link_to link.url, link.url %>)
+          <% end %>
         </p>
       <% end %>
     </div>
