@@ -1,7 +1,7 @@
 <%= javascript_include_tag "wz_tooltip.js", :cache => "cache/tooltip" %> 
 <%= render :partial => "tab_menu" %>
 <div id="tabBody" style="position:relative; padding-top:15px;">
-<h1>Periodic Jobs</h1>
+<h1><%= theme_image_tag("icons/32x32/periodicJobs.png", options = {:alt=>"Periodic Jobs"}) %>Periodic Jobs</h1>
   <div id="actionButtons2">
     Last Check: <%= format_date_time(TaskSchedulerBatch.get_batch.updated_at) unless TaskSchedulerBatch.get_batch.nil? %>
   </div>

@@ -1,10 +1,7 @@
 <%content_for :head do -%>
-   
-                   
 <%end%>
-
 <%= error_messages_for 'release' %>
-<h1>Product Releases</h1>
+<h1><%= theme_image_tag("icons/32x32/productReleases.png", options = {:alt=>"Product Releases"}) %>Product Releases</h1>
 <% form_tag('/releases/list', :method => :get, :class => 'cssform widerLabel', :name => 'search' ) do -%>
 <p>
   <label for="release_status_id">Releases by Status:</label>
