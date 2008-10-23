@@ -1,6 +1,6 @@
 class OpenmindVersion
   # The version number for the application
-  @@version = "2.3b3"
+  @@version = "2.3b4"
   
   def self.version
     @@version
