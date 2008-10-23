@@ -60,21 +60,7 @@
     </div>
   </div>
   
-  <% link_set = LinkSet.get_default_link_set %>
-  <% unless link_set.nil? %>  
-    <div class="sideBarTitle"><%= link_set.label %> </div>
-    <div class="sideBarItem">
-      <div class="unorderListNavContainer">
-        <ul class="navlist2">
-          <% for link in link_set.links %>
-            <li>
-              <%= link_to link.name, link.url %>
-            </li>
-          <% end %>
-        </ul>
-      </div>
-    </div>
-  <% end %>
+  <%=render(:partial => "link_sets/link_sidebar", :locals => {:link_set => LinkSet.get_default_link_set})%>
 
   <% tiptxt= "Subscribe to be notified of new ideas" %>
   <a href="<%= url_for(:action => 'rss', :only_path => false) %>" onmouseover="Tip('<%= tiptxt %>')"><%= theme_image_tag("icons/14x14/feed-icon-14x14.png", :border=>0) %></a>
