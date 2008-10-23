@@ -1,0 +1,28 @@
+<div class="formTitle">
+  <%= theme_image_tag("icons/16x16/userEdit.png", 
+    options = {:alt=>"Request OpenMind Account"}) %>
+OpenMind Account Request Received</div>
+<div class="cssform widerLabel">
+  <p>
+    <label>Confirmation:</label>
+    We have received your request for an OpenMind account. You should receive an
+    email in the next several minutes confirming your account request. 
+    Once your account is approved, you will receive a second email containing
+    your login credentials.
+  </p> 
+  <p>
+    <label>Note:</label>
+    If you do not receive the first email confirming your request, please
+    check any spam filters that may prevent that email from reaching you. 
+    <strong>If you fail to receive that first email, you will likely not get the second
+    email containing your login crednetials once your account has been approved.</strong>
+  </p>
+  <p>
+    <label>&nbsp;</label>
+    <%= button_to(
+      "Return to Login",
+      { :controller => 'account', :action => 'login'},
+      html_options = {:class=> "button", :method => :get,
+        :onmouseover => "Tip('Return to login screen')"} ) %>
+  </p>
+</div>

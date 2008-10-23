@@ -1,5 +1,5 @@
 class UserRequestsController < ApplicationController
-  before_filter :login_required, :except => [:new, :create]
+  before_filter :login_required, :except => [:new, :create, :acknowledge]
   access_control [:edit, :update, :destroy, :show, :index] => 'sysadmin'
   
   # GETs should be safe (see http://www.w3.org/2001/tag/doc/whenToUseGet.html)
@@ -28,8 +28,8 @@ class UserRequestsController < ApplicationController
         flash[:error] = "An account already exists for #{@user_request.email}. Select the 'Forgot your password?' link below to retrieve your password."
         redirect_to :controller => 'account', :action => 'login'
       elsif @user_request.save
-        flash[:notice] = 'Your account request has been received. You will receive an email when your account has been approved.'
-        redirect_to :controller => 'account', :action => 'login'
+        flash[:notice] = 'Your account request has been received.'
+        redirect_to acknowledge_user_request_path(@user_request)
       else
         render :action => 'new'
       end
@@ -37,6 +37,10 @@ class UserRequestsController < ApplicationController
       flash[:error] = "Verification failed...please try again"
       redirect_to :action => 'new'
     end  
+  end
+  
+  def acknowledge
+    @user_request = UserRequest.find(params[:id])
   end
   
   def index
