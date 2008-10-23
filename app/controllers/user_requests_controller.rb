@@ -41,6 +41,9 @@ class UserRequestsController < ApplicationController
   
   def acknowledge
     @user_request = UserRequest.find(params[:id])
+    
+    RunOncePeriodicJob.create(
+      :job => "UserRequest.send_confirmation_email(#{@user_request.id})")
   end
   
   def index

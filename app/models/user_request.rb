@@ -57,6 +57,14 @@ class UserRequest < ActiveRecord::Base
       :per_page => per_page
   end
   
+  def self.send_confirmation_email id
+    request = UserRequest.find(id)
+    if request.email_sent.nil?
+      EmailNotifier.deliver_user_request_received_notification id
+      request.update_attribute(:email_sent, Time.zone.now)
+    end
+  end
+  
   def can_delete?
     status == UserRequest.pending
   end

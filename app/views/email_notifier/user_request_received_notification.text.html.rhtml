@@ -154,7 +154,7 @@
               <tr>
                 <td style="color: #ccc; background: #333; text-align:right;font-family: Helvetica, Arial, sans-serif;">
                   <img src="<%= @email_image_url %>/emailHeader.jpg" />
-                       <span id="Date" style="padding-right:10px;"><%= @date_stamp %></span>
+                  <span id="Date" style="padding-right:10px;"><%= @date_stamp %></span>
                 </td>
               </tr>
             </table>
@@ -164,16 +164,14 @@
                   <!-- INSERT CONTENT HERE -->
                   <h3>OpenMind Account Request</h3>
                   
-                  <p><b>Email</b>: <%= @email %></p>
-                    
-                  <p><b>Enterprise</b>: <%= @enterprise %></p>
-                    
-                  <p><b>First Name</b>: <%= @first_name %></p>
-                    
-                  <p><b>Last Name</b>: <%= @last_name %></p>
+                  <p>We have received your request for an OpenMind account. 
+                    Once your account is approved, you will receive a second email containing
+                    your login credentials.
+                  </p>
                   
                   <p>  
-                    Logon <a href="<%= @url %>">here</a>
+                    Send email to <%= mail_to(@admin_email, 'System Administrator' ) %> with
+                    questions.
                   </p>
                   <!-- END CONTENT HERE -->
                 </td>

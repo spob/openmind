@@ -48,9 +48,23 @@ class EmailNotifier < ActionMailer::Base
     setup_email
     request = UserRequest.find(user_request_id)
     @body[:email] = request.email
+    @body[:first_name] = request.first_name
+    @body[:last_name] = request.last_name
     @body[:enterprise] = request.enterprise_name
     @subject    += "User #{request.email} has requested an OpenMind account"
     @recipients = User.sysadmins.collect(&:email)
+  end
+  
+  def user_request_received_notification(user_request_id)
+    setup_email
+    request = UserRequest.find(user_request_id)
+    @body[:email] = request.email
+    @body[:admin_email] = APP_CONFIG['admin_email']
+    @body[:first_name] = request.first_name
+    @body[:last_name] = request.last_name
+    @body[:enterprise] = request.enterprise_name
+    @subject    += "Your account request has been received"
+    @recipients = request.email
   end
   
   def new_user_allocation_notification(allocation_id)
