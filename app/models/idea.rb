@@ -1,8 +1,8 @@
 # == Schema Information
 # Schema version: 20081021172636
-#
+# 
 # Table name: ideas
-#
+# 
 #  id                :integer(4)      not null, primary key
 #  user_id           :integer(4)      not null
 #  product_id        :integer(4)      not null
@@ -16,7 +16,7 @@
 #  view_count        :integer(4)      default(0), not null
 #  cached_tag_list   :string(255)
 #  textiled          :boolean(1)      not null
-#
+# 
 
 class Idea < ActiveRecord::Base
   acts_as_ordered :order => 'id' 
@@ -233,13 +233,13 @@ class Idea < ActiveRecord::Base
   end
 
   def can_delete?
-    # Criteria is the same as can_edit (at least for now)
-    can_edit?
+    votes.empty? and comments.empty? 
   end  
 
   def can_edit?
-    # Can only delete votes for which there are no comments and not votes
-    votes.empty? and comments.empty? 
+    # Can only delete votes for which there are no comments and no votes
+    # (unless those votes are by the author
+    votes.find_all{|vote| vote.user.id != user.id}.empty? and comments.empty? 
   end  
   
   def rescindable_votes?(user_id)
@@ -274,8 +274,9 @@ class Idea < ActiveRecord::Base
       :order => 'email')
   end
   
-  # merge this idea into another idea. The merged_to_idea field will be populated,
-  # and any votes for this idea will be transferred to the target idea
+  # merge this idea into another idea. The merged_to_idea field will be
+  # populated, and any votes for this idea will be transferred to the target
+  # idea
   def merge_into target_idea
     self.merged_to_idea = target_idea
     
@@ -315,7 +316,7 @@ class Idea < ActiveRecord::Base
     # TODO: We probably want to add a flag to the allocations table to allow
     #       us to not have to iterate through every allocation to find one with
     #       open votes
-    #       
+    # 
     #  Loop through allocations looking for an open allocation, oldest first
     for allocation in allocations
       if allocation.available_quantity > 0
