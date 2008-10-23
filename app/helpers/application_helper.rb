@@ -1,4 +1,5 @@
-# Methods added to this helper will be available to all templates in the application.
+# Methods added to this helper will be available to all templates in the
+# application.
 module ApplicationHelper
   include TagsHelper  
     
@@ -9,7 +10,8 @@ module ApplicationHelper
     ]
       
     @menus = [
-      # Menu Label       # controller url       # role restrictions   # other controllers e.g., aliases
+      # Menu Label       # controller url       # role restrictions   # other
+      # controllers e.g., aliases
       ["Ideas",           "/ideas"                             ],
       ["Products",        products_path,                       ],
       ["Releases",        list_releases_path,   [],                  [ "releases" ] ],
@@ -92,12 +94,47 @@ module ApplicationHelper
     Markaby::Builder.new({}, self, &block)
   end
   
-  # Got this code from 
+  
+  def show_links link_set
+    return if link_set.nil?
+    # reverse the array since we'll push and pop the entries
+    links = link_set.links.reverse
+    markaby do
+      until links.empty? do
+        link = links.pop
+        if link.heading?
+          p link.name
+        else
+          links.push link # not a heading...put it back on the array because we'll pop it back off shortly
+          div.unorderListNavContainer do
+            ul.navlist2 do
+              while true
+                link = links.pop
+                if link.nil? 
+                  break;
+                else if link.heading?
+                    links.push link   # a heading...put it back on and process it above
+                    break
+                  else
+                    li do
+                      link_to(link.name, link.url)
+                    end
+                  end
+                end
+              end
+            end
+          end
+        end
+      end
+    end
+  end
+  
+  # Got this code from
   # http://blog.wolfman.com/articles/2006/10/29/setting-the-focus-in-a-form
   def set_focus_to_id(id)
     #  javascript_tag("$('#{id}').focus()");
     #    RES: FIXES IE onfocus BUG (i think  the browser looses it's css styles when done the other way
-    #    -- nevertheless, though it's now fixed, this is considered "obtrusive javascript", 
+    #    -- nevertheless, though it's now fixed, this is considered "obtrusive javascript",
     #    it would be better to implement this "unobstrusively" -- something to come back to later.
     #    Reverted back to the above way RBS 1/15/2008
     "onload=\"document.getElementById('#{id}').focus();\""    
@@ -127,8 +164,8 @@ module ApplicationHelper
     user.display_name full
   end
   
-  # Required to support hard line breaks
-  # See http://wiki.rubyonrails.org/rails/pages/RedCloth for a discussion
+  # Required to support hard line breaks See
+  # http://wiki.rubyonrails.org/rails/pages/RedCloth for a discussion
   def textilize(text) 
     RedCloth.new(text, [:hard_breaks]).to_html
   end
@@ -166,5 +203,5 @@ module ApplicationHelper
   def strip_leading_slash path
     path = path.from(1) if path.index('/') == 0
     path
-  end
+  end  
 end

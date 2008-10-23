@@ -23,4 +23,8 @@ class Link < ActiveRecord::Base
   def should_destroy?
     should_destroy.to_i == 1
   end
+  
+  def heading? 
+    self.url.nil? or self.url.empty?
+  end
 end
