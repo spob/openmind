@@ -1,68 +1,69 @@
 <div id="action_buttons<%= @idea.id %>">
   <% if from == "show" %>
-    <%= link_to '<', option = { :action => 'previous', :id => @idea }, 
-      html_options = {:class=> "button",
-      :onmouseover => "Tip('View the previous idea')"} %>
-    <%= link_to '>', option = { :action => 'next', :id => @idea }, 
-      html_options = {:class=> "button",
-      :onmouseover => "Tip('View the next idea')"} %>
+
+    <%= link_to theme_image_tag("icons/16x16/back.png", :alt=>"previous", :title=> "previous"),
+      option = { :action => 'previous', :id => @idea },
+      html_options = {:onmouseover => "Tip('View the previous idea')"} %>
+    <%= link_to theme_image_tag("icons/16x16/next.png", :alt=>"next", :title=> "next"),
+      option = { :action => 'next', :id => @idea },
+      html_options = {:onmouseover => "Tip('View the next idea')"} %>
   <% end %>
   <% if from == "list" %>
-    <%= link_to theme_image_tag("icons/24x24/viewAction.png", 
+    <%= link_to theme_image_tag("icons/24x24/viewAction.png",
       :alt=>"view", :title=> "view"),
       options = {:controller => 'ideas', :action => 'show', :id => @idea},
       html_options = {
       :onmouseover => "Tip('View details for this idea')"}
   %>
   <% end %>
-  <%= link_to theme_image_tag("icons/24x24/ideasEdit.png", 
+  <%= link_to theme_image_tag("icons/24x24/ideasEdit.png",
     :alt=>"edit", :title=> "edit"),
     options = {:controller => 'ideas', :action => 'edit', :id => @idea},
     html_options = {
     :onmouseover => "Tip('Edit this idea')"} if show_edit? @idea %>
-  <%= link_to theme_image_tag("icons/24x24/deleteAction.png", 
+  <%= link_to theme_image_tag("icons/24x24/deleteAction.png",
     :alt=>"delete", :title=> "delete"),
-    options = {:controller => 'ideas',  :action => 'destroy', :id => @idea }, 
+    options = {:controller => 'ideas',  :action => 'destroy', :id => @idea },
     html_options = {
     :onmouseover => "Tip('Delete this idea')",
-    :confirm => 'Are you sure?', 
+    :confirm => 'Are you sure?',
     :method => :post} if show_delete? @idea %>
-  
+
   <% vote_area @idea do %>
-    <% 
+    <%
     url = votes_path(:id => @idea)
-    url = create_from_show_votes_path(:id => @idea) if from == "show" 
+    url = create_from_show_votes_path(:id => @idea) if from == "show"
   %>
-    <%= link_to_remote theme_image_tag("icons/24x24/vote.png", 
+    <%= link_to_remote theme_image_tag("icons/24x24/vote.png",
       :alt=>"vote", :title=> "vote",
-      :onmouseover => "Tip('Vote for this idea')"), 
-      :url => url, 
-      :html => { }, 
+      :onmouseover => "Tip('Vote for this idea')"),
+      :url => url,
+      :html => { },
       :method => :post %>
   <% end %>
-  
+
   <% rescind_vote_area @idea do %>
-    <%= link_to_remote theme_image_tag("icons/24x24/voteRescind.png", 
+    <%= link_to_remote theme_image_tag("icons/24x24/voteRescind.png",
       :alt=>"rescind vote", :title=> "rescind vote",
-      :onmouseover => "Tip('Rescind your vote for this idea')"), 
-      :url => vote_path(:id => @idea, :from => from), 
-      :html => {  }, 
+      :onmouseover => "Tip('Rescind your vote for this idea')"),
+      :url => vote_path(:id => @idea, :from => from),
+      :html => {  },
       :method => :delete %>
-  
+
   <% end %>
-  <%= link_to theme_image_tag("icons/24x24/commentAdd.png", 
-    :alt=>"add comment", :title=> "add comment"), 
-    new_comment_path(:id => @idea, :type => 'Idea'), 
+  <%= link_to theme_image_tag("icons/24x24/commentAdd.png",
+    :alt=>"add comment", :title=> "add comment"),
+    new_comment_path(:id => @idea, :type => 'Idea'),
     html_options = {:method => :get,
     :onmouseover => "Tip('Add a comment to discussion forum for this idea')" } %>
   <%= show_watch_button(@idea, from) %>
-  
+
   <% if from == "show" %>
     <%= show_merge @idea %>
-    <%= link_to theme_image_tag("icons/24x24/ideasList.png", 
+    <%= link_to theme_image_tag("icons/24x24/ideasList.png",
       :alt=>"List Ideas", :title=> "List Ideas"),
       options = {:controller => 'ideas', :action => 'index'},
-      html_options = {:onmouseover => "Tip('List Ideas')"}        
+      html_options = {:onmouseover => "Tip('List Ideas')"}
   %>
   <% end %>
 </div>
