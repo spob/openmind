@@ -1,10 +1,10 @@
 <%= javascript_include_tag "wz_tooltip.js", :cache => "cache/tooltip" %> 
 <div id="actionButtons2">
   <%= link_to '<',
-    previous_enterprise_path(@enterprise), html_options = {
+    previous_enterprise_path(@enterprise), html_options = {:class => 'button',
     :onmouseover => "Tip('View the previous enterprise')"} %>
   <%= link_to '>',
-    next_enterprise_path(@enterprise), html_options = {
+    next_enterprise_path(@enterprise), html_options = {:class => 'button',
     :onmouseover => "Tip('View the next enterprise')"} %>
   <%= link_to 'Edit', edit_enterprise_path(@enterprise), html_options = {:class=> "button",
     :onmouseover => "Tip('Edit this enterprise')"} %>
