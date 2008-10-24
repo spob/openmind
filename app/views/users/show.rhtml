@@ -3,11 +3,13 @@
 <%= render :partial => "tab_menu"%>
 <div id="tabBody" style="position:relative; padding-top:15px;">
   <div id="actionButtons2">
-    <%= link_to '<', option = { :action => 'previous', :id => @user }, 
-      html_options = {:class=> "button",
+    <%= link_to theme_image_tag("icons/16x16/back.png", :alt=>"previous", :title=> "previous"),
+      option = { :action => 'previous', :id => @user }, 
+      html_options = {
       :onmouseover => "Tip('View the previous user')"} %>
-    <%= link_to '>', option = { :action => 'next', :id => @user }, 
-      html_options = {:class=> "button",
+    <%= link_to theme_image_tag("icons/16x16/next.png", :alt=>"next", :title=> "next"),
+      option = { :action => 'next', :id => @user }, 
+      html_options = {
       :onmouseover => "Tip('View the next user')"} %>
     <% restrict_to "sysadmin" do %>
       <%= link_to 'New User', option = {:action => 'new'}, 
