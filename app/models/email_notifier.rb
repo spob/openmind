@@ -23,7 +23,8 @@ class EmailNotifier < ActionMailer::Base
       :only_path  => false
   end
   
-  def activation(user)
+  def activation(user_id)
+    user = User.find user_id
     setup_email(user)
     @subject    += 'Your account has been activated!'
     @body[:url]  = url_for :controller => 'account',

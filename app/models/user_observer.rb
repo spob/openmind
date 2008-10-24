@@ -4,6 +4,8 @@ class UserObserver < ActiveRecord::Observer
   end
 
   def after_save(user)
-    EmailNotifier.deliver_activation(user) if user.recently_activated?
+    RunOncePeriodicJob.create(
+      :job => "EmailNotifier.deliver_activation(#{user.id})") if user.recently_activated?
+    #    EmailNotifier.deliver_activation(user) if user.recently_activated?
   end
 end
