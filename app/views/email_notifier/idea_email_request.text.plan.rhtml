@@ -1,0 +1,10 @@
+<%= @email_request.user.full_name %> has sent you an idea
+
+<%= @email_request.message %>
+
+Idea <%= @email_request.idea.id %>: <%= @email_request.idea.title %>
+
+<%= @email_request.idea.description %>
+
+Product: <%= @email_request.idea.product.name %>
+Votes: <%= @email_request.idea.votes.size %>

@@ -32,6 +32,19 @@ class EmailNotifier < ActionMailer::Base
       :only_path  => false
   end
   
+  def idea_email_request(request_id)
+    request = IdeaEmailRequest.find request_id
+    setup_email
+    @body[:email_request]  = request
+    @body[:url]  = url_for :controller => 'ideas', 
+      :action => 'show', 
+      :id => request.idea.id,
+      :only_path  => false
+    @subject    += request.subject
+    @cc = request.user.email if request.cc_self
+    @recipients = request.to_email
+  end
+  
   def new_comment_notification(comment_id)
     comment = Comment.find(comment_id)
     setup_email

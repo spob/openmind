@@ -130,6 +130,26 @@ class IdeasController < ApplicationController
       mark_as_read @idea
     end
   end
+  
+  def new_email_request
+      @idea_email_request = IdeaEmailRequest.new
+      @idea_email_request.idea = Idea.find(params[:idea_id])
+      @idea_email_request.subject = "#{current_user.full_name} has forwarded you an OpenMind idea"
+      @idea_email_request.cc_self = true
+  end
+  
+  def create_email_request
+    @idea_email_request = IdeaEmailRequest.new(params[:idea_email_request])
+    @idea_email_request.user = current_user
+    if @idea_email_request.save
+      flash[:notice] = "Your request to email Idea #{@idea_email_request.idea.id} was recorded."
+      redirect_to :action => 'show', :id => @idea_email_request.idea
+    else
+      render :action => 'new_email_request'
+    end
+    RunOncePeriodicJob.create(
+      :job => "IdeaEmailRequest.email_idea(#{@idea_email_request.id})")
+  end
 
   def next
     @idea = Idea.find(params[:id]).next
@@ -221,7 +241,7 @@ class IdeasController < ApplicationController
   
   def titles_for_lookup
     @titles = Idea.find(:all, :select => 'title')
-    @headers['content-type'] = 'text/javascript'
+    headers['content-type'] = 'text/javascript'
     render :layout => false
   end
 
