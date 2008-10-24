@@ -3,7 +3,16 @@
   <td><%= h periodic_job_item.job %></td>
   <td><%= h nvl(format_date_time(periodic_job_item.last_run_at), '-') %></td>
   <td style="width: 200px;">
-	<%= h nvl(periodic_job_item.last_run_result, '-') %>
+    <%= h nvl(periodic_job_item.last_run_result, '-') %>
   </td>
-  <td><%= h nvl(format_date_time(periodic_job_item.next_run_at), '-') %></td>
+  <td>
+    <%= h nvl(format_date_time(periodic_job_item.next_run_at), '-') %>
+  </td>
+  <td>
+    <%= button_to(
+      "Rerun",
+      rerun_periodic_job_path(periodic_job_item),
+      html_options = {:class=> "button", :method => :post,
+        :onmouseover => "Tip('Force this periodic job to run once')"} ) if periodic_job_item.next_run_at.nil? %>
+  </td>
 </tr>
