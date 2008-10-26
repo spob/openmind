@@ -48,7 +48,7 @@ class ForumsControllerTest < Test::Unit::TestCase
   def test_update
     put :update, {:id => forums(:bugs_forum), :forum => {:mediator_ids => [] }}
     assert_response :redirect
-    assert_redirected_to forums_path
+    assert_redirected_to forum_path
   end
 
   def test_destroy
