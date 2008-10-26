@@ -31,7 +31,7 @@ class UsersControllerTest < Test::Unit::TestCase
     assert !user.activation_code.nil?
     assert_nil user.activated_at
     email = @emails.first
-    assert_equal "OpenMind: Password reset, please activate your new account", email.subject
+    assert_equal "OpenMind: Password reset, please activate your account", email.subject
   end
 
   def test_index
