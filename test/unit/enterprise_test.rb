@@ -48,6 +48,6 @@ class EnterpriseTest < Test::Unit::TestCase
   end
   
   def test_active_enterprises
-   assert_equal 3, Enterprise.active_enterprises.size
+   assert_equal 4, Enterprise.active_enterprises.size
   end
 end
