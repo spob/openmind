@@ -1,0 +1,7 @@
+simple_idea_email_request:
+  idea: allroles
+  message: this is a test message
+  user: quentin
+  to_email: joe@openmindsw.com
+  type: IdeaEmailRequest
+  subject: Test Subject
