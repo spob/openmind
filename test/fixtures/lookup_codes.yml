@@ -24,3 +24,15 @@ release_status_val2_test:
     short_name: fooShortName2
     description: description2
     sort_value: 2
+
+enterprise_type_abc:
+    code_type: EnterpriseType
+    short_name: abc
+    description: abc description
+    sort_value: 20
+
+enterprise_type_xyz:
+    code_type: EnterpriseType
+    short_name: xyz
+    description: xyz description
+    sort_value: 30

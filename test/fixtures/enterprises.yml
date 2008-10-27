@@ -24,6 +24,11 @@ allocation_calculation_test:
   name: AllocationCalcTest
   active: true
 
+enterprise_w_enterprise_type:
+  name: EnterpriseType
+  active: true
+  enterprise_type: enterprise_type_abc
+
 no_users:
   name: NoUser
   active: true
