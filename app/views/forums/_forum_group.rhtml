@@ -1,4 +1,4 @@
-
+<% unless forums.empty? %>
   <table cellspacing="0" cellpadding="0" class="cssform">
     <tr>
       <th>Forum</th>
@@ -9,3 +9,4 @@
     </tr>  
     <%=render(:partial => "forum_item", :collection => forums)%>
   </table>
+<% end %>
