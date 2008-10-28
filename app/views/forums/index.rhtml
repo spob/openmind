@@ -33,14 +33,9 @@
   </p>
 <% end %>
 
-<table cellspacing="0" cellpadding="0" class="cssform">
-  <tr>
-    <th>Forum</th>
-    <th>Topics (Unread)</th>
-    <th>Last Post</th>
-    <th>Replies</th>
-    <th>Action</th>
-  </tr>  
-  <%=render(:partial => "forum_item", :collection => @forums)%>
-</table>
-<p><%= will_paginate @forums %></p>
+  <%=render(:partial => "forum_group", :locals => { :forums => @forums })%>
+
+<% for forum_group in @forum_groups %>
+  <h2><%= forum_group.short_name %></h2>
+  <%=render(:partial => "forum_group", :locals => { :forums => forum_group.forums })%>
+<% end %>

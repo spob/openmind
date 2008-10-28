@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
 class ForumTest < Test::Unit::TestCase
-  fixtures :users, :topics, :forum_mediators, :forums
+  fixtures :users, :topics, :forum_mediators, :forums, :lookup_codes
 
   # Replace this with your real tests.
   def test_invalid_with_empty_attributes
@@ -45,5 +45,10 @@ class ForumTest < Test::Unit::TestCase
     assert_equal 1, forum.topics.size
     assert !forum.can_delete?
     assert_equal 1, forum.mediators.count
+  end
+  
+  def test_list_by_forum
+    assert !Forum.list_by_forum_group.empty?
+    assert !Forum.list_by_forum_group(lookup_codes(:forum_group_abc)).empty?
   end
 end

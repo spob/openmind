@@ -47,6 +47,11 @@
       <%= form.collection_select :link_set_id, LinkSet.list_all(true), :id, :name %>
     </p>
     <p>
+      <label for="forum_group">Forum Group:</label>
+      <%= form.collection_select :forum_group_id, 
+        ForumGroup.findall(true), :id, :short_name %>
+    </p>
+    <p>
       <label></label>
       <%= submit_tag 'Create', options = {:class=> "button", :disable_with => "Please wait...",
             :onmouseover => "Tip('Create a new forum')"} %>

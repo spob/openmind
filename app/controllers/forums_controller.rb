@@ -26,7 +26,9 @@ class ForumsController < ApplicationController
   end
   
   def index
-    @forums = Forum.list params[:page], (current_user == :false ? 10 : current_user.row_limit)
+#    @forums = Forum.list params[:page], (current_user == :false ? 10 : current_user.row_limit)
+      @forums = Forum.list_by_forum_group
+      @forum_groups = ForumGroup.list_all
   end
 
   def create

@@ -5,6 +5,7 @@ class LookupCodesController < ApplicationController
   def index
     @types = [
       ["Enterprise Type",  "EnterpriseType"],
+      ["Forum Group",  "ForumGroup"],
       ["Release Status",  "ReleaseStatus"],
       ["Custom Field",  "CustomField"]
     ]

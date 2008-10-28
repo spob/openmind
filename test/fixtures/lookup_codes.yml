@@ -36,3 +36,15 @@ enterprise_type_xyz:
     short_name: xyz
     description: xyz description
     sort_value: 30
+
+forum_group_abc:
+    code_type: ForumGroup
+    short_name: abc
+    description: abc description
+    sort_value: 20
+
+forum_group_xyz:
+    code_type: ForumGroup
+    short_name: xyz
+    description: xyz description
+    sort_value: 30

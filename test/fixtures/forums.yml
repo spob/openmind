@@ -15,9 +15,15 @@
 
 bugs_forum:
   name: bugs_forum
-  mediators: quentin
+  mediators: allroles
   description: A forum to discuss product defects and work arounds
 
 empty_bugs_forum:
   name: empty
   description: A forum with no topics
+
+forum_with_group:
+  name: forum_with_group
+  mediators: quentin
+  description: A forum with a forum group
+  forum_group: forum_group_abc

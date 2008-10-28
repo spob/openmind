@@ -22,6 +22,7 @@ class Forum < ActiveRecord::Base
   has_and_belongs_to_many :enterprise_types
   has_many :comments, :through => :topics, :order => "id DESC"
   belongs_to :link_set
+  belongs_to :forum_group
   
   validates_presence_of :name
   validates_uniqueness_of :name 
@@ -36,6 +37,11 @@ class Forum < ActiveRecord::Base
   def self.list(page, per_page)
     paginate :page => page, :order => 'name ASC', 
       :per_page => per_page
+  end
+  
+  def self.list_by_forum_group forum_group=nil
+    return Forum.find(:all, :conditions => ["forum_group_id is null"], :order => 'name ASC') if forum_group.nil?
+    Forum.find_all_by_forum_group_id(forum_group.id, :order => 'name ASC')
   end
   
   def can_edit? user

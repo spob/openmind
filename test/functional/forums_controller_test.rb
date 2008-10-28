@@ -5,7 +5,7 @@ require 'forums_controller'
 class ForumsController; def rescue_action(e) raise e end; end
 
 class ForumsControllerTest < Test::Unit::TestCase
-  fixtures :forums, :users
+  fixtures :forums, :users, :lookup_codes
 
   def setup
     @controller = ForumsController.new
@@ -36,6 +36,7 @@ class ForumsControllerTest < Test::Unit::TestCase
   end
 
   def test_edit
+    assert_not_nil forums(:bugs_forum)
     get :edit, :id => forums(:bugs_forum)
 
     assert_response :success
