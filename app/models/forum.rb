@@ -69,8 +69,8 @@ class Forum < ActiveRecord::Base
   end
   
   def can_see? user
-    (!user.nil? and user.prodmgr?) or
-      can_edit? user or 
+    return true if user != :false and user.prodmgr?
+    can_edit? user or 
       (((groups.empty? and enterprise_types.empty?) or 
           !groups.select{|group| group.users.include? user}.empty? or
           !enterprise_types.select{|enterprise_type| enterprise_type.users.include? user}.empty?) and active)
