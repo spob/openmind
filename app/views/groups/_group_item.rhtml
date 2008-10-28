@@ -1,5 +1,5 @@
 <tr>
-  <td><%= h group_item.name %></td>
+  <td><%= link_to group_item.name, group_path(group_item.id) %></td>
   <td><%= h group_item.description %></td>
   <td><%= group_item.users.count %></td>
   <td>

@@ -7,7 +7,7 @@
           <%= truncate(StringUtils.strip_html(product_item.current_release.description), 500) %>
     <% end %>
   </div>
-  <td><%= product_item.name %></td>
+  <td><%= link_to product_item.name, product_path(product_item) %></td>
   <td><%= product_item.description %></td>
   <td class="center"><input type="checkbox" name="active" value="active" <%= "checked" if product_item.active?  %> disabled ></td>
   <td class="center">

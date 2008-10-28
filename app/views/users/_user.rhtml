@@ -1,5 +1,5 @@
 <tr>
-  <td><%= h user.email %></td>
+  <td><%= link_to user.email, {:action => 'show', :id => user.id} %></td>
   <td><%= h user.full_name %></td>
   <td class="center"><%= h user.available_enterprise_votes %></td>
   <td class="center"><%= h user.available_user_votes %></td>

@@ -9,7 +9,9 @@ module ForumsHelper
     return '-' if last_comment.nil?
     subject = ""
 	subject += "RE: " if forum.comments.size > 1
-	subject += link_to last_comment.topic.title, topic_path(last_comment.topic)
+	subject += link_to(last_comment.topic.title, 
+          topic_path(last_comment.topic, :anchor => last_comment.id),
+          html_options = {:onmouseover => "Tip('Jump to this post')"})
     subject = boldify(subject) if last_comment.topic.unread_comment?(current_user)
     
     comment = last_comment.body
@@ -28,7 +30,8 @@ module ForumsHelper
     
     author = user_display_name topic.last_comment.user
     author = boldify(author) if topic.unread_comment?(current_user)
-    "#{author} wrote \"#{truncate StringUtils.strip_html(comment), 40}\"<br/>#{om_date_time topic.last_comment.created_at}"
+    "#{author} wrote \"#{link_to truncate(StringUtils.strip_html(comment), 40), 
+      topic_path(topic.id, :anchor => topic.last_comment.id)}\"<br/>#{om_date_time topic.last_comment.created_at}"
   end
   
 

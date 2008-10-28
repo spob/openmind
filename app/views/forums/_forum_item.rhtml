@@ -1,7 +1,8 @@
 <% if forum_item.can_see? current_user %>
   <tr>
     <td>
-      <b><%= strike_text(forum_item.name, !forum_item.active) %></b>
+      <b><%= link_to strike_text(forum_item.name, !forum_item.active), forum_path(forum_item),
+        html_options = {:onmouseover => "Tip('View details for the #{forum_item.name} forum')"} %></b>
       <br/>
       <%= h forum_item.description %>
     </td>

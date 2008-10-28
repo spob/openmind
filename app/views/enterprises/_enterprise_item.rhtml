@@ -1,5 +1,5 @@
    <tr>
-      <td><%= h enterprise_item.name%></td>
+      <td><%= link_to enterprise_item.name, enterprise_path(enterprise_item) %></td>
       <td>
         <%= enterprise_item.enterprise_type.short_name unless enterprise_item.enterprise_type.nil? %>
       </td>

@@ -11,10 +11,15 @@
 </tr>  
 
 <% for @idea in @ideas %>
-  <div id="idea_body<%= @idea.id %>" style="display:none;" ><%= textilize(truncate(@idea.description, 500)) %></div>
+  <div id="idea_body<%= @idea.id %>" style="display:none;" >  
+    <%= textilize(white_list(@idea.description)) if @idea.textiled %>
+    <%= white_list(@idea.description) unless @idea.textiled %>
+  </div>
   <tr class="<%= cycle("even", "odd") %>">
       <td class="center"><%= h @idea.id %></td>
-    <td><div onmouseover="TagToTip('idea_body<%= @idea.id %>')"><%= bold_text(@idea.title, @idea.unread?(current_user)) %></div></td>
+    <td><div onmouseover="TagToTip('idea_body<%= @idea.id %>')">
+        <%= link_to bold_text(@idea.title, @idea.unread?(current_user)),
+        {:action => 'show', :id => @idea } %></div></td>
     <td class="center"><%= h status(@idea) %></td>
     <td class="center"><div id="vote_count<%= @idea.id %>"><%= @idea.votes.size %></div></td>
     <td class="center"><%= bold_text(@idea.comments.size.to_s, @idea.unread_comment?(current_user))%></td>
