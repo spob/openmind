@@ -20,7 +20,8 @@ class ForumsController < ApplicationController
   def show
     @forum = Forum.find(params[:id])
     unless @forum.can_see? current_user or prodmgr?
-      flash[:error] = "You have insuffient permissions to access forum"
+      flash[:error] = "You must be logged on to access forum" if current_user == :false
+      flash[:error] = "You have insuffient permissions to access forum" unless current_user == :false
       redirect_to forums_path
     end
   end
