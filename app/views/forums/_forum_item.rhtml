@@ -1,4 +1,4 @@
-<% if prodmgr? or forum_item.can_edit? current_user or (forum_item.can_see? current_user and forum_item.active) %>
+<% if forum_item.can_see? current_user %>
   <tr>
     <td>
       <b><%= strike_text(forum_item.name, !forum_item.active) %></b>

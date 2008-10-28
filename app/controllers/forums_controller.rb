@@ -26,9 +26,9 @@ class ForumsController < ApplicationController
   end
   
   def index
-#    @forums = Forum.list params[:page], (current_user == :false ? 10 : current_user.row_limit)
-      @forums = Forum.list_by_forum_group
-      @forum_groups = ForumGroup.list_all
+    #    @forums = Forum.list params[:page], (current_user == :false ? 10 : current_user.row_limit)
+    @forums = Forum.list_by_forum_group.find_all{|forum| forum.can_see? current_user}
+    @forum_groups = ForumGroup.list_all current_user
   end
 
   def create
@@ -109,8 +109,8 @@ class ForumsController < ApplicationController
   end
   
   def self.forum_access_denied user
-      return "You must be logged on to access this forum" if user == :false
-      return "You have insuffient permissions to access this forum" unless user == :false    
+    return "You must be logged on to access this forum" if user == :false
+    return "You have insuffient permissions to access this forum" unless user == :false    
   end
   
   private

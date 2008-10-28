@@ -1,8 +1,8 @@
 # == Schema Information
 # Schema version: 20081021172636
-#
+# 
 # Table name: forums
-#
+# 
 #  id           :integer(4)      not null, primary key
 #  name         :string(50)      not null
 #  description  :string(150)     not null
@@ -11,7 +11,7 @@
 #  updated_at   :datetime        not null
 #  active       :boolean(1)      default(TRUE), not null
 #  link_set_id  :integer(4)
-#
+# 
 
 class Forum < ActiveRecord::Base
   has_many :topics, :order => "pinned DESC, updated_at DESC", :dependent => :delete_all
@@ -69,7 +69,8 @@ class Forum < ActiveRecord::Base
   end
   
   def can_see? user
-    can_edit? user or 
+    (!user.nil? and user.prodmgr?) or
+      can_edit? user or 
       (((groups.empty? and enterprise_types.empty?) or 
           !groups.select{|group| group.users.include? user}.empty? or
           !enterprise_types.select{|enterprise_type| enterprise_type.users.include? user}.empty?) and active)
