@@ -20,8 +20,7 @@ class ForumsController < ApplicationController
   def show
     @forum = Forum.find(params[:id])
     unless @forum.can_see? current_user or prodmgr?
-      flash[:error] = "You must be logged on to access forum" if current_user == :false
-      flash[:error] = "You have insuffient permissions to access forum" unless current_user == :false
+      flash[:error] = ForumsController.forum_access_denied(current_user)
       redirect_to forums_path
     end
   end
@@ -105,6 +104,11 @@ class ForumsController < ApplicationController
       }
       format.js  { do_rjs_toggle_forum_details_box }
     end
+  end
+  
+  def self.forum_access_denied user
+      return "You must be logged on to access this forum" if user == :false
+      return "You have insuffient permissions to access this forum" unless user == :false    
   end
   
   private

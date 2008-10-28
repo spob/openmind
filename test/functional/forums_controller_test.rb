@@ -64,4 +64,11 @@ class ForumsControllerTest < Test::Unit::TestCase
       Forum.find(forums(:bugs_forum).id)
     }
   end
+  
+  def test_access_denied
+    assert_equal "You must be logged on to access this forum", 
+      ForumsController.forum_access_denied(:false)
+    assert_equal "You have insuffient permissions to access this forum", 
+      ForumsController.forum_access_denied(users(:quentin))
+  end
 end

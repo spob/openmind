@@ -9,10 +9,10 @@ class WatchesController < ApplicationController
   verify :method => :delete, :only => [ :destroy, :destroy_topic_watch ],
     :redirect_to => { :controller => 'ideas', :action => :list }
   
-  # collection routes apparently can't take additonal parameters other than id...
-  # so, a bit of a kludge, if we can't pass a from parameter to indicate whether
-  # the action was originated from the list page or the show page, I added another
-  # action to indicate the difference
+  # collection routes apparently can't take additonal parameters other than
+  # id... so, a bit of a kludge, if we can't pass a from parameter to indicate
+  # whether the action was originated from the list page or the show page, I
+  # added another action to indicate the difference
   def create_from_show
     create "show"  
   end
@@ -22,8 +22,7 @@ class WatchesController < ApplicationController
       @forum = Forum.find(params[:id])
       
       unless @forum.can_see? current_user or prodmgr?
-      flash[:error] = "You must be logged on to access forum" if current_user == :false
-      flash[:error] = "You have insuffient permissions to access forum" unless current_user == :false
+        flash[:error] = ForumsController.forum_access_denied(current_user)
         redirect_to forums_path
       end
       
@@ -32,7 +31,7 @@ class WatchesController < ApplicationController
     rescue ActiveRecord::RecordNotFound     
       logger.error("Attempt to add watch to invalid forum #{params[:id]}")
       flash[:notice] = "Attempted to add watch to invalid forum"
-      #list
+      # #list
       
       respond_to do |format|
         format.html {render forum_path(@forum) }
@@ -54,8 +53,7 @@ class WatchesController < ApplicationController
       @topic = Topic.find(params[:id])
       
       unless @topic.forum.can_see? current_user or prodmgr?
-      flash[:error] = "You must be logged on to access forum" if current_user == :false
-      flash[:error] = "You have insuffient permissions to access forum" unless current_user == :false
+        flash[:error] = ForumsController.forum_access_denied(current_user)
         redirect_to forums_path
       end
       
@@ -63,7 +61,7 @@ class WatchesController < ApplicationController
     rescue ActiveRecord::RecordNotFound     
       logger.error("Attempt to add watch to invalid topic #{params[:id]}")
       flash[:notice] = "Attempted to add watch to invalid topic"
-      #list
+      # #list
       
       respond_to do |format|
         format.html {render topic_path(@topic) }
@@ -88,7 +86,7 @@ class WatchesController < ApplicationController
     rescue ActiveRecord::RecordNotFound     
       logger.error("Attempt to add watch to invalid idea #{params[:id]}")
       flash[:notice] = "Attempted to add watch to invalid idea"
-      #list
+      # #list
       
       respond_to do |format|
         format.html {render :controller => 'ideas', :action => 'list' }
@@ -112,7 +110,7 @@ class WatchesController < ApplicationController
     rescue ActiveRecord::RecordNotFound     
       logger.error("Attempt to remove watch from invalid idea #{params[:id]}")
       flash[:notice] = "Attempted to remove watch from invalid idea"
-      #list      
+      # #list
       respond_to do |format|
         format.html {render :controller => 'ideas', :action => 'list' }
         format.js  { do_idea_action   }
@@ -133,8 +131,7 @@ class WatchesController < ApplicationController
       @forum = Forum.find(params[:id])
       
       unless @forum.can_see? current_user or prodmgr?
-      flash[:error] = "You must be logged on to access forum" if current_user == :false
-      flash[:error] = "You have insuffient permissions to access forum" unless current_user == :false
+        flash[:error] = ForumsController.forum_access_denied(current_user)
         redirect_to forums_path
       end
       
@@ -142,7 +139,7 @@ class WatchesController < ApplicationController
     rescue ActiveRecord::RecordNotFound     
       logger.error("Attempt to remove watch from invalid forum #{params[:id]}")
       flash[:notice] = "Attempted to remove watch from invalid forum"
-      #list      
+      # #list
       respond_to do |format|
         format.html {render forum_path(@forum) }
         format.js  { do_forum_action   }
@@ -163,8 +160,7 @@ class WatchesController < ApplicationController
       @topic = Topic.find(params[:id])
       
       unless @topic.forum.can_see? current_user or prodmgr?
-      flash[:error] = "You must be logged on to access forum" if current_user == :false
-      flash[:error] = "You have insuffient permissions to access forum" unless current_user == :false
+        flash[:error] = ForumsController.forum_access_denied(current_user)
         redirect_to forums_path
       end
       
@@ -172,7 +168,7 @@ class WatchesController < ApplicationController
     rescue ActiveRecord::RecordNotFound     
       logger.error("Attempt to remove watch from invalid topic #{params[:id]}")
       flash[:notice] = "Attempted to remove watch from invalid topic"
-      #list      
+      # #list
       respond_to do |format|
         format.html {render forums_path }
         format.js  { do_topic_action   }
