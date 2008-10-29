@@ -9,7 +9,8 @@
 <%= error_messages_for 'idea_email_request' %>
 <% form_for :idea_email_request, 
   :url => { :action => "create_email_request" } do |form| %>
-  <div class="formTitle">Forward Idea <%= @idea_email_request.idea.id %></div>
+  <div class="formTitle">
+  <%= link_to theme_image_tag("icons/24x24/email.png", :alt=>"email", :title=> "email") %> Forward Idea <%= @idea_email_request.idea.id %></div>
   <div class="cssform widerLabel">
     <p>
       <%= form.hidden_field :idea_id %>
