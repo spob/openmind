@@ -1,8 +1,8 @@
 # == Schema Information
 # Schema version: 20081021172636
-#
+# 
 # Table name: polls
-#
+# 
 #  id           :integer(4)      not null, primary key
 #  title        :string(200)     not null
 #  close_date   :date            not null
@@ -10,7 +10,7 @@
 #  created_at   :datetime        not null
 #  active       :boolean(1)      not null
 #  updated_at   :datetime        not null
-#
+# 
 
 class Poll < ActiveRecord::Base
   after_update :save_options
@@ -20,6 +20,8 @@ class Poll < ActiveRecord::Base
   
   before_create :create_unselectable_poll_option
   
+  has_and_belongs_to_many :groups
+  has_and_belongs_to_many :enterprise_types
   has_many :poll_options,
     :dependent => :destroy,
     :conditions => { :selectable => true},
@@ -41,11 +43,29 @@ class Poll < ActiveRecord::Base
     total_responses == 0 and !active
   end
   
-  def self.list(page, include_unpublished, per_page)
-    paginate :page => page, 
-      :conditions => [ "active = 1 or ? = 1", include_unpublished],
-      :order => 'close_date DESC', 
-      :per_page => per_page
+  def self.list(page, include_unpublished, per_page, user)
+    page = 1 if page.nil?
+    @entries = WillPaginate::Collection.create(page, per_page) do |pager|
+      result = Poll.find(:all, 
+        :limit => pager.per_page, 
+        :offset => pager.offset, 
+        :conditions => [ "active = 1 or ? = 1", include_unpublished],
+        :order => 'close_date DESC').find_all{|poll| poll.can_see? user}
+      # inject the result array into the paginated collection:
+      pager.replace(result)
+
+      unless pager.total_entries
+        # the pager didn't manage to guess the total count, do it manually
+        pager.total_entries = 
+          Poll.find(:all, 
+          :conditions => [ "active = 1 or ? = 1", include_unpublished]).size
+      end
+    end
+    
+    #    paginate :page => page,
+    #      :conditions => [ "active = 1 or ? = 1", include_unpublished],
+    #      :order => 'close_date DESC',
+    #      :per_page => per_page
   end
   
   def create_unselectable_poll_option
@@ -107,7 +127,17 @@ class Poll < ActiveRecord::Base
           WHERE pur.user_id = ?
             AND po.poll_id = p.id)
         ORDER BY p.created_at
-      endsql
+    endsql
     Poll.find_by_sql([sql, user.id])
+  end
+  
+  def can_see? user
+    (user != :false and user.prodmgr?) or can_take? user
+  end
+  
+  def can_take? user
+    (((groups.empty? and enterprise_types.empty?) or 
+          !groups.select{|group| group.users.include? user}.empty? or
+          !enterprise_types.select{|enterprise_type| enterprise_type.users.include? user}.empty?) and active)
   end
 end

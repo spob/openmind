@@ -20,13 +20,31 @@
       <label for="close_date">Close Date:</label>
       <%= calendar_date_select :poll, :close_date, :popup => :force, :time => false, :class=> 'pollTxtField' %>
     </p>
+    <p>
+      <label>Restrict to User Groups:</label>
+      <% for group in Group.list_all %>
+        <span style="display:block;margin-left:10px;">
+          <%= check_box_tag "poll[group_ids][]", group.id, @poll.groups.include?(group) %>
+          <%= h group.name %>: <%= h group.description %>
+        </span>
+      <% end %>
+    </p>
+    <p>
+      <label>Restrict to Enterprise Types:</label>
+      <% for etype in EnterpriseType.list_all %>
+        <span style="display:block;margin-left:10px;">
+          <%= check_box_tag "poll[enterprise_type_ids][]", etype.id, @poll.enterprise_types.include?(etype) %>
+          <%= h etype.short_name %>: <%= h etype.description %>
+        </span>
+      <% end %>
+    </p>
   
     <span class="insideFormTitle" style="margin-left:92px;">Options</span>
     <div id="poll_options">
       <%= render :partial => 'poll_option', :collection => @poll.poll_options %>
     </div>
     <%= add_poll_option_link "Add a choice" %>
-        
+          
     <p>
       <label></label>
       <%= submit_tag 'Save', html_options = {:class=> "button", :disable_with => "Please wait..."} %>

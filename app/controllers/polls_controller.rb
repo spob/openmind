@@ -14,7 +14,7 @@ class PollsController < ApplicationController
   
   def index
     new
-    @polls = Poll.list params[:page], prodmgr?, current_user.row_limit
+    @polls = Poll.list params[:page], prodmgr?, current_user.row_limit, current_user
   end
 
   def show
@@ -58,6 +58,8 @@ class PollsController < ApplicationController
   end
 
   def create
+    params[:poll][:group_ids] ||= []
+    params[:poll][:enterprise_type_ids] ||= []
     @poll = Poll.new(params[:poll])
     @poll.poll_options << PollOption.new(:description => 'Choice 1...')
     @poll.poll_options << PollOption.new(:description => 'Choice 2...')
@@ -75,6 +77,8 @@ class PollsController < ApplicationController
   end
 
   def update
+    params[:poll][:group_ids] ||= []
+    params[:poll][:enterprise_type_ids] ||= []
     @poll = Poll.find(params[:id])
     if @poll.update_attributes(params[:poll])
       flash[:notice] = "Poll '#{@poll.title}' was successfully updated."

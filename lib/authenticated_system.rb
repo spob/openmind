@@ -71,7 +71,7 @@ module AuthenticatedSystem
   def offer_poll
     unless self.current_user.nil? or session[:check_for_polls] == "OFFERED" or !voter?
       session[:check_for_polls] = "OFFERED"
-      polls = self.current_user.open_polls
+      polls = self.current_user.open_polls.find_all{|poll| poll.can_take? current_user }
       if !polls.empty?
         @poll = polls[0]
         redirect_to present_survey_poll_path(@poll)

@@ -20,6 +20,7 @@ class Group < ActiveRecord::Base
   has_and_belongs_to_many :users, :join_table => 'group_members', 
     :class_name => 'User', :order => 'email ASC'
   has_and_belongs_to_many :forums
+  has_and_belongs_to_many :polls
   
   def can_delete?
     true

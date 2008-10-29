@@ -1,20 +1,20 @@
 <%content_for :head do -%>
-    
+
   <%= javascript_include_tag "swfobject" %>                
 <%end%>
 <%= javascript_include_tag "wz_tooltip.js", :cache => "cache/tooltip" %> 
 <% if prodmgr? %>
   <div id="actionButtons2">
     <%= link_to 'Edit', edit_poll_url(@poll), html_options = {:class=> "button",
-    :onmouseover => "Tip('Edit this poll')"} %>
+      :onmouseover => "Tip('Edit this poll')"} %>
     <%= link_to(
-     "Publish",
+      "Publish",
       publish_poll_path(:id => @poll),
       html_options = { :method => :post, :class=> "button",
         :onmouseover => "Tip('Publish this poll')"} ) unless @poll.active %>
-
+  
     <%= link_to(
-     "Unpublish",
+      "Unpublish",
       unpublish_poll_path(:id => @poll),
       html_options = { :method => :post, :class=> "button",
         :onmouseover => "Tip('Unpublish this poll')"} ) if @poll.active %>
@@ -28,57 +28,79 @@
 </div>
 <div class="cssform" style="<% if @poll.total_responses > 0 %>width:40%; float:left<% end %>">
   <p>
-   <label for="title">Title:</label>
+    <label for="title">Title:</label>
     <%= h @poll.title %>
   </p>
-
+  
   <p>
     <label for="close_date">Close Date:</label>
     <%= h format_date(@poll.close_date) %>
   </p>
-
-  <span class="insideFormTitle">Options</span>
-    <% for option in @poll.poll_options %>
-        <p>
-            <label for="option_description">&bull;</label>
-            <%= h option.description %>
-            (<%= number_to_percentage(option.percent_chosen, :precision => 2) %>,
-            <%= pluralize(option.user_responses.size, 'response') %>)
-        </p>
-        <div id='<%= "details#{option.id}" %>' style="<%= details_display_style %>">
-          <% if prodmgr? %>
-            <% for user in option.user_responses %>
-              <p>
-                  &nbsp;&nbsp;&rarr;&nbsp;<%= user.display_name true %>
-              </p>
-            <% end %>
-          <% end %>
-        </div>
-    <% end %>
+  <% if prodmgr? %>
     <p>
-      <label for="total">Total:</label> <%= pluralize(@poll.total_responses, 'response') %>
+      <label>Access:</label>
+      <% if  @poll.groups.empty? and @poll.enterprise_types.empty? %>
+        Public
+      <% else  %>
+        <% unless @poll.groups.empty?  %>
+          Restricted to the following User Groups:
+          <% for group in @poll.groups %><br />
+            &bull;&nbsp;<%= h group.name %><br />
+          <% end %>
+        <% end %>
+        <% unless @poll.enterprise_types.empty?  %>
+          <%= "<br/>" unless @poll.groups.empty? %>
+          Restricted to the following Enterprise Types:
+          <% for etype in @poll.enterprise_types %><br />
+            &bull;&nbsp;<%= h etype.short_name %><br />
+          <% end %>
+        <% end %>
+      <% end  %>
     </p>
+  <% end %>
+  
+  <span class="insideFormTitle">Options</span>
+  <% for option in @poll.poll_options %>
+    <p>
+      <label for="option_description">&bull;</label>
+      <%= h option.description %>
+      (<%= number_to_percentage(option.percent_chosen, :precision => 2) %>,
+      <%= pluralize(option.user_responses.size, 'response') %>)
+    </p>
+    <div id='<%= "details#{option.id}" %>' style="<%= details_display_style %>">
+      <% if prodmgr? %>
+        <% for user in option.user_responses %>
+          <p>
+            &nbsp;&nbsp;&rarr;&nbsp;<%= user.display_name true %>
+          </p>
+        <% end %>
+      <% end %>
+    </div>
+  <% end %>
+  <p>
+    <label for="total">Total:</label> <%= pluralize(@poll.total_responses, 'response') %>
+  </p>
   <% if prodmgr? %>
     <div id="show_images" style="<%= details_button_display_style "SHOW" %>">
-       <p>
-          <%= link_to_remote("Show Respondent Details",
-         {:url => toggle_details_polls_path(:id => @poll)},
-         {:class => "button"} ) %>
-        </p>
+      <p>
+        <%= link_to_remote("Show Respondent Details",
+          {:url => toggle_details_polls_path(:id => @poll)},
+          {:class => "button"} ) %>
+      </p>
     </div>
   
     <div id="hide_images" style="<%= details_button_display_style "HIDE" %>">
-       <p>
-         <%= link_to_remote("Hide Respondent Details",
-         {:url => toggle_details_polls_path(:id => @poll)},
-         {:class => "button"} ) %>
-        </p>
+      <p>
+        <%= link_to_remote("Hide Respondent Details",
+          {:url => toggle_details_polls_path(:id => @poll)},
+          {:class => "button"} ) %>
+      </p>
     </div>
   <% end %>
 </div>
 
 <% if @poll.total_responses > 0 %>
   <div id="pollChart">
-     <%= @graph %>
+    <%= @graph %>
   </div>
 <% end %>

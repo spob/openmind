@@ -16,6 +16,7 @@
 class EnterpriseType < LookupCode  
   has_many :enterprises,
     :dependent => :destroy
+  has_and_belongs_to_many :polls
   has_many :users, :through => :enterprises
   
   def self.list_all
