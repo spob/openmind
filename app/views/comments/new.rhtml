@@ -14,7 +14,8 @@
 <% form_for :comment, :html => {:id => "new-comment"}, 
   :url => comments_path(:id => object.id) do |form| %>
   <input type="hidden" value="<%= object.class.to_s %>" name="type"/>
-  <div class="formTitle">Add Comment</div>
+  <div class="formTitle"><%= theme_image_tag("icons/32x32/comment.png", 
+  options = {:alt=>"Ideas"}) %>Add Comment</div>
   <div class="cssform widerLabel">
     <% if object.class.to_s == "Idea" %>
       <p>
