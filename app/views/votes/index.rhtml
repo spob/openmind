@@ -45,4 +45,11 @@
     </tr>
   <% end %>
 </table>
-<p><%= will_paginate @votes %></p>
+<p>
+  <div class="digg_pagination">
+    <div class="page_info">
+      <%= page_entries_info @votes %>
+    </div>
+    <%= will_paginate @votes, :container => false %>
+  </div>
+</p>

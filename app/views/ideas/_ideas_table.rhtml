@@ -1,37 +1,44 @@
 <div id="data">
-<table cellspacing="0" cellpadding="0" class="cssform">
-<tr>
-  <th class="center">#</th>
-  <th>Title</th>
-  <th>Status</th>
-  <th>Votes</th>
-  <th>Comments</th>
-  <th>Product</th>
-  <th>Actions</th>
-</tr>  
-
-<% for @idea in @ideas %>
-  <div id="idea_body<%= @idea.id %>" style="display:none;" >  
-    <%= textilize(white_list(@idea.description)) if @idea.textiled %>
-    <%= white_list(@idea.description) unless @idea.textiled %>
-  </div>
-  <tr class="<%= cycle("even", "odd") %>">
-      <td class="center"><%= h @idea.id %></td>
-    <td><div onmouseover="TagToTip('idea_body<%= @idea.id %>')">
-        <%= link_to bold_text(@idea.title, @idea.unread?(current_user)),
-        {:action => 'show', :id => @idea } %></div></td>
-    <td class="center"><%= h status(@idea) %></td>
-    <td class="center"><div id="vote_count<%= @idea.id %>"><%= @idea.votes.size %></div></td>
-    <td class="center"><%= bold_text(@idea.comments.size.to_s, @idea.unread_comment?(current_user))%></td>
-    <td><%= link_to h(@idea.product.name), product_path(@idea.product) %></td>
-    <td class="nowrap"><%=render(:partial => "list_actions", :object => @idea, :locals => { :from => "list"})%></td>
-  </tr>
-<% end %>
-<% if @ideas.empty? %>
-  <tr class="even">
-    <td colspan="7" class="center">No records found</td>
-  </tr>
-<% end %>
-</table>
-<p><%= will_paginate @ideas %></p>
+  <table cellspacing="0" cellpadding="0" class="cssform">
+    <tr>
+      <th class="center">#</th>
+      <th>Title</th>
+      <th>Status</th>
+      <th>Votes</th>
+      <th>Comments</th>
+      <th>Product</th>
+      <th>Actions</th>
+    </tr>  
+    
+    <% for @idea in @ideas %>
+      <div id="idea_body<%= @idea.id %>" style="display:none;" >  
+        <%= textilize(white_list(@idea.description)) if @idea.textiled %>
+        <%= white_list(@idea.description) unless @idea.textiled %>
+      </div>
+      <tr class="<%= cycle("even", "odd") %>">
+        <td class="center"><%= h @idea.id %></td>
+        <td><div onmouseover="TagToTip('idea_body<%= @idea.id %>')">
+            <%= link_to bold_text(@idea.title, @idea.unread?(current_user)),
+              {:action => 'show', :id => @idea } %></div></td>
+        <td class="center"><%= h status(@idea) %></td>
+        <td class="center"><div id="vote_count<%= @idea.id %>"><%= @idea.votes.size %></div></td>
+        <td class="center"><%= bold_text(@idea.comments.size.to_s, @idea.unread_comment?(current_user))%></td>
+        <td><%= link_to h(@idea.product.name), product_path(@idea.product) %></td>
+        <td class="nowrap"><%=render(:partial => "list_actions", :object => @idea, :locals => { :from => "list"})%></td>
+      </tr>
+    <% end %>
+    <% if @ideas.empty? %>
+      <tr class="even">
+        <td colspan="7" class="center">No records found</td>
+      </tr>
+    <% end %>
+  </table>
+  <p>
+    <div class="digg_pagination">
+      <div class="page_info">
+        <%= page_entries_info @ideas %>
+      </div>
+      <%= will_paginate @ideas, :container => false %>
+    </div>
+  </p>
 </div>

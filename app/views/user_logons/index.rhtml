@@ -17,5 +17,12 @@
   <%= render :partial => 'user_logon', :collection => @user_logons %>
 
 </table>
-<p><%= will_paginate @user_logons %></p>
 </div>
+  <p>
+    <div class="digg_pagination">
+      <div class="page_info">
+        <%= page_entries_info @user_logons %>
+      </div>
+      <%= will_paginate @user_logons, :container => false %>
+    </div>
+  </p>

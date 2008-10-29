@@ -42,5 +42,13 @@
     <%= render :partial => @user_requests %>
 
 </table>
-<p><%= will_paginate @user_requests %></p>
+  <p>
+    <div class="digg_pagination">
+      <div class="page_info">
+        <%= page_entries_info @user_requests, :entry_name => 'account request' %>
+      </div>
+      <%= will_paginate @user_requests, :container => false %>
+    </div>
+  </p>
+
 </div>

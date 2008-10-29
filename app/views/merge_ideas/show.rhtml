@@ -49,4 +49,11 @@
     </tr>
   <% end %>
 </table>
-<%= will_paginate @ideas %>
+  <p>
+    <div class="digg_pagination">
+      <div class="page_info">
+        <%= page_entries_info @ideas %>
+      </div>
+      <%= will_paginate @ideas, :container => false %>
+    </div>
+  </p>

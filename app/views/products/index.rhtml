@@ -30,4 +30,11 @@
   <%= render :partial => 'product_item', :collection => @products %>
 
 </table>
-<p><%= will_paginate @products %></p>
+  <p>
+    <div class="digg_pagination">
+      <div class="page_info">
+        <%= page_entries_info @products %>
+      </div>
+      <%= will_paginate @products, :container => false %>
+    </div>
+  </p>

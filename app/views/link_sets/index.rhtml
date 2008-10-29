@@ -2,29 +2,36 @@
 <%= error_messages_for 'link_set' %>
 <%= render :partial => "tab_menu" %>
 <div id="tabBody" style="position:relative; padding-top:15px;">
-<h1><%= theme_image_tag("icons/32x32/linkset.png", options = {:alt=>"Link Sets"}) %>Link Sets</h1>
-<table cellspacing="0" cellpadding="0" class="cssform">
-  <tr>
-    <th>Name</th>
-    <th>Label</th>
-    <th>Default?</th>
-    <th>Links</th>
-    <th>Action</th>
-  </tr>
-  <tr>
-    <% form_for :link_set, :url => link_sets_path do |form| %>
-      <td><%= form.text_field :name, { :size => 30, :maxlength => 30 } %></td>
-      <td><%= form.text_field :label, { :size => 30, :maxlength => 30 } %></td>
-      <td> <%= form.check_box :default_link_set %></td>
-      <td>0</td>
-      <td><%= submit_tag 'Create', options = {:class=> "button", :disable_with => "Please wait...",
-        :onmouseover => "Tip('Create a new link_set')"} %></td>
-      <%= set_focus_to_id_in_list_form 'link_set_name' -%>
+  <h1><%= theme_image_tag("icons/32x32/linkset.png", options = {:alt=>"Link Sets"}) %>Link Sets</h1>
+  <table cellspacing="0" cellpadding="0" class="cssform">
+    <tr>
+      <th>Name</th>
+      <th>Label</th>
+      <th>Default?</th>
+      <th>Links</th>
+      <th>Action</th>
     </tr>
-  <% end %>
-  
-  <%= render :partial => @link_sets %>
-  
-</table>
-<p><%= will_paginate @link_sets %></p>
+    <tr>
+      <% form_for :link_set, :url => link_sets_path do |form| %>
+        <td><%= form.text_field :name, { :size => 30, :maxlength => 30 } %></td>
+        <td><%= form.text_field :label, { :size => 30, :maxlength => 30 } %></td>
+        <td> <%= form.check_box :default_link_set %></td>
+        <td>0</td>
+        <td><%= submit_tag 'Create', options = {:class=> "button", :disable_with => "Please wait...",
+          :onmouseover => "Tip('Create a new link_set')"} %></td>
+        <%= set_focus_to_id_in_list_form 'link_set_name' -%>
+      </tr>
+    <% end %>
+    
+    <%= render :partial => @link_sets %>
+      
+  </table>
+  <p>
+    <div class="digg_pagination">
+      <div class="page_info">
+        <%= page_entries_info @link_sets, :entry_name => 'link set' %>
+      </div>
+      <%= will_paginate @link_sets, :container => false %>
+    </div>
+  </p>
 </div>

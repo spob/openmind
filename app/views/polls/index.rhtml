@@ -33,4 +33,11 @@
     <%= render :partial => 'poll_item', :collection => @polls %>
 
 </table>
-<p><%= will_paginate @polls %></p>
+  <p>
+    <div class="digg_pagination">
+      <div class="page_info">
+        <%= page_entries_info @polls %>
+      </div>
+      <%= will_paginate @polls, :container => false %>
+    </div>
+  </p>

@@ -28,5 +28,12 @@
   </tr>
   <%=render(:partial => "group_item", :collection => @groups)%>
   </table>
-  <p><%= will_paginate @groups %></p>
+  <p>
+    <div class="digg_pagination">
+      <div class="page_info">
+        <%= page_entries_info @groups, :entry_name => 'user group' %>
+      </div>
+      <%= will_paginate @groups, :container => false %>
+    </div>
+  </p>
 </div>

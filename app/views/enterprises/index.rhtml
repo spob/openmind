@@ -57,4 +57,11 @@
   
   <%= render :partial => 'enterprise_item', :collection => @enterprises %>
 </table>
-<p><%= will_paginate @enterprises %></p>
+<p>
+  <div class="digg_pagination">
+    <div class="page_info">
+      <%= page_entries_info @enterprises %>
+    </div>
+    <%= will_paginate @enterprises, :container => false %>
+  </div>
+</p>

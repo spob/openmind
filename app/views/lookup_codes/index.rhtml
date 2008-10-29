@@ -26,5 +26,12 @@
     
     <%= render :partial => 'lookup_code_item', :collection => @lookup_codes %>
   </table>
-  <p><%= will_paginate @lookup_codes %></p>
+  <p>
+    <div class="digg_pagination">
+      <div class="page_info">
+        <%= page_entries_info @lookup_codes, :entry_name => 'lookup code' %>
+      </div>
+      <%= will_paginate @lookup_codes, :container => false %>
+    </div>
+  </p>
 </div>

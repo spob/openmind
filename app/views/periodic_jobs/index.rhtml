@@ -1,22 +1,29 @@
 <%= javascript_include_tag "wz_tooltip.js", :cache => "cache/tooltip" %> 
 <%= render :partial => "tab_menu" %>
 <div id="tabBody" style="position:relative; padding-top:15px;">
-<h1><%= theme_image_tag("icons/32x32/periodicJobs.png", options = {:alt=>"Periodic Jobs"}) %>Periodic Jobs</h1>
+  <h1><%= theme_image_tag("icons/32x32/periodicJobs.png", options = {:alt=>"Periodic Jobs"}) %>Periodic Jobs</h1>
   <div id="actionButtons2">
     Last Check: <%= format_date_time(TaskSchedulerBatch.get_batch.updated_at) unless TaskSchedulerBatch.get_batch.nil? %>
   </div>
-<table cellspacing="0" cellpadding="0" class="cssform">
-  <tr>
-    <th>Job</th>
-    <th>Command</th>
-    <th>Last Run</th>
-    <th>Last Result</th>
-    <th>Next Run</th>
-    <th>Action</th>
-  </tr>
-  
+  <table cellspacing="0" cellpadding="0" class="cssform">
+    <tr>
+      <th>Job</th>
+      <th>Command</th>
+      <th>Last Run</th>
+      <th>Last Result</th>
+      <th>Next Run</th>
+      <th>Action</th>
+    </tr>
+    
     <%= render :partial => 'periodic_job_item', :collection => @jobs %>
-
-</table>
-<p><%= will_paginate @jobs %></p>
+    
+  </table>
+  <p>
+    <div class="digg_pagination">
+      <div class="page_info">
+        <%= page_entries_info @jobs, :entry_name => 'job' %>
+      </div>
+      <%= will_paginate @jobs, :container => false %>
+    </div>
+  </p>
 </div>

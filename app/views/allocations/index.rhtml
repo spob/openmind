@@ -48,4 +48,11 @@
   <%= render :partial => 'allocation_item', :collection => @allocations %>
 
 </table>
-<p><%= will_paginate @allocations %></p>
+  <p>
+    <div class="digg_pagination">
+      <div class="page_info">
+        <%= page_entries_info @allocations, :entry_name => 'allocation' %>
+      </div>
+      <%= will_paginate @allocations, :container => false %>
+    </div>
+  </p>

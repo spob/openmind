@@ -50,4 +50,11 @@
   </tr>
 <% end %>
 </table>
-<%= will_paginate @releases %>
+  <p>
+    <div class="digg_pagination">
+      <div class="page_info">
+        <%= page_entries_info @releases %>
+      </div>
+      <%= will_paginate @releases, :container => false %>
+    </div>
+  </p>
