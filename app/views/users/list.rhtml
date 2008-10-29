@@ -6,7 +6,7 @@
 
 <%= render :partial => "tab_menu"%>
 <div id="tabBody" style="position:relative; padding-top:15px;">
-  <h1><%=theme_image_tag("icons/32x32/users.png", :alt=>"users")%>Users</h1>
+  <h1><%=theme_image_tag("icons/32x32/user.png", :alt=>"users")%>Users</h1>
   <div id="actionButtons" style="top:30px;">
     <% restrict_to "sysadmin" do %>
       <%= button_to 'Create User', option = {:action => 'new'}, 
