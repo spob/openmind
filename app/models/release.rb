@@ -1,8 +1,8 @@
 # == Schema Information
 # Schema version: 20081021172636
-#
+# 
 # Table name: releases
-#
+# 
 #  id                :integer(4)      not null, primary key
 #  version           :string(20)      not null
 #  product_id        :integer(4)      not null
@@ -15,7 +15,7 @@
 #  download_url      :string(300)
 #  updated_at        :datetime        not null
 #  textiled          :boolean(1)      not null
-#
+# 
 
 class Release < ActiveRecord::Base
   has_many :ideas,
@@ -32,14 +32,16 @@ class Release < ActiveRecord::Base
   
   def self.list(page, product_id, per_page)
     paginate :page => page, 
-        :conditions => ['product_id = ?', product_id],
-        :order => 'version', 
+      :conditions => ['product_id = ?', product_id],
+      :order => 'version', 
       :per_page => per_page
   end
   
-  def self.list_by_status(status_id)
-    Release.find_all_by_release_status_id(status_id,
-      :order => "to_days(release_date) * if (release_date < now(),  -1, 1)")
+  def self.list_by_status(page, per_page, status_id)
+    paginate :page => page,       
+      :conditions => ['release_status_id = ?', status_id],
+      :order => "to_days(release_date) * if (release_date < now(),  -1, 1)", 
+      :per_page => per_page
   end
   
   def can_delete?

@@ -22,7 +22,9 @@ class ReleasesController < ApplicationController
     @release_statuses ||= ReleaseStatus.find(:all, :order => "sort_value ASC")
     session[:release_status_id] = params[:release_status_id] unless params[:release_status_id].nil?
     session[:release_status_id] ||= @release_statuses[0].id
-    @releases = Release.list_by_status session[:release_status_id]
+    @releases = Release.list_by_status params[:page], 
+      current_user.row_limit, 
+      session[:release_status_id]
   end
 
   # GETs should be safe (see http://www.w3.org/2001/tag/doc/whenToUseGet.html)
