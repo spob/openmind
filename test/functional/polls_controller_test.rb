@@ -47,7 +47,7 @@ class PollsControllerTest < Test::Unit::TestCase
   end
 
   def test_update
-    put :update, :id => polls(:color_poll)
+    put :update, :id => polls(:color_poll), :poll => {}
     assert_response :redirect
     assert_redirected_to :controller => 'polls', :action => 'show',
       :id => polls(:color_poll).id
