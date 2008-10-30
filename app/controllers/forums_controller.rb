@@ -1,5 +1,5 @@
 class ForumsController < ApplicationController
-  before_filter :login_required, :except => [:index, :show]
+  before_filter :login_required, :except => [:index, :show, :rss]
   access_control [:new, :edit, :create, :update, :destroy ] => 'sysadmin'
   helper :topics
 
@@ -106,6 +106,23 @@ class ForumsController < ApplicationController
       }
       format.js  { do_rjs_toggle_forum_details_box }
     end
+  end
+
+  # Build an rss feed to be notified of new announcements
+  def rss
+    forum = Forum.find(params[:id])
+    render_rss_feed_for forum.comments_by_topic, {
+      :feed => {
+        :title => "New OpenMind Comments for Forum \"#{forum.name}\"",
+        :link => forum_url(forum.id),
+        :pub_date => :created_at
+      },
+      :item => {
+        :title => :rss_headline,
+        :description => :body,
+        :link => Proc.new{|comment| "#{topic_url(comment.topic.id, :anchor => comment.id)}" }
+      }
+    }
   end
   
   def self.forum_access_denied user

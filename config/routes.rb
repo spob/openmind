@@ -15,7 +15,8 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :announcements, :collection => { :preview => :get, :rss => :get }
   map.resources :comments, :collection => { :preview => :get }
   map.resources :enterprises, :member => { :next => :get, :previous => :get }
-  map.resources :forums, :collection => { :search => :get }
+  map.resources :forums, :collection => { :search => :get, 
+    :rss => :get }
   map.resources :groups
   map.resources :link_sets, :member => { :update_sort => :post }
   map.resources :lookup_codes

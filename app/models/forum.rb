@@ -21,6 +21,7 @@ class Forum < ActiveRecord::Base
   has_and_belongs_to_many :groups
   has_and_belongs_to_many :enterprise_types
   has_many :comments, :through => :topics, :order => "id DESC"
+  has_many :comments_by_topic, :source => 'comments', :through => :topics, :order => "topic_id ASC, id ASC"
   belongs_to :link_set
   belongs_to :forum_group
   

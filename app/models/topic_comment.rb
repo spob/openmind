@@ -39,4 +39,8 @@ class TopicComment < Comment
     }
     User.find(:all, :conditions => ["id in (?)", User.find_by_sql(sql).collect(&:id)]).sort_by{|u| u.topic_comments.size * -1}
   end
+  
+  def rss_headline
+    "Forum: #{topic.forum.name}, Topic: #{topic.title}"
+  end
 end
