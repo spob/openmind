@@ -17,6 +17,13 @@ bugs_forum:
   name: bugs_forum
   mediators: allroles
   description: A forum to discuss product defects and work arounds
+  restrict_topic_creation: false
+
+bugs_forum_restrict_creation:
+  name: bugs_forum restricted
+  mediators: allroles
+  description: A forum to discuss product defects and work arounds
+  restrict_topic_creation: true
 
 empty_bugs_forum:
   name: empty

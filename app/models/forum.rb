@@ -75,4 +75,8 @@ class Forum < ActiveRecord::Base
           !groups.select{|group| group.users.include? user}.empty? or
           !enterprise_types.select{|enterprise_type| enterprise_type.users.include? user}.empty?) and active)
   end
+  
+  def can_create_topic? user
+    user != :false and (!self.restrict_topic_creation or can_edit? user)
+  end
 end

@@ -51,4 +51,11 @@ class ForumTest < Test::Unit::TestCase
     assert !Forum.list_by_forum_group.empty?
     assert !Forum.list_by_forum_group(lookup_codes(:forum_group_abc)).empty?
   end
+  
+  def test_can_create_topic
+    assert !forums(:bugs_forum).can_create_topic?(:false)
+    assert forums(:bugs_forum).can_create_topic?(users(:quentin))
+    assert !forums(:bugs_forum_restrict_creation).can_create_topic?(users(:quentin))
+    assert forums(:bugs_forum_restrict_creation).can_create_topic?(users(:allroles))
+  end
 end

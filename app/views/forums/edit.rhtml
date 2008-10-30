@@ -34,6 +34,10 @@
       <% end %>
     </p>
     <p>
+      <label for="active">Blog Style Forum:</label>      
+      <%= form.check_box :restrict_topic_creation %>
+    </p>
+    <p>
       <label>Restrict to User Groups:</label>
       <% for group in Group.list_all %>
         <span style="display:block;margin-left:10px;">

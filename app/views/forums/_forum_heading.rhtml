@@ -17,6 +17,10 @@
       <% end %>
     </p>
     <p>
+      <label>Blog Style Forum:</label>
+      <%= @forum.restrict_topic_creation %> (if true, only mediators can create new topics)
+    </p>
+    <p>
       <label>Access:</label>
       <% if  @forum.groups.empty? and @forum.enterprise_types.empty? %>
         Public
