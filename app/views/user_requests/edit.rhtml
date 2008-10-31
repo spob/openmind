@@ -1,80 +1,102 @@
 <%content_for :bodyTag do -%>
-      <%= set_focus_to_id 'user_request_email' %>
+  <%= set_focus_to_id 'user_request_email', "toggleEnterpriseType();" %>
 <%end%>
 <%= javascript_include_tag "wz_tooltip.js", :cache => "cache/tooltip" %> 
 <%= render :partial => "tab_menu"%>
 <div id="tabBody" style="position:relative; padding-top:15px;">
-<%= error_messages_for 'user_request' %>
-<% form_for :user_request, :url => user_request_path(@user_request), 
+  <%= error_messages_for 'user_request' %>
+  <% form_for :user_request, :url => user_request_path(@user_request), 
     :html => {:method => :put } do |form| %>
-  <div class="formTitle">
-  <%= theme_image_tag("icons/16x16/userEdit.png", 
-            options = {:alt=>"OpenMind Account Request Detail"}) %>
-  Edit Account Requests</div>
-  <div class="cssform" style="margin-top:0;">
-    <p>
-      <label for="user_email">Email:</label>
-      <%= form.text_field :email, { } %>
-    </p>
-    <p>
-      <label for="user_email">First Name:</label>
-      <%= form.text_field :first_name, { } %>
-    </p>
-    <p>
-      <label for="user_email">Last Name:</label><%= form.text_field :last_name, { } %>
-    </p>
-    <p>
-      <label for="enterprise_id">User Enterprise Name:</label>
-      <%= form.text_field :enterprise_name, {}  %>
-    </p>
-    <p>
-      <label for="allocation type">Selected Enterprise:</label>
-      <%= form.collection_select :enterprise_id, @enterprises, :id, :name %>
-    </p>
-    <p>
-      <label for="enterprise_type">Enterprise Type:</label>
-      <%= form.collection_select :enterprise_type_id, 
-        EnterpriseType.findall(true), :id, :short_name %>
-    </p>
-    <% if allocmgr? %>
+    <div class="formTitle">
+      <%= theme_image_tag("icons/16x16/userEdit.png", 
+        options = {:alt=>"OpenMind Account Request Detail"}) %>
+    Edit Account Requests</div>
+    <div class="cssform" style="margin-top:0;">
       <p>
-        <label for="initial_enterprise_allocation">Enterprise Allocation:</label>
-        <%= form.text_field :initial_enterprise_allocation, {}  %>
+        <label for="user_email">Email:</label>
+        <%= form.text_field :email, { } %>
       </p>
       <p>
-        <label for="initial_user_allocation">User Allocation:</label>
-        <%= form.text_field :initial_user_allocation, {}  %>
+        <label for="user_email">First Name:</label>
+        <%= form.text_field :first_name, { } %>
       </p>
-    <% end %>
-    <p>
-      <label for="time_zone">User Time Zone:</label>
-      <%= form.time_zone_select :time_zone, TimeZone.us_zones %>
-    </p>
-    <p>
-      <label>Roles:</label>
-      <% for role in Role.list %>
-        <span style="display:block;margin-left:10px;">
-          <%= check_box_tag "user_request[role_ids][]", role.id, @user_request.roles.include?(role) %>
-          <%= h role.description %>
-        </span>
+      <p>
+        <label for="user_email">Last Name:</label><%= form.text_field :last_name, { } %>
+      </p>
+      <p>
+        <label for="enterprise_id">User Enterprise Name:</label>
+        <%= form.text_field :enterprise_name, {}  %>
+      </p>
+      <p>
+        <label for="allocation type">Selected Enterprise:</label>
+        <%= form.collection_select :enterprise_id, 
+          @enterprises, 
+          :id, 
+          :name, 
+          {},
+          {:onchange => "toggleEnterpriseType();"} %>
+      </p>
+      <div id="etype">
+        <p>
+          <label for="enterprise_type">Enterprise Type:</label>
+          <%= form.collection_select :enterprise_type_id, 
+            EnterpriseType.findall(true), 
+            :id, 
+            :short_name %>
+        </p>
+      </div>
+      <% if allocmgr? %>
+        <p>
+          <label for="initial_enterprise_allocation">Enterprise Allocation:</label>
+          <%= form.text_field :initial_enterprise_allocation, {}  %>
+        </p>
+        <p>
+          <label for="initial_user_allocation">User Allocation:</label>
+          <%= form.text_field :initial_user_allocation, {}  %>
+        </p>
       <% end %>
-    </p>
-    <p>
-      <label>User Groups:</label>
-      <% for group in Group.list_all %>
-        <span style="display:block;margin-left:10px;">
-          <%= check_box_tag "user_request[group_ids][]", group.id, @user_request.groups.include?(group) %>
-          <%= h group.name %>: <%= h group.description %>
-        </span>
-      <% end %>
-    </p>
-    <p>
-      <label></label>
-      <%= submit_tag 'Save', html_options = {:class=> "button", :disable_with => "Please wait...",
+      <p>
+        <label for="time_zone">User Time Zone:</label>
+        <%= form.time_zone_select :time_zone, TimeZone.us_zones %>
+      </p>
+      <p>
+        <label>Roles:</label>
+        <% for role in Role.list %>
+          <span style="display:block;margin-left:10px;">
+            <%= check_box_tag "user_request[role_ids][]", role.id, @user_request.roles.include?(role) %>
+            <%= h role.description %>
+          </span>
+        <% end %>
+      </p>
+      <p>
+        <label>User Groups:</label>
+        <% for group in Group.list_all %>
+          <span style="display:block;margin-left:10px;">
+            <%= check_box_tag "user_request[group_ids][]", group.id, @user_request.groups.include?(group) %>
+            <%= h group.name %>: <%= h group.description %>
+          </span>
+        <% end %>
+      </p>
+      <p>
+        <label></label>
+        <%= submit_tag 'Save', html_options = {:class=> "button", :disable_with => "Please wait...",
           :onmouseover => "Tip('Save changes to user request')"} %>
-      <%= link_to 'Cancel', user_request_path(@user_request), html_options = {:class=> "button",
+        <%= link_to 'Cancel', user_request_path(@user_request), html_options = {:class=> "button",
           :onmouseover => "Tip('Do not save changes to user request')"} %>
-    </p>
-  </div>
-<% end %>
+      </p>
+    </div>
+  <% end %>
 </div>
+
+<script type="text/javascript" language="JavaScript">
+  <!--
+  function toggleEnterpriseType() {
+    if(document.getElementById("user_request_enterprise_id").selectedIndex == 0) { 
+      document.getElementById("etype").style.display = "block"; 
+    }
+    else { 
+      document.getElementById("etype").style.display = "none"; 
+    }
+  }
+  //-->
+</script>

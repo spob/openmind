@@ -1,6 +1,6 @@
 <%= calendar_date_select_includes "blue" %>
 <%= error_messages_for 'allocation' %>
-  <%content_for :bodyTag do -%>
+<%content_for :bodyTag do -%>
   <%= set_focus_to_id 'allocation_quantity' -%>
 <%end%>
 <% form_for :allocation, :url => allocation_path(@allocation), 

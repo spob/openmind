@@ -131,13 +131,13 @@ module ApplicationHelper
   
   # Got this code from
   # http://blog.wolfman.com/articles/2006/10/29/setting-the-focus-in-a-form
-  def set_focus_to_id(id)
+  def set_focus_to_id(id, othertxt=nil)
     #  javascript_tag("$('#{id}').focus()");
     #    RES: FIXES IE onfocus BUG (i think  the browser looses it's css styles when done the other way
     #    -- nevertheless, though it's now fixed, this is considered "obtrusive javascript",
     #    it would be better to implement this "unobstrusively" -- something to come back to later.
     #    Reverted back to the above way RBS 1/15/2008
-    "onload=\"document.getElementById('#{id}').focus();\""    
+    "onload=\"document.getElementById('#{id}').focus();#{othertxt}\""    
   end
 
   def announcement_link announcement
