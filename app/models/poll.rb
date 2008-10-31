@@ -22,6 +22,10 @@ class Poll < ActiveRecord::Base
   
   has_and_belongs_to_many :groups
   has_and_belongs_to_many :enterprise_types
+  has_many :comments, 
+    :class_name => "PollComment", 
+    :dependent => :delete_all,
+    :order => "id ASC" 
   has_many :poll_options,
     :dependent => :destroy,
     :conditions => { :selectable => true},

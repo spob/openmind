@@ -126,8 +126,16 @@ class PollsController < ApplicationController
         if poll_option.poll.taken_survey?(current_user)
           take_survey_failed "You can only answer this survey once"
         else
-          poll_option.user_responses << current_user
-          poll_option.save
+          Poll.transaction do
+            poll_option.user_responses << current_user
+            unless params[:comment_body].blank?
+              poll_option.poll.comments << PollComment.new(
+                :user_id => current_user.id,
+                :body => params[:comment_body])
+              poll_option.poll.save
+            end
+            poll_option.save
+          end
           redirect_to poll_path(poll_option.poll)
         end
       end
@@ -172,6 +180,18 @@ class PollsController < ApplicationController
     end
   end
   
+  def display_comments
+    poll = Poll.find(params[:id])
+    
+    respond_to do |format|
+      format.html { 
+        present_survey
+        render present_survey_poll_path(poll)
+      }
+      format.js  { do_rjs_display_comments poll }
+    end
+  end
+  
   private
   
   def take_survey_failed(msg)
@@ -192,16 +212,25 @@ class PollsController < ApplicationController
       if session[:polls_show_toggle_detail] == "HIDE"
         page.visual_effect :blind_up, "hide_images", :duration => 0.2
         page.visual_effect :blind_down, "show_images", :duration => 1
+        page.visual_effect :blind_up, "show_comments", :duration => 1
         for option in poll.poll_options
           page.visual_effect :squish, "details#{option.id}", :duration => 0.5
         end
       else
         page.visual_effect :blind_up, "show_images", :duration => 0.2
         page.visual_effect :blind_down, "hide_images", :duration => 1
+        page.visual_effect :blind_down, "show_comments", :duration => 1
         for option in poll.poll_options
           page.visual_effect :blind_down, "details#{option.id}", :duration => 1
         end
       end
+    end
+  end
+  
+  def do_rjs_display_comments  poll
+    render :update do |page|
+      page.visual_effect :blind_up, "show_comment_button", :duration => 0.2
+      page.visual_effect :blind_down, "addcomment", :duration => 1
     end
   end
 end

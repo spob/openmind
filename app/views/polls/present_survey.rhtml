@@ -1,7 +1,6 @@
 <%content_for :head do -%>
- 
-                 
-<%end%>
+  <%= javascript_include_tag :fckeditor %>
+<% end  %>
 <%= javascript_include_tag "wz_tooltip.js", :cache => "cache/tooltip" %> 
 <div class="formTitle"><%= h @poll.title %></div>
 
@@ -9,20 +8,36 @@
 <% form_for(:poll, :url => take_survey_poll_path(@poll), 
   :html => {:method => :post }) do |form| %>
   <div class="cssform pollOptions">
-      <% for option in @poll.poll_options %>
-        <span style="display:block;margin-left:10px;">
-          <%= radio_button_tag "poll_option_id", option.id, false -%><%= h option.description %>
-        </span>
-      <% end %>
-      <% unselectable = @poll.unselectable_poll_option %>
-      <div id="nothanks" style="display:none;">
-        <%= radio_button_tag "poll_option_id", unselectable.id, false, { :id => "unselected"} -%><%= h unselectable.description %>
-      </div>
-      Would you like to answer this survey?
-     
-      <%= submit_tag 'Answer Survey', html_options = {:name => 'answer', :class=> "button", :disable_with => "Please wait..."} %>
-      <%= link_to 'Not Now, Perhaps Later', home_path, html_options = {:class=> "button"} %>
-      <%= submit_tag 'No Thanks', html_options = {:name => 'no', :class=> "button",
-        :onclick => "document.getElementById('unselected').checked = true;this.disabled=true;this.value='Please wait...';this.form.submit();"} %>
+    <% for option in @poll.poll_options %>
+      <span style="display:block;margin-left:10px;">
+        <%= radio_button_tag "poll_option_id", option.id, false -%><%= h option.description %>
+      </span>
+    <% end %>
+    <% unselectable = @poll.unselectable_poll_option %>
+    <div id="nothanks" style="display:none;">
+      <%= radio_button_tag "poll_option_id", unselectable.id, false, { :id => "unselected"} -%><%= h unselectable.description %>
+    </div>
+  
+    <div id="show_comment_button">
+      <br/>
+      <%= link_to_remote("Add a Comment",
+        {:url => display_comments_polls_path(:id => @poll)},
+        {:class => "button"} ) %>
+    </div>
+    <div id="addcomment"  style="display:none;">
+      <span style="display:block;margin-left:10px;">
+        <br/>
+        <br/>
+        <strong>Additional Comments:</strong><br/>
+        <%=  text_area_tag :comment_body %>
+      </span>
+    </div>
+    <br/>
+    Would you like to answer this survey?
+  
+    <%= submit_tag 'Answer Survey', html_options = {:name => 'answer', :class=> "button", :disable_with => "Please wait..."} %>
+    <%= link_to 'Not Now, Perhaps Later', home_path, html_options = {:class=> "button"} %>
+    <%= submit_tag 'No Thanks', html_options = {:name => 'no', :class=> "button",
+      :onclick => "document.getElementById('unselected').checked = true;this.disabled=true;this.value='Please wait...';this.form.submit();"} %>
   </div>
 <% end %>

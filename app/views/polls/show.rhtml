@@ -58,7 +58,7 @@
       <% end  %>
     </p>
   <% end %>
-  
+            
   <span class="insideFormTitle">Options</span>
   <% for option in @poll.poll_options %>
     <p>
@@ -88,7 +88,27 @@
           {:class => "button"} ) %>
       </p>
     </div>
-  
+    <% if prodmgr? %>
+      <div id="show_comments" style="<%= details_display_style %>">
+        <% unless @poll.comments.empty? %>
+          <p>
+            <label for="comment">Comments:</label>
+          </p>
+        <% end %>
+        <% for comment in @poll.comments %>
+          <p>
+            <strong>
+              <%= user_display_name comment.user %> 
+              wrote at 
+              <%= om_date_time comment.created_at %>:
+            </strong>
+            <br/>
+            <%= comment.body %>
+          </p>
+        <% end %>
+      </div>
+    <% end %>
+        
     <div id="hide_images" style="<%= details_button_display_style "HIDE" %>">
       <p>
         <%= link_to_remote("Hide Respondent Details",
