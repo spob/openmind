@@ -28,6 +28,10 @@
       <%= @user_request.enterprise_name  %>
     </p>
     <p>
+      <label>Enterprise Type:</label>
+      <%= @user_request.enterprise_type.short_name unless @user_request.enterprise_type.nil? %>
+    </p>
+    <p>
       <label for="enterprise_action">Enterprise Action:</label>
       <%= h(enterprise_action(@user_request)) %>
     </p>

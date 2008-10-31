@@ -31,6 +31,11 @@
       <label for="allocation type">Selected Enterprise:</label>
       <%= form.collection_select :enterprise_id, @enterprises, :id, :name %>
     </p>
+    <p>
+      <label for="enterprise_type">Enterprise Type:</label>
+      <%= form.collection_select :enterprise_type_id, 
+        EnterpriseType.findall(true), :id, :short_name %>
+    </p>
     <% if allocmgr? %>
       <p>
         <label for="initial_enterprise_allocation">Enterprise Allocation:</label>

@@ -29,7 +29,8 @@ class UserRequest < ActiveRecord::Base
   validates_numericality_of :initial_user_allocation, :only_integer => true, 
     :allow_nil => false, :greater_than_or_equal_to => 0
   
-  belongs_to :enterprise  
+  belongs_to :enterprise
+  belongs_to :enterprise_type
   has_and_belongs_to_many :groups
   has_and_belongs_to_many :roles
   

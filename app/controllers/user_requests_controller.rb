@@ -119,7 +119,8 @@ class UserRequestsController < ApplicationController
         # is there an exact match?
         enterprise = Enterprise.find_by_name(@user_request.enterprise_name)
         if enterprise.nil?
-          Enterprise.new(:name => @user_request.enterprise_name).save! 
+          Enterprise.new(:name => @user_request.enterprise_name,
+          :enterprise_type => @user_request.enterprise_type).save! 
           enterprise = Enterprise.find_by_name(@user_request.enterprise_name)
         end
       else
