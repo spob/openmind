@@ -57,8 +57,12 @@
         <% end %>
       <% end  %>
     </p>
+    <p>
+      <label>Public Visible?:</label>
+      <%= @poll.results_publically_visible %>
+    </p>
   <% end %>
-            
+              
   <span class="insideFormTitle">Options</span>
   <% for option in @poll.poll_options %>
     <p>
@@ -108,7 +112,7 @@
         <% end %>
       </div>
     <% end %>
-        
+          
     <div id="hide_images" style="<%= details_button_display_style "HIDE" %>">
       <p>
         <%= link_to_remote("Hide Respondent Details",

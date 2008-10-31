@@ -38,13 +38,17 @@
         </span>
       <% end %>
     </p>
+    <p>
+      <label>Results Public?:</label>
+      <%= form.check_box :results_publically_visible %>
+    </p>
   
     <span class="insideFormTitle" style="margin-left:92px;">Options</span>
     <div id="poll_options">
       <%= render :partial => 'poll_option', :collection => @poll.poll_options %>
     </div>
     <%= add_poll_option_link "Add a choice" %>
-          
+            
     <p>
       <label></label>
       <%= submit_tag 'Save', html_options = {:class=> "button", :disable_with => "Please wait..."} %>

@@ -136,7 +136,7 @@ class Poll < ActiveRecord::Base
   end
   
   def can_see? user
-    (user != :false and user.prodmgr?) or can_take? user
+    results_publically_visible or (user != :false and user.prodmgr?) or can_take? user
   end
   
   def can_take? user
