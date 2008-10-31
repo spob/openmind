@@ -46,6 +46,14 @@
       <%= @user_request.status  %>
     </p>
     <p>
+      <label>Roles:</label><br />
+      <% for role in @user_request.roles %>
+        <% if @user_request.roles.include?(role) %>
+          &bull;&nbsp;<%= h role.description %><br />
+        <% end %>
+      <% end %>
+    </p>
+    <p>
       <label>User Groups:</label><br />
       <% for group in @user_request.groups %>
         &bull;&nbsp;<%= h group.name %><br />

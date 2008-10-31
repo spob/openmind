@@ -46,6 +46,15 @@
       <%= form.time_zone_select :time_zone, TimeZone.us_zones %>
     </p>
     <p>
+      <label>Roles:</label>
+      <% for role in Role.list %>
+        <span style="display:block;margin-left:10px;">
+          <%= check_box_tag "user_request[role_ids][]", role.id, @user_request.roles.include?(role) %>
+          <%= h role.description %>
+        </span>
+      <% end %>
+    </p>
+    <p>
       <label>User Groups:</label>
       <% for group in Group.list_all %>
         <span style="display:block;margin-left:10px;">

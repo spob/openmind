@@ -19,6 +19,7 @@ class UserRequestsController < ApplicationController
   def create
     @user_request = UserRequest.new(params[:user_request])
     @user_request.status = UserRequest.pending
+    @user_request.roles << Role.find_default_roles
     @user_request.enterprise = Enterprise.find_by_active(true, 
       :conditions => ["name like ?", "%#{@user_request.enterprise_name}%"], 
       :order => "name ASC")
@@ -83,6 +84,7 @@ class UserRequestsController < ApplicationController
 
   def update
     params[:user_request][:group_ids] ||= []
+    params[:user_request][:role_ids] ||= []
     @user_request = UserRequest.find(params[:id])
     if @user_request.update_attributes(params[:user_request])
       flash[:notice] = 'Account request was successfully updated.'
@@ -134,8 +136,8 @@ class UserRequestsController < ApplicationController
       user = User.new(:email => @user_request.email, :first_name => @user_request.first_name,
         :last_name => @user_request.last_name, :enterprise => enterprise)
       user.new_random_password
-      user.roles << Role.find_default_roles
       user.groups << @user_request.groups
+      user.roles << @user_request.roles
       user.save!
     
       if @user_request.initial_user_allocation > 0

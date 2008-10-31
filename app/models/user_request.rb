@@ -31,6 +31,7 @@ class UserRequest < ActiveRecord::Base
   
   belongs_to :enterprise  
   has_and_belongs_to_many :groups
+  has_and_belongs_to_many :roles
   
   attr_accessor :enterprise_action
   
