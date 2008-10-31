@@ -2,10 +2,19 @@
 <%= render :partial => "tab_menu"%>
 <div id="tabBody" style="position:relative; padding-top:15px;">
   <div id="actionButtons2">
+    <%= link_to '<',
+      previous_user_request_path(@user_request), html_options = {:class => 'button',
+      :onmouseover => "Tip('View the previous user request')"} %>
+    <%= link_to '>',
+      next_user_request_path(@user_request), html_options = {:class => 'button',
+      :onmouseover => "Tip('View the next user request')"} %>
     <% if @user_request.status == UserRequest.pending %>
       <%= link_to 'Edit', edit_user_request_path(@user_request), html_options = {:class=> "button",
         :onmouseover => "Tip('Edit this user request')"} %>
     <% end %>
+    <%= link_to 'List User Requests',
+      user_requests_path, html_options = {:class => 'button',
+      :onmouseover => "Tip('Return to a list of user requests')"} %>
   </div>
   <div class="formTitle">
     <%= theme_image_tag("icons/16x16/user.png", 

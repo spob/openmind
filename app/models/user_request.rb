@@ -19,6 +19,7 @@
 #
 
 class UserRequest < ActiveRecord::Base
+  acts_as_ordered :order => 'id DESC' 
   validates_presence_of     :email, :last_name, :enterprise_name
   validates_length_of       :email,    :within => 3..100
   validates_email_format_of :email
@@ -55,7 +56,7 @@ class UserRequest < ActiveRecord::Base
   def self.list(page, per_page, statuses, limit = :all)
     paginate :page => page, 
       :conditions => ["status in (?)", statuses],
-      :order => 'created_at DESC' ,
+      :order => 'id DESC' ,
       :limit => limit,
       :per_page => per_page
   end

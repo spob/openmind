@@ -155,6 +155,16 @@ class UserRequestsController < ApplicationController
       end
     end
   end
+
+  def next
+    @user_request = UserRequest.find(params[:id]).next
+    render :action => 'show'
+  end
+
+  def previous
+    @user_request = UserRequest.find(params[:id]).previous
+    render :action => 'show'
+  end
   
   private
   
