@@ -82,6 +82,7 @@ class UserRequestsController < ApplicationController
   end
 
   def update
+    params[:user_request][:group_ids] ||= []
     @user_request = UserRequest.find(params[:id])
     if @user_request.update_attributes(params[:user_request])
       flash[:notice] = 'Account request was successfully updated.'
@@ -134,6 +135,7 @@ class UserRequestsController < ApplicationController
         :last_name => @user_request.last_name, :enterprise => enterprise)
       user.new_random_password
       user.roles << Role.find_default_roles
+      user.groups << @user_request.groups
       user.save!
     
       if @user_request.initial_user_allocation > 0

@@ -46,6 +46,15 @@
       <%= form.time_zone_select :time_zone, TimeZone.us_zones %>
     </p>
     <p>
+      <label>User Groups:</label>
+      <% for group in Group.list_all %>
+        <span style="display:block;margin-left:10px;">
+          <%= check_box_tag "user_request[group_ids][]", group.id, @user_request.groups.include?(group) %>
+          <%= h group.name %>: <%= h group.description %>
+        </span>
+      <% end %>
+    </p>
+    <p>
       <label></label>
       <%= submit_tag 'Save', html_options = {:class=> "button", :disable_with => "Please wait...",
           :onmouseover => "Tip('Save changes to user request')"} %>

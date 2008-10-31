@@ -30,6 +30,7 @@ class UserRequest < ActiveRecord::Base
     :allow_nil => false, :greater_than_or_equal_to => 0
   
   belongs_to :enterprise  
+  has_and_belongs_to_many :groups
   
   attr_accessor :enterprise_action
   
