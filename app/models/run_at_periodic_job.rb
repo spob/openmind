@@ -44,7 +44,8 @@ class RunAtPeriodicJob < PeriodicJob
       if Time.zone.now.hour * 60 + Time.zone.now.min < run_at_minutes
         self.next_run_at = Time.local(Time.zone.now.year, Time.zone.now.month, Time.zone.now.day, hours, minutes, 0)
       else
-        self.next_run_at = Time.local(Time.zone.now.year, Time.zone.now.month, Time.zone.now.day + 1, hours, minutes, 0)
+        self.next_run_at = Time.local(Time.zone.now.year, Time.zone.now.month, Time.zone.now.day, hours, minutes, 0) + 
+          1.day
       end
     
     rescue NoMethodError
