@@ -3,12 +3,12 @@
 <% end  %>
 
 <%content_for :bodyTag do -%>
-    <%= set_focus_to_id 'comment_body' %>
+  <%= set_focus_to_id 'comment_body' %>
 <%end%>
 <%= javascript_include_tag "wz_tooltip.js", :cache => "cache/tooltip" %> 
 <%= error_messages_for 'comment' %>
 <% form_for(:comment, :url => comment_path(@comment), 
-    :html => {:method => :put }) do |form| %>
+  :html => {:method => :put }) do |form| %>
   <div id="actionButtons2">
     <%= link_to theme_image_tag("icons/24x24/ideasList.png", 
       :alt=>"Show Idea", :title=> "Show Idea"),
@@ -21,15 +21,21 @@
   </div>
   <div class="formTitle">Edit Comment</div>
   <div class="cssform widerLabel">
-    <p>
-      <% if @comment.class.to_s == "IdeaComment"  %>
+    <% if @comment.class.to_s == "IdeaComment"  %>
+      <p>
         <label for="idea">For Idea:</label>
         <%= h @comment.idea.user_friendly_idea_name %>  
-      <% else %>
-        <label for="topic">For Topic:</label>
+      </p>
+    <% else %>
+      <p>
+        <label for="topic">Forum</label>
+        <%= h @comment.topic.forum.name %>  
+      </p>
+      <p>
+        <label for="topic">Topic:</label>
         <%= h @comment.topic.title %>  
-      <% end%>
-    </p>
+      </p>
+    <% end%>
     <p>
       <label for="comment">Comment:</label>
       <%= form.text_area :body,  {:cols => 70, :rows => 8 } if @comment.textiled %>

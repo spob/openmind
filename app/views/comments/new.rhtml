@@ -33,7 +33,11 @@
       </p>
     <% else %>
       <p>
-        <label for="topic">For Topic:</label>
+        <label for="topic">Forum:</label>
+        <%= h @topic.forum.name %>  
+      </p>
+      <p>
+        <label for="topic">Topic:</label>
         <%= h @topic.title %>  
       </p>
     <% end %>
