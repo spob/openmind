@@ -54,5 +54,14 @@
     <th>Last Post</th>
     <th>Action</th>
   </tr>
-  <%=render(:partial => "topic_item", :collection => @forum.topics)%>
+  <%=render(:partial => "topic_item", :collection => @topics)%>
 </table>
+
+<p>
+  <div class="digg_pagination">
+    <div class="page_info">
+      <%= page_entries_info @topics %>
+    </div>
+    <%= will_paginate @topics, :container => false %>
+  </div>
+</p>

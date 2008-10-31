@@ -19,6 +19,7 @@ class ForumsController < ApplicationController
   
   def show
     @forum = Forum.find(params[:id])
+    @topics = Topic.list params[:page], current_user.row_limit, @forum
     unless @forum.can_see? current_user or prodmgr?
       flash[:error] = ForumsController.forum_access_denied(current_user)
       redirect_to forums_path

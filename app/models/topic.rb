@@ -38,8 +38,10 @@ class Topic < ActiveRecord::Base
     comments.count <= 1
   end
   
-  def self.list(page, per_page)
-    paginate :page => page, :order => 'title ASC', 
+  def self.list(page, per_page, forum)
+    paginate :page => page, 
+      :conditions => ["forum_id = ?", forum.id],
+      :order => "pinned DESC, updated_at DESC", 
       :per_page => per_page
   end
   
