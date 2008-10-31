@@ -1,5 +1,4 @@
-<div id="sidebar1" class="sidebar">  
-  
+<div id="sidebar1" class="sidebar">   
   <div class="sideBarTitle">Announcements</div>
   <div class="sideBarItem">
     <div class="unorderListNavContainer">
@@ -17,7 +16,7 @@
   <% link_set = nvl(forum_link_set, LinkSet.get_default_link_set) %>
   
   <%=render(:partial => "link_sets/link_sidebar", :locals => {:link_set => link_set})%>
-   
+     
   <div class="sideBarTitle">Most Active Users</div>
   <div class="sideBarItem">
     <div class="unorderListNavContainer">
@@ -31,5 +30,10 @@
     </div>
   </div>
   
+  <% unless @forum.nil? %>
+    <% tiptxt= "Subscribe to be notified of postings in this forum" %>
+    <a href="<%= url_for(:action => 'rss', :id => @forum, :only_path => false) %>" onmouseover="Tip('<%= tiptxt %>')"><%= theme_image_tag("icons/14x14/feed-icon-14x14.png", :border=>0) %></a>
+    <span style="font-size:0.75em;" onmouseover="Tip('<%= tiptxt %>')">Subscribe via RSS</span>
+  <% end %>
   <div style="clear: left"></div>
 </div>

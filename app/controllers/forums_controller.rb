@@ -119,7 +119,7 @@ class ForumsController < ApplicationController
       },
       :item => {
         :title => :rss_headline,
-        :description => :body,
+        :description => :rss_body,
         :link => Proc.new{|comment| "#{topic_url(comment.topic.id, :anchor => comment.id)}" }
       }
     }

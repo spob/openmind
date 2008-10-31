@@ -1,6 +1,9 @@
 <%content_for :head do -%>
   <%= theme_stylesheet_link_tag 'sideBarRight' %>
+  <%= auto_discovery_link_tag(:rss, url_options = {:action=>'rss'}, tag_options = {:title=>'OpenMind: Announcements'})%>
 <%end%>
+
+
 <%content_for :bodyTag do -%>
   <%= set_focus_to_id 'forum_search' -%>              
 <%end%>

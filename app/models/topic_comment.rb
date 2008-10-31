@@ -43,4 +43,8 @@ class TopicComment < Comment
   def rss_headline
     "Forum: #{topic.forum.name}, Topic: #{topic.title}"
   end
+  
+  def rss_body
+    "<i>#{user.display_name} wrote:</i><br/>#{body}"
+  end
 end
