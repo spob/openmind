@@ -22,8 +22,10 @@
   </p>
 <% end %>
 
+
+<% session[:forums_search] ||= "" %>
 <% @hits.each_value do |topic_hit| %>
-  <h3><%= link_to highlight(topic_hit.topic.title, session[:forums_search], '<span class="highlight">\1</span>'),
+  <h3><%= link_to highlight(topic_hit.topic.title, session[:forums_search].split, '<span class="highlight">\1</span>'),
     topic_path(topic_hit.topic.id) %></h3>
   <%=render(:partial => "comments/comment_item", :collection => topic_hit.comments)%>
   <br/>
