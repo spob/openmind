@@ -59,6 +59,7 @@ class TopicsController < ApplicationController
   end
   
   def show
+    session[:forums_search] = nil
     @topic = Topic.find(params[:id])
     unless @topic.forum.can_see? current_user or prodmgr?
       flash[:error] = ForumsController.forum_access_denied(current_user)

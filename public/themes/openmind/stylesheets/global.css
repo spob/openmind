@@ -517,10 +517,15 @@ div.progressBar div.background {
     width: 0%;
 }
 
-.css1 { font-size: 1.0em; }
+span.highlight {
+    background-color: yellow;
+    font-weight: bold;
+}
+
+.css1 { font-size: 0.7em; }
 .css2 { font-size: 1.4em; }
-.css3 { font-size: 1.8em; }
-.css4 { font-size: 2.2em; }
+.css3 { font-size: 2.1em; }
+.css4 { font-size: 2.5em; }
 
 .nobr {white-space:nowrap;}
 
