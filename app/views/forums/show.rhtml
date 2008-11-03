@@ -29,31 +29,27 @@
 
 <% form_tag(search_topics_path, :class => 'cssform searchform', :name => 'search' ) do -%>
   <div id="search_help" style="display:none;" >  
-    <p>
+    <p style="font-size:1.2em">
       The following search options are supported:
     </p>
-    <ul>
+    <ul style="font-size:1.2em">
       <li><b>AND</b>: This is the default option. 'cat dog' will find records 
       matching 'cat' AND 'dog'.</li>
       <li><b>NOT</b>: 'cat -dog' will find records matching 'cat' AND NOT 'dog'.</li>
       <li><b>INCLUDE</b>: 'cat +me' will find records matching 'cat' and 'me',
       even if 'me' is smaller than the +min_word_size+</li>
       <li><b>""</b>: Quoted terms are matched as phrases. '"cat dog"' will find 
-        records matching the whole phrase. Quoted terms can be preceded by the NOT 
+        records matching the whole phrase. Quoted terms can be preceded <br/>by the NOT 
         operator; 'cat -"big dog"' etc. Quoted terms can include words shorter than 
       the +min_word_size+.</li>
     </ul>
   </div>
-  <p style="text-align: right">
-    <%= theme_image_tag("icons/16x16/question.png", 
-      options = {:alt=>"Help", 
-        :onmouseover=>"TagToTip('search_help')"}) %>
-  </p>
   <p>
     <label for="search">Search Forum:</label>
     <%= text_field_tag 'search', 
       "", 
-      options = { :id => "forum_search", :size => "50" } %>
+      options = { :id => "forum_search",
+      :onmouseover=>"TagToTip('search_help')"} %>
     <%= hidden_field_tag(:forum_id, value = @forum.id) %>
     <%= submit_tag 'Search', html_options = {:name => nil, :class=> "button",
       :onmouseover => "Tip('Search topics and topic comments')"} %>
