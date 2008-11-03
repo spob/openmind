@@ -1,11 +1,18 @@
+require "migration_helpers"
+
 class CreateWatches < ActiveRecord::Migration
+  extend MigrationHelpers
+  
   def self.up
     create_table :watches, :id => false  do |t|
-      t.column :user_id,  :integer, :null => false
-      t.column :idea_id,  :integer, :null => false
+      t.references :user, :null => false
+      t.references :idea, :null => false
       t.column :lock_version, :integer, :default => 0
-      t.column :created_at, :datetime, :null => false
+      t.timestamps
     end
+    
+    add_foreign_key(:watches, :user_id, :users)
+    add_foreign_key(:watches, :idea_id, :ideas)
     
     add_index :watches, [:user_id, :idea_id], :unique => true
   end

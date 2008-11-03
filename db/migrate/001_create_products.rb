@@ -4,7 +4,7 @@ class CreateProducts < ActiveRecord::Migration
       t.column :name,  :string, :limit => 30, :null => false
       t.column :description,  :string, :limit => 200, :null => false
       t.column :active, :boolean, :default => true, :null => false
-      t.column :created_at, :datetime, :null => false
+      t.timestamps
       t.column :lock_version, :integer, :default => 0
     end
     

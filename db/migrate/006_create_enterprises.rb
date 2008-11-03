@@ -4,7 +4,7 @@ class CreateEnterprises < ActiveRecord::Migration
       t.column :name, :string, :limit => 50, :null => false
       t.column :active, :boolean, :default => true, :null => false
       t.column :lock_version, :integer, :default => 0
-      t.column :created_at, :datetime, :null => false
+      t.timestamps
     end
     
     add_index :enterprises, :name, :unique => true

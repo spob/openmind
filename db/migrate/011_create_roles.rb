@@ -5,7 +5,7 @@ class CreateRoles < ActiveRecord::Migration
       t.column :description, :string, :limit => 50, :null => false
       t.column :default_role, :bool, :default => false
       t.column :lock_version, :integer, :default => 0
-      t.column :created_at, :datetime, :null => false
+      t.timestamps
     end
     
     add_index :roles, :title, :unique => true

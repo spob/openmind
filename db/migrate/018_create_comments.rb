@@ -1,13 +1,19 @@
+require "migration_helpers"
+
 class CreateComments < ActiveRecord::Migration
+  extend MigrationHelpers
+  
   def self.up
     create_table :comments, :options => 'DEFAULT CHARSET=utf8' do |t|
-      t.column :user_id,:integer, :null => false
-      t.column :idea_id,:integer, :null => false
+      t.references :user, :null => false
+      t.references :idea, :null => false
       t.column :body, :string, :null => false
-      t.column :created_at, :datetime, :null => false 
-      t.column :updated_at, :datetime, :null => false
+      t.timestamps
       t.column :lock_version, :integer, :default => 0
     end
+    
+    add_foreign_key(:comments, :user_id, :users)
+    add_foreign_key(:comments, :idea_id, :ideas)
   end
 
   def self.down

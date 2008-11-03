@@ -1,15 +1,22 @@
+require "migration_helpers"
+
 class CreateIdeas < ActiveRecord::Migration
+  extend MigrationHelpers
+  
   def self.up
     create_table :ideas, :options => 'DEFAULT CHARSET=utf8' do |t|
-      t.column :user_id, :integer, :null => false
-      t.column :product_id, :integer, :null => false
-      t.column :release_id, :integer
+      t.references :user, :null => false
+      t.references :product, :null => false
+      t.references :release
       t.column :title, :string, :limit => 100, :null => false
       t.column :description, :string, :null => false
-      t.column :created_at, :datetime, :null => false
-      t.column :updated_at, :datetime, :null => false 
+      t.timestamps
       t.column :lock_version, :integer, :default => 0
     end
+      
+    add_foreign_key(:ideas, :user_id, :users)
+    add_foreign_key(:ideas, :product_id, :products)
+    add_foreign_key(:ideas, :release_id, :releases)
   end
 
   def self.down

@@ -5,7 +5,7 @@ class CreateLookupCodes < ActiveRecord::Migration
       t.column :short_name,  :string, :limit => 20, :null => false
       t.column :description,  :string, :limit => 50, :null => false
       t.column :sort_value, :integer, :null => false, :default => 100
-      t.column :created_at, :datetime, :null => false
+      t.timestamps
       t.column :lock_version, :integer, :default => 0
     end
     
