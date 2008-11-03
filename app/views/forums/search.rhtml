@@ -12,11 +12,28 @@
 <h1><%= theme_image_tag("icons/32x32/forums.png", options = {:alt=>"Search Forum"}) %>Search Forums</h1>
 
 <% form_tag(search_forums_path, :class => 'cssform searchform', :name => 'search' ) do -%>
+  <div id="search_help" style="display:none;" >  
+    <p style="font-size:1.2em">
+      The following search options are supported:
+    </p>
+    <ul style="font-size:1.2em">
+      <li><b>AND</b>: This is the default option. 'cat dog' will find records 
+      matching 'cat' AND 'dog'.</li>
+      <li><b>NOT</b>: 'cat -dog' will find records matching 'cat' AND NOT 'dog'.</li>
+      <li><b>INCLUDE</b>: 'cat +me' will find records matching 'cat' and 'me',
+      even if 'me' is smaller than the +min_word_size+</li>
+      <li><b>""</b>: Quoted terms are matched as phrases. '"cat dog"' will find 
+        records matching the whole phrase. Quoted terms can be preceded <br/>by the NOT 
+        operator; 'cat -"big dog"' etc. Quoted terms can include words shorter than 
+      the +min_word_size+.</li>
+    </ul>
+  </div>
   <p>
     <label for="search">Search Forums:</label>
     <%= text_field_tag 'search', 
-      session[:forums_search], 
-      options = { :id => "forum_search", :size => "50" } %>
+      "", 
+      options = { :id => "forum_search",
+      :onmouseover=>"TagToTip('search_help')"} %>
     <%= submit_tag 'Search', html_options = {:name => nil, :class=> "button",
       :onmouseover => "Tip('Search topics and topic comments')"} %>
   </p>
