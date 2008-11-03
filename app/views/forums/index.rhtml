@@ -23,6 +23,27 @@
 
 <!--  -->
 <% form_tag(search_forums_path, :class => 'cssform searchform', :name => 'search' ) do -%>
+  <div id="search_help" style="display:none;" >  
+    <p>
+      The following search options are supported:
+    </p>
+    <ul>
+      <li><b>AND</b>: This is the default option. 'cat dog' will find records 
+      matching 'cat' AND 'dog'.</li>
+      <li><b>NOT</b>: 'cat -dog' will find records matching 'cat' AND NOT 'dog'.</li>
+      <li><b>INCLUDE</b>: 'cat +me' will find records matching 'cat' and 'me',
+      even if 'me' is smaller than the +min_word_size+</li>
+      <li><b>""</b>: Quoted terms are matched as phrases. '"cat dog"' will find 
+        records matching the whole phrase. Quoted terms can be preceded by the NOT 
+        operator; 'cat -"big dog"' etc. Quoted terms can include words shorter than 
+      the +min_word_size+.</li>
+    </ul>
+  </div>
+  <p style="text-align: right">
+    <%= theme_image_tag("icons/16x16/question.png", 
+      options = {:alt=>"Help", 
+        :onmouseover=>"TagToTip('search_help')"}) %>
+  </p>
   <p>
     <label for="search">Search Forums:</label>
     <%= text_field_tag 'search', 
@@ -33,7 +54,7 @@
   </p>
 <% end %>
 
-  <%=render(:partial => "forum_group", :locals => { :forums => @forums })%>
+<%=render(:partial => "forum_group", :locals => { :forums => @forums })%>
 
 <% for forum_group in @forum_groups %>
   <h2><%= forum_group.short_name %></h2>
