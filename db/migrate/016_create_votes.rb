@@ -18,6 +18,10 @@ class CreateVotes < ActiveRecord::Migration
   end
 
   def self.down
+    remove_foreign_key(:votes, :user_id)
+    remove_foreign_key(:votes, :allocation_id)
+    remove_foreign_key(:votes, :idea_id)
+    
     drop_table :votes
   end
 end

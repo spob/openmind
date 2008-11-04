@@ -18,6 +18,9 @@ class CreateTopicWatches < ActiveRecord::Migration
   end
 
   def self.down
+    remove_foreign_key(:topic_watches, :user_id)
+    remove_foreign_key(:topic_watches, :topic_id)
+    
     drop_table :topic_watches
   end
 end

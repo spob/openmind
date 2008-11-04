@@ -31,7 +31,10 @@ class CreatePollEnterpriseTypesAndGroups < ActiveRecord::Migration
       :unique => true, :name => ':groups_polls_u1'
   end
 
-  def self.down
+  def self.down    
+    remove_foreign_key(:enterprise_types_polls, :poll_id)
+    remove_foreign_key(:enterprise_types_polls, :enterprise_type_id)
+    
     drop_table :enterprise_types_polls
     drop_table :groups_polls
   end

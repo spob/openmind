@@ -16,6 +16,9 @@ class ForumMediators < ActiveRecord::Migration
   end
 
   def self.down
+    remove_foreign_key(:forum_mediators, :user_id)
+    remove_foreign_key(:forum_mediators, :forum_id)
+    
     drop_table :forum_mediators
   end
 end

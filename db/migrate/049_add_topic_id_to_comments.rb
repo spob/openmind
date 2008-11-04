@@ -13,6 +13,8 @@ class AddTopicIdToComments < ActiveRecord::Migration
   end
 
   def self.down
+    remove_foreign_key(:comments, :topic_id)
+    
     execute "Delete from comments where type = 'TopicComment'"
 #    for comment in TopicComment.find(:all)
 #      comment.destroy

@@ -16,6 +16,9 @@ class AddPollOptionsUsers < ActiveRecord::Migration
   end
 
   def self.down
+    remove_foreign_key(:poll_user_responses, :user_id)
+    remove_foreign_key(:poll_user_responses, :poll_option_id)
+    
     drop_table :poll_user_responses
   end
 end

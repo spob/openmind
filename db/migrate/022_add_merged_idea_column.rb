@@ -10,6 +10,8 @@ class AddMergedIdeaColumn < ActiveRecord::Migration
   end
 
   def self.down
+    remove_foreign_key(:ideas, :merged_to_idea_id)
+    
     remove_column :ideas, :merged_to_idea_id
   end
 end

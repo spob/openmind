@@ -12,6 +12,8 @@ class AddLinkSetReference < ActiveRecord::Migration
   end
 
   def self.down
+    remove_foreign_key(:forums, :link_set_id)
+    
     change_table :forums do |t|
       t.remove :link_set_id
     end

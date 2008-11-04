@@ -18,6 +18,9 @@ class CreateReleases < ActiveRecord::Migration
   end
 
   def self.down
+    remove_foreign_key(:releases, :product_id)
+    remove_foreign_key(:releases, :release_status_id)
+    
     drop_table :releases
   end
 end

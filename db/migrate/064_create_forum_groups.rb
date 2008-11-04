@@ -18,6 +18,9 @@ class CreateForumGroups < ActiveRecord::Migration
   end
 
   def self.down
+    remove_foreign_key(:forums_groups, :forum_id)
+    remove_foreign_key(:forums_groups, :group_id)
+    
     drop_table :forums_groups
   end
 end

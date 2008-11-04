@@ -17,6 +17,9 @@ class AddIdeaChangeLog < ActiveRecord::Migration
   end
 
   def self.down
+    remove_foreign_key(:idea_change_logs, :idea_id)
+    remove_foreign_key(:idea_change_logs, :user_id)
+    
     drop_table :idea_change_logs
   end
 end

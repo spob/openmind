@@ -22,6 +22,8 @@ class AddUserEnterpriseFk < ActiveRecord::Migration
   end
 
   def self.down
+    remove_foreign_key(:users, :enterprise_id)
+    
     remove_column :users, :enterprise_id
   end
 end

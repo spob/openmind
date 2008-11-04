@@ -24,6 +24,8 @@ class AddUserRequest < ActiveRecord::Migration
   end
 
   def self.down
+    remove_foreign_key(:user_requests, :enterprise_id)
+    
     drop_table :user_requests
   end
 end

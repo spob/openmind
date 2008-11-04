@@ -12,6 +12,8 @@ class AddEnterpriseTypeToUserRequest < ActiveRecord::Migration
   end
 
   def self.down
+    remove_foreign_key(:user_requests, :enterprise_type_id)
+    
     change_table :user_requests do |t|
       t.remove :enterprise_type_id
     end

@@ -18,6 +18,9 @@ class CreateForumWatch < ActiveRecord::Migration
   end
 
   def self.down
+    remove_foreign_key(:forum_watches, :user_id)
+    remove_foreign_key(:forum_watches, :forum_id)
+    
     drop_table :forum_watches
   end
 end

@@ -19,6 +19,9 @@ class CreateUserTopicReads < ActiveRecord::Migration
   end
 
   def self.down
+    remove_foreign_key(:user_topic_reads, :user_id)
+    remove_foreign_key(:user_topic_reads, :topic_id)
+    
     drop_table :user_topic_reads
   end
 end

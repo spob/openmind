@@ -16,6 +16,8 @@ class AddUserLogons < ActiveRecord::Migration
   end
 
   def self.down
+    remove_foreign_key(:user_logons, :user_id)
+    
     drop_table :user_logons
   end
 end

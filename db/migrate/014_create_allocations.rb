@@ -19,6 +19,9 @@ class CreateAllocations < ActiveRecord::Migration
   end
 
   def self.down
+    remove_foreign_key(:allocations, :user_id)
+    remove_foreign_key(:allocations, :enterprise_id)
+    
     drop_table :allocations
   end
 

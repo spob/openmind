@@ -7,7 +7,7 @@ class AddPositionToLink < ActiveRecord::Migration
 
   def self.down
     change_table :links do |t|
-      t.remove :links
+      t.remove :position
     end
   end
 end

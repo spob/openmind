@@ -15,6 +15,8 @@ class CreatePollOptions < ActiveRecord::Migration
   end
 
   def self.down
+    remove_foreign_key(:poll_options, :poll_id)
+    
     drop_table :poll_options
   end
 end

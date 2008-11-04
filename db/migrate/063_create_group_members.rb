@@ -18,6 +18,9 @@ class CreateGroupMembers < ActiveRecord::Migration
   end
 
   def self.down
+    remove_foreign_key(:group_members, :user_id)
+    remove_foreign_key(:group_members, :group_id)
+    
     drop_table :group_members
   end
 end

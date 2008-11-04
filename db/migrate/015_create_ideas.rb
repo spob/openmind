@@ -20,6 +20,10 @@ class CreateIdeas < ActiveRecord::Migration
   end
 
   def self.down
+    remove_foreign_key(:ideas, :user_id)
+    remove_foreign_key(:ideas, :product_id)
+    remove_foreign_key(:ideas, :release_id)
+    
     drop_table :ideas
   end
 end

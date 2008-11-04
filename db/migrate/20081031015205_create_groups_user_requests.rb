@@ -18,6 +18,9 @@ class CreateGroupsUserRequests < ActiveRecord::Migration
   end
 
   def self.down
+#    remove_foreign_key(:groups_user_requests, :user_request_id)
+#    remove_foreign_key(:groups_user_requests, :group_id)
+    
     drop_table :groups_user_requests
   end
 end

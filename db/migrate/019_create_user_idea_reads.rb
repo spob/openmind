@@ -19,6 +19,9 @@ class CreateUserIdeaReads < ActiveRecord::Migration
   end
 
   def self.down
+    remove_foreign_key(:user_idea_reads, :user_id)
+    remove_foreign_key(:user_idea_reads, :idea_id)
+    
     drop_table :user_idea_reads
   end
 end

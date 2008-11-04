@@ -15,6 +15,8 @@ class CreateLinks < ActiveRecord::Migration
   end
 
   def self.down
+    remove_foreign_key(:links, :link_set_id)
+    
     drop_table :links
   end
 end

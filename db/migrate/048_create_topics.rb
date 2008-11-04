@@ -20,6 +20,9 @@ class CreateTopics < ActiveRecord::Migration
   end
 
   def self.down
+    remove_foreign_key(:topics, :user_id)
+    remove_foreign_key(:topics, :forum_id)
+    
     drop_table :topics
   end
 end

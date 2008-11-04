@@ -18,6 +18,9 @@ class CreateRolesUserRequests < ActiveRecord::Migration
   end
 
   def self.down
+    remove_foreign_key(:roles_user_requests, :user_request_id)
+    remove_foreign_key(:roles_user_requests, :role_id)
+    
     drop_table :roles_user_requests
   end
 end

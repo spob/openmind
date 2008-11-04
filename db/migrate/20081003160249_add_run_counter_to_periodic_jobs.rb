@@ -8,8 +8,10 @@ class AddRunCounterToPeriodicJobs < ActiveRecord::Migration
 
   def self.down
     change_table :periodic_jobs do |t|
-      t.remove :run_counter
       t.remove_index :run_counter
+    end
+    change_table :periodic_jobs do |t|
+      t.remove :run_counter
     end
   end
 end

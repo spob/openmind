@@ -16,6 +16,8 @@ class AddPollIdToComment < ActiveRecord::Migration
   end
 
   def self.down
+    remove_foreign_key(:comments, :poll_id)
+    
     change_table :comments do |t|
       t.remove :poll_id
     end

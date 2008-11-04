@@ -19,6 +19,9 @@ class CreateEnterpriseTypeForums < ActiveRecord::Migration
   end
 
   def self.down
+    remove_foreign_key(:enterprise_types_forums, :forum_id)
+    remove_foreign_key(:enterprise_types_forums, :enterprise_type_id)
+    
     drop_table :enterprise_types_forums
   end
 end

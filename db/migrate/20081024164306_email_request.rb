@@ -21,6 +21,9 @@ class EmailRequest < ActiveRecord::Migration
   end
 
   def self.down
+    remove_foreign_key(:email_requests, :idea_id)
+    remove_foreign_key(:email_requests, :user_id)
+    
     drop_table :email_requests
   end
 end

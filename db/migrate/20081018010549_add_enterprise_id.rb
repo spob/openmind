@@ -12,6 +12,8 @@ class AddEnterpriseId < ActiveRecord::Migration
   end
 
   def self.down
+    remove_foreign_key(:enterprises, :enterprise_type_id)
+    
     change_table :enterprises do |t|
       t.remove :enterprise_type_id
     end

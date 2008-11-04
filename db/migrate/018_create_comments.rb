@@ -17,6 +17,9 @@ class CreateComments < ActiveRecord::Migration
   end
 
   def self.down
+    remove_foreign_key(:comments, :user_id)
+    remove_foreign_key(:comments, :idea_id)
+    
     drop_table :comments
   end
 end
