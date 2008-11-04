@@ -1,4 +1,8 @@
+require "migration_helpers"
+
 class CreateLinks < ActiveRecord::Migration
+  extend MigrationHelpers
+  
   def self.up
     create_table :links do |t|
       t.string :name, :limit => 30, :null => false
@@ -6,6 +10,8 @@ class CreateLinks < ActiveRecord::Migration
       t.references :link_set
       t.timestamps
     end
+    
+    add_foreign_key(:links, :link_set_id, :link_sets)
   end
 
   def self.down

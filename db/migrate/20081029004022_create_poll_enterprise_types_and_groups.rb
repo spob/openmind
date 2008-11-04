@@ -1,4 +1,8 @@
+require "migration_helpers"
+
 class CreatePollEnterpriseTypesAndGroups < ActiveRecord::Migration
+  extend MigrationHelpers
+  
   def self.up
     create_table :enterprise_types_polls, :id => false  do |t|
       t.references :poll, :null => false
@@ -6,6 +10,10 @@ class CreatePollEnterpriseTypesAndGroups < ActiveRecord::Migration
       t.column :lock_version, :integer, :default => 0
       t.timestamps
     end
+    
+    add_foreign_key(:enterprise_types_polls, :poll_id, :polls)
+    add_foreign_key(:enterprise_types_polls, :enterprise_type_id, :lookup_codes)
+    
     add_index :enterprise_types_polls, [:poll_id, :enterprise_type_id], 
       :unique => true, :name => ':enterprise_types_polls_u1'
     
@@ -15,6 +23,10 @@ class CreatePollEnterpriseTypesAndGroups < ActiveRecord::Migration
       t.column :lock_version, :integer, :default => 0
       t.timestamps
     end
+    
+    add_foreign_key(:groups_polls, :poll_id, :polls)
+    add_foreign_key(:groups_polls, :group_id, :groups)
+    
     add_index :groups_polls, [:poll_id, :group_id], 
       :unique => true, :name => ':groups_polls_u1'
   end

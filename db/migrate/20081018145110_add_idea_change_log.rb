@@ -1,4 +1,8 @@
+require "migration_helpers"
+
 class AddIdeaChangeLog < ActiveRecord::Migration
+  extend MigrationHelpers
+  
   def self.up
     create_table :idea_change_logs do |t|
       t.references :idea, :null => false
@@ -7,7 +11,9 @@ class AddIdeaChangeLog < ActiveRecord::Migration
       t.datetime :processed_at, :null => true
       t.timestamps
     end
-    add_index :idea_change_logs, [:idea_id]
+    
+    add_foreign_key(:idea_change_logs, :idea_id, :ideas)
+    add_foreign_key(:idea_change_logs, :user_id, :users)
   end
 
   def self.down

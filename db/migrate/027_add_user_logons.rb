@@ -1,13 +1,18 @@
+require "migration_helpers"
+
 class AddUserLogons < ActiveRecord::Migration
+  extend MigrationHelpers
+  
   def self.up
     create_table :user_logons do |t|
-      t.column :user_id,  :integer, :null => false
+      t.references :user, :null => false
       t.column :lock_version, :integer, :default => 0
-      t.column :created_at, :datetime, :null => false
+      t.timestamps
     end
     
+    add_foreign_key(:user_logons, :user_id, :users)
+    
     add_index :user_logons, :created_at, :unique => false
-    add_index :user_logons, :user_id, :unique => false
   end
 
   def self.down

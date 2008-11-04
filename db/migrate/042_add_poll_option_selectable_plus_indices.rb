@@ -1,6 +1,6 @@
 class AddPollOptionSelectablePlusIndices < ActiveRecord::Migration
   def self.up
-    add_index :poll_options, :poll_id, :unique => false
+    #    add_index :poll_options, :poll_id, :unique => false
     add_index :poll_options, [:poll_id, :description], :unique => true
     add_index :poll_user_responses, [:poll_option_id, :user_id], :unique => true
     
@@ -8,7 +8,7 @@ class AddPollOptionSelectablePlusIndices < ActiveRecord::Migration
   end
 
   def self.down
-    remove_index :poll_options, :poll_id
+    #    remove_index :poll_options, :poll_id
     remove_index :poll_user_responses, [:poll_option_id, :user_id]
     
     remove_column :poll_options, :selectable

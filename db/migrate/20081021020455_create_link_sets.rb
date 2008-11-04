@@ -4,6 +4,8 @@ class CreateLinkSets < ActiveRecord::Migration
       t.string :name, :limit => 30, :null => false
       t.timestamps
     end
+    
+    add_index :link_sets, [:name], :unique => true
   end
 
   def self.down

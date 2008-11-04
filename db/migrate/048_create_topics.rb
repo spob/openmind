@@ -1,14 +1,21 @@
+require "migration_helpers"
+
 class CreateTopics < ActiveRecord::Migration
+  extend MigrationHelpers
+  
   def self.up
     create_table :topics, :options => 'DEFAULT CHARSET=utf8' do |t|
       t.column :title, :string, :limit => 120, :null => false
       t.column :lock_version, :integer, :default => 0
-      t.column :forum_id,  :integer, :null => false
-      t.column :user_id,  :integer, :null => false
+      t.references :forum, :null => false
+      t.references :user, :null => false
       t.column :pinned, :boolean, :default => false, :null => false
-      t.column :created_at, :datetime, :null => false
-      t.column :updated_at, :datetime, :null => false
+      t.timestamps
     end
+    
+    add_foreign_key(:topics, :user_id, :users)
+    add_foreign_key(:topics, :forum_id, :forums)
+    
     add_index :topics, :title, :unique => false
   end
 

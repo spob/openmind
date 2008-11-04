@@ -1,4 +1,8 @@
+require "migration_helpers"
+
 class EmailRequest < ActiveRecord::Migration
+  extend MigrationHelpers
+  
   def self.up
     create_table :email_requests do |t|
       t.references :idea
@@ -11,6 +15,9 @@ class EmailRequest < ActiveRecord::Migration
       t.references :user, :null => false
       t.string :type, :null => false, :limit => 100
     end
+    
+    add_foreign_key(:email_requests, :idea_id, :ideas)
+    add_foreign_key(:email_requests, :user_id, :users)
   end
 
   def self.down

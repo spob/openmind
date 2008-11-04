@@ -1,11 +1,18 @@
+require "migration_helpers"
+
 class CreateForumWatch < ActiveRecord::Migration
+  extend MigrationHelpers
+  
   def self.up
     create_table :forum_watches, :id => false  do |t|
-      t.column :user_id,  :integer, :null => false
-      t.column :forum_id,  :integer, :null => false
+      t.references :user, :null => false
+      t.references :forum, :null => false
       t.column :lock_version, :integer, :default => 0
-      t.column :created_at, :datetime, :null => false
+      t.timestamps
     end
+    
+    add_foreign_key(:forum_watches, :user_id, :users)
+    add_foreign_key(:forum_watches, :forum_id, :forums)
     
     add_index :forum_watches, [:user_id, :forum_id], :unique => false
   end
