@@ -60,12 +60,14 @@ class TopicsController < ApplicationController
   
   def show
     session[:forums_search] = nil
-    @topic = Topic.find(params[:id])
-    unless @topic.forum.can_see? current_user or prodmgr?
-      flash[:error] = ForumsController.forum_access_denied(current_user)
-      redirect_to forums_path
+    Topic.transaction do
+      @topic = Topic.find(params[:id])
+      unless @topic.forum.can_see? current_user or prodmgr?
+        flash[:error] = ForumsController.forum_access_denied(current_user)
+        redirect_to forums_path
+      end
+      @topic.add_user_read(current_user).save unless current_user == :false
     end
-    @topic.add_user_read(current_user).save
   end
 
   def destroy

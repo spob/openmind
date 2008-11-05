@@ -62,7 +62,7 @@ class Topic < ActiveRecord::Base
   end
   
   def add_user_read user
-    read = UserTopicRead.find_by_user_id_and_topic_id(user.id, id)
+    read = UserTopicRead.find_by_user_id_and_topic_id(user.id, self.id, :lock => true)
     if read.nil?
       read = UserTopicRead.new(:user_id => user.id)
       user_topic_reads << read

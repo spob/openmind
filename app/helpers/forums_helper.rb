@@ -8,10 +8,10 @@ module ForumsHelper
     last_comment = forum.comments.first #this isn't very efficient...replace by sql?
     return '-' if last_comment.nil?
     subject = ""
-	subject += "RE: " if forum.comments.size > 1
-	subject += link_to(last_comment.topic.title, 
-          topic_path(last_comment.topic, :anchor => last_comment.id),
-          html_options = {:onmouseover => "Tip('Jump to this post')"})
+    subject += "RE: " if forum.comments.size > 1
+    subject += link_to(last_comment.topic.title, 
+      topic_path(last_comment.topic, :anchor => last_comment.id),
+      html_options = {:onmouseover => "Tip('Jump to this post')"})
     subject = boldify(subject) if last_comment.topic.unread_comment?(current_user)
     
     comment = last_comment.body
@@ -31,7 +31,7 @@ module ForumsHelper
     author = user_display_name topic.last_comment.user
     author = boldify(author) if topic.unread_comment?(current_user)
     "#{author} wrote \"#{link_to truncate(StringUtils.strip_html(comment), 40), 
-      topic_path(topic.id, :anchor => topic.last_comment.id)}\"<br/>#{om_date_time topic.last_comment.created_at}"
+    topic_path(topic.id, :anchor => topic.last_comment.id)}\"<br/>#{om_date_time topic.last_comment.created_at}"
   end
   
 
@@ -88,18 +88,20 @@ module ForumsHelper
 
 
   def show_forum_watch_button forum
-    if forum.watchers.include? current_user
-      link_to "Remove Forum Watch", 
-        destroy_forum_watch_watch_path(:id => forum), 
-        { :class => "button",
-        :onmouseover => "Tip('Don't automatically watch new topics in this forum')",
-        :method => :delete                }
-    else
-      link_to "Add Forum Watch", 
-        create_forum_watch_watch_path(forum), 
-        { :class => "button",
-        :onmouseover => "Tip('Watch this forum and all topics within this forum')",
-        :method => :post                   }
+    unless current_user == :false
+      if forum.watchers.include? current_user
+        link_to "Remove Forum Watch", 
+          destroy_forum_watch_watch_path(:id => forum), 
+          { :class => "button",
+          :onmouseover => "Tip('Don't automatically watch new topics in this forum')",
+          :method => :delete                }
+      else
+        link_to "Add Forum Watch", 
+          create_forum_watch_watch_path(forum), 
+          { :class => "button",
+          :onmouseover => "Tip('Watch this forum and all topics within this forum')",
+          :method => :post                   }
+      end
     end
   end
   
@@ -121,6 +123,6 @@ module ForumsHelper
   private
   
   def boldify(text)
-  	"<b>#{text}</b>"
+    "<b>#{text}</b>"
   end
 end

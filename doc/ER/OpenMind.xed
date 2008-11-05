@@ -1,0 +1,2640 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Diagram version="1.0" type="MySQL" versionMajor="5" versionMinor="0">
+   <Table id="0" name="allocations" schema="" database="openmind_dev">
+      <Column id="1" name="id" type="int" length="0" nulls="false">
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">YES</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="2" name="quantity" type="int" length="0" nulls="false">
+         <CP name="DEFAULT_VALUE">0</CP>
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="3" name="comments" type="text" length="0" nulls="true"/>
+      <Column id="4" name="user_id" type="int" length="0" nulls="true">
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="5" name="enterprise_id" type="int" length="0" nulls="true">
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="6" name="created_at" type="datetime" length="0" nulls="true"/>
+      <Column id="7" name="updated_at" type="datetime" length="0" nulls="true"/>
+      <Column id="8" name="lock_version" type="int" length="0" nulls="true">
+         <CP name="DEFAULT_VALUE">0</CP>
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="9" name="allocation_type" type="varchar" length="30" nulls="false"/>
+      <Column id="10" name="expiration_date" type="date" length="0" nulls="false">
+         <CP name="DEFAULT_VALUE">2009-03-04</CP>
+      </Column>
+   </Table>
+   <Table id="11" name="announcements" schema="" database="openmind_dev">
+      <Column id="12" name="id" type="int" length="0" nulls="false">
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">YES</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="13" name="headline" type="varchar" length="120" nulls="false"/>
+      <Column id="14" name="description" type="text" length="0" nulls="true"/>
+      <Column id="15" name="lock_version" type="int" length="0" nulls="true">
+         <CP name="DEFAULT_VALUE">0</CP>
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="16" name="created_at" type="datetime" length="0" nulls="true"/>
+      <Column id="17" name="updated_at" type="datetime" length="0" nulls="true"/>
+      <Column id="18" name="textiled" type="tinyint" length="0" nulls="false">
+         <CP name="DEFAULT_VALUE">0</CP>
+         <CP name="PRECISION">1</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+   </Table>
+   <Table id="19" name="comments" schema="" database="openmind_dev">
+      <Column id="20" name="id" type="int" length="0" nulls="false">
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">YES</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="21" name="user_id" type="int" length="0" nulls="false">
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="22" name="idea_id" type="int" length="0" nulls="true">
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="23" name="body" type="text" length="0" nulls="true"/>
+      <Column id="24" name="created_at" type="datetime" length="0" nulls="true"/>
+      <Column id="25" name="updated_at" type="datetime" length="0" nulls="true"/>
+      <Column id="26" name="lock_version" type="int" length="0" nulls="true">
+         <CP name="DEFAULT_VALUE">0</CP>
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="27" name="type" type="varchar" length="255" nulls="false"/>
+      <Column id="28" name="topic_id" type="int" length="0" nulls="true">
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="29" name="textiled" type="tinyint" length="0" nulls="false">
+         <CP name="DEFAULT_VALUE">0</CP>
+         <CP name="PRECISION">1</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="30" name="poll_id" type="int" length="0" nulls="true">
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+   </Table>
+   <Table id="31" name="email_requests" schema="" database="openmind_dev">
+      <Column id="32" name="id" type="int" length="0" nulls="false">
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">YES</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="33" name="idea_id" type="int" length="0" nulls="true">
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="34" name="created_at" type="datetime" length="0" nulls="true"/>
+      <Column id="35" name="updated_at" type="datetime" length="0" nulls="true"/>
+      <Column id="36" name="sent_at" type="datetime" length="0" nulls="true"/>
+      <Column id="37" name="message" type="text" length="0" nulls="true"/>
+      <Column id="38" name="subject" type="varchar" length="255" nulls="false"/>
+      <Column id="39" name="to_email" type="varchar" length="255" nulls="false"/>
+      <Column id="40" name="cc_self" type="tinyint" length="0" nulls="true">
+         <CP name="PRECISION">1</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="41" name="user_id" type="int" length="0" nulls="false">
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="42" name="type" type="varchar" length="100" nulls="false"/>
+   </Table>
+   <Table id="43" name="enterprise_types_forums" schema="" database="openmind_dev">
+      <Column id="44" name="forum_id" type="int" length="0" nulls="false">
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="45" name="enterprise_type_id" type="int" length="0" nulls="false">
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="46" name="lock_version" type="int" length="0" nulls="true">
+         <CP name="DEFAULT_VALUE">0</CP>
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="47" name="created_at" type="datetime" length="0" nulls="true"/>
+      <Column id="48" name="updated_at" type="datetime" length="0" nulls="true"/>
+   </Table>
+   <Table id="49" name="enterprise_types_polls" schema="" database="openmind_dev">
+      <Column id="50" name="poll_id" type="int" length="0" nulls="false">
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="51" name="enterprise_type_id" type="int" length="0" nulls="false">
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="52" name="lock_version" type="int" length="0" nulls="true">
+         <CP name="DEFAULT_VALUE">0</CP>
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="53" name="created_at" type="datetime" length="0" nulls="true"/>
+      <Column id="54" name="updated_at" type="datetime" length="0" nulls="true"/>
+   </Table>
+   <Table id="55" name="enterprises" schema="" database="openmind_dev">
+      <Column id="56" name="id" type="int" length="0" nulls="false">
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">YES</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="57" name="name" type="varchar" length="50" nulls="false"/>
+      <Column id="58" name="active" type="tinyint" length="0" nulls="false">
+         <CP name="DEFAULT_VALUE">1</CP>
+         <CP name="PRECISION">1</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="59" name="lock_version" type="int" length="0" nulls="true">
+         <CP name="DEFAULT_VALUE">0</CP>
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="60" name="created_at" type="datetime" length="0" nulls="true"/>
+      <Column id="61" name="updated_at" type="datetime" length="0" nulls="true"/>
+      <Column id="62" name="enterprise_type_id" type="int" length="0" nulls="true">
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+   </Table>
+   <Table id="63" name="forum_mediators" schema="" database="openmind_dev">
+      <Column id="64" name="user_id" type="int" length="0" nulls="false">
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="65" name="forum_id" type="int" length="0" nulls="false">
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="66" name="lock_version" type="int" length="0" nulls="true">
+         <CP name="DEFAULT_VALUE">0</CP>
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="67" name="created_at" type="datetime" length="0" nulls="true"/>
+      <Column id="68" name="updated_at" type="datetime" length="0" nulls="true"/>
+   </Table>
+   <Table id="69" name="forum_watches" schema="" database="openmind_dev">
+      <Column id="70" name="user_id" type="int" length="0" nulls="false">
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="71" name="forum_id" type="int" length="0" nulls="false">
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="72" name="lock_version" type="int" length="0" nulls="true">
+         <CP name="DEFAULT_VALUE">0</CP>
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="73" name="created_at" type="datetime" length="0" nulls="true"/>
+      <Column id="74" name="updated_at" type="datetime" length="0" nulls="true"/>
+   </Table>
+   <Table id="75" name="forums_groups" schema="" database="openmind_dev">
+      <Column id="76" name="forum_id" type="int" length="0" nulls="false">
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="77" name="group_id" type="int" length="0" nulls="false">
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="78" name="lock_version" type="int" length="0" nulls="true">
+         <CP name="DEFAULT_VALUE">0</CP>
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="79" name="created_at" type="datetime" length="0" nulls="true"/>
+      <Column id="80" name="updated_at" type="datetime" length="0" nulls="true"/>
+   </Table>
+   <Table id="81" name="forums" schema="" database="openmind_dev">
+      <Column id="82" name="id" type="int" length="0" nulls="false">
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">YES</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="83" name="name" type="varchar" length="50" nulls="false"/>
+      <Column id="84" name="description" type="varchar" length="150" nulls="false"/>
+      <Column id="85" name="lock_version" type="int" length="0" nulls="true">
+         <CP name="DEFAULT_VALUE">0</CP>
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="86" name="created_at" type="datetime" length="0" nulls="true"/>
+      <Column id="87" name="updated_at" type="datetime" length="0" nulls="true"/>
+      <Column id="88" name="active" type="tinyint" length="0" nulls="false">
+         <CP name="DEFAULT_VALUE">1</CP>
+         <CP name="PRECISION">1</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="89" name="link_set_id" type="int" length="0" nulls="true">
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="90" name="forum_group_id" type="int" length="0" nulls="true">
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="91" name="restrict_topic_creation" type="tinyint" length="0" nulls="false">
+         <CP name="DEFAULT_VALUE">0</CP>
+         <CP name="PRECISION">1</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+   </Table>
+   <Table id="92" name="group_members" schema="" database="openmind_dev">
+      <Column id="93" name="user_id" type="int" length="0" nulls="false">
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="94" name="group_id" type="int" length="0" nulls="false">
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="95" name="lock_version" type="int" length="0" nulls="true">
+         <CP name="DEFAULT_VALUE">0</CP>
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="96" name="created_at" type="datetime" length="0" nulls="true"/>
+      <Column id="97" name="updated_at" type="datetime" length="0" nulls="true"/>
+   </Table>
+   <Table id="98" name="groups_polls" schema="" database="openmind_dev">
+      <Column id="99" name="poll_id" type="int" length="0" nulls="false">
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="100" name="group_id" type="int" length="0" nulls="false">
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="101" name="lock_version" type="int" length="0" nulls="true">
+         <CP name="DEFAULT_VALUE">0</CP>
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="102" name="created_at" type="datetime" length="0" nulls="true"/>
+      <Column id="103" name="updated_at" type="datetime" length="0" nulls="true"/>
+   </Table>
+   <Table id="104" name="groups_user_requests" schema="" database="openmind_dev">
+      <Column id="105" name="user_request_id" type="int" length="0" nulls="false">
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="106" name="group_id" type="int" length="0" nulls="false">
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="107" name="lock_version" type="int" length="0" nulls="true">
+         <CP name="DEFAULT_VALUE">0</CP>
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="108" name="created_at" type="datetime" length="0" nulls="true"/>
+      <Column id="109" name="updated_at" type="datetime" length="0" nulls="true"/>
+   </Table>
+   <Table id="110" name="groups" schema="" database="openmind_dev">
+      <Column id="111" name="id" type="int" length="0" nulls="false">
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">YES</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="112" name="name" type="varchar" length="50" nulls="false"/>
+      <Column id="113" name="description" type="varchar" length="150" nulls="false"/>
+      <Column id="114" name="lock_version" type="int" length="0" nulls="true">
+         <CP name="DEFAULT_VALUE">0</CP>
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="115" name="created_at" type="datetime" length="0" nulls="true"/>
+      <Column id="116" name="updated_at" type="datetime" length="0" nulls="true"/>
+   </Table>
+   <Table id="117" name="idea_change_logs" schema="" database="openmind_dev">
+      <Column id="118" name="id" type="int" length="0" nulls="false">
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">YES</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="119" name="idea_id" type="int" length="0" nulls="false">
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="120" name="user_id" type="int" length="0" nulls="false">
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="121" name="message" type="text" length="0" nulls="false"/>
+      <Column id="122" name="processed_at" type="datetime" length="0" nulls="true"/>
+      <Column id="123" name="created_at" type="datetime" length="0" nulls="true"/>
+      <Column id="124" name="updated_at" type="datetime" length="0" nulls="true"/>
+   </Table>
+   <Table id="125" name="ideas" schema="" database="openmind_dev">
+      <Column id="126" name="id" type="int" length="0" nulls="false">
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">YES</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="127" name="user_id" type="int" length="0" nulls="false">
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="128" name="product_id" type="int" length="0" nulls="false">
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="129" name="release_id" type="int" length="0" nulls="true">
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="130" name="title" type="varchar" length="100" nulls="false"/>
+      <Column id="131" name="description" type="text" length="0" nulls="true"/>
+      <Column id="132" name="created_at" type="datetime" length="0" nulls="true"/>
+      <Column id="133" name="updated_at" type="datetime" length="0" nulls="true"/>
+      <Column id="134" name="lock_version" type="int" length="0" nulls="true">
+         <CP name="DEFAULT_VALUE">0</CP>
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="135" name="merged_to_idea_id" type="int" length="0" nulls="true">
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="136" name="view_count" type="int" length="0" nulls="false">
+         <CP name="DEFAULT_VALUE">0</CP>
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="137" name="cached_tag_list" type="varchar" length="255" nulls="true"/>
+      <Column id="138" name="textiled" type="tinyint" length="0" nulls="false">
+         <CP name="DEFAULT_VALUE">0</CP>
+         <CP name="PRECISION">1</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+   </Table>
+   <Table id="139" name="link_sets" schema="" database="openmind_dev">
+      <Column id="140" name="id" type="int" length="0" nulls="false">
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">YES</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="141" name="name" type="varchar" length="30" nulls="false"/>
+      <Column id="142" name="created_at" type="datetime" length="0" nulls="true"/>
+      <Column id="143" name="updated_at" type="datetime" length="0" nulls="true"/>
+      <Column id="144" name="label" type="varchar" length="30" nulls="false"/>
+      <Column id="145" name="default_link_set" type="tinyint" length="0" nulls="false">
+         <CP name="DEFAULT_VALUE">0</CP>
+         <CP name="PRECISION">1</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+   </Table>
+   <Table id="146" name="links" schema="" database="openmind_dev">
+      <Column id="147" name="id" type="int" length="0" nulls="false">
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">YES</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="148" name="name" type="varchar" length="30" nulls="false"/>
+      <Column id="149" name="url" type="varchar" length="255" nulls="true"/>
+      <Column id="150" name="link_set_id" type="int" length="0" nulls="true">
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="151" name="created_at" type="datetime" length="0" nulls="true"/>
+      <Column id="152" name="updated_at" type="datetime" length="0" nulls="true"/>
+      <Column id="153" name="position" type="int" length="0" nulls="true">
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+   </Table>
+   <Table id="154" name="lookup_codes" schema="" database="openmind_dev">
+      <Column id="155" name="id" type="int" length="0" nulls="false">
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">YES</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="156" name="code_type" type="varchar" length="30" nulls="false"/>
+      <Column id="157" name="short_name" type="varchar" length="40" nulls="false"/>
+      <Column id="158" name="description" type="varchar" length="50" nulls="false"/>
+      <Column id="159" name="sort_value" type="int" length="0" nulls="false">
+         <CP name="DEFAULT_VALUE">100</CP>
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="160" name="created_at" type="datetime" length="0" nulls="true"/>
+      <Column id="161" name="updated_at" type="datetime" length="0" nulls="true"/>
+      <Column id="162" name="lock_version" type="int" length="0" nulls="true">
+         <CP name="DEFAULT_VALUE">0</CP>
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+   </Table>
+   <Table id="163" name="open_id_authentication_associations" schema="" database="openmind_dev">
+      <Column id="164" name="id" type="int" length="0" nulls="false">
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">YES</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="165" name="server_url" type="blob" length="0" nulls="true"/>
+      <Column id="166" name="handle" type="varchar" length="255" nulls="true"/>
+      <Column id="167" name="secret" type="blob" length="0" nulls="true"/>
+      <Column id="168" name="issued" type="int" length="0" nulls="true">
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="169" name="lifetime" type="int" length="0" nulls="true">
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="170" name="assoc_type" type="varchar" length="255" nulls="true"/>
+   </Table>
+   <Table id="171" name="open_id_authentication_nonces" schema="" database="openmind_dev">
+      <Column id="172" name="id" type="int" length="0" nulls="false">
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">YES</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="173" name="nonce" type="varchar" length="255" nulls="true"/>
+      <Column id="174" name="created" type="int" length="0" nulls="true">
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+   </Table>
+   <Table id="175" name="open_id_authentication_settings" schema="" database="openmind_dev">
+      <Column id="176" name="id" type="int" length="0" nulls="false">
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">YES</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="177" name="setting" type="varchar" length="255" nulls="true"/>
+      <Column id="178" name="value" type="blob" length="0" nulls="true"/>
+   </Table>
+   <Table id="179" name="periodic_jobs" schema="" database="openmind_dev">
+      <Column id="180" name="id" type="int" length="0" nulls="false">
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">YES</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="181" name="type" type="varchar" length="255" nulls="true"/>
+      <Column id="182" name="job" type="text" length="0" nulls="true"/>
+      <Column id="183" name="interval" type="int" length="0" nulls="true">
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="184" name="last_run_at" type="datetime" length="0" nulls="true"/>
+      <Column id="185" name="run_at_minutes" type="int" length="0" nulls="true">
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="186" name="last_run_result" type="varchar" length="500" nulls="true"/>
+      <Column id="187" name="next_run_at" type="datetime" length="0" nulls="true"/>
+      <Column id="188" name="run_counter" type="int" length="0" nulls="true">
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+   </Table>
+   <Table id="189" name="poll_options" schema="" database="openmind_dev">
+      <Column id="190" name="id" type="int" length="0" nulls="false">
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">YES</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="191" name="description" type="varchar" length="80" nulls="false"/>
+      <Column id="192" name="poll_id" type="int" length="0" nulls="false">
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="193" name="lock_version" type="int" length="0" nulls="true">
+         <CP name="DEFAULT_VALUE">0</CP>
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="194" name="created_at" type="datetime" length="0" nulls="true"/>
+      <Column id="195" name="updated_at" type="datetime" length="0" nulls="true"/>
+      <Column id="196" name="selectable" type="tinyint" length="0" nulls="false">
+         <CP name="DEFAULT_VALUE">1</CP>
+         <CP name="PRECISION">1</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+   </Table>
+   <Table id="197" name="poll_user_responses" schema="" database="openmind_dev">
+      <Column id="198" name="user_id" type="int" length="0" nulls="false">
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="199" name="poll_option_id" type="int" length="0" nulls="false">
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="200" name="lock_version" type="int" length="0" nulls="true">
+         <CP name="DEFAULT_VALUE">0</CP>
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="201" name="created_at" type="datetime" length="0" nulls="true"/>
+      <Column id="202" name="updated_at" type="datetime" length="0" nulls="true"/>
+   </Table>
+   <Table id="203" name="polls" schema="" database="openmind_dev">
+      <Column id="204" name="id" type="int" length="0" nulls="false">
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">YES</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="205" name="title" type="varchar" length="200" nulls="false"/>
+      <Column id="206" name="close_date" type="date" length="0" nulls="false"/>
+      <Column id="207" name="lock_version" type="int" length="0" nulls="true">
+         <CP name="DEFAULT_VALUE">0</CP>
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="208" name="created_at" type="datetime" length="0" nulls="true"/>
+      <Column id="209" name="updated_at" type="datetime" length="0" nulls="true"/>
+      <Column id="210" name="active" type="tinyint" length="0" nulls="false">
+         <CP name="DEFAULT_VALUE">0</CP>
+         <CP name="PRECISION">1</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="211" name="poll_comments_count" type="int" length="0" nulls="true">
+         <CP name="DEFAULT_VALUE">0</CP>
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="212" name="results_publically_visible" type="tinyint" length="0" nulls="false">
+         <CP name="DEFAULT_VALUE">1</CP>
+         <CP name="PRECISION">1</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+   </Table>
+   <Table id="213" name="products" schema="" database="openmind_dev">
+      <Column id="214" name="id" type="int" length="0" nulls="false">
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">YES</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="215" name="name" type="varchar" length="30" nulls="false"/>
+      <Column id="216" name="description" type="varchar" length="200" nulls="false"/>
+      <Column id="217" name="active" type="tinyint" length="0" nulls="false">
+         <CP name="DEFAULT_VALUE">1</CP>
+         <CP name="PRECISION">1</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="218" name="created_at" type="datetime" length="0" nulls="true"/>
+      <Column id="219" name="updated_at" type="datetime" length="0" nulls="true"/>
+      <Column id="220" name="lock_version" type="int" length="0" nulls="true">
+         <CP name="DEFAULT_VALUE">0</CP>
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+   </Table>
+   <Table id="221" name="releases" schema="" database="openmind_dev">
+      <Column id="222" name="id" type="int" length="0" nulls="false">
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">YES</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="223" name="version" type="varchar" length="20" nulls="false"/>
+      <Column id="224" name="product_id" type="int" length="0" nulls="false">
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="225" name="release_status_id" type="int" length="0" nulls="false">
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="226" name="created_at" type="datetime" length="0" nulls="true"/>
+      <Column id="227" name="updated_at" type="datetime" length="0" nulls="true"/>
+      <Column id="228" name="lock_version" type="int" length="0" nulls="true">
+         <CP name="DEFAULT_VALUE">0</CP>
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="229" name="description" type="text" length="0" nulls="true"/>
+      <Column id="230" name="release_date" type="datetime" length="0" nulls="true"/>
+      <Column id="231" name="user_release_date" type="varchar" length="255" nulls="true"/>
+      <Column id="232" name="download_url" type="varchar" length="300" nulls="true"/>
+      <Column id="233" name="textiled" type="tinyint" length="0" nulls="false">
+         <CP name="DEFAULT_VALUE">0</CP>
+         <CP name="PRECISION">1</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+   </Table>
+   <Table id="234" name="roles_user_requests" schema="" database="openmind_dev">
+      <Column id="235" name="user_request_id" type="int" length="0" nulls="false">
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="236" name="role_id" type="int" length="0" nulls="false">
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="237" name="lock_version" type="int" length="0" nulls="true">
+         <CP name="DEFAULT_VALUE">0</CP>
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="238" name="created_at" type="datetime" length="0" nulls="true"/>
+      <Column id="239" name="updated_at" type="datetime" length="0" nulls="true"/>
+   </Table>
+   <Table id="240" name="roles_users" schema="" database="openmind_dev">
+      <Column id="241" name="user_id" type="int" length="0" nulls="false">
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="242" name="role_id" type="int" length="0" nulls="false">
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="243" name="lock_version" type="int" length="0" nulls="true">
+         <CP name="DEFAULT_VALUE">0</CP>
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="244" name="created_at" type="datetime" length="0" nulls="true"/>
+      <Column id="245" name="updated_at" type="datetime" length="0" nulls="true"/>
+   </Table>
+   <Table id="246" name="roles" schema="" database="openmind_dev">
+      <Column id="247" name="id" type="int" length="0" nulls="false">
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">YES</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="248" name="title" type="varchar" length="50" nulls="false"/>
+      <Column id="249" name="description" type="varchar" length="50" nulls="false"/>
+      <Column id="250" name="default_role" type="tinyint" length="0" nulls="true">
+         <CP name="DEFAULT_VALUE">0</CP>
+         <CP name="PRECISION">1</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="251" name="lock_version" type="int" length="0" nulls="true">
+         <CP name="DEFAULT_VALUE">0</CP>
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="252" name="created_at" type="datetime" length="0" nulls="true"/>
+      <Column id="253" name="updated_at" type="datetime" length="0" nulls="true"/>
+   </Table>
+   <Table id="254" name="schema_migrations" schema="" database="openmind_dev">
+      <Column id="255" name="version" type="varchar" length="255" nulls="false"/>
+   </Table>
+   <Table id="256" name="sessions" schema="" database="openmind_dev">
+      <Column id="257" name="id" type="int" length="0" nulls="false">
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">YES</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="258" name="session_id" type="varchar" length="255" nulls="true"/>
+      <Column id="259" name="data" type="text" length="0" nulls="true"/>
+      <Column id="260" name="updated_at" type="datetime" length="0" nulls="true"/>
+   </Table>
+   <Table id="261" name="simple_captcha_data" schema="" database="openmind_dev">
+      <Column id="262" name="id" type="int" length="0" nulls="false">
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">YES</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="263" name="key" type="varchar" length="40" nulls="true"/>
+      <Column id="264" name="value" type="varchar" length="6" nulls="true"/>
+      <Column id="265" name="created_at" type="datetime" length="0" nulls="true"/>
+      <Column id="266" name="updated_at" type="datetime" length="0" nulls="true"/>
+   </Table>
+   <Table id="267" name="taggings" schema="" database="openmind_dev">
+      <Column id="268" name="id" type="int" length="0" nulls="false">
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">YES</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="269" name="tag_id" type="int" length="0" nulls="true">
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="270" name="taggable_id" type="int" length="0" nulls="true">
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="271" name="taggable_type" type="varchar" length="255" nulls="true"/>
+      <Column id="272" name="created_at" type="datetime" length="0" nulls="true"/>
+   </Table>
+   <Table id="273" name="tags" schema="" database="openmind_dev">
+      <Column id="274" name="id" type="int" length="0" nulls="false">
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">YES</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="275" name="name" type="varchar" length="255" nulls="true"/>
+   </Table>
+   <Table id="276" name="task_scheduler_batches" schema="" database="openmind_dev">
+      <Column id="277" name="id" type="int" length="0" nulls="false">
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">YES</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="278" name="run_counter" type="int" length="0" nulls="false">
+         <CP name="DEFAULT_VALUE">0</CP>
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="279" name="created_at" type="datetime" length="0" nulls="true"/>
+      <Column id="280" name="updated_at" type="datetime" length="0" nulls="true"/>
+   </Table>
+   <Table id="281" name="topic_watches" schema="" database="openmind_dev">
+      <Column id="282" name="id" type="int" length="0" nulls="false">
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">YES</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="283" name="user_id" type="int" length="0" nulls="false">
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="284" name="topic_id" type="int" length="0" nulls="false">
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="285" name="lock_version" type="int" length="0" nulls="true">
+         <CP name="DEFAULT_VALUE">0</CP>
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="286" name="created_at" type="datetime" length="0" nulls="true"/>
+      <Column id="287" name="updated_at" type="datetime" length="0" nulls="true"/>
+      <Column id="288" name="last_checked_at" type="datetime" length="0" nulls="false">
+         <CP name="DEFAULT_VALUE">2008-11-05 02:37:16</CP>
+      </Column>
+   </Table>
+   <Table id="289" name="topics" schema="" database="openmind_dev">
+      <Column id="290" name="id" type="int" length="0" nulls="false">
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">YES</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="291" name="title" type="varchar" length="200" nulls="false"/>
+      <Column id="292" name="lock_version" type="int" length="0" nulls="true">
+         <CP name="DEFAULT_VALUE">0</CP>
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="293" name="forum_id" type="int" length="0" nulls="false">
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="294" name="user_id" type="int" length="0" nulls="false">
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="295" name="pinned" type="tinyint" length="0" nulls="false">
+         <CP name="DEFAULT_VALUE">0</CP>
+         <CP name="PRECISION">1</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="296" name="created_at" type="datetime" length="0" nulls="true"/>
+      <Column id="297" name="updated_at" type="datetime" length="0" nulls="true"/>
+      <Column id="298" name="topic_comments_count" type="int" length="0" nulls="true">
+         <CP name="DEFAULT_VALUE">0</CP>
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="299" name="touch_counter" type="int" length="0" nulls="false">
+         <CP name="DEFAULT_VALUE">0</CP>
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+   </Table>
+   <Table id="300" name="user_idea_reads" schema="" database="openmind_dev">
+      <Column id="301" name="id" type="int" length="0" nulls="false">
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">YES</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="302" name="user_id" type="int" length="0" nulls="false">
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="303" name="idea_id" type="int" length="0" nulls="false">
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="304" name="last_read" type="datetime" length="0" nulls="false">
+         <CP name="DEFAULT_VALUE">2008-11-05 02:37:15</CP>
+      </Column>
+      <Column id="305" name="created_at" type="datetime" length="0" nulls="true"/>
+      <Column id="306" name="updated_at" type="datetime" length="0" nulls="true"/>
+      <Column id="307" name="lock_version" type="int" length="0" nulls="true">
+         <CP name="DEFAULT_VALUE">0</CP>
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+   </Table>
+   <Table id="308" name="user_logons" schema="" database="openmind_dev">
+      <Column id="309" name="id" type="int" length="0" nulls="false">
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">YES</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="310" name="user_id" type="int" length="0" nulls="false">
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="311" name="lock_version" type="int" length="0" nulls="true">
+         <CP name="DEFAULT_VALUE">0</CP>
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="312" name="created_at" type="datetime" length="0" nulls="true"/>
+      <Column id="313" name="updated_at" type="datetime" length="0" nulls="true"/>
+   </Table>
+   <Table id="314" name="user_requests" schema="" database="openmind_dev">
+      <Column id="315" name="id" type="int" length="0" nulls="false">
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">YES</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="316" name="email" type="varchar" length="255" nulls="false"/>
+      <Column id="317" name="created_at" type="datetime" length="0" nulls="true"/>
+      <Column id="318" name="updated_at" type="datetime" length="0" nulls="true"/>
+      <Column id="319" name="first_name" type="varchar" length="255" nulls="true"/>
+      <Column id="320" name="last_name" type="varchar" length="255" nulls="false"/>
+      <Column id="321" name="lock_version" type="int" length="0" nulls="true">
+         <CP name="DEFAULT_VALUE">0</CP>
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="322" name="enterprise_name" type="varchar" length="255" nulls="false"/>
+      <Column id="323" name="enterprise_id" type="int" length="0" nulls="true">
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="324" name="initial_enterprise_allocation" type="int" length="0" nulls="false">
+         <CP name="DEFAULT_VALUE">0</CP>
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="325" name="initial_user_allocation" type="int" length="0" nulls="false">
+         <CP name="DEFAULT_VALUE">0</CP>
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="326" name="time_zone" type="varchar" length="255" nulls="false"/>
+      <Column id="327" name="status" type="varchar" length="10" nulls="false"/>
+      <Column id="328" name="email_sent" type="datetime" length="0" nulls="true"/>
+      <Column id="329" name="enterprise_type_id" type="int" length="0" nulls="true">
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+   </Table>
+   <Table id="330" name="user_topic_reads" schema="" database="openmind_dev">
+      <Column id="331" name="id" type="int" length="0" nulls="false">
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">YES</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="332" name="user_id" type="int" length="0" nulls="false">
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="333" name="topic_id" type="int" length="0" nulls="false">
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="334" name="lock_version" type="int" length="0" nulls="true">
+         <CP name="DEFAULT_VALUE">0</CP>
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="335" name="created_at" type="datetime" length="0" nulls="true"/>
+      <Column id="336" name="updated_at" type="datetime" length="0" nulls="true"/>
+      <Column id="337" name="views" type="int" length="0" nulls="false">
+         <CP name="DEFAULT_VALUE">0</CP>
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+   </Table>
+   <Table id="338" name="users" schema="" database="openmind_dev">
+      <Column id="339" name="id" type="int" length="0" nulls="false">
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">YES</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="340" name="email" type="varchar" length="255" nulls="true"/>
+      <Column id="341" name="crypted_password" type="varchar" length="40" nulls="true"/>
+      <Column id="342" name="salt" type="varchar" length="40" nulls="true"/>
+      <Column id="343" name="created_at" type="datetime" length="0" nulls="true"/>
+      <Column id="344" name="updated_at" type="datetime" length="0" nulls="true"/>
+      <Column id="345" name="remember_token" type="varchar" length="255" nulls="true"/>
+      <Column id="346" name="remember_token_expires_at" type="datetime" length="0" nulls="true"/>
+      <Column id="347" name="first_name" type="varchar" length="40" nulls="true"/>
+      <Column id="348" name="last_name" type="varchar" length="40" nulls="true"/>
+      <Column id="349" name="row_limit" type="int" length="0" nulls="false">
+         <CP name="DEFAULT_VALUE">10</CP>
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="350" name="active" type="tinyint" length="0" nulls="false">
+         <CP name="DEFAULT_VALUE">1</CP>
+         <CP name="PRECISION">1</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="351" name="lock_version" type="int" length="0" nulls="true">
+         <CP name="DEFAULT_VALUE">0</CP>
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="352" name="activation_code" type="varchar" length="40" nulls="true"/>
+      <Column id="353" name="activated_at" type="datetime" length="0" nulls="true"/>
+      <Column id="354" name="last_message_read" type="datetime" length="0" nulls="true"/>
+      <Column id="355" name="enterprise_id" type="int" length="0" nulls="false">
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="356" name="time_zone" type="varchar" length="255" nulls="true">
+         <CP name="DEFAULT_VALUE">Eastern Time (US &amp; Canada)</CP>
+      </Column>
+      <Column id="357" name="force_change_password" type="tinyint" length="0" nulls="false">
+         <CP name="DEFAULT_VALUE">1</CP>
+         <CP name="PRECISION">1</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="358" name="hide_contact_info" type="tinyint" length="0" nulls="true">
+         <CP name="DEFAULT_VALUE">1</CP>
+         <CP name="PRECISION">1</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="359" name="custom_boolean1" type="tinyint" length="0" nulls="true">
+         <CP name="PRECISION">1</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="360" name="watch_on_vote" type="tinyint" length="0" nulls="false">
+         <CP name="DEFAULT_VALUE">1</CP>
+         <CP name="PRECISION">1</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="361" name="identity_url" type="varchar" length="255" nulls="true"/>
+   </Table>
+   <Table id="362" name="votes" schema="" database="openmind_dev">
+      <Column id="363" name="id" type="int" length="0" nulls="false">
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">YES</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="364" name="user_id" type="int" length="0" nulls="false">
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="365" name="allocation_id" type="int" length="0" nulls="false">
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="366" name="idea_id" type="int" length="0" nulls="false">
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="367" name="created_at" type="datetime" length="0" nulls="true"/>
+      <Column id="368" name="updated_at" type="datetime" length="0" nulls="true"/>
+      <Column id="369" name="lock_version" type="int" length="0" nulls="true">
+         <CP name="DEFAULT_VALUE">0</CP>
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="370" name="comments" type="text" length="0" nulls="true"/>
+   </Table>
+   <Table id="371" name="watches" schema="" database="openmind_dev">
+      <Column id="372" name="user_id" type="int" length="0" nulls="false">
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="373" name="idea_id" type="int" length="0" nulls="false">
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="374" name="lock_version" type="int" length="0" nulls="true">
+         <CP name="DEFAULT_VALUE">0</CP>
+         <CP name="PRECISION">11</CP>
+         <CP name="IDENTITY">NO</CP>
+         <CP name="UNSIGNED">NO</CP>
+         <CP name="ZERO_FILL">NO</CP>
+      </Column>
+      <Column id="375" name="created_at" type="datetime" length="0" nulls="true"/>
+      <Column id="376" name="updated_at" type="datetime" length="0" nulls="true"/>
+   </Table>
+   <Relation id="377" name="fk_allocations_user_id" cardinality="-2" identifying="false" nulls="false">
+      <Option name="onUpdate" class="String" value=""></Option>
+      <Option name="onDelete" class="String" value=""></Option>
+      <FK>339</FK>
+      <PK>4</PK>
+   </Relation>
+   <Relation id="378" name="fk_allocations_enterprise_id" cardinality="-2" identifying="false" nulls="false">
+      <Option name="onUpdate" class="String" value=""></Option>
+      <Option name="onDelete" class="String" value=""></Option>
+      <FK>56</FK>
+      <PK>5</PK>
+   </Relation>
+   <Relation id="379" name="fk_comments_user_id" cardinality="-2" identifying="false" nulls="false">
+      <Option name="onUpdate" class="String" value=""></Option>
+      <Option name="onDelete" class="String" value=""></Option>
+      <FK>339</FK>
+      <PK>21</PK>
+   </Relation>
+   <Relation id="380" name="fk_comments_topic_id" cardinality="-2" identifying="false" nulls="false">
+      <Option name="onUpdate" class="String" value=""></Option>
+      <Option name="onDelete" class="String" value=""></Option>
+      <FK>290</FK>
+      <PK>28</PK>
+   </Relation>
+   <Relation id="381" name="fk_comments_poll_id" cardinality="-2" identifying="false" nulls="false">
+      <Option name="onUpdate" class="String" value=""></Option>
+      <Option name="onDelete" class="String" value=""></Option>
+      <FK>204</FK>
+      <PK>30</PK>
+   </Relation>
+   <Relation id="382" name="fk_comments_idea_id" cardinality="-2" identifying="false" nulls="false">
+      <Option name="onUpdate" class="String" value=""></Option>
+      <Option name="onDelete" class="String" value=""></Option>
+      <FK>126</FK>
+      <PK>22</PK>
+   </Relation>
+   <Relation id="383" name="fk_email_requests_user_id" cardinality="-2" identifying="false" nulls="false">
+      <Option name="onUpdate" class="String" value=""></Option>
+      <Option name="onDelete" class="String" value=""></Option>
+      <FK>339</FK>
+      <PK>41</PK>
+   </Relation>
+   <Relation id="384" name="fk_email_requests_idea_id" cardinality="-2" identifying="false" nulls="false">
+      <Option name="onUpdate" class="String" value=""></Option>
+      <Option name="onDelete" class="String" value=""></Option>
+      <FK>126</FK>
+      <PK>33</PK>
+   </Relation>
+   <Relation id="385" name="fk_enterprise_types_forums_forum_id" cardinality="-2" identifying="false" nulls="false">
+      <Option name="onUpdate" class="String" value=""></Option>
+      <Option name="onDelete" class="String" value=""></Option>
+      <FK>82</FK>
+      <PK>44</PK>
+   </Relation>
+   <Relation id="386" name="fk_enterprise_types_forums_enterprise_type_id" cardinality="-2" identifying="false" nulls="false">
+      <Option name="onUpdate" class="String" value=""></Option>
+      <Option name="onDelete" class="String" value=""></Option>
+      <FK>155</FK>
+      <PK>45</PK>
+   </Relation>
+   <Relation id="387" name="fk_enterprise_types_polls_poll_id" cardinality="-2" identifying="false" nulls="false">
+      <Option name="onUpdate" class="String" value=""></Option>
+      <Option name="onDelete" class="String" value=""></Option>
+      <FK>204</FK>
+      <PK>50</PK>
+   </Relation>
+   <Relation id="388" name="fk_enterprise_types_polls_enterprise_type_id" cardinality="-2" identifying="false" nulls="false">
+      <Option name="onUpdate" class="String" value=""></Option>
+      <Option name="onDelete" class="String" value=""></Option>
+      <FK>155</FK>
+      <PK>51</PK>
+   </Relation>
+   <Relation id="389" name="fk_enterprises_enterprise_type_id" cardinality="-2" identifying="false" nulls="false">
+      <Option name="onUpdate" class="String" value=""></Option>
+      <Option name="onDelete" class="String" value=""></Option>
+      <FK>155</FK>
+      <PK>62</PK>
+   </Relation>
+   <Relation id="390" name="fk_forum_mediators_user_id" cardinality="-2" identifying="false" nulls="false">
+      <Option name="onUpdate" class="String" value=""></Option>
+      <Option name="onDelete" class="String" value=""></Option>
+      <FK>339</FK>
+      <PK>64</PK>
+   </Relation>
+   <Relation id="391" name="fk_forum_mediators_forum_id" cardinality="-2" identifying="false" nulls="false">
+      <Option name="onUpdate" class="String" value=""></Option>
+      <Option name="onDelete" class="String" value=""></Option>
+      <FK>82</FK>
+      <PK>65</PK>
+   </Relation>
+   <Relation id="392" name="fk_forum_watches_user_id" cardinality="-2" identifying="false" nulls="false">
+      <Option name="onUpdate" class="String" value=""></Option>
+      <Option name="onDelete" class="String" value=""></Option>
+      <FK>339</FK>
+      <PK>70</PK>
+   </Relation>
+   <Relation id="393" name="fk_forum_watches_forum_id" cardinality="-2" identifying="false" nulls="false">
+      <Option name="onUpdate" class="String" value=""></Option>
+      <Option name="onDelete" class="String" value=""></Option>
+      <FK>82</FK>
+      <PK>71</PK>
+   </Relation>
+   <Relation id="394" name="fk_forums_groups_group_id" cardinality="-2" identifying="false" nulls="false">
+      <Option name="onUpdate" class="String" value=""></Option>
+      <Option name="onDelete" class="String" value=""></Option>
+      <FK>111</FK>
+      <PK>77</PK>
+   </Relation>
+   <Relation id="395" name="fk_forums_groups_forum_id" cardinality="-2" identifying="false" nulls="false">
+      <Option name="onUpdate" class="String" value=""></Option>
+      <Option name="onDelete" class="String" value=""></Option>
+      <FK>82</FK>
+      <PK>76</PK>
+   </Relation>
+   <Relation id="396" name="fk_forums_link_set_id" cardinality="-2" identifying="false" nulls="false">
+      <Option name="onUpdate" class="String" value=""></Option>
+      <Option name="onDelete" class="String" value=""></Option>
+      <FK>140</FK>
+      <PK>89</PK>
+   </Relation>
+   <Relation id="397" name="fk_forums_forum_group_id" cardinality="-2" identifying="false" nulls="false">
+      <Option name="onUpdate" class="String" value=""></Option>
+      <Option name="onDelete" class="String" value=""></Option>
+      <FK>155</FK>
+      <PK>90</PK>
+   </Relation>
+   <Relation id="398" name="fk_group_members_user_id" cardinality="-2" identifying="false" nulls="false">
+      <Option name="onUpdate" class="String" value=""></Option>
+      <Option name="onDelete" class="String" value=""></Option>
+      <FK>339</FK>
+      <PK>93</PK>
+   </Relation>
+   <Relation id="399" name="fk_group_members_group_id" cardinality="-2" identifying="false" nulls="false">
+      <Option name="onUpdate" class="String" value=""></Option>
+      <Option name="onDelete" class="String" value=""></Option>
+      <FK>111</FK>
+      <PK>94</PK>
+   </Relation>
+   <Relation id="400" name="fk_groups_polls_poll_id" cardinality="-2" identifying="false" nulls="false">
+      <Option name="onUpdate" class="String" value=""></Option>
+      <Option name="onDelete" class="String" value=""></Option>
+      <FK>204</FK>
+      <PK>99</PK>
+   </Relation>
+   <Relation id="401" name="fk_groups_polls_group_id" cardinality="-2" identifying="false" nulls="false">
+      <Option name="onUpdate" class="String" value=""></Option>
+      <Option name="onDelete" class="String" value=""></Option>
+      <FK>111</FK>
+      <PK>100</PK>
+   </Relation>
+   <Relation id="402" name="fk_groups_user_requests_user_request_id" cardinality="-2" identifying="false" nulls="false">
+      <Option name="onUpdate" class="String" value=""></Option>
+      <Option name="onDelete" class="String" value=""></Option>
+      <FK>315</FK>
+      <PK>105</PK>
+   </Relation>
+   <Relation id="403" name="fk_groups_user_requests_group_id" cardinality="-2" identifying="false" nulls="false">
+      <Option name="onUpdate" class="String" value=""></Option>
+      <Option name="onDelete" class="String" value=""></Option>
+      <FK>111</FK>
+      <PK>106</PK>
+   </Relation>
+   <Relation id="404" name="fk_idea_change_logs_user_id" cardinality="-2" identifying="false" nulls="false">
+      <Option name="onUpdate" class="String" value=""></Option>
+      <Option name="onDelete" class="String" value=""></Option>
+      <FK>339</FK>
+      <PK>120</PK>
+   </Relation>
+   <Relation id="405" name="fk_idea_change_logs_idea_id" cardinality="-2" identifying="false" nulls="false">
+      <Option name="onUpdate" class="String" value=""></Option>
+      <Option name="onDelete" class="String" value=""></Option>
+      <FK>126</FK>
+      <PK>119</PK>
+   </Relation>
+   <Relation id="406" name="fk_ideas_user_id" cardinality="-2" identifying="false" nulls="false">
+      <Option name="onUpdate" class="String" value=""></Option>
+      <Option name="onDelete" class="String" value=""></Option>
+      <FK>339</FK>
+      <PK>127</PK>
+   </Relation>
+   <Relation id="407" name="fk_ideas_release_id" cardinality="-2" identifying="false" nulls="false">
+      <Option name="onUpdate" class="String" value=""></Option>
+      <Option name="onDelete" class="String" value=""></Option>
+      <FK>222</FK>
+      <PK>129</PK>
+   </Relation>
+   <Relation id="408" name="fk_ideas_product_id" cardinality="-2" identifying="false" nulls="false">
+      <Option name="onUpdate" class="String" value=""></Option>
+      <Option name="onDelete" class="String" value=""></Option>
+      <FK>214</FK>
+      <PK>128</PK>
+   </Relation>
+   <Relation id="409" name="fk_ideas_merged_to_idea_id" cardinality="-2" identifying="false" nulls="false">
+      <Option name="onUpdate" class="String" value=""></Option>
+      <Option name="onDelete" class="String" value=""></Option>
+      <FK>126</FK>
+      <PK>135</PK>
+   </Relation>
+   <Relation id="410" name="fk_links_link_set_id" cardinality="-2" identifying="false" nulls="false">
+      <Option name="onUpdate" class="String" value=""></Option>
+      <Option name="onDelete" class="String" value=""></Option>
+      <FK>140</FK>
+      <PK>150</PK>
+   </Relation>
+   <Relation id="411" name="fk_poll_options_poll_id" cardinality="-2" identifying="false" nulls="false">
+      <Option name="onUpdate" class="String" value=""></Option>
+      <Option name="onDelete" class="String" value=""></Option>
+      <FK>204</FK>
+      <PK>192</PK>
+   </Relation>
+   <Relation id="412" name="fk_poll_user_responses_user_id" cardinality="-2" identifying="false" nulls="false">
+      <Option name="onUpdate" class="String" value=""></Option>
+      <Option name="onDelete" class="String" value=""></Option>
+      <FK>339</FK>
+      <PK>198</PK>
+   </Relation>
+   <Relation id="413" name="fk_poll_user_responses_poll_option_id" cardinality="-2" identifying="false" nulls="false">
+      <Option name="onUpdate" class="String" value=""></Option>
+      <Option name="onDelete" class="String" value=""></Option>
+      <FK>190</FK>
+      <PK>199</PK>
+   </Relation>
+   <Relation id="414" name="fk_releases_release_status_id" cardinality="-2" identifying="false" nulls="false">
+      <Option name="onUpdate" class="String" value=""></Option>
+      <Option name="onDelete" class="String" value=""></Option>
+      <FK>155</FK>
+      <PK>225</PK>
+   </Relation>
+   <Relation id="415" name="fk_releases_product_id" cardinality="-2" identifying="false" nulls="false">
+      <Option name="onUpdate" class="String" value=""></Option>
+      <Option name="onDelete" class="String" value=""></Option>
+      <FK>214</FK>
+      <PK>224</PK>
+   </Relation>
+   <Relation id="416" name="fk_roles_user_requests_user_request_id" cardinality="-2" identifying="false" nulls="false">
+      <Option name="onUpdate" class="String" value=""></Option>
+      <Option name="onDelete" class="String" value=""></Option>
+      <FK>315</FK>
+      <PK>235</PK>
+   </Relation>
+   <Relation id="417" name="fk_roles_user_requests_role_id" cardinality="-2" identifying="false" nulls="false">
+      <Option name="onUpdate" class="String" value=""></Option>
+      <Option name="onDelete" class="String" value=""></Option>
+      <FK>247</FK>
+      <PK>236</PK>
+   </Relation>
+   <Relation id="418" name="fk_roles_users_user_id" cardinality="-2" identifying="false" nulls="false">
+      <Option name="onUpdate" class="String" value=""></Option>
+      <Option name="onDelete" class="String" value=""></Option>
+      <FK>339</FK>
+      <PK>241</PK>
+   </Relation>
+   <Relation id="419" name="fk_roles_users_role_id" cardinality="-2" identifying="false" nulls="false">
+      <Option name="onUpdate" class="String" value=""></Option>
+      <Option name="onDelete" class="String" value=""></Option>
+      <FK>247</FK>
+      <PK>242</PK>
+   </Relation>
+   <Relation id="420" name="fk_topic_watches_user_id" cardinality="-2" identifying="false" nulls="false">
+      <Option name="onUpdate" class="String" value=""></Option>
+      <Option name="onDelete" class="String" value=""></Option>
+      <FK>339</FK>
+      <PK>283</PK>
+   </Relation>
+   <Relation id="421" name="fk_topic_watches_topic_id" cardinality="-2" identifying="false" nulls="false">
+      <Option name="onUpdate" class="String" value=""></Option>
+      <Option name="onDelete" class="String" value=""></Option>
+      <FK>290</FK>
+      <PK>284</PK>
+   </Relation>
+   <Relation id="422" name="fk_topics_user_id" cardinality="-2" identifying="false" nulls="false">
+      <Option name="onUpdate" class="String" value=""></Option>
+      <Option name="onDelete" class="String" value=""></Option>
+      <FK>339</FK>
+      <PK>294</PK>
+   </Relation>
+   <Relation id="423" name="fk_topics_forum_id" cardinality="-2" identifying="false" nulls="false">
+      <Option name="onUpdate" class="String" value=""></Option>
+      <Option name="onDelete" class="String" value=""></Option>
+      <FK>82</FK>
+      <PK>293</PK>
+   </Relation>
+   <Relation id="424" name="fk_user_idea_reads_user_id" cardinality="-2" identifying="false" nulls="false">
+      <Option name="onUpdate" class="String" value=""></Option>
+      <Option name="onDelete" class="String" value=""></Option>
+      <FK>339</FK>
+      <PK>302</PK>
+   </Relation>
+   <Relation id="425" name="fk_user_idea_reads_idea_id" cardinality="-2" identifying="false" nulls="false">
+      <Option name="onUpdate" class="String" value=""></Option>
+      <Option name="onDelete" class="String" value=""></Option>
+      <FK>126</FK>
+      <PK>303</PK>
+   </Relation>
+   <Relation id="426" name="fk_user_logons_user_id" cardinality="-2" identifying="false" nulls="false">
+      <Option name="onUpdate" class="String" value=""></Option>
+      <Option name="onDelete" class="String" value=""></Option>
+      <FK>339</FK>
+      <PK>310</PK>
+   </Relation>
+   <Relation id="427" name="fk_user_requests_enterprise_type_id" cardinality="-2" identifying="false" nulls="false">
+      <Option name="onUpdate" class="String" value=""></Option>
+      <Option name="onDelete" class="String" value=""></Option>
+      <FK>155</FK>
+      <PK>329</PK>
+   </Relation>
+   <Relation id="428" name="fk_user_requests_enterprise_id" cardinality="-2" identifying="false" nulls="false">
+      <Option name="onUpdate" class="String" value=""></Option>
+      <Option name="onDelete" class="String" value=""></Option>
+      <FK>56</FK>
+      <PK>323</PK>
+   </Relation>
+   <Relation id="429" name="fk_user_topic_reads_user_id" cardinality="-2" identifying="false" nulls="false">
+      <Option name="onUpdate" class="String" value=""></Option>
+      <Option name="onDelete" class="String" value=""></Option>
+      <FK>339</FK>
+      <PK>332</PK>
+   </Relation>
+   <Relation id="430" name="fk_user_topic_reads_topic_id" cardinality="-2" identifying="false" nulls="false">
+      <Option name="onUpdate" class="String" value=""></Option>
+      <Option name="onDelete" class="String" value=""></Option>
+      <FK>290</FK>
+      <PK>333</PK>
+   </Relation>
+   <Relation id="431" name="fk_users_enterprise_id" cardinality="-2" identifying="false" nulls="false">
+      <Option name="onUpdate" class="String" value=""></Option>
+      <Option name="onDelete" class="String" value=""></Option>
+      <FK>56</FK>
+      <PK>355</PK>
+   </Relation>
+   <Relation id="432" name="fk_votes_user_id" cardinality="-2" identifying="false" nulls="false">
+      <Option name="onUpdate" class="String" value=""></Option>
+      <Option name="onDelete" class="String" value=""></Option>
+      <FK>339</FK>
+      <PK>364</PK>
+   </Relation>
+   <Relation id="433" name="fk_votes_idea_id" cardinality="-2" identifying="false" nulls="false">
+      <Option name="onUpdate" class="String" value=""></Option>
+      <Option name="onDelete" class="String" value=""></Option>
+      <FK>126</FK>
+      <PK>366</PK>
+   </Relation>
+   <Relation id="434" name="fk_votes_allocation_id" cardinality="-2" identifying="false" nulls="false">
+      <Option name="onUpdate" class="String" value=""></Option>
+      <Option name="onDelete" class="String" value=""></Option>
+      <FK>1</FK>
+      <PK>365</PK>
+   </Relation>
+   <Relation id="435" name="fk_watches_user_id" cardinality="-2" identifying="false" nulls="false">
+      <Option name="onUpdate" class="String" value=""></Option>
+      <Option name="onDelete" class="String" value=""></Option>
+      <FK>339</FK>
+      <PK>372</PK>
+   </Relation>
+   <Relation id="436" name="fk_watches_idea_id" cardinality="-2" identifying="false" nulls="false">
+      <Option name="onUpdate" class="String" value=""></Option>
+      <Option name="onDelete" class="String" value=""></Option>
+      <FK>126</FK>
+      <PK>373</PK>
+   </Relation>
+   <Note id="437">
+      <Text>Users</Text>
+   </Note>
+   <Note id="438">
+      <Text>Ideas</Text>
+   </Note>
+   <Note id="439">
+      <Text>Allocations</Text>
+   </Note>
+   <Note id="440">
+      <Text>Forums</Text>
+   </Note>
+   <Note id="441">
+      <Text>Polls</Text>
+   </Note>
+   <Note id="442">
+      <Text>OpenID</Text>
+   </Note>
+   <Note id="443">
+      <Text>Products</Text>
+   </Note>
+   <Note id="444">
+      <Text>Miscellaneous</Text>
+   </Note>
+   <Index table="0" name="fk_allocations_user_id" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="false"></Option>
+      <IndexColumn id="4" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="0" name="PRIMARY" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="true"></Option>
+      <IndexColumn id="1" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="0" name="fk_allocations_enterprise_id" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="false"></Option>
+      <IndexColumn id="5" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="11" name="PRIMARY" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="true"></Option>
+      <IndexColumn id="12" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="19" name="fk_comments_user_id" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="false"></Option>
+      <IndexColumn id="21" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="19" name="PRIMARY" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="true"></Option>
+      <IndexColumn id="20" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="19" name="fk_comments_idea_id" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="false"></Option>
+      <IndexColumn id="22" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="19" name="fk_comments_poll_id" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="false"></Option>
+      <IndexColumn id="30" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="19" name="fk_comments_topic_id" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="false"></Option>
+      <IndexColumn id="28" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="31" name="fk_email_requests_idea_id" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="false"></Option>
+      <IndexColumn id="33" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="31" name="PRIMARY" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="true"></Option>
+      <IndexColumn id="32" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="31" name="fk_email_requests_user_id" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="false"></Option>
+      <IndexColumn id="41" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="43" name=":enterprise_types_forums_u1" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="true"></Option>
+      <IndexColumn id="44" sequence="0" ascending="true"></IndexColumn>
+      <IndexColumn id="45" sequence="1" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="43" name="fk_enterprise_types_forums_enterprise_type_id" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="false"></Option>
+      <IndexColumn id="45" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="49" name=":enterprise_types_polls_u1" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="true"></Option>
+      <IndexColumn id="50" sequence="0" ascending="true"></IndexColumn>
+      <IndexColumn id="51" sequence="1" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="49" name="fk_enterprise_types_polls_enterprise_type_id" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="false"></Option>
+      <IndexColumn id="51" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="55" name="index_enterprises_on_name" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="true"></Option>
+      <IndexColumn id="57" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="55" name="PRIMARY" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="true"></Option>
+      <IndexColumn id="56" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="55" name="fk_enterprises_enterprise_type_id" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="false"></Option>
+      <IndexColumn id="62" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="63" name="fk_forum_mediators_forum_id" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="false"></Option>
+      <IndexColumn id="65" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="63" name="fk_forum_mediators_user_id" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="false"></Option>
+      <IndexColumn id="64" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="69" name="index_forum_watches_on_user_id_and_forum_id" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="false"></Option>
+      <IndexColumn id="70" sequence="0" ascending="true"></IndexColumn>
+      <IndexColumn id="71" sequence="1" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="69" name="fk_forum_watches_forum_id" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="false"></Option>
+      <IndexColumn id="71" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="75" name="index_forums_groups_on_forum_id_and_group_id" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="true"></Option>
+      <IndexColumn id="76" sequence="0" ascending="true"></IndexColumn>
+      <IndexColumn id="77" sequence="1" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="75" name="fk_forums_groups_group_id" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="false"></Option>
+      <IndexColumn id="77" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="81" name="index_forums_on_name" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="true"></Option>
+      <IndexColumn id="83" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="81" name="PRIMARY" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="true"></Option>
+      <IndexColumn id="82" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="81" name="fk_forums_link_set_id" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="false"></Option>
+      <IndexColumn id="89" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="81" name="fk_forums_forum_group_id" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="false"></Option>
+      <IndexColumn id="90" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="92" name="fk_group_members_group_id" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="false"></Option>
+      <IndexColumn id="94" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="92" name="index_group_members_on_user_id_and_group_id" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="true"></Option>
+      <IndexColumn id="93" sequence="0" ascending="true"></IndexColumn>
+      <IndexColumn id="94" sequence="1" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="98" name=":groups_polls_u1" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="true"></Option>
+      <IndexColumn id="99" sequence="0" ascending="true"></IndexColumn>
+      <IndexColumn id="100" sequence="1" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="98" name="fk_groups_polls_group_id" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="false"></Option>
+      <IndexColumn id="100" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="104" name="fk_groups_user_requests_group_id" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="false"></Option>
+      <IndexColumn id="106" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="104" name="index_groups_user_requests_on_user_request_id_and_group_id" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="true"></Option>
+      <IndexColumn id="105" sequence="0" ascending="true"></IndexColumn>
+      <IndexColumn id="106" sequence="1" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="110" name="index_groups_on_name" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="true"></Option>
+      <IndexColumn id="112" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="110" name="PRIMARY" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="true"></Option>
+      <IndexColumn id="111" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="117" name="fk_idea_change_logs_idea_id" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="false"></Option>
+      <IndexColumn id="119" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="117" name="fk_idea_change_logs_user_id" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="false"></Option>
+      <IndexColumn id="120" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="117" name="PRIMARY" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="true"></Option>
+      <IndexColumn id="118" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="125" name="fk_ideas_merged_to_idea_id" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="false"></Option>
+      <IndexColumn id="135" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="125" name="fk_ideas_user_id" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="false"></Option>
+      <IndexColumn id="127" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="125" name="PRIMARY" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="true"></Option>
+      <IndexColumn id="126" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="125" name="fk_ideas_product_id" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="false"></Option>
+      <IndexColumn id="128" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="125" name="fk_ideas_release_id" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="false"></Option>
+      <IndexColumn id="129" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="139" name="index_link_sets_on_name" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="true"></Option>
+      <IndexColumn id="141" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="139" name="PRIMARY" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="true"></Option>
+      <IndexColumn id="140" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="146" name="fk_links_link_set_id" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="false"></Option>
+      <IndexColumn id="150" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="146" name="PRIMARY" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="true"></Option>
+      <IndexColumn id="147" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="154" name="index_lookup_codes_on_code_type_and_short_name" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="false"></Option>
+      <IndexColumn id="156" sequence="0" ascending="true"></IndexColumn>
+      <IndexColumn id="157" sequence="1" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="154" name="PRIMARY" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="true"></Option>
+      <IndexColumn id="155" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="163" name="PRIMARY" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="true"></Option>
+      <IndexColumn id="164" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="171" name="PRIMARY" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="true"></Option>
+      <IndexColumn id="172" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="175" name="PRIMARY" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="true"></Option>
+      <IndexColumn id="176" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="179" name="PRIMARY" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="true"></Option>
+      <IndexColumn id="180" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="179" name="index_periodic_jobs_on_run_counter" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="false"></Option>
+      <IndexColumn id="188" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="189" name="fk_poll_options_poll_id" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="false"></Option>
+      <IndexColumn id="192" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="189" name="PRIMARY" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="true"></Option>
+      <IndexColumn id="190" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="189" name="index_poll_options_on_description" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="false"></Option>
+      <IndexColumn id="191" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="197" name="fk_poll_user_responses_user_id" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="false"></Option>
+      <IndexColumn id="198" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="197" name="fk_poll_user_responses_poll_option_id" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="false"></Option>
+      <IndexColumn id="199" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="203" name="PRIMARY" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="true"></Option>
+      <IndexColumn id="204" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="203" name="index_polls_on_title" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="true"></Option>
+      <IndexColumn id="205" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="213" name="PRIMARY" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="true"></Option>
+      <IndexColumn id="214" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="213" name="index_products_on_name" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="true"></Option>
+      <IndexColumn id="215" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="221" name="fk_releases_release_status_id" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="false"></Option>
+      <IndexColumn id="225" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="221" name="PRIMARY" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="true"></Option>
+      <IndexColumn id="222" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="221" name="index_releases_on_product_id_and_version" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="true"></Option>
+      <IndexColumn id="224" sequence="0" ascending="true"></IndexColumn>
+      <IndexColumn id="223" sequence="1" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="234" name="fk_roles_user_requests_role_id" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="false"></Option>
+      <IndexColumn id="236" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="234" name="index_roles_user_requests_on_user_request_id_and_role_id" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="true"></Option>
+      <IndexColumn id="235" sequence="0" ascending="true"></IndexColumn>
+      <IndexColumn id="236" sequence="1" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="240" name="fk_roles_users_role_id" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="false"></Option>
+      <IndexColumn id="242" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="240" name="index_roles_users_on_user_id_and_role_id" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="true"></Option>
+      <IndexColumn id="241" sequence="0" ascending="true"></IndexColumn>
+      <IndexColumn id="242" sequence="1" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="246" name="PRIMARY" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="true"></Option>
+      <IndexColumn id="247" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="246" name="index_roles_on_title" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="true"></Option>
+      <IndexColumn id="248" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="254" name="unique_schema_migrations" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="true"></Option>
+      <IndexColumn id="255" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="256" name="PRIMARY" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="true"></Option>
+      <IndexColumn id="257" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="256" name="index_sessions_on_updated_at" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="false"></Option>
+      <IndexColumn id="260" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="256" name="index_sessions_on_session_id" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="false"></Option>
+      <IndexColumn id="258" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="261" name="PRIMARY" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="true"></Option>
+      <IndexColumn id="262" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="267" name="index_taggings_on_taggable_id_and_taggable_type" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="false"></Option>
+      <IndexColumn id="270" sequence="0" ascending="true"></IndexColumn>
+      <IndexColumn id="271" sequence="1" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="267" name="PRIMARY" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="true"></Option>
+      <IndexColumn id="268" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="267" name="index_taggings_on_tag_id" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="false"></Option>
+      <IndexColumn id="269" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="273" name="PRIMARY" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="true"></Option>
+      <IndexColumn id="274" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="276" name="PRIMARY" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="true"></Option>
+      <IndexColumn id="277" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="281" name="index_topic_watches_on_user_id_and_topic_id" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="true"></Option>
+      <IndexColumn id="283" sequence="0" ascending="true"></IndexColumn>
+      <IndexColumn id="284" sequence="1" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="281" name="PRIMARY" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="true"></Option>
+      <IndexColumn id="282" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="281" name="fk_topic_watches_topic_id" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="false"></Option>
+      <IndexColumn id="284" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="289" name="fk_topics_user_id" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="false"></Option>
+      <IndexColumn id="294" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="289" name="PRIMARY" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="true"></Option>
+      <IndexColumn id="290" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="289" name="index_topics_on_title" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="false"></Option>
+      <IndexColumn id="291" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="289" name="fk_topics_forum_id" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="false"></Option>
+      <IndexColumn id="293" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="300" name="PRIMARY" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="true"></Option>
+      <IndexColumn id="301" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="300" name="index_user_idea_reads_on_user_id_and_idea_id" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="true"></Option>
+      <IndexColumn id="302" sequence="0" ascending="true"></IndexColumn>
+      <IndexColumn id="303" sequence="1" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="300" name="fk_user_idea_reads_idea_id" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="false"></Option>
+      <IndexColumn id="303" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="308" name="index_user_logons_on_created_at" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="false"></Option>
+      <IndexColumn id="312" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="308" name="PRIMARY" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="true"></Option>
+      <IndexColumn id="309" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="308" name="fk_user_logons_user_id" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="false"></Option>
+      <IndexColumn id="310" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="314" name="fk_user_requests_enterprise_id" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="false"></Option>
+      <IndexColumn id="323" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="314" name="index_user_requests_on_email" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="false"></Option>
+      <IndexColumn id="316" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="314" name="PRIMARY" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="true"></Option>
+      <IndexColumn id="315" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="314" name="fk_user_requests_enterprise_type_id" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="false"></Option>
+      <IndexColumn id="329" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="330" name="PRIMARY" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="true"></Option>
+      <IndexColumn id="331" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="330" name="fk_user_topic_reads_topic_id" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="false"></Option>
+      <IndexColumn id="333" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="330" name="index_user_topic_reads_on_user_id_and_topic_id" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="true"></Option>
+      <IndexColumn id="332" sequence="0" ascending="true"></IndexColumn>
+      <IndexColumn id="333" sequence="1" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="338" name="fk_users_enterprise_id" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="false"></Option>
+      <IndexColumn id="355" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="338" name="index_users_on_email" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="true"></Option>
+      <IndexColumn id="340" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="338" name="PRIMARY" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="true"></Option>
+      <IndexColumn id="339" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="362" name="fk_votes_allocation_id" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="false"></Option>
+      <IndexColumn id="365" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="362" name="PRIMARY" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="true"></Option>
+      <IndexColumn id="363" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="362" name="fk_votes_idea_id" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="false"></Option>
+      <IndexColumn id="366" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="362" name="fk_votes_user_id" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="false"></Option>
+      <IndexColumn id="364" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="371" name="fk_watches_idea_id" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="false"></Option>
+      <IndexColumn id="373" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="371" name="index_watches_on_user_id_and_idea_id" schema="" database="openmind_dev">
+      <Option name="unique" class="Boolean" value="true"></Option>
+      <IndexColumn id="372" sequence="0" ascending="true"></IndexColumn>
+      <IndexColumn id="373" sequence="1" ascending="true"></IndexColumn>
+   </Index>
+   <Constraint table="0" name="PRIMARY" type="PrimKey">
+      <ConstraintColumn id="1"></ConstraintColumn>
+   </Constraint>
+   <Constraint table="11" name="PRIMARY" type="PrimKey">
+      <ConstraintColumn id="12"></ConstraintColumn>
+   </Constraint>
+   <Constraint table="19" name="PRIMARY" type="PrimKey">
+      <ConstraintColumn id="20"></ConstraintColumn>
+   </Constraint>
+   <Constraint table="31" name="PRIMARY" type="PrimKey">
+      <ConstraintColumn id="32"></ConstraintColumn>
+   </Constraint>
+   <Constraint table="43" name=":enterprise_types_forums_u1" type="Unique">
+      <ConstraintColumn id="44"></ConstraintColumn>
+      <ConstraintColumn id="45"></ConstraintColumn>
+   </Constraint>
+   <Constraint table="49" name=":enterprise_types_polls_u1" type="Unique">
+      <ConstraintColumn id="50"></ConstraintColumn>
+      <ConstraintColumn id="51"></ConstraintColumn>
+   </Constraint>
+   <Constraint table="55" name="PRIMARY" type="PrimKey">
+      <ConstraintColumn id="56"></ConstraintColumn>
+   </Constraint>
+   <Constraint table="55" name="index_enterprises_on_name" type="Unique">
+      <ConstraintColumn id="57"></ConstraintColumn>
+   </Constraint>
+   <Constraint table="75" name="index_forums_groups_on_forum_id_and_group_id" type="Unique">
+      <ConstraintColumn id="76"></ConstraintColumn>
+      <ConstraintColumn id="77"></ConstraintColumn>
+   </Constraint>
+   <Constraint table="81" name="PRIMARY" type="PrimKey">
+      <ConstraintColumn id="82"></ConstraintColumn>
+   </Constraint>
+   <Constraint table="81" name="index_forums_on_name" type="Unique">
+      <ConstraintColumn id="83"></ConstraintColumn>
+   </Constraint>
+   <Constraint table="92" name="index_group_members_on_user_id_and_group_id" type="Unique">
+      <ConstraintColumn id="93"></ConstraintColumn>
+      <ConstraintColumn id="94"></ConstraintColumn>
+   </Constraint>
+   <Constraint table="98" name=":groups_polls_u1" type="Unique">
+      <ConstraintColumn id="99"></ConstraintColumn>
+      <ConstraintColumn id="100"></ConstraintColumn>
+   </Constraint>
+   <Constraint table="104" name="index_groups_user_requests_on_user_request_id_and_group_id" type="Unique">
+      <ConstraintColumn id="105"></ConstraintColumn>
+      <ConstraintColumn id="106"></ConstraintColumn>
+   </Constraint>
+   <Constraint table="110" name="PRIMARY" type="PrimKey">
+      <ConstraintColumn id="111"></ConstraintColumn>
+   </Constraint>
+   <Constraint table="110" name="index_groups_on_name" type="Unique">
+      <ConstraintColumn id="112"></ConstraintColumn>
+   </Constraint>
+   <Constraint table="117" name="PRIMARY" type="PrimKey">
+      <ConstraintColumn id="118"></ConstraintColumn>
+   </Constraint>
+   <Constraint table="125" name="PRIMARY" type="PrimKey">
+      <ConstraintColumn id="126"></ConstraintColumn>
+   </Constraint>
+   <Constraint table="139" name="PRIMARY" type="PrimKey">
+      <ConstraintColumn id="140"></ConstraintColumn>
+   </Constraint>
+   <Constraint table="139" name="index_link_sets_on_name" type="Unique">
+      <ConstraintColumn id="141"></ConstraintColumn>
+   </Constraint>
+   <Constraint table="146" name="PRIMARY" type="PrimKey">
+      <ConstraintColumn id="147"></ConstraintColumn>
+   </Constraint>
+   <Constraint table="154" name="PRIMARY" type="PrimKey">
+      <ConstraintColumn id="155"></ConstraintColumn>
+   </Constraint>
+   <Constraint table="163" name="PRIMARY" type="PrimKey">
+      <ConstraintColumn id="164"></ConstraintColumn>
+   </Constraint>
+   <Constraint table="171" name="PRIMARY" type="PrimKey">
+      <ConstraintColumn id="172"></ConstraintColumn>
+   </Constraint>
+   <Constraint table="175" name="PRIMARY" type="PrimKey">
+      <ConstraintColumn id="176"></ConstraintColumn>
+   </Constraint>
+   <Constraint table="179" name="PRIMARY" type="PrimKey">
+      <ConstraintColumn id="180"></ConstraintColumn>
+   </Constraint>
+   <Constraint table="189" name="PRIMARY" type="PrimKey">
+      <ConstraintColumn id="190"></ConstraintColumn>
+   </Constraint>
+   <Constraint table="203" name="PRIMARY" type="PrimKey">
+      <ConstraintColumn id="204"></ConstraintColumn>
+   </Constraint>
+   <Constraint table="203" name="index_polls_on_title" type="Unique">
+      <ConstraintColumn id="205"></ConstraintColumn>
+   </Constraint>
+   <Constraint table="213" name="PRIMARY" type="PrimKey">
+      <ConstraintColumn id="214"></ConstraintColumn>
+   </Constraint>
+   <Constraint table="213" name="index_products_on_name" type="Unique">
+      <ConstraintColumn id="215"></ConstraintColumn>
+   </Constraint>
+   <Constraint table="221" name="PRIMARY" type="PrimKey">
+      <ConstraintColumn id="222"></ConstraintColumn>
+   </Constraint>
+   <Constraint table="221" name="index_releases_on_product_id_and_version" type="Unique">
+      <ConstraintColumn id="224"></ConstraintColumn>
+      <ConstraintColumn id="223"></ConstraintColumn>
+   </Constraint>
+   <Constraint table="234" name="index_roles_user_requests_on_user_request_id_and_role_id" type="Unique">
+      <ConstraintColumn id="235"></ConstraintColumn>
+      <ConstraintColumn id="236"></ConstraintColumn>
+   </Constraint>
+   <Constraint table="240" name="index_roles_users_on_user_id_and_role_id" type="Unique">
+      <ConstraintColumn id="241"></ConstraintColumn>
+      <ConstraintColumn id="242"></ConstraintColumn>
+   </Constraint>
+   <Constraint table="246" name="PRIMARY" type="PrimKey">
+      <ConstraintColumn id="247"></ConstraintColumn>
+   </Constraint>
+   <Constraint table="246" name="index_roles_on_title" type="Unique">
+      <ConstraintColumn id="248"></ConstraintColumn>
+   </Constraint>
+   <Constraint table="254" name="unique_schema_migrations" type="Unique">
+      <ConstraintColumn id="255"></ConstraintColumn>
+   </Constraint>
+   <Constraint table="256" name="PRIMARY" type="PrimKey">
+      <ConstraintColumn id="257"></ConstraintColumn>
+   </Constraint>
+   <Constraint table="261" name="PRIMARY" type="PrimKey">
+      <ConstraintColumn id="262"></ConstraintColumn>
+   </Constraint>
+   <Constraint table="267" name="PRIMARY" type="PrimKey">
+      <ConstraintColumn id="268"></ConstraintColumn>
+   </Constraint>
+   <Constraint table="273" name="PRIMARY" type="PrimKey">
+      <ConstraintColumn id="274"></ConstraintColumn>
+   </Constraint>
+   <Constraint table="276" name="PRIMARY" type="PrimKey">
+      <ConstraintColumn id="277"></ConstraintColumn>
+   </Constraint>
+   <Constraint table="281" name="PRIMARY" type="PrimKey">
+      <ConstraintColumn id="282"></ConstraintColumn>
+   </Constraint>
+   <Constraint table="281" name="index_topic_watches_on_user_id_and_topic_id" type="Unique">
+      <ConstraintColumn id="283"></ConstraintColumn>
+      <ConstraintColumn id="284"></ConstraintColumn>
+   </Constraint>
+   <Constraint table="289" name="PRIMARY" type="PrimKey">
+      <ConstraintColumn id="290"></ConstraintColumn>
+   </Constraint>
+   <Constraint table="300" name="PRIMARY" type="PrimKey">
+      <ConstraintColumn id="301"></ConstraintColumn>
+   </Constraint>
+   <Constraint table="300" name="index_user_idea_reads_on_user_id_and_idea_id" type="Unique">
+      <ConstraintColumn id="302"></ConstraintColumn>
+      <ConstraintColumn id="303"></ConstraintColumn>
+   </Constraint>
+   <Constraint table="308" name="PRIMARY" type="PrimKey">
+      <ConstraintColumn id="309"></ConstraintColumn>
+   </Constraint>
+   <Constraint table="314" name="PRIMARY" type="PrimKey">
+      <ConstraintColumn id="315"></ConstraintColumn>
+   </Constraint>
+   <Constraint table="330" name="PRIMARY" type="PrimKey">
+      <ConstraintColumn id="331"></ConstraintColumn>
+   </Constraint>
+   <Constraint table="330" name="index_user_topic_reads_on_user_id_and_topic_id" type="Unique">
+      <ConstraintColumn id="332"></ConstraintColumn>
+      <ConstraintColumn id="333"></ConstraintColumn>
+   </Constraint>
+   <Constraint table="338" name="PRIMARY" type="PrimKey">
+      <ConstraintColumn id="339"></ConstraintColumn>
+   </Constraint>
+   <Constraint table="338" name="index_users_on_email" type="Unique">
+      <ConstraintColumn id="340"></ConstraintColumn>
+   </Constraint>
+   <Constraint table="362" name="PRIMARY" type="PrimKey">
+      <ConstraintColumn id="363"></ConstraintColumn>
+   </Constraint>
+   <Constraint table="371" name="index_watches_on_user_id_and_idea_id" type="Unique">
+      <ConstraintColumn id="372"></ConstraintColumn>
+      <ConstraintColumn id="373"></ConstraintColumn>
+   </Constraint>
+   <Sheet name="local" id="445" disp_at="true" disp_co="true">
+      <Place id="308" visible="true">1910,280,140,110</Place>
+      <Place id="125" visible="true">2520,280,190,240</Place>
+      <Place id="416" visible="true">500,0,0,0</Place>
+      <Place id="380" visible="true">500,0,0,0</Place>
+      <Place id="418" visible="true">500,0,0,0</Place>
+      <Place id="391" visible="true">500,0,0,0</Place>
+      <Place id="383" visible="true">500,0,0,0</Place>
+      <Place id="417" visible="true">500,0,0,0</Place>
+      <Place id="389" visible="true">500,0,0,0</Place>
+      <Place id="410" visible="true">500,0,0,0</Place>
+      <Place id="429" visible="true">500,0,0,0</Place>
+      <Place id="386" visible="true">500,0,0,0</Place>
+      <Place id="402" visible="true">500,0,0,0</Place>
+      <Place id="300" visible="true">800,10,140,140</Place>
+      <Place id="423" visible="true">500,0,0,0</Place>
+      <Place id="289" visible="true">830,600,170,190</Place>
+      <Place id="436" visible="true">500,0,0,0</Place>
+      <Place id="203" visible="true">950,280,190,180</Place>
+      <Place id="415" visible="true">500,0,0,0</Place>
+      <Place id="393" visible="true">500,0,0,0</Place>
+      <Place id="163" visible="true">1270,1050,230,140</Place>
+      <Place id="92" visible="true">10,0,140,110</Place>
+      <Place id="171" visible="true">620,1050,200,70</Place>
+      <Place id="411" visible="true">500,0,0,0</Place>
+      <Place id="338" visible="true">560,600,230,410</Place>
+      <Place id="197" visible="true">1550,280,140,110</Place>
+      <Place id="154" visible="true">750,280,160,160</Place>
+      <Place id="420" visible="true">500,0,0,0</Place>
+      <Place id="414" visible="true">500,0,0,0</Place>
+      <Place id="433" visible="true">500,0,0,0</Place>
+      <Place id="75" visible="true">190,280,140,110</Place>
+      <Place id="399" visible="true">500,0,0,0</Place>
+      <Place id="254" visible="true">1080,1050,150,40</Place>
+      <Place id="371" visible="true">1190,10,140,110</Place>
+      <Place id="19" visible="true">10,280,140,210</Place>
+      <Place id="43" visible="true">2370,10,160,110</Place>
+      <Place id="175" visible="true">2200,600,200,70</Place>
+      <Place id="189" visible="true">2170,10,160,140</Place>
+      <Place id="110" visible="true">1440,600,160,130</Place>
+      <Place id="98" visible="true">1570,10,140,110</Place>
+      <Place id="413" visible="true">500,0,0,0</Place>
+      <Place id="179" visible="true">210,1050,180,180</Place>
+      <Place id="267" visible="true">860,1050,180,110</Place>
+      <Place id="276" visible="true">10,1050,160,90</Place>
+      <Place id="246" visible="true">600,10,160,140</Place>
+      <Place id="314" visible="true">2290,280,190,280</Place>
+      <Place id="234" visible="true">190,600,140,110</Place>
+      <Place id="388" visible="true">500,0,0,0</Place>
+      <Place id="387" visible="true">500,0,0,0</Place>
+      <Place id="11" visible="true">430,1050,150,140</Place>
+      <Place id="240" visible="true">370,280,140,110</Place>
+      <Place id="407" visible="true">500,0,0,0</Place>
+      <Place id="213" visible="true">2090,280,160,140</Place>
+      <Place id="139" visible="true">370,600,150,130</Place>
+      <Place id="392" visible="true">500,0,0,0</Place>
+      <Place id="397" visible="true">500,0,0,0</Place>
+      <Place id="117" visible="true">190,10,150,140</Place>
+      <Place id="409" visible="true">500,0,0,0</Place>
+      <Place id="385" visible="true">500,0,0,0</Place>
+      <Place id="419" visible="true">500,0,0,0</Place>
+      <Place id="395" visible="true">500,0,0,0</Place>
+      <Place id="382" visible="true">500,0,0,0</Place>
+      <Place id="104" visible="true">1040,600,140,110</Place>
+      <Place id="390" visible="true">500,0,0,0</Place>
+      <Place id="404" visible="true">500,0,0,0</Place>
+      <Place id="434" visible="true">500,0,0,0</Place>
+      <Place id="398" visible="true">500,0,0,0</Place>
+      <Place id="362" visible="true">1990,10,140,160</Place>
+      <Place id="0" visible="true">1220,600,180,190</Place>
+      <Place id="405" visible="true">500,0,0,0</Place>
+      <Place id="431" visible="true">500,0,0,0</Place>
+      <Place id="31" visible="true">1360,280,150,210</Place>
+      <Place id="330" visible="true">1640,600,140,140</Place>
+      <Place id="384" visible="true">500,0,0,0</Place>
+      <Place id="281" visible="true">980,10,170,140</Place>
+      <Place id="378" visible="true">500,0,0,0</Place>
+      <Place id="256" visible="true">1820,600,160,90</Place>
+      <Place id="81" visible="true">380,10,180,190</Place>
+      <Place id="406" visible="true">500,0,0,0</Place>
+      <Place id="394" visible="true">500,0,0,0</Place>
+      <Place id="435" visible="true">500,0,0,0</Place>
+      <Place id="408" visible="true">500,0,0,0</Place>
+      <Place id="430" visible="true">500,0,0,0</Place>
+      <Place id="424" visible="true">500,0,0,0</Place>
+      <Place id="69" visible="true">1730,280,140,110</Place>
+      <Place id="146" visible="true">10,600,140,140</Place>
+      <Place id="221" visible="true">1750,10,200,230</Place>
+      <Place id="49" visible="true">550,280,160,110</Place>
+      <Place id="426" visible="true">500,0,0,0</Place>
+      <Place id="422" visible="true">500,0,0,0</Place>
+      <Place id="400" visible="true">500,0,0,0</Place>
+      <Place id="425" visible="true">500,0,0,0</Place>
+      <Place id="63" visible="true">1180,280,140,110</Place>
+      <Place id="432" visible="true">500,0,0,0</Place>
+      <Place id="427" visible="true">500,0,0,0</Place>
+      <Place id="381" visible="true">500,0,0,0</Place>
+      <Place id="377" visible="true">500,0,0,0</Place>
+      <Place id="261" visible="true">2020,600,140,110</Place>
+      <Place id="403" visible="true">500,0,0,0</Place>
+      <Place id="379" visible="true">500,0,0,0</Place>
+      <Place id="428" visible="true">500,0,0,0</Place>
+      <Place id="396" visible="true">500,0,0,0</Place>
+      <Place id="55" visible="true">1370,10,160,140</Place>
+      <Place id="401" visible="true">500,0,0,0</Place>
+      <Place id="273" visible="true">2440,600,140,60</Place>
+      <Place id="412" visible="true">500,0,0,0</Place>
+      <Place id="421" visible="true">500,0,0,0</Place>
+   </Sheet>
+   <Sheet name="Users" id="446" disp_at="true" disp_ph="true" disp_co="true" disp_rn="true">
+      <Place id="308" visible="true">989,518,140,110</Place>
+      <Place id="416" visible="true">500,0,0,0</Place>
+      <Place id="154" visible="true">110,280,160,160</Place>
+      <Place id="418" visible="true">500,0,0,0</Place>
+      <Place id="419" visible="true">500,0,0,0</Place>
+      <Place id="399" visible="true">500,0,0,0</Place>
+      <Place id="104" visible="true">39,599,140,110</Place>
+      <Place id="110" visible="true">299,659,160,130</Place>
+      <Place id="426" visible="true">500,0,0,0</Place>
+      <Place id="417" visible="true">500,0,0,0</Place>
+      <Place id="398" visible="true">500,0,0,0</Place>
+      <Place id="389" visible="true">500,0,0,0</Place>
+      <Place id="437" visible="true">10,10,120,60</Place>
+      <Place id="402" visible="true">500,0,0,0</Place>
+      <Place id="427" visible="true">500,0,0,0</Place>
+      <Place id="246" visible="true">960,59,160,140</Place>
+      <Place id="314" visible="true">318,9,190,280</Place>
+      <Place id="234" visible="true">691,51,140,110</Place>
+      <Place id="403" visible="true">500,0,0,0</Place>
+      <Place id="428" visible="true">500,0,0,0</Place>
+      <Place id="55" visible="true">390,427,160,140</Place>
+      <Place id="431" visible="true">500,0,0,0</Place>
+      <Place id="240" visible="true">1010,351,140,110</Place>
+      <Place id="92" visible="true">669,768,140,110</Place>
+      <Place id="338" visible="true">609,230,230,410</Place>
+   </Sheet>
+   <Sheet name="Ideas" id="447" disp_at="true" disp_ph="true" disp_co="true" disp_rn="true">
+      <Place id="125" visible="true">319,509,190,240</Place>
+      <Place id="406" visible="true">500,0,0,0</Place>
+      <Place id="435" visible="true">500,0,0,0</Place>
+      <Place id="408" visible="false">500,0,0,0</Place>
+      <Place id="433" visible="true">500,0,0,0</Place>
+      <Place id="424" visible="true">500,0,0,0</Place>
+      <Place id="371" visible="true">779,629,140,110</Place>
+      <Place id="19" visible="true">360,0,140,210</Place>
+      <Place id="382" visible="true">500,0,0,0</Place>
+      <Place id="404" visible="true">500,0,0,0</Place>
+      <Place id="221" visible="true">0,290,200,230</Place>
+      <Place id="434" visible="true">500,0,0,0</Place>
+      <Place id="383" visible="false">500,0,0,0</Place>
+      <Place id="362" visible="true">711,828,140,160</Place>
+      <Place id="267" visible="true">29,729,180,110</Place>
+      <Place id="425" visible="true">500,0,0,0</Place>
+      <Place id="432" visible="true">500,0,0,0</Place>
+      <Place id="0" visible="true">1009,790,180,190</Place>
+      <Place id="405" visible="true">500,0,0,0</Place>
+      <Place id="438" visible="true">10,10,120,60</Place>
+      <Place id="377" visible="true">500,0,0,0</Place>
+      <Place id="300" visible="true">569,410,140,140</Place>
+      <Place id="379" visible="true">500,0,0,0</Place>
+      <Place id="436" visible="true">500,0,0,0</Place>
+      <Place id="31" visible="false">110,19,150,210</Place>
+      <Place id="273" visible="true">39,620,140,60</Place>
+      <Place id="11" visible="false">9,69,150,140</Place>
+      <Place id="415" visible="false">500,0,0,0</Place>
+      <Place id="407" visible="true">500,0,0,0</Place>
+      <Place id="384" visible="false">500,0,0,0</Place>
+      <Place id="213" visible="false">0,59,160,140</Place>
+      <Place id="117" visible="true">520,219,150,140</Place>
+      <Place id="338" visible="true">980,260,230,410</Place>
+      <Place id="409" visible="true">500,0,0,0</Place>
+   </Sheet>
+   <Sheet name="Allocations" id="448" disp_at="true" disp_ph="true" disp_co="true">
+      <Place id="0" visible="true">60,40,180,190</Place>
+      <Place id="377" visible="true">500,0,0,0</Place>
+      <Place id="439" visible="true">10,10,120,60</Place>
+      <Place id="55" visible="true">60,300,160,140</Place>
+      <Place id="338" visible="true">380,30,230,410</Place>
+      <Place id="431" visible="true">500,0,0,0</Place>
+      <Place id="378" visible="true">500,0,0,0</Place>
+   </Sheet>
+   <Sheet name="Forums" id="449" disp_at="true" disp_ph="true" disp_co="true">
+      <Place id="81" visible="true">680,210,180,190</Place>
+      <Place id="385" visible="true">500,0,0,0</Place>
+      <Place id="394" visible="true">500,0,0,0</Place>
+      <Place id="154" visible="true">710,10,160,160</Place>
+      <Place id="380" visible="true">500,0,0,0</Place>
+      <Place id="435" visible="false">500,0,0,0</Place>
+      <Place id="420" visible="true">500,0,0,0</Place>
+      <Place id="395" visible="true">500,0,0,0</Place>
+      <Place id="391" visible="true">531,10,-61,0</Place>
+      <Place id="75" visible="true">740,690,140,110</Place>
+      <Place id="430" visible="true">500,0,0,0</Place>
+      <Place id="371" visible="false">520,990,140,110</Place>
+      <Place id="69" visible="true">450,940,140,110</Place>
+      <Place id="19" visible="true">0,220,140,210</Place>
+      <Place id="43" visible="true">430,0,160,110</Place>
+      <Place id="440" visible="true">10,10,120,60</Place>
+      <Place id="146" visible="true">10,50,140,140</Place>
+      <Place id="390" visible="true">500,0,0,0</Place>
+      <Place id="110" visible="true">720,950,160,130</Place>
+      <Place id="49" visible="false">580,20,160,110</Place>
+      <Place id="410" visible="true">500,0,0,0</Place>
+      <Place id="422" visible="true">500,0,0,0</Place>
+      <Place id="429" visible="true">500,0,0,0</Place>
+      <Place id="386" visible="true">0,0,-15,0</Place>
+      <Place id="63" visible="true">410,770,140,110</Place>
+      <Place id="423" visible="true">500,0,0,0</Place>
+      <Place id="379" visible="true">500,0,0,0</Place>
+      <Place id="396" visible="true">500,0,0,0</Place>
+      <Place id="289" visible="true">250,200,170,190</Place>
+      <Place id="330" visible="true">160,430,140,140</Place>
+      <Place id="393" visible="true">500,0,0,0</Place>
+      <Place id="139" visible="true">250,40,150,130</Place>
+      <Place id="281" visible="true">470,410,170,140</Place>
+      <Place id="392" visible="true">500,0,0,0</Place>
+      <Place id="421" visible="true">500,0,0,0</Place>
+      <Place id="397" visible="true">500,0,0,0</Place>
+      <Place id="338" visible="true">130,730,230,410</Place>
+   </Sheet>
+   <Sheet name="Polls" id="450" disp_at="true" disp_ph="true" disp_co="true">
+      <Place id="197" visible="true">380,400,140,110</Place>
+      <Place id="154" visible="true">620,680,160,160</Place>
+      <Place id="381" visible="true">500,0,0,0</Place>
+      <Place id="388" visible="true">500,0,0,0</Place>
+      <Place id="379" visible="true">500,0,0,0</Place>
+      <Place id="387" visible="true">500,0,0,0</Place>
+      <Place id="19" visible="true">360,30,140,210</Place>
+      <Place id="203" visible="true">40,70,190,180</Place>
+      <Place id="401" visible="true">500,0,0,0</Place>
+      <Place id="189" visible="true">150,350,160,140</Place>
+      <Place id="110" visible="true">410,550,160,130</Place>
+      <Place id="98" visible="true">80,550,140,110</Place>
+      <Place id="49" visible="true">20,680,160,110</Place>
+      <Place id="413" visible="true">500,0,0,0</Place>
+      <Place id="412" visible="true">500,0,0,0</Place>
+      <Place id="441" visible="true">10,10,120,60</Place>
+      <Place id="411" visible="true">500,0,0,0</Place>
+      <Place id="338" visible="true">600,50,230,410</Place>
+      <Place id="400" visible="true">500,0,0,0</Place>
+   </Sheet>
+   <Sheet name="OpenId" id="451" disp_at="true" disp_ph="true" disp_co="true" disp_rn="true">
+      <Place id="163" visible="true">70,150,230,140</Place>
+      <Place id="171" visible="true">310,150,200,70</Place>
+      <Place id="442" visible="true">10,10,120,60</Place>
+      <Place id="175" visible="true">520,150,200,70</Place>
+   </Sheet>
+   <Sheet name="Products" id="452" disp_at="true" disp_ph="true" disp_co="true" disp_rn="true">
+      <Place id="221" visible="true">100,290,200,230</Place>
+      <Place id="415" visible="true">500,0,0,0</Place>
+      <Place id="154" visible="true">410,130,160,160</Place>
+      <Place id="414" visible="true">500,0,0,0</Place>
+      <Place id="213" visible="true">120,50,160,140</Place>
+      <Place id="443" visible="true">10,10,120,60</Place>
+   </Sheet>
+   <Sheet name="Misc" id="453" disp_at="true" disp_ph="true" disp_co="true">
+      <Place id="125" visible="true">690,370,190,240</Place>
+      <Place id="406" visible="true">500,0,0,0</Place>
+      <Place id="444" visible="true">10,10,120,60</Place>
+      <Place id="261" visible="true">540,0,140,110</Place>
+      <Place id="254" visible="true">300,10,150,40</Place>
+      <Place id="31" visible="true">710,50,150,210</Place>
+      <Place id="175" visible="false">30,320,200,70</Place>
+      <Place id="11" visible="true">130,120,150,140</Place>
+      <Place id="384" visible="true">500,0,0,0</Place>
+      <Place id="383" visible="true">500,0,0,0</Place>
+      <Place id="163" visible="false">10,10,230,140</Place>
+      <Place id="171" visible="false">10,10,200,70</Place>
+      <Place id="179" visible="true">20,270,180,180</Place>
+      <Place id="338" visible="true">310,160,230,410</Place>
+      <Place id="276" visible="true">170,600,160,90</Place>
+      <Place id="409" visible="true">500,0,0,0</Place>
+      <Place id="256" visible="true">40,490,160,90</Place>
+   </Sheet>
+   <Settings sheet="449" zoom="1.0"></Settings>
+</Diagram>
