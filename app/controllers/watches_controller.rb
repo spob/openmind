@@ -26,7 +26,7 @@ class WatchesController < ApplicationController
         redirect_to forums_path
       end
       
-      @forum.watchers << current_user
+      @forum.watchers << current_user unless @forum.watchers.include? current_user
       @forum.watch_all_topics current_user
     rescue ActiveRecord::RecordNotFound     
       logger.error("Attempt to add watch to invalid forum #{params[:id]}")
@@ -57,7 +57,7 @@ class WatchesController < ApplicationController
         redirect_to forums_path
       end
       
-      @topic.watchers << current_user
+      @topic.watchers << current_user unless @topic.watchers.include? current_user
     rescue ActiveRecord::RecordNotFound     
       logger.error("Attempt to add watch to invalid topic #{params[:id]}")
       flash[:notice] = "Attempted to add watch to invalid topic"
@@ -82,7 +82,7 @@ class WatchesController < ApplicationController
   def create from="list"
     begin
       @idea = Idea.find(params[:id])
-      @idea.watchers << current_user
+      @idea.watchers << current_user unless @idea.watchers.include? current_user
     rescue ActiveRecord::RecordNotFound     
       logger.error("Attempt to add watch to invalid idea #{params[:id]}")
       flash[:notice] = "Attempted to add watch to invalid idea"
