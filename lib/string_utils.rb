@@ -19,6 +19,12 @@ class StringUtils
     str.gsub(/<\/?[^>]*>/, "")
   end
   
+  def self.truncate(string, length)
+    s = string.slice(0..length - 1)
+    s = s + "..." if s.length < string.length
+    s
+  end
+  
 #  def self.strip_html_tags html    
 #    #remove <script ...>...</script> tags
 #    html = html.gsub(/<script(.*)>(.*)<\/script(.*)>/, "")

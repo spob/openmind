@@ -38,7 +38,7 @@ class PollsController < ApplicationController
     for option in poll.poll_options
       if option.user_responses.size > 0
         data << option.user_responses.size
-        labels << "#{option.description}"
+        labels << "#{StringUtils.truncate option.description, 16}"
       end
     end
 
