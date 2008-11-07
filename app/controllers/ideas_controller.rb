@@ -173,6 +173,10 @@ class IdeasController < ApplicationController
     @idea.user_id = current_user.id
     # author should watch the idea by default
     @idea.watchers << current_user
+    @idea.change_logs <<  IdeaChangeLog.new(
+          :message => "Idea created", 
+          :user => current_user,
+          :processed_at => Time.zone.now)
     if @idea.save
       # also createa  user read record so it doesn't show up as an unread record
       mark_as_read @idea
