@@ -87,7 +87,7 @@ class EnterprisesControllerTest < Test::Unit::TestCase
   end
   
   def test_update
-    put :update, :id => @enterprise_id
+    put :update, :id => @enterprise_id, :enterprise => { :active => :true }
     assert_response :redirect
     assert_redirected_to :action => 'show', :id => @enterprise_id
   end
