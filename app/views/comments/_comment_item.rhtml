@@ -1,5 +1,5 @@
 <div class="commentbox">
-  <a name="<%= comment_item.id %>"/>
+  <a name="<%= comment_item.id %>"></a>
   <% session[:forums_search] ||= "" %>
   <%= highlight(white_list(comment_item.body), 
     session[:forums_search].split, 
