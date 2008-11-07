@@ -132,10 +132,10 @@ class IdeasController < ApplicationController
   end
   
   def new_email_request
-      @idea_email_request = IdeaEmailRequest.new
-      @idea_email_request.idea = Idea.find(params[:idea_id])
-      @idea_email_request.subject = "#{current_user.full_name} has forwarded you an OpenMind idea"
-      @idea_email_request.cc_self = true
+    @idea_email_request = IdeaEmailRequest.new
+    @idea_email_request.idea = Idea.find(params[:idea_id])
+    @idea_email_request.subject = "#{current_user.full_name} has forwarded you an OpenMind idea"
+    @idea_email_request.cc_self = true
   end
   
   def create_email_request
@@ -169,16 +169,17 @@ class IdeasController < ApplicationController
 
   def create
     TagList.delimiter = " "
+    params['idea'].each_pair {|key, value| puts "[#{key}] #{value}"}
     @idea = Idea.new(params[:idea])
     @idea.user_id = current_user.id
     # author should watch the idea by default
     @idea.watchers << current_user
-    @idea.change_logs <<  IdeaChangeLog.new(
-          :message => "Idea created", 
-          :user => current_user,
-          :processed_at => Time.zone.now)
+    @idea.change_logs <<  IdeaChangeLog.new(:message => "Idea created", 
+      :user => current_user
+      #          :processed_at => Time.zone.now
+    )
     if @idea.save
-      # also createa  user read record so it doesn't show up as an unread record
+      # also create a user read record so it doesn't show up as an unread record
       mark_as_read @idea
       
       flash[:notice] = "Idea #{@idea.id} was successfully created."

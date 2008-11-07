@@ -1,0 +1,17 @@
+# == Schema Information
+# Schema version: 20081021172636
+#
+# Table name: ideas
+#
+#
+
+first_idea_creation:
+  user: allroles
+  idea: first_idea
+  message: Idea created
+  processed_at: <%= (Time.zone.now - 1.day).to_s(:db) %>
+
+first_idea_update:
+  user: allroles
+  idea: first_idea
+  message: Idea updated xyz

@@ -2,7 +2,9 @@ require File.dirname(__FILE__) + '/../test_helper'
 require 'exceptions/vote_exception'
 
 class IdeaTest < Test::Unit::TestCase
-  fixtures :ideas, :votes, :users, :products, :releases, :comments
+  fixtures :ideas, :votes, :users, :products, :releases, :comments, :idea_change_logs
+  
+  should_have_many :change_logs
 
   def test_fetch
     idea = Idea.find(:first)
@@ -117,14 +119,14 @@ class IdeaTest < Test::Unit::TestCase
       idea.errors.on(:title)
   end
 
-  def test_should_create_idea
+  should "create_idea" do
     idea = Idea.new(
       :user_id => ideas(:first_idea).id,
       :product_id=>ideas(:first_idea).product_id,
-      :release_id =>ideas(:first_idea). release_id,
       :title => 'title',
       :description  => 'description')
     assert idea.valid?
+    assert idea.save
   end
 
   def test_uniqueness
@@ -168,8 +170,7 @@ class IdeaTest < Test::Unit::TestCase
   end
   
   def test_vote
-    # test data from fixtures:
-    # allocation data
+    # test data from fixtures: allocation data
     #   user 12
     #   user 20
     #      vote
@@ -263,5 +264,21 @@ class IdeaTest < Test::Unit::TestCase
     assert_not_nil idea.last_comment
     assert !idea.last_comment?(comment1)
     assert idea.last_comment?(comment2)
+  end
+  
+  context "an idea with change logs" do
+    setup do
+      @idea = ideas(:first_idea)
+    end
+    
+    should "retrieve change logs" do
+      assert !@idea.change_logs.empty?
+      assert_equal 2, @idea.change_logs.size
+    end
+    
+    should "retrieve active change logs" do
+      assert !@idea.unprocessed_change_logs.empty?
+      assert_equal 1, @idea.unprocessed_change_logs.size
+    end
   end
 end
