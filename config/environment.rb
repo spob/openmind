@@ -18,6 +18,8 @@ Rails::Initializer.run do |config|
   # Require the latest version of mysql
   config.gem "mysql"
   
+  config.gem 'thoughtbot-shoulda', :lib => 'shoulda/rails', :source => "http://gems.github.com"
+  
   config.gem "RedCloth", :lib => 'redcloth', :source => "http://code.whytheluckystiff.net/"
   
   config.gem "ruby-yadis",  :lib => 'yadis',  :version => '0.3.4'

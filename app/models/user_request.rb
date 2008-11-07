@@ -18,9 +18,9 @@
 #  status                        :string(10)      not null
 #
 
-class UserRequest < ActiveRecord::Base
+class UserRequest < ActiveRecord::Base  
   acts_as_ordered :order => 'id DESC' 
-  validates_presence_of     :email, :last_name, :enterprise_name
+  validates_presence_of     :email, :last_name, :enterprise_name, :time_zone, :status
   validates_length_of       :email,    :within => 3..100
   validates_email_format_of :email
   validates_length_of       :first_name, :maximum => 40, :allow_nil => true
@@ -72,6 +72,10 @@ class UserRequest < ActiveRecord::Base
   def can_delete?
     status == UserRequest.pending
   end
+  
+  def before_validation_on_create
+    self.status = UserRequest.pending
+  end
 
   protected
 
@@ -80,4 +84,5 @@ class UserRequest < ActiveRecord::Base
     errors.add("initial_enterprise_allocation", "must be > 0") if initial_enterprise_allocation < 0
     errors.add("initial_user_allocation", "must be > 0") if initial_user_allocation < 0
   end
+  
 end
