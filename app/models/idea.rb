@@ -36,7 +36,7 @@ class Idea < ActiveRecord::Base
     :order => "id ASC"
   has_many :change_logs,
     :class_name => "IdeaChangeLog",
-    :order => "id ASC",
+    :order => "created_at ASC",
     :dependent => :destroy 
   has_many :unprocessed_change_logs, 
     :conditions => ["processed_at is null"], 
