@@ -169,7 +169,7 @@ class IdeasController < ApplicationController
 
   def create
     TagList.delimiter = " "
-    params['idea'].each_pair {|key, value| puts "[#{key}] #{value}"}
+    #    params['idea'].each_pair {|key, value| puts "[#{key}] #{value}"}
     @idea = Idea.new(params[:idea])
     @idea.user_id = current_user.id
     # author should watch the idea by default
