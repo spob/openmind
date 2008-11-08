@@ -62,6 +62,7 @@ class EnterprisesControllerTest < Test::Unit::TestCase
     assert_response :redirect
     assert_redirected_to :action => 'index'
     assert_not_nil flash[:notice]    
+    assigns(:enterprise).errors.each{|attr,msg| puts "#{attr} - #{msg}"}
     assert_not_nil assigns(:enterprise)
   end  
 
@@ -83,6 +84,7 @@ class EnterprisesControllerTest < Test::Unit::TestCase
     assert_response :success
     assert_template 'edit'
     assert_not_nil assigns(:enterprise)
+    assigns(:enterprise).errors.each{|attr,msg| puts "#{attr} - #{msg}"}
     assert assigns(:enterprise).valid?
   end
   
