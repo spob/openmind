@@ -12,7 +12,7 @@ class EnterprisesControllerTest < Test::Unit::TestCase
     @request    = ActionController::TestRequest.new
     @response   = ActionController::TestResponse.new
     
-    @enterprise_id = Enterprise.find(:first, :order => 'RAND()').id
+    @enterprise = Enterprise.find(:first, :order => 'RAND()')
     login_as 'allroles'
   end
   
@@ -47,7 +47,7 @@ class EnterprisesControllerTest < Test::Unit::TestCase
   end  
   
   def test_should_know_show
-    get :show, :id => @enterprise_id
+    get :show, :id => @enterprise
 
     assert_response :success
     assert_template 'show'
@@ -78,7 +78,7 @@ class EnterprisesControllerTest < Test::Unit::TestCase
   end
   
   def test_edit
-    get :edit, :id => @enterprise_id
+    get :edit, :id => @enterprise
 
     assert_response :success
     assert_template 'edit'
@@ -87,17 +87,17 @@ class EnterprisesControllerTest < Test::Unit::TestCase
   end
   
   def test_update
-    put :update, :id => @enterprise_id, :enterprise => { :active => :true }
+    put :update, :id => @enterprise, :enterprise => { :active => :true }
     assert_response :redirect
-    assert_redirected_to :action => 'show', :id => @enterprise_id
+    assert_redirected_to :action => 'show', :id => @enterprise
   end
   
   def test_destroy
-    assert_nothing_raised { Enterprise.find(@enterprise_id) }
+    assert_nothing_raised { Enterprise.find(@enterprise) }
 
-    delete :destroy, :id => @enterprise_id
+    delete :destroy, :id => @enterprise
     assert_response :redirect
     assert_redirected_to :action => 'index'
-    assert_raise(ActiveRecord::RecordNotFound) { Enterprise.find(@enterprise_id) }
+    assert_raise(ActiveRecord::RecordNotFound) { Enterprise.find(@enterprise) }
   end
 end
