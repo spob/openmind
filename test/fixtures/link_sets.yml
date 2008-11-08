@@ -11,10 +11,22 @@
 #  default_link_set :boolean(1)      not null
 #
 
-# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+first_link_set:
+    name: linkset1
+    label: Link Set 1
+    default_link_set: false
 
-# one:
-#   column: value
-#
-# two:
-#   column: value
+default_link_set:
+    name: default linkset
+    label: Default Link Set
+    default_link_set: true
+
+empty_link_set:
+    name: empty_linkset
+    label: Empty Link Set
+    default_link_set: false
+
+forum_link_set:
+    name: forum_linkset
+    label: Forum Link Set
+    default_link_set: false

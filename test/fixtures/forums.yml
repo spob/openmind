@@ -34,3 +34,10 @@ forum_with_group:
   mediators: quentin
   description: A forum with a forum group
   forum_group: forum_group_abc
+
+forum_with_link_set:
+  name: link_set_forum
+  mediators: allroles
+  description: A forum with a link set
+  restrict_topic_creation: false
+  link_set: forum_link_set

@@ -1,0 +1,30 @@
+# == Schema Information
+# Schema version: 20081021172636
+#
+# Table name: links
+#
+#    t.string   "name",        :limit => 30, :null => false
+#    t.string   "url"
+#    t.integer  "link_set_id"
+#    t.datetime "created_at"
+#    t.datetime "updated_at"
+#    t.integer  "position"
+#
+
+first_link_set_link:
+    name: google
+    url: http://www.google.com
+    link_set: first_link_set
+    position: 2
+
+second_link_set_link:
+    name: yahoo
+    url: http://www.yahoo.com
+    link_set: first_link_set
+    position: 3
+
+heading_link_set_link:
+    name: some heading
+    url: 
+    link_set: first_link_set
+    position: 1
