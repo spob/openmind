@@ -3,6 +3,10 @@ require File.dirname(__FILE__) + '/../test_helper'
 class AllocationTest < Test::Unit::TestCase
   fixtures :enterprises, :allocations, :votes, :users, :ideas
 
+  should_have_many :votes,  :dependent => :destroy
+  should_only_allow_numeric_values_for :quantity
+  should_require_attributes :expiration_date
+  
   def test_polymorphism
     user_allocation_count = 0;
     enterprise_allocation_count = 0;
@@ -79,6 +83,27 @@ class AllocationTest < Test::Unit::TestCase
     assert !allocation.valid?
     assert_equal ["is not a number", "should be at least 1 or greater"], 
       allocation.errors.on(:quantity)
+  end
+  
+  should "retrieve allocations for user" do
+    assert !Allocation.list_all_for_user(users(:allroles), 1, 10, false).empty?
+    assert !Allocation.list_all_for_user(users(:allroles), 1, 10, true).empty?
+  end
+  
+  should "retrieve allocations" do
+    assert !Allocation.list(users(:allroles), nil, true, 1, 10, false).empty?
+    assert !Allocation.list(users(:allroles), nil, false, 1, 10, false).empty?
+    assert !Allocation.list(nil, users(:allocation_calculation_test), true, 1, 10, false).empty?
+    assert !Allocation.list(nil, users(:allocation_calculation_test), false, 1, 10, false).empty?
+    assert !Allocation.list(users(:allroles), users(:allocation_calculation_test), true, 1, 10, false).empty?
+    assert !Allocation.list(users(:allroles), users(:allocation_calculation_test), false, 1, 10, false).empty?
+    
+    assert !Allocation.list(users(:allroles), nil, true, 1, 10, true).empty?
+    assert !Allocation.list(users(:allroles), nil, false, 1, 10, true).empty?
+    assert !Allocation.list(nil, users(:allocation_calculation_test), true, 1, 10, true).empty?
+    assert !Allocation.list(nil, users(:allocation_calculation_test), false, 1, 10, true).empty?
+    assert !Allocation.list(users(:allroles), users(:allocation_calculation_test), true, 1, 10, true).empty?
+    assert !Allocation.list(users(:allroles), users(:allocation_calculation_test), false, 1, 10, true).empty?
   end
   
   def test_user_expiration
