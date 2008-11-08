@@ -16,6 +16,20 @@ class AnnouncementTest < Test::Unit::TestCase
     assert_equal 2, Announcement.list(1, 10, 2).size
   end
   
+  should "allow delete" do
+    assert announcements(:normal1).can_delete?
+  end
+  
+  should "allow edit" do
+    assert announcements(:normal1).can_edit?
+  end
+  
+  should "format_output" do
+    assert_nothing_thrown {
+      announcements(:normal1).formatted_description
+    }
+  end
+  
   def test_invalid_too_long
     announcement = Announcement.new(
       :headline => "01234567890123456789012345678901234567890123456789012345678901234567890123456789x")

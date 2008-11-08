@@ -9,4 +9,6 @@
 #  created_at   :datetime        not null
 #
 
-# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+first_comment_watcher:
+  user: quentin
+  idea: first_idea

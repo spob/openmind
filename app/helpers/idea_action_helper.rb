@@ -64,7 +64,7 @@ module IdeaActionHelper
         show = link_to theme_image_tag("icons/24x24/ideasUnmerge.png", 
           :alt=>"Merge", :title=> "Merge"), 
           merge_idea_path(idea), 
-          html_options = {:class=> "button", :method => :delete,
+          html_options = { :method => :delete,
           :onmouseover => "Tip('Un-merge this idea from another')"} 
       end
     end

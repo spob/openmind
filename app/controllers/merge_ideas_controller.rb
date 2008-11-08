@@ -14,11 +14,19 @@ class MergeIdeasController < ApplicationController
     idea = Idea.find(params[:id])
     merged_to_idea = Idea.find(params[:merged_into_idea_id])
     idea.merge_into(merged_to_idea)
+    idea.change_logs << IdeaChangeLog.new(
+      :message => "Idea was merged into idea ##{merged_to_idea.id}", 
+      :user => current_user)
     idea.save
+    RunOncePeriodicJob.create(
+      :job => "Idea.send_change_notifications(#{idea.id})")
+    
+    idea.merged_to_idea.change_logs << IdeaChangeLog.new(
+      :message => "Idea ##{idea.id} was merged into this idea", 
+      :user => current_user)
     idea.merged_to_idea.save
-      
-    EmailNotifier.deliver_idea_change_notifications(idea, 
-      Array("Idea was merged into idea ##{merged_to_idea.id}")) if !idea.watchers.empty?
+    RunOncePeriodicJob.create(
+      :job => "Idea.send_change_notifications(#{idea.merged_to_idea.id})")
       
     flash[:notice] = "Idea number #{idea.id} was successfully merged with idea number #{idea.merged_to_idea.id}."
     redirect_to :controller => 'ideas', :action => 'show', :id => idea
@@ -29,12 +37,24 @@ class MergeIdeasController < ApplicationController
     if idea.merged_to_idea.nil?
       raise Exception("Cannot unmerge an unmerged idea")
     else
-      merged_to_id = idea.merged_to_idea.id
-      idea.update_attribute(:merged_to_idea, nil)
+      Idea.transaction do
+        merged_to_idea = idea.merged_to_idea
+        idea.update_attribute(:merged_to_idea, nil)
       
-    EmailNotifier.deliver_idea_change_notifications(idea, 
-      Array("Idea was previously merged with idea ##{merged_to_id} but is no longer merged")) if !idea.watchers.empty?
-    
+        idea.change_logs << IdeaChangeLog.new(
+          :message => "Idea was previously merged with idea ##{merged_to_idea.id} but is no longer merged", 
+          :user => current_user)
+        RunOncePeriodicJob.create(
+          :job => "Idea.send_change_notifications(#{idea.id})")
+        
+      
+        merged_to_idea.change_logs << IdeaChangeLog.new(
+          :message => "Idea ##{idea.id} was previously merged with this idea but is no longer merged", 
+          :user => current_user)
+        merged_to_idea.save
+        RunOncePeriodicJob.create(
+          :job => "Idea.send_change_notifications(#{merged_to_idea.id})")
+      end
       flash[:notice] = "Idea number #{idea.id} was successfully unmerged."
     end
     redirect_to :controller => 'ideas', :action => 'show', :id => idea
