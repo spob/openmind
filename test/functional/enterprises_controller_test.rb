@@ -79,15 +79,13 @@ class EnterprisesControllerTest < Test::Unit::TestCase
   end
   
   def test_edit
-    get :edit, :id => @enterprise
+    get :edit, :id => @enterprise, :enterprise => { :active => true }
 
     assert_response :success
     assert_template 'edit'
     assert_not_nil assigns(:enterprise)
-    unless assigns(:enterprise).valid?
       puts "enterprise errors"
       assigns(:enterprise).errors.each{|attr,msg| puts "#{attr} - #{msg}"}
-    end
     assert assigns(:enterprise).valid?
   end
   

@@ -11,7 +11,12 @@ class ApplicationController < ActionController::Base
   # Pick a unique cookie name to distinguish our session data from others'
   session :session_key => '_OpenMind_session_id'
   
-  before_filter :login_from_cookie, :set_time_zone
+  before_filter :login_from_cookie, :set_time_zone, :set_charset
+  
+  def set_charset
+    response.headers["Content-Type"] = "text/html; charset=utf-8"
+  end
+
 
   def login_from_cookie
     # what it's saying is, if theres no session var but there is the token 
