@@ -47,7 +47,7 @@ class Forum < ActiveRecord::Base
   
   def can_edit? user
     mediators.include? user
-  end  
+  end 
   
   # Return a list of topics for this forum that have comments which have not yet
   # been read by the specified user

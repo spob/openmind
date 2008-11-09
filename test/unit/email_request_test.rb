@@ -3,6 +3,9 @@ require File.dirname(__FILE__) + '/../test_helper'
 class EmailRequestTest < Test::Unit::TestCase
   fixtures :users, :ideas, :email_requests
 
+  should_belong_to :user
+  should_require_attributes :to_email, :user, :subject
+  
   def test_should_be_value
     e = IdeaEmailRequest.new(:idea => ideas(:first_idea), 
       :subject => 'xxx', 

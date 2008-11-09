@@ -84,8 +84,7 @@ class EnterprisesControllerTest < Test::Unit::TestCase
     assert_response :success
     assert_template 'edit'
     assert_not_nil assigns(:enterprise)
-      puts "enterprise errors"
-      assigns(:enterprise).errors.each{|attr,msg| puts "#{attr} - #{msg}"}
+    assigns(:enterprise).errors.each{|attr,msg| puts ":::::::::::::::::::::: #{attr} - #{msg}"}
     assert assigns(:enterprise).valid?
   end
   

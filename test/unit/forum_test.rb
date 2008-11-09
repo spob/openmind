@@ -3,6 +3,36 @@ require File.dirname(__FILE__) + '/../test_helper'
 class ForumTest < Test::Unit::TestCase
   fixtures :users, :topics, :forum_mediators, :forums, :lookup_codes
 
+  should_have_many :topics, :dependent => :delete_all
+  should_have_many :comments, :comments_by_topic
+  should_belong_to :link_set, :forum_group
+  should_have_and_belong_to_many :mediators, :watchers, :groups, 
+    :enterprise_types
+  should_require_attributes :description
+  should_require_unique_attributes :name
+  should_ensure_length_in_range :name, (0..50)
+  should_ensure_length_in_range :description, (0..150)
+
+  context "test can delete" do
+    should "allow delete" do
+      assert forums(:empty_bugs_forum).can_delete?
+    end
+    
+    should "allow not delete" do
+      assert !forums(:bugs_forum).can_delete?
+    end
+  end
+  
+  context "test can edit" do
+    should "allow edit" do
+      assert forums(:bugs_forum).can_edit?(users(:allroles))
+    end
+    
+    should "allow not edit" do
+      assert !forums(:bugs_forum).can_edit?(users(:quentin))
+    end
+  end
+  
   # Replace this with your real tests.
   def test_invalid_with_empty_attributes
     forum = Forum.new(:name => "", :description => "")
@@ -47,7 +77,7 @@ class ForumTest < Test::Unit::TestCase
     assert_equal 1, forum.mediators.count
   end
   
-  def test_list_by_forum
+  def test_list_by_forum_group
     assert !Forum.list_by_forum_group.empty?
     assert !Forum.list_by_forum_group(lookup_codes(:forum_group_abc)).empty?
   end
