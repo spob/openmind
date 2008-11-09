@@ -24,7 +24,7 @@ class LinkSetTest < ActiveSupport::TestCase
   should_ensure_length_in_range :label, (0..30)
   
   should "retrieve links" do
-    assert_equal 2, link_sets(:first_link_set).links.size
+    assert_equal 3, link_sets(:first_link_set).links.size
   end
   
   context "testing list methods" do
