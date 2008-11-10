@@ -37,10 +37,10 @@ class AccountController < ApplicationController
     status = begin_openid_authentication(@openid_url, '/account/continue_openid')
       
     flash[:error] = case status 
-    when :missing : 'Sorry, the OpenID is missing.'
-    when :failed  : 'Sorry, the OpenID verification failed.'
-    when :timeout : 'Timed out.'
-    when :unknown : 'Not sure what happened.'
+    when :missing then 'Sorry, the OpenID is missing.'
+    when :failed  then 'Sorry, the OpenID verification failed.'
+    when :timeout then 'Timed out.'
+    when :unknown then 'Not sure what happened.'
     end
   end
     
@@ -48,10 +48,10 @@ class AccountController < ApplicationController
     status = complete_openid_authentication
       
     case status 
-    when :missing   : failed_login('Sorry, the OpenID server couldn\'t be found.')
-    when :canceled  : failed_login('OpenID verification was canceled.')
-    when :failed    : failed_login('Sorry, the OpenID verification failed.')
-    when :unknown   : failed_login('Not sure what happened.')
+    when :missing   then failed_login('Sorry, the OpenID server couldn\'t be found.')
+    when :canceled  then failed_login('OpenID verification was canceled.')
+    when :failed    then failed_login('Sorry, the OpenID verification failed.')
+    when :unknown   then failed_login('Not sure what happened.')
     when :success
       self.current_user = User.find_by_identity_url(openid_result[:identity_url])
       logged_in
