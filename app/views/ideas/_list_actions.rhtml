@@ -1,13 +1,13 @@
 <div id="action_buttons<%= @idea.id %>">
   <% if from == "show" %>
     <%= link_to theme_image_tag("icons/16x16/back.png", :alt=>"previous", :title=> "previous"),
-      option = { :action => 'previous', :id => @idea },
+      option = { :controller => 'ideas', :action => 'previous', :id => @idea },
       html_options = {:onmouseover => "Tip('View the previous idea')"} %>
     <%= link_to theme_image_tag("icons/16x16/next.png", :alt=>"next", :title=> "next"),
-      option = { :action => 'next', :id => @idea },
+      option = { :controller => 'ideas', :action => 'next', :id => @idea },
       html_options = {:onmouseover => "Tip('View the next idea')"} %>
     <%= link_to theme_image_tag("icons/24x24/email.png", :alt=>"email", :title=> "email"),
-      option = { :action => 'new_email_request', :idea_id => @idea },
+      option = { :controller => 'ideas', :action => 'new_email_request', :idea_id => @idea },
       html_options = { 
         :onmouseover => "Tip('Forward this idea as an email')"} %>
   <% end %>
