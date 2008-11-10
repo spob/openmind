@@ -38,3 +38,4 @@ topic_comment:
   topic: bug_topic1
   body: topic comment
   type: TopicComment
+  created_at: <%= (Time.zone.now - 1.day).to_s(:db) %>

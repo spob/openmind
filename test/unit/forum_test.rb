@@ -1,7 +1,8 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
 class ForumTest < Test::Unit::TestCase
-  fixtures :users, :topics, :forum_mediators, :forums, :lookup_codes
+  fixtures :users, :topics, :forum_mediators, :forums, :lookup_codes,
+    :user_topic_reads
 
   should_have_many :topics, :dependent => :delete_all
   should_have_many :comments, :comments_by_topic
@@ -30,6 +31,20 @@ class ForumTest < Test::Unit::TestCase
     
     should "allow not edit" do
       assert !forums(:bugs_forum).can_edit?(users(:quentin))
+    end
+  end
+  
+  context "testing unread comment logic" do
+    should "return unread comment" do
+      assert !topics(:bug_topic1).forum.unread_topics(users(:quentin)).empty?
+    end
+    
+    should "not return unread comment" do
+      # forum with no topics
+      assert forums(:empty_bugs_forum).unread_topics(users(:quentin)).empty?
+      
+      # forum that has been read
+      assert topics(:bug_topic1).forum.unread_topics(users(:aaron)).empty?
     end
   end
   
@@ -72,7 +87,7 @@ class ForumTest < Test::Unit::TestCase
   
   def test_mediators
     forum = Forum.find forums(:bugs_forum).id
-    assert_equal 1, forum.topics.size
+    assert_equal 2, forum.topics.size
     assert !forum.can_delete?
     assert_equal 1, forum.mediators.count
   end

@@ -7,8 +7,8 @@
 #  name               :string(50)      not null
 #  active             :boolean(1)      default(TRUE), not null
 #  lock_version       :integer(4)      default(0)
-#  created_at         :datetime        not null
-#  updated_at         :datetime        not null
+#  created_at         :datetime      
+#  updated_at         :datetime      
 #  enterprise_type_id :integer(4)
 #
 

@@ -19,3 +19,8 @@ bug_topic1:
   title: Topic one
   forum: bugs_forum
   user: quentin
+
+bug_topic2:
+  title: Topic two
+  forum: bugs_forum
+  user: quentin

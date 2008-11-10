@@ -8,7 +8,7 @@ class TopicTest < Test::Unit::TestCase
     user = users(:quentin)
     
     topic = Topic.find(topic.id)
-    assert topic.user_topic_reads.empty?
+    read_count = topic.user_topic_reads.size
     
     assert topic.unread_comment?(user)
     
@@ -17,6 +17,7 @@ class TopicTest < Test::Unit::TestCase
     
     topic = Topic.find(topic.id)
     assert !topic.user_topic_reads.empty?
+    assert read_count + 1, topic.user_topic_reads.size
     assert !topic.unread_comment?(user)
     
     sleep 1
