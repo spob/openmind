@@ -69,4 +69,33 @@ class TopicTest < Test::Unit::TestCase
     assert_equal "can't be blank", 
       topic.errors.on(:title)
   end
+  
+  context "testing last comment" do
+    should "calc last comment" do
+      topic = comments(:topic_comment2).topic
+      assert !topic.last_comment?(comments(:topic_comment2))
+      assert topic.last_comment?(comments(:topic_comment3))
+    end    
+  end
+  
+  context "testing last posting date" do
+    should "return nil" do
+      assert_nil topics(:empty_topic).last_posting_date
+    end
+    
+    should "return last comment date" do
+      assert_equal comments(:topic_comment3).created_at, 
+        topics(:bug_topic1).last_posting_date
+    end
+  end
+  
+  context "testing can_delete?" do
+    should "allow" do
+      assert topics(:empty_topic).can_delete?
+    end
+    
+    should "not allow" do
+      assert !topics(:bug_topic1).can_delete?
+    end
+  end
 end

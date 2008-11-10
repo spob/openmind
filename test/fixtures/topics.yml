@@ -24,3 +24,8 @@ bug_topic2:
   title: Topic two
   forum: bugs_forum
   user: quentin
+
+empty_topic:
+  title: empty topic
+  forum: bugs_forum
+  user: quentin

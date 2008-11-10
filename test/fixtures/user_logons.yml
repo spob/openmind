@@ -9,5 +9,5 @@
 #  created_at   :datetime        not null
 #
 
-# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
-
+quentin_logon1:
+  user: quentin

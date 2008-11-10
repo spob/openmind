@@ -49,4 +49,18 @@ class UserRequestTest < Test::Unit::TestCase
     assert !UserRequest.list(1, 10, [UserRequest.pending], 50).empty?
     assert UserRequest.pending_requests?
   end
+  
+  context "testing constant values" do
+    should "validate rejected" do
+      assert "Rejected", UserRequest.rejected
+    end
+    
+    should "validate approved" do
+      assert "Approved", UserRequest.approved
+    end
+    
+    should "validate pending" do
+      assert "Pending", UserRequest.pending
+    end    
+  end
 end

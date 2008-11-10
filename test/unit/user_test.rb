@@ -4,7 +4,8 @@ class UserTest < Test::Unit::TestCase
   # Be sure to include AuthenticatedTestHelper in test/test_helper.rb instead.
   # Then, you can remove it from this and the functional test.
   include AuthenticatedTestHelper
-  fixtures :users, :enterprises, :allocations, :votes, :roles, :topics
+  fixtures :users, :enterprises, :allocations, :votes, :roles, :topics, :polls, 
+    :poll_options
 
   def test_full_name
     user = User.new(:last_name => "xxx")
@@ -189,6 +190,42 @@ class UserTest < Test::Unit::TestCase
     assert 1, user.watched_topics.count
     topic2 = user.watched_topics.first
     assert topic, topic2
+  end
+  
+  context "testing of sysadmin stuff" do
+    should "return sysadmins" do
+      assert !User.sysadmins.empty?
+    end
+    
+    should "indicate a sysadmin" do
+      assert users(:allroles).sysadmin?
+    end
+    
+    should "not indicate a sysadmin" do
+      assert !users(:user_no_roles).sysadmin?
+    end
+  end
+  
+  context "testing of prodmgr stuff" do    
+    should "indicate a sysadmin" do
+      assert users(:allroles).prodmgr?
+    end
+    
+    should "not indicate a sysadmin" do
+      assert !users(:user_no_roles).prodmgr?
+    end
+  end
+  
+  context "testing the make logic for activation codes" do
+    should "create a code" do
+      @u = create_user
+      assert_not_nil @u.activation_code
+    end
+    
+    should "not create a code" do
+      @u = create_user(:activation_code => "SKIP")
+      assert @u.activation_code.nil?
+    end
   end
 
   protected

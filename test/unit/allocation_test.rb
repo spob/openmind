@@ -119,6 +119,13 @@ class AllocationTest < Test::Unit::TestCase
     assert_equal 119, Allocation.expiring_allocation_days(users(:force_change_pw))
   end
   
+  context "testing string conversion" do
+    should "convert to strings" do
+      assert_equal "User Allocation, user: all@example.com, quantity: 10", allocations(:user_allocation).to_s
+      assert_equal "Enterprise Allocation, enterprise: Enterprise1, quantity: 100", allocations(:enterprise_allocation).to_s
+    end
+  end
+  
   private
   
   def create_allocation(str)

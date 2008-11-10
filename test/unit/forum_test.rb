@@ -139,7 +139,7 @@ class ForumTest < Test::Unit::TestCase
   
   def test_mediators
     forum = Forum.find forums(:bugs_forum).id
-    assert_equal 2, forum.topics.size
+    assert_equal 3, forum.topics.size
     assert !forum.can_delete?
     assert_equal 1, forum.mediators.count
   end
