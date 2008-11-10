@@ -52,8 +52,8 @@ class EnterprisesControllerTest < Test::Unit::TestCase
     assert_response :success
     assert_template 'show'
     assert_not_nil assigns(:enterprise)
-    assert assigns(:enterprise).valid?
     assigns(:enterprise).errors.each{|attr,msg| puts ":::::::::::::::::::::: #{attr} - #{msg}"}
+    assert assigns(:enterprise).valid?
   end
   
   def test_should_know_create

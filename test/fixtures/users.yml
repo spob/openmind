@@ -53,6 +53,31 @@ aaron:
   force_change_password: 0
   activated_at: 
   activation_code: blahblah
+  roles: voter
+
+bob:
+  email: bob@example.com
+  salt: <%= SALT %>
+  crypted_password: <%= (User.encrypt 'secret', SALT) %>
+  active: true
+  enterprise: active_enterprise
+  first_name: Bob
+  last_name: Smith
+  force_change_password: 0
+  activated_at: 
+  activation_code: 234safas
+
+judy:
+  email: judy@example.com
+  salt: <%= SALT %>
+  crypted_password: <%= (User.encrypt 'secret', SALT) %>
+  active: true
+  enterprise: forum_test_enterprise
+  first_name: Judy
+  last_name: Smith
+  force_change_password: 0
+  activated_at: 
+  activation_code: abcabc
 
 prodmgr:
   email: prodmgr@example.com
@@ -65,6 +90,7 @@ prodmgr:
   last_name: ProdMgr
   force_change_password: 0
   activated_at: <%= 5.days.ago.to_s :db %>
+  roles: prodmgr
 
 allroles:
   email: all@example.com

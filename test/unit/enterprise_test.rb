@@ -52,6 +52,6 @@ class EnterpriseTest < Test::Unit::TestCase
   end
   
   should "retrieve active enterprises" do
-    assert_equal 4, Enterprise.active_enterprises.size
+    assert_equal 5, Enterprise.active_enterprises.size
   end
 end

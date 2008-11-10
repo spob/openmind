@@ -20,6 +20,11 @@ inactive_enterprise:
   name: Enterprise2
   active: false
 
+forum_test_enterprise:
+  name: Forum Enterprise
+  active: true
+  enterprise_type: enterprise_type_xyz
+
 allocation_calculation_test:
   name: AllocationCalcTest
   active: true

@@ -29,6 +29,18 @@ empty_bugs_forum:
   name: empty
   description: A forum with no topics
 
+forum_restricted_to_user_group:
+  name: forum_with_user_group
+  mediators: quentin
+  description: A forum with a user group
+  groups: group1
+
+forum_restricted_to_enterprise_type:
+  name: forum_with_enterprise_type
+  mediators: quentin
+  description: A forum with an enterprise type
+  enterprise_types: enterprise_type_xyz
+
 forum_with_group:
   name: forum_with_group
   mediators: quentin

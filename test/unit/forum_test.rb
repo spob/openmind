@@ -1,8 +1,8 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
 class ForumTest < Test::Unit::TestCase
-  fixtures :users, :topics, :forum_mediators, :forums, :lookup_codes,
-    :user_topic_reads
+  fixtures :users, :roles, :topics, :forum_mediators, :forums, :lookup_codes,
+    :user_topic_reads, :groups
 
   should_have_many :topics, :dependent => :delete_all
   should_have_many :comments, :comments_by_topic
@@ -45,6 +45,58 @@ class ForumTest < Test::Unit::TestCase
       
       # forum that has been read
       assert topics(:bug_topic1).forum.unread_topics(users(:aaron)).empty?
+    end
+  end
+  
+  context "testing watchers" do
+    should "add and remove watches" do
+      assert forums(:bugs_forum).topics.size > 0
+      forums(:bugs_forum).remove_all_topic_watches(users(:aaron))
+      forum = Forum.find(forums(:bugs_forum).id)
+      count = all_watchers(forum)
+      
+      forums(:bugs_forum).watch_all_topics(users(:aaron))
+      forum = Forum.find(forums(:bugs_forum).id)
+      assert_equal forums(:bugs_forum).topics.size + count, all_watchers(forum)
+    end
+  end
+  
+  context "testing can_see?" do
+    should "be able to see" do
+      # mediator
+      assert forums(:forum_restricted_to_user_group).can_edit?(users(:quentin))
+      assert forums(:forum_restricted_to_user_group).can_see?(users(:quentin))
+      # prodmgr
+      assert users(:prodmgr).prodmgr?
+      assert forums(:forum_restricted_to_user_group).can_see?(users(:prodmgr))
+      assert !forums(:forum_restricted_to_user_group).can_edit?(users(:prodmgr))
+      # group member
+      assert forums(:forum_restricted_to_user_group).can_see?(users(:bob))
+      assert !forums(:forum_restricted_to_user_group).can_edit?(users(:bob))
+      # public
+      assert forums(:bugs_forum).can_see?(users(:aaron))
+      
+      # mediator
+      assert forums(:forum_restricted_to_enterprise_type).can_edit?(users(:quentin))
+      assert forums(:forum_restricted_to_enterprise_type).can_see?(users(:quentin))
+      # prodmgr
+      assert users(:prodmgr).prodmgr?
+      assert forums(:forum_restricted_to_enterprise_type).can_see?(users(:prodmgr))
+      assert !forums(:forum_restricted_to_enterprise_type).can_edit?(users(:prodmgr))
+      # group member
+      assert forums(:forum_restricted_to_enterprise_type).can_see?(users(:judy))
+      assert !forums(:forum_restricted_to_enterprise_type).can_edit?(users(:judy))
+      # public
+      assert forums(:bugs_forum).can_see?(users(:aaron))
+    end
+    
+    should "not be able to see" do
+      assert !forums(:forum_restricted_to_user_group).groups.empty?
+      assert !forums(:forum_restricted_to_user_group).can_edit?(users(:aaron))
+      assert !users(:aaron).prodmgr?
+      assert !forums(:forum_restricted_to_user_group).can_see?(users(:aaron))
+      assert !forums(:forum_restricted_to_enterprise_type).can_see?(users(:bob))
+      assert !forums(:forum_restricted_to_user_group).can_see?(users(:judy))
     end
   end
   
@@ -102,5 +154,15 @@ class ForumTest < Test::Unit::TestCase
     assert forums(:bugs_forum).can_create_topic?(users(:quentin))
     assert !forums(:bugs_forum_restrict_creation).can_create_topic?(users(:quentin))
     assert forums(:bugs_forum_restrict_creation).can_create_topic?(users(:allroles))
+  end
+  
+  private
+  
+  def all_watchers forum
+    count = 0
+    for topic in forum.topics
+      count += topic.watchers.size
+    end
+    count
   end
 end
