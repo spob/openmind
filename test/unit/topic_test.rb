@@ -126,4 +126,12 @@ class TopicTest < Test::Unit::TestCase
       }
     end
   end
+  
+  context "testing topic notification" do
+    should "not throw an error" do
+      assert_nothing_thrown {
+        Topic.notify_watchers
+      }
+    end
+  end
 end

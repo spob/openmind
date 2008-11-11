@@ -1,3 +1,14 @@
+#    t.integer  "idea_id"
+#    t.datetime "created_at"
+#    t.datetime "updated_at"
+#    t.datetime "sent_at"
+#    t.text     "message"
+#    t.string   "subject",                   :null => false
+#    t.string   "to_email",                  :null => false
+#    t.boolean  "cc_self"
+#    t.integer  "user_id",                   :null => false
+#    t.string   "type",       :limit => 100, :null => false
+
 simple_idea_email_request:
   idea: allroles
   message: this is a test message
@@ -5,3 +16,24 @@ simple_idea_email_request:
   to_email: joe@openmindsw.com
   type: IdeaEmailRequest
   subject: Test Subject
+  cc_self: false
+  
+sent_email_request:
+  user: allroles
+  idea: first_idea
+  message: Idea created
+  subject: Blah blah blah1
+  to_email: joe@openmindsw.com
+  type: IdeaEmailRequest
+  sent_at: <%= (Time.zone.now - 1.day).to_s(:db) %>
+  cc_self: false
+
+pending_email_request:
+  user: allroles
+  idea: first_idea
+  message: Idea created2
+  subject: Blah blah blah
+  to_email: joe@openmindsw.com
+  type: IdeaEmailRequest
+  sent_at: 
+  cc_self: false
