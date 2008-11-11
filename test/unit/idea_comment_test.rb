@@ -4,7 +4,7 @@ class IdeaCommentTest < Test::Unit::TestCase
   fixtures :comments, :ideas, :users, :topics
   
   should_belong_to :idea
-  should_require_attributes :idea
+  should_require_attributes :idea_id
   
   context "testing can edit" do
     should "allow edit" do

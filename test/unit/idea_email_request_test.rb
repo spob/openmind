@@ -25,7 +25,7 @@ class IdeaEmailRequestTest < Test::Unit::TestCase
     assert_nothing_thrown {
       IdeaEmailRequest.email_idea(email_requests(:pending_email_request).id)
     }
-    unsent_request = IdeaEmailRequest.find(unsent_request.id)
+    unsent_request = IdeaEmailRequest.find(email_requests(:pending_email_request).id)
     assert_not_nil unsent_request.sent_at
   end
 end
