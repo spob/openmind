@@ -3,6 +3,12 @@ require File.dirname(__FILE__) + '/../test_helper'
 class ReleaseTest < Test::Unit::TestCase
   fixtures :releases, :products, :lookup_codes
   
+  should_have_many :ideas, :dependent => :destroy
+  should_belong_to :product
+  should_belong_to :release_status
+  should_require_unique_attributes :version, :scoped_to => :product_id
+  should_ensure_length_in_range :version, (0..20)
+  
   def test_invalid_with_empty_attributes
     release = Release.new()
     assert !release.valid?
@@ -26,5 +32,10 @@ class ReleaseTest < Test::Unit::TestCase
       :release_status_id => lookup_codes(:release_status_controller_test).id, 
       :product_id => products(:producta).id)
     assert release.valid?
+  end
+  
+  should "retrieve by status" do
+    assert !Release.list_by_status(1, 10, 
+      lookup_codes(:release_status_controller_test).id).empty?
   end
 end

@@ -1,11 +1,39 @@
+# == Schema Information
+# Schema version: 20081021172636
+#
+# Table name: votes
+#
+#  id            :integer(4)      not null, primary key
+#  user_id       :integer(4)      not null
+#  allocation_id :integer(4)
+#  idea_id       :integer(4)
+#  created_at    :datetime        not null
+#  updated_at    :datetime        not null
+#  lock_version  :integer(4)      default(0)
+#  comments      :text
+#
 require File.dirname(__FILE__) + '/../test_helper'
 
 class VoteTest < Test::Unit::TestCase
-  fixtures :votes
+  fixtures :votes, :allocations, :ideas, :users, :enterprises
 
+  should_belong_to :idea
+  should_belong_to :allocation
+  should_belong_to :user
+  should_require_attributes :user_id, :allocation_id, :idea_id
+  
   def test_fetch
     vote = Vote.find(:first)
     assert_not_nil vote
+  end
+  
+  context "testing list" do
+    should "retrieve values from list" do
+      assert !Vote.list(1, 10).empty?
+      assert !Vote.list(1, 10, enterprises(:active_enterprise)).empty?
+      assert !Vote.list(1, 10, nil, users(:allroles)).empty?
+      assert !Vote.list(1, 10, enterprises(:active_enterprise), users(:allroles)).empty?
+    end
   end
 
   def test_invalid_with_empty_attributes
@@ -25,4 +53,7 @@ class VoteTest < Test::Unit::TestCase
     assert v.valid?
   end
 
+  should "allow delete" do
+    assert votes(:first_vote).can_delete?
+  end
 end

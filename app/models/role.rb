@@ -21,10 +21,10 @@ class Role < ActiveRecord::Base
   
   has_and_belongs_to_many :users 
   
-  def self.list(page)
-    paginate :page => page, :order => 'description', 
-      :per_page => 10
-  end
+  #  def self.list(page)
+  #    paginate :page => page, :order => 'description',
+  #      :per_page => 10
+  #  end
   
   def self.list
     Role.find(:all, :order => "description ASC" )

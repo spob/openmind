@@ -24,6 +24,7 @@ prodmgr:
 voter:
   title: voter
   description: voter role
+  default_role: 1
 allocmgr:
   title: allocmgr
   description: allocations manager role

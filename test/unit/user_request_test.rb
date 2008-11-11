@@ -62,5 +62,11 @@ class UserRequestTest < Test::Unit::TestCase
     should "validate pending" do
       assert "Pending", UserRequest.pending
     end    
+    
+    should "send notification" do
+      assert_nothing_thrown {
+        UserRequest.send_confirmation_email(user_requests(:pending).id)
+      }
+    end
   end
 end

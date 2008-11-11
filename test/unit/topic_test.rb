@@ -47,7 +47,13 @@ class TopicTest < Test::Unit::TestCase
   
   def test_watch_topic
     topic = topics(:bug_topic1)
+    assert !topic.watchers.empty?
+    
+    for user in topic.watchers
+      topic.watchers.delete user
+    end
     assert topic.watchers.empty?
+    assert topic.save
     
     user = users(:quentin)
     topic.watchers << user
@@ -100,6 +106,24 @@ class TopicTest < Test::Unit::TestCase
     
     should "not allow" do
       assert !topics(:bug_topic1).can_delete?
+    end
+  end
+  
+  context "testing watched?" do
+    should "show watched" do
+      assert topic_watches(:aaron_watcher).topic.watched?(topic_watches(:aaron_watcher).watcher)
+    end
+    
+    should "not show watched" do
+      assert !topic_watches(:aaron_watcher).topic.watched?(users(:quentin))
+    end
+  end
+  
+  context "testing notify watchers" do
+    should "should notify watchers" do
+      assert_nothing_thrown {
+        Topic.notify_watchers
+      }
     end
   end
 end

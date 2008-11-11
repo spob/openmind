@@ -2,6 +2,15 @@ require File.dirname(__FILE__) + '/../test_helper'
 
 class PollTest < Test::Unit::TestCase
   fixtures :polls, :poll_options, :users
+  
+  should_require_attributes :close_date
+  should_require_unique_attributes :title 
+  should_ensure_length_in_range :title, (0..200)
+  should_have_and_belong_to_many :groups
+  should_have_and_belong_to_many :enterprise_types
+  should_have_many :comments, :dependent => :delete_all
+  should_have_many :poll_options, :dependent => :destroy
+  should_have_one :unselectable_poll_option
 
   def test_invalid_with_empty_attributes
     poll = Poll.new()
@@ -55,5 +64,15 @@ class PollTest < Test::Unit::TestCase
     assert_equal 4, polls(:color_poll).total_responses
     assert_equal 0, polls(:no_options_poll).total_responses
     assert_equal 0, polls(:no_votes_poll).total_responses
+  end
+  
+  context "testing can take" do
+    should "allow" do
+      
+    end
+    
+    should "not allow" do
+      
+    end
   end
 end

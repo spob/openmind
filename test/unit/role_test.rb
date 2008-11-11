@@ -3,6 +3,26 @@ require File.dirname(__FILE__) + '/../test_helper'
 class RoleTest < Test::Unit::TestCase
   fixtures :roles
 
+  should_require_unique_attributes :title, :description
+  should_ensure_length_in_range :title, (0..50)
+  should_ensure_length_in_range :description, (0..50)
+  should_have_and_belong_to_many :users 
+  
+  context "testing list" do
+    should "retrieve values" do
+      assert !Role.list.empty?
+    end
+  end
+  
+  should "not allow delete" do
+    for role in Role.list
+      assert !role.can_delete?
+    end
+  end
+  
+  should "find default role" do
+    assert !Role.find_default_roles.empty?
+  end
   
   def test_invalid_with_empty_attributes
     role = Role.new
