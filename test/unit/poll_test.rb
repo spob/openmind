@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
 class PollTest < Test::Unit::TestCase
-  fixtures :polls, :poll_options, :users
+  fixtures :polls, :poll_options, :users, :roles, :groups
   
   should_require_attributes :close_date
   should_require_unique_attributes :title 
@@ -66,13 +66,13 @@ class PollTest < Test::Unit::TestCase
     assert_equal 0, polls(:no_votes_poll).total_responses
   end
   
-  context "testing can take" do
+  context "testing can see" do
     should "allow" do
-      
+      polls(:color_poll).can_see? users(:bob)
     end
     
     should "not allow" do
-      
+      polls(:private_poll).can_see? users(:bob)
     end
   end
 end

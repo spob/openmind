@@ -16,6 +16,7 @@
 color_poll:
   title: What is your favor color?
   close_date: <%= 119.days.since.to_s :db %>
+  results_publically_visible: 1
 
 no_options_poll:
   title: No options?
@@ -24,3 +25,8 @@ no_options_poll:
 no_votes_poll:
   title: No votes
   close_date: <%= 119.days.since.to_s :db %>
+
+private_poll:
+  title: private poll
+  close_date: <%= 119.days.since.to_s :db %>
+  results_publically_visible: 0
