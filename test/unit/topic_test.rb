@@ -30,6 +30,10 @@ class TopicTest < Test::Unit::TestCase
     assert topic.unread_comment?(user)
   end
   
+  should "retrieve rows from list" do
+    assert !Topic.list(1, 10, topics(:bug_topic1).forum).empty?
+  end
+  
   def test_unread_comments
     topic = topics(:bug_topic1)
     assert 0, topic.unread_comments(users(:quentin)).size
