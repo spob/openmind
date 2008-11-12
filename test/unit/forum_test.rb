@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
 class ForumTest < Test::Unit::TestCase
-  fixtures :users, :roles, :topics, :forum_mediators, :forums, :lookup_codes,
+  fixtures :users, :roles, :topics, :forums, :lookup_codes,
     :user_topic_reads, :groups
 
   should_have_many :topics, :dependent => :delete_all

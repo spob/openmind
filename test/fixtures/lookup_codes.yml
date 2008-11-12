@@ -48,3 +48,9 @@ forum_group_xyz:
     short_name: xyz
     description: xyz description
     sort_value: 30
+
+unassigned_forum_group:
+    code_type: ForumGroup
+    short_name: unassigned
+    description: unassigned description
+    sort_value: 40

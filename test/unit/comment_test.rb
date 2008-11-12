@@ -1,7 +1,27 @@
+# == Schema Information
+# Schema version: 20081021172636
+#
+# Table name: comments
+#
+#  id           :integer(4)      not null, primary key
+#  user_id      :integer(4)      not null
+#  idea_id      :integer(4)
+#  body         :text
+#  created_at   :datetime        not null
+#  updated_at   :datetime        not null
+#  lock_version :integer(4)      default(0)
+#  type         :string(255)     not null
+#  topic_id     :integer(4)
+#  textiled     :boolean(1)      not null
+#
 require File.dirname(__FILE__) + '/../test_helper'
 
 class CommentTest < Test::Unit::TestCase
   fixtures :comments, :ideas, :users, :topics
+  
+  should_belong_to :user
+  
+  should_require_attributes :user_id, :body
   
   def test_fetch
     comment = IdeaComment.find(:first)
@@ -42,5 +62,9 @@ class CommentTest < Test::Unit::TestCase
     assert !comment1.can_edit?(user)
     assert comment1.can_edit?(user, true)
     assert comment2.can_edit?(user)
+  end
+  
+  should "allow edit" do
+    assert Comment.new.can_edit?(users(:quentin))
   end
 end

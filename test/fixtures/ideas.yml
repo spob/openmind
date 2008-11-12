@@ -62,3 +62,11 @@ no_comments_idea:
   release: controller_test
   title: idea with no comments
   description: blah blah
+
+merged_idea:
+  user: allroles
+  product: producta
+  release: controller_test
+  title: merged idea with no comments
+  description: merged
+  merged_to_idea: no_comments_idea

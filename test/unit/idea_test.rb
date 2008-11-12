@@ -34,6 +34,39 @@ class IdeaTest < Test::Unit::TestCase
     assert idea.can_delete?
   end
   
+  context "testing change notifications" do
+    should "send notification" do
+      assert_nil idea_change_logs(:first_idea_update).processed_at
+      assert !ideas(:first_idea).unprocessed_change_logs.empty?
+      assert_nothing_thrown {
+        Idea.send_change_notifications(ideas(:first_idea).id)
+      }
+      assert_not_nil IdeaChangeLog.find(idea_change_logs(:first_idea_update).id).processed_at
+    end
+  end
+  
+  should "format as redcloth" do
+    assert_equal "<p>#{ideas(:first_idea).description}</p>", ideas(:first_idea).formatted_description
+  end
+  
+  context "testing can edit?" do
+    should "allow edit" do
+      assert ideas(:no_comments_idea).can_edit?
+    end
+    
+    should "not allow edit" do
+      # no votes but has comments
+      assert !ideas(:no_votes_idea).can_edit?
+      assert !ideas(:new_votes_idea).can_edit?
+    end
+  end
+  
+  should "return status" do
+    assert_equal "Open", ideas(:unscheduled_idea).display_status
+    assert_equal "Scheduled", ideas(:first_idea).display_status
+    assert_equal "Merged", ideas(:merged_idea).display_status
+  end
+  
   def test_list_unread_ideas 
     assert_nothing_thrown {
       Idea.list_unread_ideas(1, users(:allroles), {}, true)

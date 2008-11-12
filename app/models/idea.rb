@@ -237,8 +237,8 @@ class Idea < ActiveRecord::Base
   end  
 
   def can_edit?
-    # Can only delete votes for which there are no comments and no votes
-    # (unless those votes are by the author
+    # Can only delete votes for which there are no comments and no votes (unless
+    # those votes are by the author
     votes.find_all{|vote| vote.user.id != user.id}.empty? and comments.empty? 
   end  
   
