@@ -74,4 +74,35 @@ class AnnouncementsControllerTest < Test::Unit::TestCase
       Announcement.find(@first_id)
     }
   end
+  
+  context "on GET to :show" do
+    setup { get :show, :id => @first_id }
+    
+    should_respond_with :success
+    should_render_template :show
+    should_not_set_the_flash
+    should_assign_to :announcement
+  end
+  
+  context "on POST to :create with bad value" do
+    setup { post :create, :announcement => {
+        :headline => "x", :description => ""
+      }
+    }  
+    should_respond_with :success
+    should_render_template :new
+    should_not_set_the_flash
+    should_assign_to :announcement
+  end
+  
+  context "on PUT to :update with bad value" do
+    setup { put :update, :id => @first_id, :announcement => {
+        :headline => "x", :description => ""
+      }
+    should_respond_with :success
+    should_render_template :edit
+    should_not_set_the_flash
+    should_assign_to :announcement
+    }
+  end
 end
