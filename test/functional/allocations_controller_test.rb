@@ -16,6 +16,64 @@ class AllocationsControllerTest < Test::Unit::TestCase
     login_as 'allroles'
   end
   
+  def test_types
+    assert !AllocationsController.types.empty?
+  end
+  
+  context "on GET to :index" do
+    setup { get :index, :form_based => "yes" }
+    
+    should_respond_with :success
+    should_render_template :index
+    should_not_set_the_flash
+    should_assign_to :allocations
+  end
+  
+  context "on POST to :create with bad value" do
+    setup { post :create, :allocation => {
+        :allocation_type=> allocations(:user_allocation).class.to_s,
+        :quantity => -1,
+        :comments =>allocations(:user_allocation).comments,
+        :expiration_date => allocations(:user_allocation).expiration_date,
+        :user_id =>  allocations(:user_allocation).user_id
+      }
+    }
+  
+    should_respond_with :success
+    should_render_template :new
+    should_not_set_the_flash
+    should_assign_to :allocation
+  end
+  
+  context "on PUT to :update with bad value" do
+    setup { put :update, :id => @first_id,:allocation => {
+        :allocation_type=> allocations(:user_allocation).class.to_s,
+        :quantity => -1,
+        :comments =>allocations(:user_allocation).comments,
+        :expiration_date => allocations(:user_allocation).expiration_date,
+        :user_id =>  allocations(:user_allocation).user_id
+      }
+    }
+  
+    should_respond_with :success
+    should_render_template :edit
+    should_not_set_the_flash
+    should_assign_to :allocation
+  end
+  
+  context "on DELETE to :destroy" do
+    setup { delete :destroy, :id => @first_id
+    }
+  
+    should_redirect_to "allocations_path"
+    should_set_the_flash_to(/deleted/i)
+  end
+  
+  context "on POST to :export" do
+    setup { post :export
+    }
+  end
+  
   def test_routing  
     with_options :controller => 'allocations' do |test|
       test.assert_routing 'allocations', :action => 'index'

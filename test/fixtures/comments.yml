@@ -38,14 +38,14 @@ topic_comment:
   topic: bug_topic1
   body: topic comment
   type: TopicComment
-  created_at: <%= (Time.zone.now - 1.day).to_s(:db) %>
+  created_at: <%= (Time.zone.now - 3.day).to_s(:db) %>
 
 topic_comment2:
   user: aaron
   topic: bug_topic1
   body: topic comment
   type: TopicComment
-  created_at: <%= (Time.zone.now - 1.day).to_s(:db) %>
+  created_at: <%= (Time.zone.now - 2.day).to_s(:db) %>
 
 topic_comment3:
   user: judy
