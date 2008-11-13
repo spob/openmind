@@ -22,6 +22,42 @@ class IdeasControllerTest < Test::Unit::TestCase
     }
     should_respond_with :redirect
   end
+  
+  context "send GET to :new_email_request" do
+    setup { get :new_email_request, :idea_id => ideas(:first_idea) }
+    
+    should_respond_with :success
+    should_render_template 'new_email_request'
+    should_not_set_the_flash
+    should_assign_to :idea_email_request
+  end
+  
+  context "send POST to :create_email_request" do
+    setup { post :create_email_request, 
+      :idea_email_request => { :idea => ideas(:first_idea),
+        :subject => "xxx",
+        :to_email => "xxx" }
+    }
+    
+    should_respond_with :redirect
+    should_set_the_flash_to(/recorded/i)
+  end
+  
+  context "on get to :next" do
+    setup { get :next, :id => ideas(:first_idea)}
+    should_respond_with :success
+    should_render_template 'show'
+    should_not_set_the_flash
+    should_assign_to :idea
+  end
+  
+  context "on get to :previous" do
+    setup { get :previous, :id => ideas(:first_idea)}
+    should_respond_with :success
+    should_render_template 'show'
+    should_not_set_the_flash
+    should_assign_to :idea
+  end
 
   def test_index
     get :index

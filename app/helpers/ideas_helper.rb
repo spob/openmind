@@ -15,18 +15,18 @@ module IdeasHelper
     ["By tag", "tags", "tag_cloud"],
   ]
   
-  def calc_titles_for_lookup
-    titles = Idea.find(:all, :select => 'title', :order => 'title')
-    titles_string =  "["
-    titles.each_with_index do |idea,index|
-      titles_string += "," unless index == 0
-      titles_string += "'"
-      titles_string += idea.title.gsub(/[']/, '\\\\\'')
-      titles_string += "'"
-    end
-    titles_string +=  "]"
-    titles_string
-  end
+  #  def calc_titles_for_lookup
+  #    titles = Idea.find(:all, :select => 'title', :order => 'title')
+  #    titles_string =  "["
+  #    titles.each_with_index do |idea,index|
+  #      titles_string += "," unless index == 0
+  #      titles_string += "'"
+  #      titles_string += idea.title.gsub(/[']/, '\\\\\'')
+  #      titles_string += "'"
+  #    end
+  #    titles_string +=  "]"
+  #    titles_string
+  #  end
   
   def show_filter_tabs
     markaby do

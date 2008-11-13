@@ -244,11 +244,11 @@ class IdeasController < ApplicationController
     redirect_to :action => 'index'
   end
   
-  def titles_for_lookup
-    @titles = Idea.find(:all, :select => 'title')
-    headers['content-type'] = 'text/javascript'
-    render :layout => false
-  end
+  #  def titles_for_lookup
+  #    @titles = Idea.find(:all, :select => 'title')
+  #    headers['content-type'] = 'text/javascript'
+  #    render :layout => false
+  #  end
 
   
   #  THESE ARE NEW

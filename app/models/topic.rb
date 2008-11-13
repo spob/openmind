@@ -101,7 +101,7 @@ class Topic < ActiveRecord::Base
           "WHERE tw.user_id = users.id " +
           "AND t.updated_at > tw.last_checked_at)"])
 
-    for user in users.find_all{|user| user.active and !user.activated_at.nil?}
+    for user in users.find_all{|u| u.active and !u.activated_at.nil?}
       # puts "user #{user.email}"
       tws = TopicWatch.find_all_by_user_id(user, :include => "topic",
         :conditions => "topics.updated_at > topic_watches.last_checked_at",
