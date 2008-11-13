@@ -110,6 +110,7 @@ class UserRequestsControllerTest < Test::Unit::TestCase
     setup { post :reject,
       :id => user_requests(:pending)
     }
+    should_respond_with :redirect
     should_redirect_to "user_requests_path"
     should_set_the_flash_to(/rejected/)
   end
@@ -118,7 +119,7 @@ class UserRequestsControllerTest < Test::Unit::TestCase
     setup { post :approve,
       :id => user_requests(:pending)
     }
-    should_redirect_to "user_requests_path"
+    should_respond_with :redirect
     should_set_the_flash_to(/approved/)
   end
 
@@ -126,7 +127,7 @@ class UserRequestsControllerTest < Test::Unit::TestCase
     setup { post :approve,
       :id => user_requests(:pending)
     }
-    should_redirect_to "user_requests_path"
+    should_respond_with :redirect
     should_set_the_flash_to(/approved/)
   end
 
