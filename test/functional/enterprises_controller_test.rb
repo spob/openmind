@@ -37,8 +37,27 @@ class EnterprisesControllerTest < Test::Unit::TestCase
     assert_template 'index'
     assert_not_nil assigns(:enterprises)
   end
+  
+  context "on get to :next" do
+    setup { get :next, :id => enterprises(:forum_test_enterprise)}
+    should_respond_with :success
+    should_render_template 'show'
+    should_not_set_the_flash
+    should_assign_to :enterprise
+  end
+  
+  context "on get to :previous" do
+    setup { get :previous, :id => enterprises(:forum_test_enterprise)}
+    should_respond_with :success
+    should_render_template 'show'
+    should_not_set_the_flash
+    should_assign_to :enterprise
+  end
 
   def test_index
+    (1..55).each do |i|
+      Enterprise.create(:name => "enterprise_#{i}")
+    end
     get :index
 
     assert_response :success

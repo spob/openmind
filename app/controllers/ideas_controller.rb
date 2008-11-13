@@ -7,6 +7,10 @@ class IdeasController < ApplicationController
   before_filter :login_required, :except => [:rss]
   access_control [:new, :edit, :create, :update, :destroy] => 'prodmgr | voter'
 
+  verify :method => :post, 
+    :only => [ :destroy, :create, :update ],
+    :redirect_to => { :action => :list }
+  
   def tag_cloud
     @tags = Idea.tag_counts
   end
@@ -41,10 +45,6 @@ class IdeasController < ApplicationController
   def preview
     render :layout => false
   end
-
-  verify :method => :post, 
-    :only => [ :destroy, :create, :update ],
-    :redirect_to => { :action => :list }
 
   def list    
     session[:idea_search_box_display] ||= "HIDE"

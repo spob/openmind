@@ -43,7 +43,7 @@ topic_comment:
 topic_comment2:
   user: aaron
   topic: bug_topic1
-  body: topic comment
+  body: topic comment search test
   type: TopicComment
   created_at: <%= (Time.zone.now - 2.day).to_s(:db) %>
 

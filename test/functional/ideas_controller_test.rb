@@ -15,6 +15,13 @@ class IdeasControllerTest < Test::Unit::TestCase
     @idea_id = ideas(:first_idea).id
     login_as 'allroles'
   end
+  
+  context "send GET to :jump_to" do
+    setup { 
+      get :jump_to, :goto_id => ideas(:first_idea)
+    }
+    should_respond_with :redirect
+  end
 
   def test_index
     get :index
@@ -120,4 +127,7 @@ class IdeasControllerTest < Test::Unit::TestCase
     }    
   end
  
+  context "send GET to :rss" do
+    setup { get :rss }
+  end
 end

@@ -5,7 +5,7 @@ require 'forums_controller'
 class ForumsController; def rescue_action(e) raise e end; end
 
 class ForumsControllerTest < Test::Unit::TestCase
-  fixtures :forums, :users, :lookup_codes
+  fixtures :forums, :users, :lookup_codes, :topics, :comments
 
   def setup
     @controller = ForumsController.new
@@ -13,6 +13,39 @@ class ForumsControllerTest < Test::Unit::TestCase
     @response   = ActionController::TestResponse.new
     
     login_as 'allroles'
+  end
+  
+  context "on get to :new" do
+    setup { get :new }
+    should_respond_with :success
+    should_render_template 'new'
+    should_not_set_the_flash
+    should_assign_to :forum
+    should_assign_to :mediators
+  end
+  
+  context "on get to :show" do
+    setup { get :show, :id => forums(:bugs_forum) }
+    should_respond_with :success
+    should_render_template 'show'
+    should_not_set_the_flash
+    should_assign_to :forum
+  end
+  
+  context "on get to :search" do
+    setup { get :search, :search => "search"}
+    should_respond_with :success
+    should_render_template 'search'
+    should_not_set_the_flash
+    should_assign_to :hits
+  end
+  
+  context "on get to :toggle_forum_details_box" do
+    setup {get :toggle_forum_details_box, :id => forums(:bugs_forum) }
+  end
+  
+  context "on get to :rss" do
+    setup {get :rss }
   end
 
   def test_index
