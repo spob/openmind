@@ -34,12 +34,55 @@ class UsersControllerTest < Test::Unit::TestCase
     assert_equal "OpenMind: Password reset, please activate your account", email.subject
   end
 
+  context "send POST to :reset_password" do
+    setup { post :reset_password, :id => users(:prodmgr) }
+    should_respond_with :redirect
+    should_set_the_flash_to(/reset/)
+    should_assign_to :user
+  end
+
+  context "send POST to :export" do
+    setup { post :export }
+  end
+
   def test_index
+    (1..105).each do |i|
+      User.create!(
+        :last_name => "user#{i}",
+        :email => "user#{i}@x.com",
+        :password => "password",
+        :password_confirmation => "password",
+        :enterprise_id => enterprises(:active_enterprise).id)
+    end
     get :index
     assert_response :success
     assert_template 'list'
     
     assert_not_nil assigns(:users)
+  end
+
+  context "on GET to :next" do
+    setup { get :next, :id => users(:prodmgr)}
+    should_respond_with :success
+    should_render_template 'show'
+    should_not_set_the_flash
+    should_assign_to :user
+  end
+
+  context "on GET to :previous" do
+    setup { get :previous, :id => users(:prodmgr)}
+    should_respond_with :success
+    should_render_template 'show'
+    should_not_set_the_flash
+    should_assign_to :user
+  end
+
+  context "on GET to :edit_profile" do
+    setup { get :edit_profile}
+    should_respond_with :success
+    should_render_template 'edit_profile'
+    should_not_set_the_flash
+    should_assign_to :user
   end
 
   def test_list

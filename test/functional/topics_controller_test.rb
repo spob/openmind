@@ -5,7 +5,7 @@ require 'topics_controller'
 class TopicsController; def rescue_action(e) raise e end; end
 
 class TopicsControllerTest < Test::Unit::TestCase
-  fixtures :topics, :users, :forums, :groups, :roles
+  fixtures :topics, :users, :forums, :groups, :roles, :topic_watches
 
   def setup
     @controller = TopicsController.new
@@ -35,6 +35,57 @@ class TopicsControllerTest < Test::Unit::TestCase
     should_set_the_flash_to(/insuffient permissions/)
   end
 
+  context "send POST to :create with bad values" do
+    setup {
+      post :create, :forum_id => forums(:bugs_forum).id,
+      :topic => { :title=>"title", :comment_body=>""
+      }
+    }
+    should_assign_to :forum
+    should_respond_with :success
+    should_render_template :new
+    should_not_set_the_flash
+  end
+
+  context "send GET to :show" do
+    setup { get :show, :id => topics(:bug_topic1) }
+    should_respond_with :success
+    should_render_template 'show'
+    should_not_set_the_flash
+    should_assign_to :topic
+  end
+
+  context "send GET to :edit without access" do
+    setup {
+      login_as 'judy'
+      get :edit, :id => topics(:forum_restricted_to_user_group_topic)
+    }
+    should_respond_with :redirect
+    should_redirect_to "forums_path"
+    should_set_the_flash_to(/insuffient permissions/)
+  end
+
+  context "send PUT to :update with bad values" do
+    setup {
+      put :update, :id => topics(:bug_topic1),
+      :topic => { :title=>"" }
+    }
+    should_assign_to :topic
+    should_respond_with :success
+    should_render_template :edit
+    should_not_set_the_flash
+  end
+
+  context "on get to :search" do
+    setup { get :search,
+      :search => "search",
+      :forum_id => forums(:bugs_forum).id}
+    should_respond_with :success
+    should_render_template 'search'
+    should_not_set_the_flash
+    should_assign_to :hits
+  end
+
   def test_index
     get :index
 
@@ -47,7 +98,7 @@ class TopicsControllerTest < Test::Unit::TestCase
     topic = Topic.find(:first)
 
     title = 5.days.ago.to_s(:db)
-    post :create, :forum_id => topic.forum.id, 
+    post :create, :forum_id => topic.forum.id,
       :topic => { :title=>title, :comment_body=>"fda"
     }
 

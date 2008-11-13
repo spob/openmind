@@ -26,3 +26,11 @@ pending:
     enterprise_name: Acme, Inc.
     time_zone: Atlantic Time (Canada)
     status: Pending
+
+pending_existing_enterprise:
+    email: pending2@openmindsw.com
+    first_name: Pending
+    last_name: Jones
+    enterprise_name: Enterprise1
+    time_zone: Atlantic Time (Canada)
+    status: Pending

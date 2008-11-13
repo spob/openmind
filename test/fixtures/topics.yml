@@ -29,3 +29,8 @@ empty_topic:
   title: empty topic
   forum: bugs_forum
   user: quentin
+
+forum_restricted_to_user_group_topic:
+  title: restricted_to_user_group
+  forum: forum_restricted_to_user_group
+  user: quentin

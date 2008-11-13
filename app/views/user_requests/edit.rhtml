@@ -57,7 +57,7 @@
       <% end %>
       <p>
         <label for="time_zone">User Time Zone:</label>
-        <%= form.time_zone_select :time_zone, TimeZone.us_zones %>
+        <%= form.time_zone_select :time_zone, ActiveSupport::TimeZone.us_zones %>
       </p>
       <p>
         <label>Roles:</label>
