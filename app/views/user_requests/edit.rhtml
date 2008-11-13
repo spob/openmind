@@ -14,18 +14,18 @@
     <div class="cssform" style="margin-top:0;">
       <p>
         <label for="user_email">Email:</label>
-        <%= form.text_field :email, { } %>
+        <%= form.text_field :email, { :maxlength => 100 } %>
       </p>
       <p>
         <label for="user_email">First Name:</label>
-        <%= form.text_field :first_name, { } %>
+        <%= form.text_field :first_name, { :maxlength => 40 } %>
       </p>
       <p>
-        <label for="user_email">Last Name:</label><%= form.text_field :last_name, { } %>
+        <label for="user_email">Last Name:</label><%= form.text_field :last_name, { :maxlength => 40 } %>
       </p>
       <p>
         <label for="enterprise_id">User Enterprise Name:</label>
-        <%= form.text_field :enterprise_name, {}  %>
+        <%= form.text_field :enterprise_name, { :maxlength => 50}  %>
       </p>
       <p>
         <label for="allocation type">Selected Enterprise:</label>

@@ -8,6 +8,9 @@ class UserRequestTest < Test::Unit::TestCase
     :enterprise_name, 
     :time_zone
   should_ensure_length_in_range :email, (3..100)
+  should_ensure_length_in_range :enterprise_name, (0..50)
+  should_ensure_length_in_range :first_name, (0..40)
+  should_ensure_length_in_range :last_name, (0..40)
   should_allow_values_for :email,  "bob@openmindsw.com"
   should_not_allow_values_for :email, "bobopenmindsw.com", "bob@openmindswcom",
     :message => " does not appear to be a valid e-mail address"

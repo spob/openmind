@@ -1,5 +1,5 @@
 <%content_for :bodyTag do -%>
-      <%= set_focus_to_id 'user_request_email' %>
+  <%= set_focus_to_id 'user_request_email' %>
 <%end%>
 
 <%= error_messages_for 'user_request' %>
@@ -7,23 +7,23 @@
 <% form_for :user_request, :url => { :action => "create" } do |form| %>
   <div class="formTitle">
     <%= theme_image_tag("icons/16x16/userEdit.png", 
-          options = {:alt=>"Request OpenMind Account"}) %>
+      options = {:alt=>"Request OpenMind Account"}) %>
   Request OpenMind Account</div>
   <div class="cssform widerLabel">
     <p>
       <label for="user_email">Email:</label>
-      <%= form.text_field :email, { } %>
+      <%= form.text_field :email, { :maxlength => 100 } %>
     </p>
     <p>
       <label for="user_email">First Name:</label>
-      <%= form.text_field :first_name, { } %>
+      <%= form.text_field :first_name, { :maxlength => 40 } %>
     </p>
     <p>
-      <label for="user_email">Last Name:</label><%= form.text_field :last_name, { } %>
+      <label for="user_email">Last Name:</label><%= form.text_field :last_name, { :maxlength => 40 } %>
     </p>
     <p>
       <label for="enterprise_id">Company:</label>
-      <%= form.text_field :enterprise_name, {}  %>
+      <%= form.text_field :enterprise_name, { :maxlength => 50}  %>
     </p>
     <p>
       <label for="time_zone">User Time Zone:</label>

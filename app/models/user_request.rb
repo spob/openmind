@@ -23,6 +23,7 @@ class UserRequest < ActiveRecord::Base
   validates_presence_of     :email, :last_name, :enterprise_name, :time_zone, :status
   validates_length_of       :email,    :within => 3..100
   validates_email_format_of :email
+  validates_length_of       :enterprise_name, :maximum => 50
   validates_length_of       :first_name, :maximum => 40, :allow_nil => true
   validates_length_of       :last_name, :maximum => 40, :allow_nil => true
   validates_numericality_of :initial_enterprise_allocation, :only_integer => true, 
