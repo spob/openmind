@@ -23,6 +23,31 @@ class TopicCommentTest < Test::Unit::TestCase
       assert !comments(:topic_comment2).can_edit?(users(:judy))
     end
   end
+
+  context "testing can endorse logic" do
+    should "allow endorse" do
+      comment = comments(:topic_comment)
+      assert comment.can_endorse?(users(:allroles))
+
+      comment.endorser = users(:allroles)
+      assert comment.can_unendorse?(users(:allroles))
+    end
+
+    should "not allow endorse" do
+      comment = comments(:topic_comment)
+      # not mediator
+      assert !comment.can_endorse?(users(:bob))
+
+      # not endorsed
+      assert !comment.can_unendorse?(users(:allroles))
+
+      # not unendorsed already
+      comment.endorser = users(:allroles)
+      
+      # already endorsed
+      assert !comment.can_endorse?(users(:allroles))
+    end
+  end
   
   def test_rss_headline
     assert_equal "Forum: bugs_forum, Topic: Topic one", comments(:topic_comment).rss_headline

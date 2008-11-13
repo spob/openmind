@@ -42,6 +42,33 @@ class CommentsController < ApplicationController
     end
   end
 
+  def endorse
+    @comment = TopicComment.find(params[:id])
+    unless @comment.can_endorse? current_user
+      flash[:error] = "Cannot endorse this comment"
+      redirect_to topic_path(@comment.topic.id)
+      return
+    end
+    @comment.endorser = current_user
+    @comment.save!
+    flash[:notice] = "Comment has been endorsed"
+    redirect_to topic_path(@comment.topic.id, :anchor => @comment.id)
+  end
+
+  def unendorse
+    @comment = TopicComment.find(params[:id])
+    unless @comment.can_unendorse? current_user
+      flash[:error] = "Cannot unendorse this comment"
+      flash[:notice] = "Endorsement has been removed"
+      redirect_to topic_path(@comment.topic.id, :anchor => @comment.id)
+      return
+    end
+    @comment.endorser = nil
+    @comment.save!
+    flash[:notice] = "Comment endorsement has been removed"
+    redirect_to topic_path(@comment.topic.id, :anchor => @comment.id)
+  end
+
   def edit
     @comment = Comment.find(params[:id])
   end
@@ -65,7 +92,7 @@ class CommentsController < ApplicationController
     redirect_to comments_path
   end
   
-  private  
+  private
 
   def create_idea_comment
     @idea = Idea.find(params[:id])
@@ -73,7 +100,7 @@ class CommentsController < ApplicationController
     @comment.user_id = current_user.id
     @comment.idea_id = @idea.id
     if params[:watch] == 'yes'
-    	@idea.watchers << current_user
+      @idea.watchers << current_user
     end
     if @comment.save
       flash[:notice] = "Comment for idea number #{@comment.idea.id} was successfully created."
@@ -93,8 +120,9 @@ class CommentsController < ApplicationController
     @comment = TopicComment.new(params[:comment])
     @comment.user_id = current_user.id
     @comment.topic_id = @topic.id
+    @comment.endorser = current_user if @topic.forum.mediators.include? current_user
     if params[:watch] == 'yes'
-    	@topic.watchers << current_user
+      @topic.watchers << current_user
     end
     if @topic.save and @comment.save
       flash[:notice] = "Comment for topic '#{@topic.title}' was successfully created."

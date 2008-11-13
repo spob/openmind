@@ -26,4 +26,16 @@ class Comment < ActiveRecord::Base
   def can_edit? current_user, role_override=false
     true
   end
+
+  def endorsed?
+    false
+  end
+
+  def can_endorse? current_user
+    false
+  end
+
+  def can_unendorse? current_user
+    false
+  end
 end

@@ -27,6 +27,18 @@ class TopicComment < Comment
     return true if role_override
     topic.last_comment?(self) and user.id == current_user.id
   end
+
+  def endorsed?
+    !endorser.nil?
+  end
+
+  def can_endorse? current_user
+    self.endorser.nil? and topic.forum.mediators.include? current_user
+  end
+
+  def can_unendorse? current_user
+    !self.endorser.nil? and topic.forum.mediators.include? current_user
+  end
   
   def self.top_users
     sql = %Q{

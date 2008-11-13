@@ -79,6 +79,14 @@ class CommentsControllerTest < Test::Unit::TestCase
     should_assign_to :comment
   end
 
+  context "on POST to :endorse for comment" do
+    setup { post :endorse, :id => comments(:topic_comment2).id }
+
+    should_respond_with :redirect
+    should_redirect_to "topic_path(@comment.topic, :anchor => @comment.id)"
+    should_set_the_flash_to(/endorsed/i)
+  end
+
   def test_destroy
     assert_nothing_raised {
       Comment.find(@comment_id)

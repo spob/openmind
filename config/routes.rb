@@ -13,7 +13,8 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :allocations, :collection => { :export_import => :get,
     :export => :post, :import => :post, :toggle_pix => :get }
   map.resources :announcements, :collection => { :preview => :get, :rss => :get }
-  map.resources :comments, :collection => { :preview => :get }
+  map.resources :comments, :collection => { :preview => :get },
+    :member => { :endorse => :post, :unendorse => :post }
   map.resources :enterprises, :member => { :next => :get, :previous => :get }
   map.resources :forums, :collection => { :search => :get, 
     :rss => :get }
