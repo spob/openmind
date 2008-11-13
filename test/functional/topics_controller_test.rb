@@ -5,7 +5,7 @@ require 'topics_controller'
 class TopicsController; def rescue_action(e) raise e end; end
 
 class TopicsControllerTest < Test::Unit::TestCase
-  fixtures :topics, :users
+  fixtures :topics, :users, :forums, :groups, :roles
 
   def setup
     @controller = TopicsController.new
@@ -13,6 +13,26 @@ class TopicsControllerTest < Test::Unit::TestCase
     @response   = ActionController::TestResponse.new
     
     login_as 'allroles'
+  end
+
+  context "send GET to :new" do
+    setup { get :new, :forum_id => topics(:bug_topic1).forum }
+    should_respond_with :success
+    should_render_template 'new'
+    should_not_set_the_flash
+    should_assign_to :forum
+    should_assign_to :topic
+    should_assign_to :comment
+  end
+
+  context "send GET to :new without access" do
+    setup {
+      login_as 'judy'
+      get :new, :forum_id => forums(:forum_restricted_to_user_group)
+    }
+    should_respond_with :redirect
+    should_redirect_to "forums_path"
+    should_set_the_flash_to(/insuffient permissions/)
   end
 
   def test_index

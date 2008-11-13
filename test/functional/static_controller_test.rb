@@ -11,8 +11,10 @@ class StaticControllerTest < Test::Unit::TestCase
     @response   = ActionController::TestResponse.new
   end
 
-  # Replace this with your real tests.
-  def test_truth
-    assert true
+  context "send GET to :index" do
+    setup { get :index, :path => 'help'}
+    should_respond_with :success
+    should_render_template 'help'
+    should_not_set_the_flash
   end
 end

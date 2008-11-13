@@ -15,6 +15,14 @@ class PollsControllerTest < Test::Unit::TestCase
     login_as 'allroles'
   end
 
+  context "send :GET to :show" do
+    setup { get :show, :id => polls(:color_poll) }
+    should_respond_with :success
+    should_render_template 'show'
+    should_not_set_the_flash
+    should_assign_to :poll
+    should_assign_to :graph
+  end
 
   def test_index
     get :index

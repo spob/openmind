@@ -16,6 +16,14 @@ class ProductsControllerTest < Test::Unit::TestCase
     login_as 'allroles'
   end
   
+#  context "send GET to :new" do
+#    setup { get :new }
+#    should_respond_with :success
+#    should_render_template 'index'
+#    should_not_set_the_flash
+#    should_assign_to :product
+#  end
+  
   def test_routing  
     with_options :controller => 'products' do |test|
       test.assert_routing 'products', :action => 'index'

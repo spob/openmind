@@ -16,6 +16,25 @@ class ReleasesControllerTest < Test::Unit::TestCase
     login_as 'allroles'
   end
   
+  context "send GET to :list" do
+    setup { get :list }
+    should_respond_with :success
+    should_render_template 'list'
+    should_not_set_the_flash
+    should_assign_to :releases
+    should_assign_to :release_statuses
+  end
+  
+  context "send GET to :new" do
+    setup { get :new, :product_id => releases(:controller_test).product }
+    should_respond_with :success
+    should_render_template 'new'
+    should_not_set_the_flash
+    should_assign_to :product
+    should_assign_to :release
+    should_assign_to :release_statuses
+  end
+  
   def test_routing  
     with_options :controller => 'releases' do |test|
       test.assert_routing 'releases', :action => 'index'
