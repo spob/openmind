@@ -3,7 +3,9 @@ require File.dirname(__FILE__) + '/../test_helper'
 class TopicCommentTest < Test::Unit::TestCase
   fixtures :comments, :ideas, :users, :topics
   
-  should_belong_to :topic 
+  should_belong_to :topic
+  should_have_db_column :endorser_id, :default => nil, :null => true
+  should_have_instance_methods :endorser
   should_require_attributes :topic_id
   
   context "testing can edit" do

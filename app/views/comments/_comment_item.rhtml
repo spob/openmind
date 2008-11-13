@@ -1,18 +1,23 @@
-<div class="commentbox">
+<div class="commentbox" id="comment_<%= comment_item.id %>">
   <a name="<%= comment_item.id %>"></a>
   <% session[:forums_search] ||= "" %>
-  <%= highlight(white_list(comment_item.body), 
-    session[:forums_search].split, 
+  <%=  theme_image_tag("icons/32x32/checked_comment.png",
+    :alt=>"endorsed",
+    :title=> "endorsed",
+    :class => "floatRight",
+    :onmouseover => "Tip('This comment has been endorsed by the forum mediator')") unless comment_item.endorser.nil? %>
+  <%= highlight(white_list(comment_item.body),
+    session[:forums_search].split,
     '<span class="highlight">\1</span>') unless comment_item.textiled %>
   <%= highlight(textilize(white_list(comment_item.body)), session[:forums_search].split, '<span class="highlight">\1</span>') if comment_item.textiled %>
-  <%= link_to '[Edit]', edit_comment_path(comment_item), 
+  <%= link_to '[Edit]', edit_comment_path(comment_item),
     html_options = { :class=> "btTxt editButton",
     :onmouseover => "Tip('Edit this comment')"} if can_edit_comment? comment_item %>
-      
+
 </div>
 <div class="commentfooter">
-  Posted by <%= "#{user_display_name comment_item.user}" %> 
-  on <%=  om_date_time comment_item.created_at %> 
+  Posted by <%= "#{user_display_name comment_item.user}" %>
+  on <%=  om_date_time comment_item.created_at %>
   <a href="#top" onmouseover="Tip('Return to top of page')">
     <%= theme_image_tag("icons/16x16/arrow_up.png", options = {:alt=>"Return to top"}) %>
   </a>

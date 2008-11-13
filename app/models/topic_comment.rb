@@ -17,6 +17,7 @@
 
 class TopicComment < Comment
   belongs_to :topic, :counter_cache => true
+  belongs_to :endorser, :class_name => 'User'
   
   acts_as_indexed :fields => [ :body ]
   

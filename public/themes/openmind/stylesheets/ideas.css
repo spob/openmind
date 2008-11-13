@@ -231,9 +231,13 @@ div.auto_complete ul strong.highlight {
     font-size:0.75em;
 }
 
-#search_area img
-{
+#search_area img {
     margin:0;
+}
+
+img.floatRight {
+    float: right;
+    margin: 8px;
 }
 
 .commentbox .editButton
