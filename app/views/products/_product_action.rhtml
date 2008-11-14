@@ -17,12 +17,6 @@
       product_path(product_action),
       html_options = {:confirm => 'Are you sure?', :method => :delete,
         :onmouseover => "Tip('Delete this product')"} ) if product_action.can_delete? %>
-
-    <%= link_to theme_image_tag("icons/16x16/releasesView.png", :alt=>"view releases", :title=> "view releases"),
-      releases_path(:product_id => product_action.id),
-      html_options = {
-      :onmouseover => "Tip('View releases for this product')"}
-  %>
   <% end %>
   <%= show_product_watch_icon product_action %>
 

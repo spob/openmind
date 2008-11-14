@@ -10,8 +10,6 @@
 <%= link_to  "Product: #{@release.product.name}", product_path(@release.product),
   html_options = {
   :onmouseover => "Tip('Return to showing details for #{@release.product.name}')"} %>
--> <%= link_to "All Releases for #{@release.product.name}",
-  releases_path(:product_id => @release.product) %>
 -> Release <%= @release.version %>
 <div class="formTitle">Detail for Release <%=h @release.version %></div>
 <div class="cssform widerLabel">
@@ -54,6 +52,17 @@
     <% end %>
   </p>
   <p>
-    <label></label>
+    <label>Change History:</label>
   </p>
+  <br/>
+  <div style="margin: 0px 20px 0px 140px">
+    <table cellspacing="0" cellpadding="0" class="cssform">
+      <tr>
+        <th>Editor</th>
+        <th>Change At</th>
+        <th>Change</th>
+      </tr>
+      <%= render :partial => "ideas/change_log", :collection => @release.change_logs %>
+    </table>
+  </div>
 </div>

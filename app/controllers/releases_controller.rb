@@ -54,15 +54,21 @@ class ReleasesController < ApplicationController
   end
 
   def create
-    product_id = params[:product_id]
-    @release = Release.new(params[:release])
-    @release.product_id = product_id
-    if @release.save
-      flash[:notice] = "Release #{@release.version} was successfully created."
-      redirect_to releases_path(:product_id => product_id)
-    else
-      @product = Product.find(product_id)
-      render :action => 'new', :product_id => product_id if index
+    Release.transaction do
+      Release.transaction do
+        product_id = params[:product_id]
+        @release = Release.new(params[:release])
+        @release.product_id = product_id
+        @release.change_logs <<  ReleaseChangeLog.new(:message => "Release created",
+          :user => current_user)
+        if @release.save
+          flash[:notice] = "Release #{@release.version} was successfully created."
+          redirect_to releases_path(:product_id => product_id)
+        else
+          @product = Product.find(product_id)
+          render :action => 'new', :product_id => product_id if index
+        end
+      end
     end
   end
 
@@ -85,12 +91,21 @@ class ReleasesController < ApplicationController
 
   def update
     @release = Release.find(params[:id])
-    if @release.update_attributes(params[:release])
-      flash[:notice] = "Release #{@release.version} was successfully updated."
-      redirect_to releases_path(:product_id => @release.product.id)
-    else
-      edit
-      render :action => 'edit'
+    @release.description = params[:release][:description]
+    @release.user_release_date = params[:release][:user_release_date]
+    @release.release_status_id = params[:release][:release_status_id]
+    @release.version = params[:release][:version]
+    @release.download_url = params[:release][:download_url]
+    @release.release_date = params[:release][:release_date]
+    Release.transaction do
+      calc_change_history @release
+      if @release.save
+        flash[:notice] = "Release #{@release.version} was successfully updated."
+        redirect_to release_path(@release)
+      else
+        edit
+        render :action => 'edit'
+      end
     end
   end
 
@@ -101,5 +116,40 @@ class ReleasesController < ApplicationController
     release.destroy
     flash[:notice] = "Release #{version} for product #{product.name} was successfully deleted."
     redirect_to releases_path(:product_id => product.id)
+  end
+
+  private
+  
+  def calc_change_history release    
+    add_change_history_from_message release, "Description updated" if release.description_changed?
+    add_change_history_old_new release, "Release Date",
+      @release.user_release_date_was,
+      @release.user_release_date if release.user_release_date_changed?
+    add_change_history_old_new release, "Release Status",
+      ReleaseStatus.find(@release.release_status_id_was).short_name,
+      @release.release_status.short_name if release.release_status_id_changed?
+    add_change_history_from_changes release, "Version Name",
+      release.changes['version'] if release.version_changed?
+    add_change_history_from_changes release, "Download URL",
+      release.changes['download_url'] if release.download_url_changed?
+  end
+
+  def add_change_history_old_new release, label, old_value, new_value
+    if old_value.nil? or old_value.blank?
+      add_change_history_from_message release, "#{label} set to \"#{new_value}\""
+    elsif new_value.nil? or new_value.blank?
+      add_change_history_from_message release, "#{label} changed from \"#{old_value}\" to null"
+    else
+      add_change_history_from_message release, "#{label} changed from \"#{old_value}\" to \"#{new_value}\""
+    end
+  end
+
+  def add_change_history_from_changes release, label, old_and_new_values
+    add_change_history_old_new release, label, old_and_new_values[0], old_and_new_values[1]
+  end
+  
+  def add_change_history_from_message release, message
+    release.change_logs <<  ReleaseChangeLog.new(:message => message,
+      :user => current_user)
   end
 end

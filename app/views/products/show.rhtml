@@ -1,19 +1,8 @@
-<%content_for :head do -%>
-
-
-<%end%>
 <%= javascript_include_tag "wz_tooltip.js", :cache => "cache/tooltip" %> 
 <div id="actionButtons2">
   <% if prodmgr? %>
-    <%= link_to 'Edit', edit_product_url(@product), html_options = {:class=> "button",
+    <%= link_to 'Edit Product', edit_product_url(@product), html_options = {:class=> "button",
       :onmouseover => "Tip('Edit this product')"} %>
-  <% end %>
-  <%= link_to 'List Products', products_path , html_options = {:class=> "button",
-    :onmouseover => "Tip('Return to list products')"}%>
-  <% if prodmgr? %>
-    <%= link_to 'List Releases', releases_path(:product_id => @product.id),
-      html_options = {:class=> "button",
-      :onmouseover => "Tip('View releases for this product')"} %>
   <% end %>
   <%= show_product_watch_button @product %>
 </div>
@@ -37,24 +26,32 @@
   </p>
 </div>
 <br/>
-<h3><%= link_to 'Releases',
-    releases_path(:product_id => @product.id),
-    html_options = {
-    :onmouseover => "Tip('View releases for this product')"}
-%>
+<h3>
+  Releases
 </h3>
+<div id="actionButtons">
+  <% if prodmgr? %>
+    <%= link_to 'Add New Release', new_release_path(:product_id => @product.id),
+      html_options = {:class => "button",
+      :onmouseover => "Tip('Create a new release')"} if prodmgr? %>
+  <% end %>
+</div>
 <table cellspacing="0" cellpadding="0" class="cssform" width="25%">
   <tr>
     <th>Version</th>
     <th>Release Date</th>
-    <th>Release Date Label</th>
+    <% if prodmgr? %>
+      <th>Release Date Label</th>
+    <% end %>
     <th>Status</th>
     <th>Action</th>
   </tr>
   <% for release in @product.releases %>
     <tr>
       <td><%= link_to h(release.version), release_path(release) %></td>
-      <td><%= h nvl(format_date(release.release_date), '-') %></td>
+      <% if prodmgr? %>
+        <td><%= h nvl(format_date(release.release_date), '-') %></td>
+      <% end %>
       <td><%= h nvl(release.user_release_date, '-') %></td>
       <td><%= h release.release_status.description %></td>
       <td>
@@ -66,14 +63,13 @@
         <%= link_to theme_image_tag("icons/16x16/editAction.png", :alt=>"edit", :title=> "edit"),
           edit_release_path(release),
           html_options = {
-          :onmouseover => "Tip('Edit this release')"}
-      %>
+          :onmouseover => "Tip('Edit this release')"} if prodmgr? %>
 
         <%= link_to(
           theme_image_tag("icons/16x16/deleteAction.png", :alt=>"delete", :title=> "delete"),
           release_path(release),
           html_options = {:confirm => 'Are you sure?', :method => :delete,
-            :onmouseover => "Tip('Delete this release')"} ) if release.can_delete? %>
+            :onmouseover => "Tip('Delete this release')"} ) if release.can_delete? and prodmgr? %>
       </td>
     </tr>
   <% end %>

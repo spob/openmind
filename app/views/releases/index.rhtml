@@ -6,9 +6,6 @@
   <%= link_to 'New Release', new_release_path(:product_id => @product.id),
     html_options = {:class => "button",
     :onmouseover => "Tip('Create a new release')"} %>
-  <%= link_to 'List Products', products_path,
-    html_options = {:class=> "button",
-    :onmouseover => "Tip('Return to list products')"} %>
 </div>
 
 <%= link_to 'All Products', products_path, html_options = {
@@ -30,7 +27,7 @@
 
   <% for release in @releases %>
     <tr>
-      <td><%=h release.version %></td>
+      <td><%= link_to release.version, release_path(release) %></td>
       <td><%=h release.release_status.description %></td>
       <td><%= h nvl(format_date(release.release_date), '-') %></td>
       <td><%= h nvl(release.user_release_date, '-') %></td>

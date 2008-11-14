@@ -7,8 +7,6 @@
   <div id="actionButtons2">
     <%= link_to 'View Details', product_path(@product), 
       html_options = { :class => "button" } %>
-    <%= link_to 'List Products', products_path, 
-      html_options = { :class => "button" } %>
   </div>
   <div class="formTitle"><%=theme_image_tag("icons/16x16/products.png", :alt=>"edit product")%>Edit Product</div>
   <div class="cssform widerLabel">
@@ -26,6 +24,8 @@
     <p>
       <label></label>
       <%= submit_tag 'Save', html_options = {:class=> "button", :disable_with => "Please wait..."} %>
+      <%= link_to 'Cancel', product_path(@product),
+        html_options = { :class => "button", :onmouseover => "Tip('Do not save changes')" } %>
     </p>
   </div>
 <% end %>

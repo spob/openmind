@@ -9,5 +9,5 @@ class ReleaseChangeLog < ActiveRecord::Base
   belongs_to :release
   belongs_to :user
   
-  validates_presence_of :release, :message
+  validates_presence_of :message
 end

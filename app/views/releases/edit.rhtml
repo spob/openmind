@@ -48,8 +48,8 @@
     <p>
       <label></label>
       <%= submit_tag 'Save', html_options = {:class=> "button", :disable_with => "Please wait..."} %>
-      <%= link_to 'Cancel', releases_path(:product_id => @release.product), 
-        html_options = { :class => "button", :onmouseover => "Tip('Return to list releases')" } %>
+      <%= link_to 'Cancel', release_path(@release), 
+        html_options = { :class => "button", :onmouseover => "Tip('Do not save changes')" } %>
     </p>
   </div>
 <% end %>

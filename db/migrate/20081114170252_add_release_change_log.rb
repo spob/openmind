@@ -12,7 +12,7 @@ class AddReleaseChangeLog < ActiveRecord::Migration
       t.timestamps
     end
 
-    add_foreign_key(:release_change_logs, :release_id, :ideas)
+    add_foreign_key(:release_change_logs, :release_id, :releases)
     add_foreign_key(:release_change_logs, :user_id, :users)
   end
 
