@@ -1,6 +1,5 @@
 module ProductsHelper
   def show_product_watch_icon product
-    puts "===========>#{product.id}"
     if current_user == :false
       link_to theme_image_tag("icons/24x24/watchAdd.png",
         :alt=>"Watch this product to be informed of any updates to releases for this product",
