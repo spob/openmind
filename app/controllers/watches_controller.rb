@@ -283,8 +283,6 @@ class WatchesController < ApplicationController
       flash[:notice].nil? ? (page.hide :flash_notice) : (page.show :flash_notice)
       flash[:error].nil? ? (page.hide :flash_error) : (page.show :flash_error)
       flash.discard
-      puts "========do_product_action=========="
-      puts "action_buttons_#{@product.id.to_s}"
       page.replace "action_buttons_#{@product.id.to_s}",
         :partial => "products/product_action",
         :object => @product
