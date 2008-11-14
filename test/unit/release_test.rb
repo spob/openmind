@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
 class ReleaseTest < Test::Unit::TestCase
-  fixtures :releases, :products, :lookup_codes
+  fixtures :releases, :products, :lookup_codes, :users, :release_change_logs
   
   should_have_many :ideas, :dependent => :destroy
   should_belong_to :product
@@ -13,6 +13,12 @@ class ReleaseTest < Test::Unit::TestCase
     release = Release.new()
     assert !release.valid?
     assert release.errors.invalid?(:version)
+  end
+
+  should "retrieve change_logs" do
+    assert !releases(:controller_test).change_logs.empty?
+    assert !releases(:controller_test).unprocessed_change_logs.empty?
+    assert releases(:controller_test).change_logs.size > releases(:controller_test).unprocessed_change_logs.size
   end
   
   def test_invalid_too_long

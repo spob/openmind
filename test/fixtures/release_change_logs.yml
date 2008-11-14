@@ -1,0 +1,17 @@
+# == Schema Information
+# Schema version: 20081021172636
+#
+# Table name: releases
+#
+#
+
+controller_test_processed:
+  user: allroles
+  release: controller_test
+  message: Idea created
+  processed_at: <%= (Time.zone.now - 1.day).to_s(:db) %>
+
+controller_test_unprocessed:
+  user: allroles
+  release: controller_test
+  message: Idea updated xyz

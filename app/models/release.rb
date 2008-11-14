@@ -21,9 +21,18 @@ class Release < ActiveRecord::Base
   has_many :ideas,
     :dependent => :destroy,
     :order => "id ASC"
+  has_many :change_logs,
+    :class_name => "ReleaseChangeLog",
+    :order => "created_at ASC",
+    :dependent => :destroy
+  has_many :unprocessed_change_logs,
+    :conditions => ["processed_at is null"],
+    :class_name => "ReleaseChangeLog",
+    :order => "id ASC"
   belongs_to :product
   belongs_to :release_status, :class_name => "LookupCode", 
     :foreign_key => "release_status_id"
+
   validates_presence_of :version
   validates_uniqueness_of :version, :scope => "product_id"
   validates_length_of :version, :maximum => 20
