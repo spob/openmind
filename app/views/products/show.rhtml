@@ -17,6 +17,10 @@
   <% end %>
   <%= show_product_watch_button @product %>
 </div>
+
+<%= link_to 'All Products', products_path , html_options = {
+  :onmouseover => "Tip('Return to list products')"}%> -> Product: <%=  @product.name %>
+
 <div class="formTitle">Product Detail</div>
 <div class="cssform">
   <p>

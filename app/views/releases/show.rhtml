@@ -2,10 +2,17 @@
   <div id="actionButtons2">
     <%= link_to 'Edit', edit_release_path(@release) , options = {:class=> "button",
       :onmouseover => "Tip('Edit this release')"}%>
-    <%= link_to 'List Releases', releases_path(:product_id => @release.product) , options = {
-      :class=> "button", :onmouseover => "Tip('Return to list releases')" }%>
   </div>
 <% end %>
+
+<%= link_to 'All Products', products_path, html_options = {
+  :onmouseover => "Tip('Return to list products')"}%> ->
+<%= link_to  "Product: #{@release.product.name}", product_path(@release.product),
+  html_options = {
+  :onmouseover => "Tip('Return to showing details for #{@release.product.name}')"} %>
+-> <%= link_to "All Releases for #{@release.product.name}",
+  releases_path(:product_id => @release.product) %>
+-> Release <%= @release.version %>
 <div class="formTitle">Detail for Release <%=h @release.version %></div>
 <div class="cssform widerLabel">
   <p>
@@ -30,10 +37,10 @@
     <%= white_list(@release.description) unless @release.description.nil? || @release.textiled %>
   </p>
   <% unless @release.download_url.nil? %>
-  <p>
-    <label for="download_url">Download URL:</label>
-    <%= link_to @release.download_url, @release.download_url, :popup => true  %>
-  </p>
+    <p>
+      <label for="download_url">Download URL:</label>
+      <%= link_to @release.download_url, @release.download_url, :popup => true  %>
+    </p>
   <% end %>
   <p>
     <label for="ideas">Scheduled Ideas:</label>
@@ -42,8 +49,8 @@
     <p>
       <label for="ideas"></label><%= link_to h(idea.user_friendly_idea_name),
         :controller => 'ideas',
-        :action => 'show', 
-        :id => idea.id %> 
+        :action => 'show',
+        :id => idea.id %>
     <% end %>
   </p>
   <p>
