@@ -7,6 +7,12 @@ class UserTest < Test::Unit::TestCase
   fixtures :users, :enterprises, :allocations, :votes, :roles, :topics, :polls, 
     :poll_options
 
+  should_have_and_belong_to_many :roles
+  should_have_many :topic_watches
+  should_have_many :user_logons, :dependent => :destroy
+  should_have_many :ideas,:dependent => :destroy
+  should_have_many :allocations, :dependent => :destroy
+
   def test_full_name
     user = User.new(:last_name => "xxx")
     assert_equal "xxx", user.full_name

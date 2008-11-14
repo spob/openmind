@@ -1,5 +1,5 @@
 class WatchesController < ApplicationController
-  helper :idea_action, :forums
+  helper :idea_action, :forums, :products
   before_filter :login_required
   
   verify :method => :post, :only => [:create, :create_from_show, :create_topic_watch ],
@@ -16,6 +16,31 @@ class WatchesController < ApplicationController
   def create_from_show
     create "show"  
   end
+
+  def create_product_watch
+    begin
+      @product = Product.find(params[:id])
+
+      @product.watchers << current_user unless @product.watchers.include? current_user
+    rescue ActiveRecord::RecordNotFound
+      logger.error("Attempt to add watch to invalid product #{params[:id]}")
+      flash[:error] = "Attempted to add watch to invalid product"
+      # #list
+
+      respond_to do |format|
+        format.html { redirect_to product_path(@product) }
+        format.js  { do_product_action   }
+      end
+      return false
+    else
+      flash[:notice] = "Product '#{@product.name}' is being watched."
+
+      respond_to do |format|
+        format.html { redirect_to product_path(@product) }
+        format.js  { do_product_action   }
+      end
+    end
+  end
   
   def create_forum_watch
     begin
@@ -30,7 +55,7 @@ class WatchesController < ApplicationController
       @forum.watch_all_topics current_user
     rescue ActiveRecord::RecordNotFound     
       logger.error("Attempt to add watch to invalid forum #{params[:id]}")
-      flash[:notice] = "Attempted to add watch to invalid forum"
+      flash[:error] = "Attempted to add watch to invalid forum"
       # #list
       
       respond_to do |format|
@@ -109,7 +134,7 @@ class WatchesController < ApplicationController
       @idea.watchers.delete(current_user)
     rescue ActiveRecord::RecordNotFound     
       logger.error("Attempt to remove watch from invalid idea #{params[:id]}")
-      flash[:notice] = "Attempted to remove watch from invalid idea"
+      flash[:error] = "Attempted to remove watch from invalid idea"
       # #list
       respond_to do |format|
         format.html {render :controller => 'ideas', :action => 'list' }
@@ -138,10 +163,10 @@ class WatchesController < ApplicationController
       @forum.watchers.delete(current_user)
     rescue ActiveRecord::RecordNotFound     
       logger.error("Attempt to remove watch from invalid forum #{params[:id]}")
-      flash[:notice] = "Attempted to remove watch from invalid forum"
+      flash[:error] = "Attempted to remove watch from invalid forum"
       # #list
       respond_to do |format|
-        format.html {render forum_path(@forum) }
+        format.html {redirect_to forum_path(@forum) }
         format.js  { do_forum_action   }
       end
       return false
@@ -153,6 +178,30 @@ class WatchesController < ApplicationController
         format.js  { do_forum_action  }
       end      
     end 
+  end
+
+  def destroy_product_watch
+    begin
+      @product = Product.find(params[:id])
+
+      @product.watchers.delete(current_user)
+    rescue ActiveRecord::RecordNotFound
+      logger.error("Attempt to remove watch from invalid product #{params[:id]}")
+      flash[:error] = "Attempted to remove watch from invalid product"
+      # list
+      respond_to do |format|
+        format.html { redirect_to product_path(@product) }
+        format.js  { do_product_action   }
+      end
+      return false
+    else
+      flash[:notice] = %(Watch removed from product '#{@product.name}')
+
+      respond_to do |format|
+        format.html { redirect_to product_path(@product) }
+        format.js  { do_product_action   }
+      end
+    end
   end
 
   def destroy_topic_watch
@@ -224,6 +273,21 @@ class WatchesController < ApplicationController
       page.replace "action_buttons#{@forum.id.to_s}", 
         :partial => "forums/forum_action", 
         :object => @forum
+    end
+  end
+
+  def do_product_action
+    render :update do |page|
+      page.replace_html :flash_notice, flash_notice_string(flash[:notice])
+      page.replace_html :flash_error,  flash_error_string(flash[:error])
+      flash[:notice].nil? ? (page.hide :flash_notice) : (page.show :flash_notice)
+      flash[:error].nil? ? (page.hide :flash_error) : (page.show :flash_error)
+      flash.discard
+      puts "========do_product_action=========="
+      puts "action_buttons_#{@product.id.to_s}"
+      page.replace "action_buttons_#{@product.id.to_s}",
+        :partial => "products/product_action",
+        :object => @product
     end
   end
 end

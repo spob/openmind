@@ -36,7 +36,8 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :votes, :collection => { :create_from_show => :post }
   map.resources :watches, :member => { :create_topic_watch => :post,  
     :destroy_topic_watch => :delete, :create_forum_watch => :post,  
-    :destroy_forum_watch => :delete }, 
+    :create_product_watch => :post, :destroy_forum_watch => :delete,
+    :destroy_product_watch => :delete},
     :collection => {:create_from_show => :post }
 
   # Allow downloading Web Service WSDL as a file with an extension
@@ -53,7 +54,7 @@ ActionController::Routing::Routes.draw do |map|
   map.connect ':controller/:action.:format'
   
   map.simple_captcha '/simple_captcha/:action', :controller => 'simple_captcha'
-#  map.connect ':id', :controller => 'ideas', :action => 'show'
+  #  map.connect ':id', :controller => 'ideas', :action => 'show'
 
   map.connect ':path', :controller => 'static'
 end

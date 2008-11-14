@@ -22,6 +22,8 @@ class Product < ActiveRecord::Base
     :dependent => :destroy, :order => "release_date ASC"
   has_many :ideas,
     :dependent => :destroy, :order => "id ASC"
+  has_and_belongs_to_many :watchers, :join_table => 'products_watches',
+    :class_name => 'User'
   
   def self.list(page, per_page)
     paginate :page => page, :order => 'name', 

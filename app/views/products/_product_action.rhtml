@@ -1,0 +1,38 @@
+<div id="action_buttons_<%= product_action.id %>">
+
+  <%= link_to theme_image_tag("icons/16x16/viewAction.png", :alt=>"view", :title=> "view"),
+    product_path(product_action),
+    html_options = {
+    :onmouseover => "Tip('View details for this product')"}
+%>
+  <% if prodmgr? %>
+    <%= link_to theme_image_tag("icons/16x16/editAction.png", :alt=>"edit", :title=> "edit"),
+      edit_product_path(product_action),
+      html_options = {
+      :onmouseover => "Tip('Edit this product')"}
+  %>
+
+    <%= link_to(
+      theme_image_tag("icons/16x16/deleteAction.png", :alt=>"delete", :title=> "delete"),
+      product_path(product_action),
+      html_options = {:confirm => 'Are you sure?', :method => :delete,
+        :onmouseover => "Tip('Delete this product')"} ) if product_action.can_delete? %>
+
+    <%= link_to theme_image_tag("icons/16x16/releasesView.png", :alt=>"view releases", :title=> "view releases"),
+      releases_path(:product_id => product_action.id),
+      html_options = {
+      :onmouseover => "Tip('View releases for this product')"}
+  %>
+  <% end %>
+  <%= show_product_watch_icon product_action %>
+
+  <% if !product_action.current_release.nil? and !product_action.current_release.download_url.nil? and !product_action.current_release.download_url.strip.empty? %>
+    <%= link_to theme_image_tag("icons/16x16/download.png", :alt=>"download release", :title=> "download release"),
+      product_action.current_release.download_url,
+      html_options = {
+      :onmouseover => "Tip('Download release #{product_action.current_release_version}')"}
+  %>
+  <% else %>
+    &nbsp;
+  <% end %>
+</div>

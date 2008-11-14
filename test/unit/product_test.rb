@@ -2,6 +2,8 @@ require File.dirname(__FILE__) + '/../test_helper'
 
 class ProductTest < Test::Unit::TestCase
   fixtures :products, :lookup_codes
+
+  should_have_and_belong_to_many :watchers
   
   def test_invalid_with_empty_attributes
     product = Product.new(:active => nil)
