@@ -55,7 +55,7 @@ class EmailNotifier < ActionMailer::Base
     @body[:comment] = comment
     @subject    += "Idea ##{comment.idea.id} has a new comment"
     @recipients = ''
-    @bcc = watcher_email_addresses comment.idea
+    @bcc = idea_watcher_email_addresses comment.idea
   end
   
   def new_user_request_notification(user_request_id)
@@ -110,7 +110,20 @@ class EmailNotifier < ActionMailer::Base
     @body[:idea] = idea
     @subject    += "Idea ##{idea.id} was updated"
     @recipients = ''
-    @bcc = watcher_email_addresses idea
+    @bcc = idea_watcher_email_addresses idea
+  end
+
+  def release_change_notifications(release)
+    return if release.product.watchers.empty?
+
+    setup_email
+    @body[:url]  = url_for :controller => 'releases', :action => 'show',
+      :id => release.id, :only_path  => false
+    @body[:change_notices] = release.unprocessed_change_logs.collect(&:message)
+    @body[:release] = release
+    @subject    += "Release #{release.version} for product #{release.product.name} was updated"
+    @recipients = ''
+    @bcc = release_watcher_email_addresses release
   end
   
   def new_topic_comment_notification(topics, user)
@@ -134,8 +147,12 @@ class EmailNotifier < ActionMailer::Base
     @body[:date_stamp] = Time.zone.now.strftime "%A, %B %d, %Y"
   end
   
-  def watcher_email_addresses idea
+  def idea_watcher_email_addresses idea
     idea.watchers.find_all_by_active(true).collect(&:email)
+  end
+
+  def release_watcher_email_addresses release
+    release.product.watchers.find_all_by_active(true).collect(&:email)
   end
   
   def setup_allocation_email allocation

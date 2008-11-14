@@ -44,4 +44,11 @@ class ReleaseTest < Test::Unit::TestCase
     assert !Release.list_by_status(1, 10, 
       lookup_codes(:release_status_controller_test).id).empty?
   end
+
+  should "send notifications without errors" do
+    assert_nothing_thrown {
+      Release.send_change_notifications(
+        release_change_logs(:controller_test_unprocessed).release.id)
+    }
+  end
 end

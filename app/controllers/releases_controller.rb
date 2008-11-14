@@ -99,6 +99,12 @@ class ReleasesController < ApplicationController
     @release.release_date = params[:release][:release_date]
     Release.transaction do
       calc_change_history @release
+
+      # run job in the feature to notify of changes (in case user makes several
+      # changes, we will only ping watchers once
+      RunOncePeriodicJob.create(
+        :job => "Release.send_change_notifications(#{@release.id})",
+        :next_run_at => Time.zone.now + 10.minutes)
       if @release.save
         flash[:notice] = "Release #{@release.version} was successfully updated."
         redirect_to release_path(@release)

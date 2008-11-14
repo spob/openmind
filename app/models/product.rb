@@ -43,9 +43,9 @@ class Product < ActiveRecord::Base
   end
   
   def current_release
-   releases.find(:first, 
-     :conditions => 'release_date <= now()', 
-     :order => "release_date desc")
+    releases.find(:first,
+      :conditions => 'release_date <= now()',
+      :order => "release_date desc")
   end
   
   def current_release_version

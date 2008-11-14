@@ -67,7 +67,7 @@ class PeriodicJob < ActiveRecord::Base
   
   def set_initial_next_run
     begin
-      self.next_run_at = Time.zone.now    
+      self.next_run_at = Time.zone.now if self.next_run_at.nil?
     rescue NoMethodError
       # Won't work if run during migration -  - column is added later, so swallow it
       raise unless ActiveRecord::Migrator.current_version.to_i < 68

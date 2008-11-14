@@ -56,4 +56,16 @@ class Release < ActiveRecord::Base
   def can_delete?
     ideas.empty?
   end
+
+  def self.send_change_notifications release_id
+    Release.transaction do
+      release = Release.find(release_id, :lock => true)
+      unless release.unprocessed_change_logs.empty?
+        EmailNotifier.deliver_release_change_notifications(release)
+        for change_log in release.unprocessed_change_logs
+          change_log.update_attribute(:processed_at, Time.zone.now)
+        end
+      end
+    end
+  end
 end

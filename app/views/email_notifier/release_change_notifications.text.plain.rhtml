@@ -1,0 +1,7 @@
+You are watching release # <%= @release.version %> for Product <%= @release.product.name %> which was recently updated:
+
+<% for notice in @change_notices %>
+*  <%= notice %>
+<% end %>
+
+See details: <%= @url %>
