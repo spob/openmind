@@ -21,4 +21,8 @@ controller_test:
     version: 1.0
     release_status: release_status_controller_test
     product: producta
+    description: blah blah blah
+    release_date: <%= Time.zone.now.to_s(:db) %>
+    user_release_date: real soon
+    textiled: false
 

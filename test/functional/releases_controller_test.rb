@@ -5,7 +5,7 @@ require 'releases_controller'
 class ReleasesController; def rescue_action(e) raise e end; end
 
 class ReleasesControllerTest < Test::Unit::TestCase
-  fixtures :releases, :users
+  fixtures :releases, :users, :lookup_codes, :products, :roles
 
   def setup
     @controller = ReleasesController.new
@@ -99,9 +99,15 @@ class ReleasesControllerTest < Test::Unit::TestCase
   end
 
   def test_update
-    put :update, :id => @first_id
+    put :update, :id => @first_id, :release => {
+      :description => "abc xyz",
+      :user_release_date => "abc",
+      :release_status_id => lookup_codes(:release_status_val2_test).id,
+      :version => 'xxx',
+      :release_date => releases(:controller_test).release_date
+    }
     assert_response :redirect
-    assert_redirected_to releases_path(:product_id => Release.find(@first_id).product.id)
+    assert_redirected_to release_path(Release.find(@first_id))
   end
 
   def test_destroy
