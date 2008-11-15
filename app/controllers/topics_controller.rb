@@ -32,10 +32,12 @@ class TopicsController < ApplicationController
     @topic.forum_id = forum_id
     @topic.user = current_user
     if @topic.save   
-      @topic.comments << TopicComment.new(
+      @topic.add_user_read(current_user)
+      comment = TopicComment.new(
         :user_id => current_user.id,
         :body => @topic.comment_body)
-      @topic.add_user_read(current_user)
+      comment.endorser = current_user if @topic.forum.mediators.include? current_user
+      @topic.comments << comment
     
       #      @topic = Topic.find(@topic.id)
       for user in @topic.forum.watchers
