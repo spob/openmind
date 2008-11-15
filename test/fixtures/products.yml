@@ -15,6 +15,7 @@
 producta:
   name: proda
   description: desca
+  watchers: allroles
 
 available_votes_calc_test1:
   name: calctest

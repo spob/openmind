@@ -61,7 +61,7 @@ class Release < ActiveRecord::Base
     Release.transaction do
       release = Release.find(release_id, :lock => true)
       unless release.unprocessed_change_logs.empty?
-        EmailNotifier.deliver_release_change_notifications(release)
+        EmailNotifier.deliver_release_change_notifications(release) unless release.product.watchers.empty?
         for change_log in release.unprocessed_change_logs
           change_log.update_attribute(:processed_at, Time.zone.now)
         end
