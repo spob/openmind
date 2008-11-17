@@ -200,6 +200,9 @@ class UsersController < ApplicationController
   
   # Generate a csv file of users and enterprises
   def export
+    
+    CsvUtils.setup_request_for_csv headers, request, "users"
+    
     stream_csv do |csv|
       csv << ["email",
         "first name", 

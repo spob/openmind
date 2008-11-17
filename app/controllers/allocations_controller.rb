@@ -100,6 +100,7 @@ class AllocationsController < ApplicationController
   def export
     users = User.active_voters
     enterprises = Enterprise.find(:all, :order => "name ASC")
+    CsvUtils.setup_request_for_csv headers, request, "allocations"
     stream_csv do |csv|
       cols = ["type", "email","name","enterprise","enterprise type/user group(s)", "allocation qty","expire days","comments"]
       cols << CustomField.users_custom_boolean1 unless CustomField.users_custom_boolean1.nil?

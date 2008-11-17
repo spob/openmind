@@ -342,17 +342,7 @@ class IdeasController < ApplicationController
   def stream_csv
     filename = "ideas.csv"    
 
-    # #this is required if you want this to work with IE
-    if request.env['HTTP_USER_AGENT'] =~ /msie/i
-      headers['Pragma'] = 'public'
-      headers["Content-type"] = "text/plain" 
-      headers['Cache-Control'] = 'private'
-      headers['Content-Disposition'] = "attachment; filename=\"#{filename}\"" 
-      headers['Expires'] = "0" 
-    else
-      headers["Content-Type"] ||= 'text/csv'
-      headers["Content-Disposition"] = "attachment; filename=\"#{filename}\"" 
-    end
+    CsvUtils.setup_request_for_csv headers, request, filename
 
     render :text => Proc.new { |response, output|
       csv = FasterCSV.new(output, :row_sep => "\r\n") 
