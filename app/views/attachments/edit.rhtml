@@ -1,0 +1,30 @@
+<%content_for :bodyTag do -%>
+  <%= set_focus_to_id 'attachment_description' -%>
+<%end%>
+<%= javascript_include_tag "wz_tooltip.js", :cache => "cache/tooltip" %> 
+<%= error_messages_for 'attachment' %>
+<% form_for :attachment, :url => attachment_path(@attachment), 
+  :html => {:method => :put } do |form| %>
+  <div class="formTitle"><%= theme_image_tag("icons/16x16/paperclip.png", 
+      options = {:alt=>"attachment"}) %>
+  Edit Attachment
+  </div>
+  <div class="cssform">
+    <p>
+      <label for="attachment_name">File Name:</label>
+      <%= @attachment.filename %>
+    </p>
+    <p>
+      <label for="attachment_name">Description</label>
+      <%= form.text_field :description, { :size => 50, :maxlength => 200 } %>
+    </p>
+    <%= render(:partial => "details") %>
+    <p>
+      <label></label>
+      <%= submit_tag 'Save', html_options = {:class=> "button", :disable_with => "Please wait...",
+        :onmouseover => "Tip('Save changes to attachment')"} %>
+      <%= link_to 'Cancel', attachment_path(@attachment), html_options = {:class=> "button",
+        :onmouseover => "Tip('Do not save changes to attachment')"} %>
+    </p>
+  </div>
+<% end %>

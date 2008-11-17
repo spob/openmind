@@ -35,3 +35,6 @@ allocation_expiration_warning_days: 45
 #     rake time:zones:local
 # to get a list of timezones local to your location
 default_user_timezone: Eastern Time (US & Canada)
+
+# Max file upload size for non-prodmgr and non-sysadmin users (in KB)
+max_file_upload_size: 500

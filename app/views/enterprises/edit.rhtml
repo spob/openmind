@@ -5,13 +5,10 @@
 <%= error_messages_for 'enterprise' %>
 <% form_for :enterprise, :url => enterprise_path(@enterprise), 
   :html => {:method => :put } do |form| %>
-  <div id="actionButtons2">
-    <%= link_to 'List Enterprises', enterprises_path, html_options = {:class=> "button",
-      :onmouseover => "Tip('List enterprises')"} %>
-  </div>
   <div class="formTitle"><%= theme_image_tag("icons/16x16/enterprises.png", 
       options = {:alt=>"Enterprise"}) %>
-  Edit Enterprise</div>
+  Edit Enterprise
+  </div>
   <div class="cssform">
     <p>
       <label for="enterprise_name">Name:</label>

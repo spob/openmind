@@ -8,6 +8,10 @@ require 'FileUtils'
 class Attachment < ActiveRecord::Base
   validates_presence_of :filename, :description, :content_type, :size
   belongs_to :user
+  has_one :thumbnail, :class_name => :attachment, :foreign_key => :parent_id
+  # the attachment record for which this record is a thumbnail. If null,
+  # then this image is not a thumbnail
+  belongs_to :parent, :class_name => :attachment, :foreign_key => :parent_id
 
   def file=(incoming_file)
 		self.filename = incoming_file.original_filename
@@ -21,7 +25,7 @@ class Attachment < ActiveRecord::Base
 	end
 
   def can_delete? user
-    prodmgr? or sysadmin? or self.user == user
+    user.prodmgr? or user.sysadmin? or self.user == user
   end
 
   def self.list(page, per_page)

@@ -15,17 +15,11 @@
       <label>Description:</label>
       <%= @attachment.description %>
     </p>
+    <%= render(:partial => "details") %>
     <p>
-      <label>File Size:</label>
-      <%= number_to_human_size @attachment.size %>
-    </p>
-    <p>
-      <label>Content Type:</label>
-      <%= @attachment.content_type %>
-    </p>
-    <p>
-      <label>Author:</label>
-      <%= user_display_name @attachment.user %>
+      <label></label>
+      <%= link_to 'Download', download_attachment_path(@attachment), html_options = {:class=> "button",
+        :onmouseover => "Tip('Download this file')"} %>
     </p>
     <% if @attachment.image? %>
       <p>
@@ -33,11 +27,5 @@
         <img src="<%= download_attachment_path(@attachment) %>"/>
       </p>
     <% end %>
-    <p>
-      <label></label>
-      <%= link_to 'Download', download_attachment_path(@attachment), html_options = {:class=> "button",
-        :onmouseover => "Tip('Download this file')"} %>
-    </p>
-
   </div>
 </div>

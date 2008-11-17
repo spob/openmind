@@ -1,3 +1,6 @@
+<%content_for :bodyTag do -%>
+  <%= set_focus_to_id 'attachment_description' -%>
+<%end%>
 <%= javascript_include_tag "wz_tooltip.js", :cache => "cache/tooltip" %> 
 <%= error_messages_for 'attachment' %>
 <div id="tabBody" style="position:relative; padding-top:15px;">

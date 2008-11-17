@@ -10,17 +10,30 @@ class AttachmentsController < ApplicationController
   verify :method => :delete, :only => [ :destroy ],
     :redirect_to => { :action => :index }
 
-	def index
+  def index
     @attachments = Attachment.list params[:page], current_user.row_limit
   end
-  
-#  def new
-#		@attachment = Attachment.new
-#	end
 
-	def show
-		@attachment = Attachment.find(params[:id])
-	end
+  def edit
+    @attachment = Attachment.find(params[:id])
+  end
+
+  def update
+    @attachment = Attachment.find(params[:id])
+    if @attachment.update_attributes(params[:attachment])
+      flash[:notice] = "Attachment '#{@attachment.filename}' was successfully updated."
+      redirect_to attachment_path(@attachment)
+    else
+      render :action => :edit
+    end
+  end
+  
+  #  def new
+  # # 	@attachment = Attachment.new # end
+
+  def show
+    @attachment = Attachment.find(params[:id])
+  end
 
   def destroy
     attachment = Attachment.find(params[:id])
@@ -30,25 +43,29 @@ class AttachmentsController < ApplicationController
     redirect_to attachments_url
   end
 
-	def download
-		@attachment = Attachment.find(params[:id])
-		send_data @attachment.data, :filename => @attachment.filename,
+  def download
+    @attachment = Attachment.find(params[:id])
+    send_data @attachment.data, :filename => @attachment.filename,
       :type => @attachment.content_type
-	end
+  end
 
   def create
-		return if params[:attachment].blank?
-
-		@attachment = Attachment.new(params[:attachment])
+    if params[:attachment][:file].blank?
+      flash[:error] = "Please specify a file to upload"
+      index
+      render :action => :index
+      return
+    end
+    @attachment = Attachment.new(params[:attachment])
     @attachment.user = current_user
 
-		if @attachment.save
-			flash[:notice] = "Your file has been uploaded successfully"
-			redirect_to attachment_path(@attachment)
-		else
-			flash[:error] = "There was a problem submitting your attachment."
+    if @attachment.save
+      flash[:notice] = "Your file has been uploaded successfully"
+      redirect_to attachment_path(@attachment)
+    else
+      flash[:error] = "There was a problem submitting your attachment."
       index
-			render :action => :index
-		end
-	end
+      render :action => :index
+    end
+  end
 end

@@ -1,0 +1,18 @@
+
+    <p>
+      <label>File Size:</label>
+      <%= number_to_human_size @attachment.size %>
+    </p>
+    <p>
+      <label>Content Type:</label>
+      <%= @attachment.content_type %>
+    </p>
+    <p>
+      <label>Author:</label>
+      <%= user_display_name @attachment.user %>
+    </p>
+    <p>
+      <label>Download URL:</label>
+      <%= link_to download_attachment_url(@attachment), 
+        download_attachment_url(@attachment) %>
+    </p>

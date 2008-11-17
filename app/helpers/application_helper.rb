@@ -21,7 +21,8 @@ module ApplicationHelper
       ["Allocations",     allocations_path,                    ],
       ["Votes",           votes_path                           ],
       ["Announcements",   announcements_path ,  ["sysadmin", "prodmgr"]  ],
-      ["Polls",           polls_path ,          ],
+      ["Attachments",     attachments_path,     ["sysadmin", "prodmgr"]  ],
+      ["Polls",           polls_path,           ],
       ["Admin",           periodic_jobs_path,    ["sysadmin"],  ["lookup_codes", "link_sets"] ],
     ]
     
