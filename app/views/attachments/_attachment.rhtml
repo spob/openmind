@@ -1,6 +1,12 @@
 <tr>
   <td><%= h attachment.filename %></td>
-  <td><%= h attachment.description %></td>
+  <td>
+    <%= h attachment.description %>
+    <% unless attachment.thumbnail.nil? %>
+      <br/>
+      <img src="<%= download_attachment_path(attachment.thumbnail) %>"/>
+    <% end %>
+  </td>
   <td><%= number_to_human_size attachment.size %></td>
   <td><%= attachment.content_type %></td>
   <td><%= user_display_name attachment.user %></td>

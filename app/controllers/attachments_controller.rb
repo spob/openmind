@@ -1,6 +1,10 @@
+require 'RMagick'
+
 class AttachmentsController < ApplicationController
+  include Magick
+
   before_filter :login_required, :except => [ :show ]
-  access_control [:index, :edit, :create, :update, :destroy] => 'prodmgr | sysadmin'
+  access_control [:index, :edit, :update, :destroy] => 'prodmgr | sysadmin'
 
   # GETs should be safe (see http://www.w3.org/2001/tag/doc/whenToUseGet.html)
   verify :method => :post, :only => [:create ],
@@ -59,13 +63,47 @@ class AttachmentsController < ApplicationController
     @attachment = Attachment.new(params[:attachment])
     @attachment.user = current_user
 
-    if @attachment.save
-      flash[:notice] = "Your file has been uploaded successfully"
-      redirect_to attachment_path(@attachment)
-    else
-      flash[:error] = "There was a problem submitting your attachment."
-      index
-      render :action => :index
+    Attachment.transaction do
+      if @attachment.save
+        thumbnail_data = thumbnail(@attachment, 64, 64)
+        unless thumbnail_data.nil?
+          thumbnail_image = Attachment.new(:user => current_user, 
+            :filename => "thumbnail-#{@attachment.filename}",
+            :description => "Thumbnail: #{@attachment.description}",
+            :data => thumbnail_data,
+            :parent => @attachment,
+            :content_type => @attachment.content_type,
+            :size => thumbnail_data.size)
+          thumbnail_image.save!
+        end
+        flash[:notice] = "Your file has been uploaded successfully"
+        redirect_to attachment_path(@attachment)
+      else
+        flash[:error] = "There was a problem submitting your attachment."
+        index
+        render :action => :index
+      end
+    end
+  end
+  
+  private
+
+  def thumbnail attachment, width=100, height=100
+    if attachment.image?
+      img = Magick::Image.from_blob(attachment.data).first
+      rows, cols = img.rows, img.columns
+      
+      # thumbnail is larger than image...return image
+      return attachment.data if rows < height and cols < width
+
+      source_aspect = cols.to_f / rows
+      target_aspect = width.to_f / height
+      thumbnail_wider = target_aspect > source_aspect
+
+      factor = thumbnail_wider ? width.to_f / cols : height.to_f / rows
+      img.thumbnail!(factor)
+      img.crop!(CenterGravity, width, height)
+      img.to_blob
     end
   end
 end
