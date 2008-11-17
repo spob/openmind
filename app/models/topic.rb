@@ -107,6 +107,7 @@ class Topic < ActiveRecord::Base
         :conditions => "topics.updated_at > topic_watches.last_checked_at",
         :order => "topics.forum_id")
       topics = tws.find_all{|tw| tw.topic.forum.can_see? user}.collect(&:topic)
+      topics = topics.find_all{ |topic| !topic.unread_comments(user).empty? }
       
       EmailNotifier.deliver_new_topic_comment_notification(topics, user)
       
