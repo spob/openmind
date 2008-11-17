@@ -1,0 +1,26 @@
+<tr>
+  <td><%= h attachment.filename %></td>
+  <td><%= h attachment.description %></td>
+  <td><%= number_to_human_size attachment.size %></td>
+  <td><%= attachment.content_type %></td>
+  <td><%= user_display_name attachment.user %></td>
+  <td><%= om_date_time attachment.created_at %></td>
+  <td style="white-space:nowrap;">
+    <%= link_to theme_image_tag("icons/16x16/viewAction.png", :alt=>"view", :title=> "view"),
+      attachment_path(attachment),
+      html_options = {
+      :onmouseover => "Tip('View details for this attachment')"}
+  %>
+    <%= link_to theme_image_tag("icons/16x16/editAction.png", :alt=>"edit", :title=> "edit"), 
+      edit_attachment_path(attachment),
+      html_options = {
+      :onmouseover => "Tip('Edit this attachment')"}
+  %>
+    
+    <%= link_to(
+      theme_image_tag("icons/16x16/deleteAction.png", :alt=>"delete", :title=> "delete"),
+      attachment_path(attachment),
+      html_options = {:confirm => 'Are you sure?', :method => :delete,
+        :onmouseover => "Tip('Delete this attachment')"} ) if attachment.can_delete? current_user %>
+  </td>
+</tr>

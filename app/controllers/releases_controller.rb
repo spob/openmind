@@ -2,6 +2,14 @@ class ReleasesController < ApplicationController
   before_filter :login_required
   access_control [:new, :commit, :index, :edit, :create, :update, :destroy] => 'prodmgr'
   
+  # GETs should be safe (see http://www.w3.org/2001/tag/doc/whenToUseGet.html)
+  verify :method => :post, :only => [:create, :commit ],
+    :redirect_to => { :action => :index }
+  verify :method => :put, :only => [ :update ],
+    :redirect_to => { :action => :index }
+  verify :method => :delete, :only => [ :destroy ],
+    :redirect_to => { :action => :index }
+
   def index
     begin
       id = params[:product_id]
@@ -26,14 +34,6 @@ class ReleasesController < ApplicationController
       current_user.row_limit, 
       session[:release_status_id]
   end
-
-  # GETs should be safe (see http://www.w3.org/2001/tag/doc/whenToUseGet.html)
-  verify :method => :post, :only => [:create, :commit ],
-    :redirect_to => { :action => :index }
-  verify :method => :put, :only => [ :update ],
-    :redirect_to => { :action => :index }
-  verify :method => :delete, :only => [ :destroy ],
-    :redirect_to => { :action => :index }
 
   def show
     id = params[:id]

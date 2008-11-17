@@ -1,0 +1,47 @@
+<%= javascript_include_tag "wz_tooltip.js", :cache => "cache/tooltip" %> 
+<%= error_messages_for 'attachment' %>
+<div id="tabBody" style="position:relative; padding-top:15px;">
+  <h1><%= theme_image_tag("icons/32x32/paperclip.png", options = {:alt=>"Attachments"}) %>Attachments</h1>
+  <table cellspacing="0" cellpadding="0" class="cssform">
+    <tr>
+      <th>File Name</th>
+      <th>Description</th>
+      <th>Filesize</th>
+      <th>Type</th>
+      <th>Author</th>
+      <th>Uploaded At</th>
+      <th>Action</th>
+    </tr>
+    <tr>
+      <% form_for :attachment, :url => attachments_path,
+        :html => { :multipart=> true } do |form| %>
+        <td>
+          <% if prodmgr? or sysadmin? %>
+            <%= file_field :attachment, :file %>
+          <% else %>
+            <%= file_field :attachment, :file,
+              :accept =>  'image/gif,image/jpeg,image/png,image/tiff,text/plain'  %>
+          <% end %>
+        </td>
+        <td><%= form.text_field :description, { :size => 30, :maxlength => 200 } %></td>
+        <td>-</td>
+        <td>-</td>
+        <td>-</td>
+        <td>-</td>
+        <td><%= submit_tag 'Upload', options = {:class=> "button", :disable_with => "Please wait...",
+          :onmouseover => "Tip('Create a new attachment')"} %></td>
+      </tr>
+    <% end %>
+
+    <%= render :partial => @attachments %>
+
+  </table>
+  <p>
+    <div class="digg_pagination">
+      <div class="page_info">
+        <%= page_entries_info @attachments %>
+      </div>
+      <%= will_paginate @attachments, :container => false %>
+    </div>
+  </p>
+</div>
