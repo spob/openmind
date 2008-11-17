@@ -3,7 +3,7 @@
 #   t.column :content_type, :string, :limit => 20, :null => false
 #   t.column :size, :integer, :null => false
 #   t.column :data, :binary, :null => false
-require 'FileUtils'
+require 'fileutils'
 
 class Attachment < ActiveRecord::Base
   validates_presence_of :filename, :description, :content_type, :size
