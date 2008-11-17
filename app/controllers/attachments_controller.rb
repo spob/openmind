@@ -3,7 +3,7 @@ require 'RMagick'
 class AttachmentsController < ApplicationController
   include Magick
 
-  before_filter :login_required, :except => [ :show ]
+  before_filter :login_required, :except => [ :download ]
   access_control [:index, :edit, :update, :destroy] => 'prodmgr | sysadmin'
 
   # GETs should be safe (see http://www.w3.org/2001/tag/doc/whenToUseGet.html)
