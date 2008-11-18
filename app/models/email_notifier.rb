@@ -1,5 +1,6 @@
 class EmailNotifier < ActionMailer::Base
   include ActionController::UrlWriter
+  
   default_url_options.update :host => APP_CONFIG['host']
   default_url_options.update :port => APP_CONFIG['port']
   

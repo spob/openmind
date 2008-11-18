@@ -15,7 +15,7 @@
   :url => comments_path(:id => object.id) do |form| %>
   <input type="hidden" value="<%= object.class.to_s %>" name="type"/>
   <div class="formTitle"><%= theme_image_tag("icons/32x32/comment.png", 
-  options = {:alt=>"New Comment"}) %>Add Comment</div>
+    options = {:alt=>"New Comment"}) %>Add Comment</div>
   <div class="cssform widerLabel">
     <% if object.class.to_s == "Idea" %>
       <p>
@@ -62,19 +62,24 @@
         </p>
       <% end %>
     <% end %>
+        <p>
+          <label></label>
+          <%= check_box_tag 'attach', 'yes', false,
+            {:onmouseover => "Tip('Attach images to this comment')"} %>Attach Images
+        </p>
     <p>
       <label></label>
       <% text = "Create this comment for idea ##{@idea.id}" if object.class.to_s == "Idea" %>
       <% text = "Create this comment for topic '#{@topic.title}'" if object.class.to_s == "Topic" %>
       <%= submit_tag 'Create', html_options = {:class=> "button", :disable_with => "Please wait...",
         :onmouseover => "Tip('#{text}')"}  %>
-    <%= link_to "Cancel",
-      options = { :controller=> 'ideas', :action => 'show', :id => @idea},
-      html_options = {:class=> "button", 
-      :onmouseover => "Tip('Return to idea ##{@idea.id}')"} if object.class.to_s == "Idea" %>
-  
-    <%=  link_to 'Cancel', topic_path(@topic.id) , html_options = {:class=> "button",
-      :onmouseover => "Tip('Return to topic ##{@topic.title}')"} if object.class.to_s == "Topic" %>
+      <%= link_to "Cancel",
+        options = { :controller=> 'ideas', :action => 'show', :id => @idea},
+        html_options = {:class=> "button", 
+        :onmouseover => "Tip('Return to idea ##{@idea.id}')"} if object.class.to_s == "Idea" %>
+    
+      <%=  link_to 'Cancel', topic_path(@topic.id) , html_options = {:class=> "button",
+        :onmouseover => "Tip('Return to topic ##{@topic.title}')"} if object.class.to_s == "Topic" %>
     </p>
   </div>  
 <% end %>

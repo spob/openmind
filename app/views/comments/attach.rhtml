@@ -1,0 +1,33 @@
+<%content_for :bodyTag do -%>
+  <%= set_focus_to_id 'comment__body_editor' -%>
+<%end%>
+<%= javascript_include_tag "wz_tooltip.js", :cache => "cache/tooltip" %> 
+
+<%= error_messages_for 'attachment' %>
+<% form_for :attachment, :url => attachments_path,
+  :html => { :multipart=> true } do |form| %>
+  <input type="hidden" value="<%= @comment.id %>" name="comment_id"/>
+  <div class="formTitle"><%= theme_image_tag("icons/32x32/paperclip.png", 
+    options = {:alt=>"New Attachment"}) %>Add New Image to Comment</div>
+  <div class="cssform widerLabel">
+    <p>
+      <label for="file">Image File:</label>
+      <%= file_field :attachment, :file,
+        :accept =>  'image/gif,image/jpeg,image/png,image/tiff,text/plain'  %>
+    </p>
+    <p>
+      <label for="description">Description:</label>
+      <%= form.text_field :description, { :size => 30, :maxlength => 200 } %>
+    </p>
+    <p>
+      <label></label>
+      <%= submit_tag 'Attach file', html_options = {:class=> "button", :disable_with => "Please wait...",
+        :onmouseover => "Tip('Attach image file to this comment')"}  %>
+        <%= link_to "Cancel",
+          calc_return_path(@comment),
+          html_options = {:class=> "button", 
+          :onmouseover => "Tip('Do not attach file')"} %>
+    </p>
+  </div>  
+<% end %>
+<%=render(:partial => "comments/comment_item", :locals => { :comment_item => @comment })  %>

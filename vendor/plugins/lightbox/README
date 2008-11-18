@@ -1,0 +1,23 @@
+LightBoxObject v.1.1
+====================
+This LightBox Helper is based on the lastest javascript http://www.huddletogether.com/projects/lightbox2/
+
+It's only make an helper, copy the lastest javascripts, css, and images on your public/javascript directory
+and register the javascript in the AssetTagHelper of rails,
+so for include the javascript in your page you only can add this (if you havn't yet):
+
+<%= javascript_include_tag :defaults %>
+
+You must add also the stylesheet so add this on your page head:
+
+<%= stylesheet_link_tag 'lightbox' %>
+
+The is very simple for add a LightBox in your page add this:
+
+<%= lightbox_link_to "Link Name", "/path/of/your/image.png" %> 
+or
+<%= lightbox_image_tag("/path/of/your/image-thumb.png", "/path/of/your/image.png", {:class=>"images"}, :title => "This is a test!") %>
+
+You can add, title, controller, action what do u whant becaue it's based on image_tag and link_to.
+
+Vist my website: http://blog.lipsiasoft.com

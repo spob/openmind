@@ -1,8 +1,5 @@
-require 'RMagick'
-
 class AttachmentsController < ApplicationController
-  include Magick
-
+  include ActionView::Helpers::NumberHelper
   before_filter :login_required, :except => [ :download ]
   access_control [:index, :edit, :update, :destroy] => 'prodmgr | sysadmin'
 
@@ -55,55 +52,69 @@ class AttachmentsController < ApplicationController
 
   def create
     if params[:attachment][:file].blank?
-      flash[:error] = "Please specify a file to upload"
-      index
-      render :action => :index
+      redirect_on_error params, "Please specify a file to upload"
       return
     end
-    @attachment = Attachment.new(params[:attachment])
+    if not_from_comment? params
+      @attachment = Attachment.new(params[:attachment])
+    else
+      @attachment = CommentAttachment.new(params[:attachment])
+      comment = Comment.find params[:comment_id]
+      @attachment.comment = comment
+    end
     @attachment.user = current_user
 
+    if from_comment? params 
+      unless @attachment.image?
+        redirect_on_error params, "Uploads are restricted to image files only"
+        return
+      end
+      if @attachment.size > APP_CONFIG['max_file_upload_size'].to_i * 1024
+        redirect_on_error params, 
+          "Upload exceeds maximum file size of #{number_to_human_size(APP_CONFIG['max_file_upload_size'].to_i * 1024)}"
+        return
+      end
+    end
     Attachment.transaction do
       if @attachment.save
-        thumbnail_data = thumbnail(@attachment, 64, 64)
-        unless thumbnail_data.nil?
-          thumbnail_image = Attachment.new(:user => current_user, 
-            :filename => "thumbnail-#{@attachment.filename}",
-            :description => "Thumbnail: #{@attachment.description}",
-            :data => thumbnail_data,
-            :parent => @attachment,
-            :content_type => @attachment.content_type,
-            :size => thumbnail_data.size)
-          thumbnail_image.save!
-        end
         flash[:notice] = "Your file has been uploaded successfully"
-        redirect_to attachment_path(@attachment)
+        if @attachment.class.to_s == 'Attachment'
+          redirect_to attachment_path(@attachment)
+        else
+          redirect_to calc_return_path(@attachment.comment)
+        end
       else
-        flash[:error] = "There was a problem submitting your attachment."
-        index
-        render :action => :index
+        redirect_on_error params, "There was a problem submitting your attachment"
       end
     end
   end
   
   private
-
-  def thumbnail attachment, width=100, height=100
-    if attachment.image?
-      img = Magick::Image.from_blob(attachment.data).first
-      rows, cols = img.rows, img.columns
-      
-      # thumbnail is larger than image...return image
-      return attachment.data if rows < height and cols < width
-
-      source_aspect = cols.to_f / rows
-      target_aspect = width.to_f / height
-      thumbnail_wider = target_aspect > source_aspect
-
-      factor = thumbnail_wider ? width.to_f / cols : height.to_f / rows
-      img.thumbnail!(factor)
-      img.crop!(CenterGravity, width, height)
-      img.to_blob
+  
+  def redirect_on_error params, err_msg
+    flash[:error] =  err_msg
+    if not_from_comment? params
+      index
+      render :action => :index
+    else
+      redirect_to attach_comment_path(Comment.find(params[:comment_id]))
     end
+  end
+  
+  def calc_return_path comment
+    if comment.class.to_s == 'TopicComment'
+      topic_path(comment.topic.id, :anchor => comment.id.to_s)
+    else
+      url_for(:controller => 'ideas', :action => 'show', :id => comment.idea, 
+        :selected_tab => "COMMENTS", :anchor => comment.id.to_s)
+    end
+  end
+  
+  def from_comment? params
+    !not_from_comment? params
+  end
+  
+  def not_from_comment? params
+    params[:comment_id].nil? or params[:comment_id].blank?
   end
 end

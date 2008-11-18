@@ -1,9 +1,18 @@
-class CommentsController < ApplicationController
+class CommentsController < ApplicationController  
   helper :ideas
   
   before_filter :login_required
   access_control [:edit, :update, :destroy] => 'prodmgr | voter'
- 
+   
+  # GETs should be safe (see
+  # http://www.w3.org/2001/tag/doc/whenToUseGet.html)c/whenToUseGet.html)
+  verify :method => :post, :only => [:create ],
+    :redirect_to =>{ :controller => 'ideas', :action => :index }
+  verify :method => :put, :only => [ :update ],
+    :redirect_to => { :controller => 'ideas', :action => :index }
+  verify :method => :delete, :only => [ :destroy ],
+    :redirect_to => { :controller => 'ideas', :action => :index }
+  
   def index
     @comment_pages, @comments = paginate :comments, :per_page => 10
   end
@@ -11,14 +20,6 @@ class CommentsController < ApplicationController
   def preview
     render :layout => false
   end
-  
-  # GETs should be safe (see http://www.w3.org/2001/tag/doc/whenToUseGet.html)c/whenToUseGet.html)
-  verify :method => :post, :only => [:create ],
-    :redirect_to =>{ :controller => 'ideas', :action => :index }
-  verify :method => :put, :only => [ :update ],
-    :redirect_to => { :controller => 'ideas', :action => :index }
-  verify :method => :delete, :only => [ :destroy ],
-    :redirect_to => { :controller => 'ideas', :action => :index }
 
   def show
     @comment = IdeaComment.find(params[:id])
@@ -31,6 +32,19 @@ class CommentsController < ApplicationController
     else
       @topic = Topic.find(params[:id]) 
       @comment ||= TopicComment.new
+    end
+  end
+  
+  def attach
+    @comment = Comment.find(params[:id])   
+    unless @comment.can_edit?(current_user, prodmgr?)
+      flash[:error] = "You do not have priveleges to edit this comment"
+      if @comment.class.to_s == 'TopicComment'
+        redirect_to topic_path(@topic.id)
+      else
+        redirect_to :controller => 'ideas', :action => 'show', :id => @idea, 
+          :selected_tab => "COMMENTS"
+      end
     end
   end
 
@@ -104,7 +118,12 @@ class CommentsController < ApplicationController
     end
     if @comment.save
       flash[:notice] = "Comment for idea number #{@comment.idea.id} was successfully created."
-      redirect_to :controller => 'ideas', :action => 'show', :id => @idea, :selected_tab => "COMMENTS"
+      if params[:attach] == 'yes'
+        redirect_to attach_comment_path(@comment)
+      else
+        redirect_to :controller => 'ideas', :action => 'show', :id => @idea, 
+          :selected_tab => "COMMENTS"
+      end
     else
       new
       render :action => 'new'
@@ -126,7 +145,11 @@ class CommentsController < ApplicationController
     end
     if @topic.save and @comment.save
       flash[:notice] = "Comment for topic '#{@topic.title}' was successfully created."
-      redirect_to topic_path(@topic.id)
+      if params[:attach] == 'yes'
+        redirect_to attach_comment_path(@comment)
+      else
+        redirect_to topic_path(@topic.id)
+      end
     else
       new
       render :action => 'new'

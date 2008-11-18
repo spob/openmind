@@ -4,8 +4,12 @@
 #   t.column :size, :integer, :null => false
 #   t.column :data, :binary, :null => false
 require 'fileutils'
+require 'RMagick'
 
 class Attachment < ActiveRecord::Base
+  include Magick
+  after_create :create_thumbnail
+  
   validates_presence_of :filename, :description, :content_type, :size
   belongs_to :user
   has_one :thumbnail, :class_name => 'Attachment', 
@@ -53,4 +57,39 @@ class Attachment < ActiveRecord::Base
     just_filename.gsub(/[^\w\.\-]/, '_')
   end
 
+  def create_thumbnail
+    # if a thumbnail, do nothing...avoid infinite recursion
+    return unless parent.nil?
+    
+    thumbnail_data = gen_thumbnail_image(64, 64)
+    unless thumbnail_data.nil?
+      thumbnail_image = Attachment.new(:user => self.user, 
+        :filename => "thumbnail-#{self.filename}",
+        :description => "Thumbnail: #{self.description}",
+        :data => thumbnail_data,
+        :parent => self,
+        :content_type => self.content_type,
+        :size => thumbnail_data.size)
+      thumbnail_image.save!
+    end
+  end
+
+  def gen_thumbnail_image width=100, height=100
+    if self.image?
+      img = Magick::Image.from_blob(self.data).first
+      rows, cols = img.rows, img.columns
+      
+      # thumbnail is larger than image...return image
+      return self.data if rows < height and cols < width
+
+      source_aspect = cols.to_f / rows
+      target_aspect = width.to_f / height
+      thumbnail_wider = target_aspect > source_aspect
+
+      factor = thumbnail_wider ? width.to_f / cols : height.to_f / rows
+      img.thumbnail!(factor)
+      img.crop!(CenterGravity, width, height)
+      img.to_blob
+    end
+  end
 end

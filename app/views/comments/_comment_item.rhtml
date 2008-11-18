@@ -10,22 +10,40 @@
     session[:forums_search].split,
     '<span class="highlight">\1</span>') unless comment_item.textiled %>
   <%= highlight(textilize(white_list(comment_item.body)), session[:forums_search].split, '<span class="highlight">\1</span>') if comment_item.textiled %>
-
+  
   <%= link_to '[Endorse]', endorse_comment_path(comment_item),
     html_options = { :class=> "btTxt editButton",
     :method => :post,
     :onmouseover => "Tip('Endorse this comment')"} if comment_item.can_endorse? current_user %>
-
+  
   <%= link_to '[Un-Endorse]', unendorse_comment_path(comment_item),
     html_options = { :class=> "btTxt editButton",
     :method => :post,
     :onmouseover => "Tip('Remove the endorsement for this comment')"} if comment_item.can_unendorse? current_user %>
-    
+  
   <%= "&nbsp;" if ( comment_item.can_unendorse? current_user or  comment_item.can_endorse? current_user) and can_edit_comment? comment_item %>
   <%= link_to '[Edit]', edit_comment_path(comment_item),
     html_options = { :class=> "btTxt editButton",
     :onmouseover => "Tip('Edit this comment')"} if can_edit_comment? comment_item %>
-
+  <%= "&nbsp;" if can_edit_comment? comment_item %>
+  <%= link_to '[Add Image]', attach_comment_path(comment_item),
+    html_options = { :class=> "btTxt editButton",
+    :onmouseover => "Tip('Add an image to this comment')"} if can_edit_comment? comment_item %>
+  
+  <% unless comment_item.comment_attachments.empty? %>
+    <strong>Images:</strong>
+    <br/>
+    <% for attachment in comment_item.comment_attachments %>
+      <a href="<%= download_attachment_path(attachment) %>" 
+         title="<%= attachment.description %>" 
+         rel="lightbox[comment_<%= comment_item.id %>]">
+         <img src="<%= download_attachment_path(attachment.thumbnail) %>"
+           alt="<%= attachment.description %>"
+           onmouseover="Tip('Click to expand')"
+           style="border-style: solid;" />
+         </a>
+    <% end %>
+  <% end %>
 </div>
 <div class="commentfooter">
   Posted by <%= "#{user_display_name comment_item.user}" %>

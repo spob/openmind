@@ -1,3 +1,8 @@
+<%content_for :head do -%>
+  <%= javascript_include_tag "lightbox" %>
+  <%= javascript_include_tag 'builder' %>
+  <%= stylesheet_link_tag 'lightbox' %>
+<%end%>
 <div id="tabBody">
   <br/>
     <%=render(:partial => "comments/comment_item", :collection => @idea.comments)%>
