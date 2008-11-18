@@ -1,1 +1,0 @@
-require 'lightbox_view_helper'
