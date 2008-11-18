@@ -1,3 +1,8 @@
+<%content_for :head do -%>
+  <%= javascript_include_tag "lightbox" %>
+  <%= javascript_include_tag 'builder' %>
+  <%= stylesheet_link_tag 'lightbox' %>
+<%end%>
 <div class="commentbox" id="comment_<%= comment_item.id %>">
   <a name="<%= comment_item.id %>"></a>
   <% session[:forums_search] ||= "" %>
