@@ -29,6 +29,11 @@
     <% end %>
     <p>
       <label></label>
+      <%= check_box_tag 'attach', 'yes', false,
+        {:onmouseover => "Tip('Attach images to this topic comment')"} %>Attach Images
+    </p>
+    <p>
+      <label></label>
       <%= submit_tag 'Create', options = {:class=> "button", :disable_with => "Please wait...",
         :onmouseover => "Tip('Create a new topic')"} %>
       <%= link_to 'Cancel', forum_path(@topic.forum), 

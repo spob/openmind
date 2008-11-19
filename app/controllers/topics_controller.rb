@@ -47,8 +47,12 @@ class TopicsController < ApplicationController
       tw = TopicWatch.find_by_user_id_and_topic_id(current_user, @topic)
       @topic.watchers << current_user if tw.nil?
       @topic.save!
-      flash[:notice] = "Topic #{@topic.title} was successfully created."
-      redirect_to forum_path(forum_id)
+      if params[:attach] == 'yes'
+        redirect_to attach_comment_path(comment)
+      else
+        flash[:notice] = "Topic #{@topic.title} was successfully created."
+        redirect_to forum_path(forum_id)
+      end
     else
       @forum = Forum.find(forum_id)
       new
