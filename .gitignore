@@ -2,4 +2,6 @@ log/*.log
 tmp/**/*
 index/**/*
 coverage/**/*
+config/environments/development.rb
+nbproject
 db/schema.rb
