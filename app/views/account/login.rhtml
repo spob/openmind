@@ -23,6 +23,8 @@
     <%= link_to 'Forgot your password?', { :controller => :users,
                   :action => 'lost_password' } %>
     &nbsp;|&nbsp;
+<%= theme_image_tag("icons/14x14/openid-14x14.gif", 
+          options = {:alt=>"OpenID"}) %>
     <%= link_to 'Login using Open ID', { :action => 'login_openid' } %>
   </p>
 </div>
