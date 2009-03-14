@@ -5,7 +5,7 @@ You are watching topics that have new comments.
 <% for topic in @topics %>
 Forum:      <%= topic.forum.name %>
 Topic:      <%= topic.title %>
-  <% for comment in topic.unread_comments(@user) %>
+  <% for comment in topic.unread_comments(@user).find_all{|c| !c.private or topic.forum.mediators.include? @user} %>
 <%= comment.user.display_name %> wrote at <%= comment.created_at.strftime("%b %d, %Y %I:%M%p") %>:
 <%= StringUtils.strip_html(comment.body) %>
 

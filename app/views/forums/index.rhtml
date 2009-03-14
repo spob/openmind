@@ -1,19 +1,21 @@
-<%= calendar_date_select_includes "blue" %>
 <%content_for :head do -%>     
   <%= theme_stylesheet_link_tag 'sideBarRight' %>
-  <%= javascript_include_tag "tablecloth" %>                
+  <%= javascript_include_tag "tablecloth" %>
 <%end%>
 <%content_for :bodyTag do -%>
-  <%= set_focus_to_id 'forum_search' -%>              
+  <%= set_focus_to_id 'forum_search' -%>
 <%end%>
 <%= javascript_include_tag "wz_tooltip.js", :cache => "cache/tooltip" %> 
 <%= error_messages_for 'forum' %>
 <h1><%= theme_image_tag("icons/32x32/forums.png", options = {:alt=>"Forum"}) %>Forums</h1>
-<% if current_user != :false and sysadmin? %>
+<% if current_user != :false %>
   <div id="actionButtons2" style="float:right; margin-top:-40px;">
-    <%= link_to 'New Forum', new_forum_path, 
+    <%= link_to 'New Forum', new_forum_path,
       html_options = {:class => "button",
-      :onmouseover => "Tip('Create a new forum')"} %>
+      :onmouseover => "Tip('Create a new forum')"} if sysadmin? %>
+    <%= link_to 'Metrics', metrics_forums_path,
+      html_options = {:class => "button",
+      :onmouseover => "Tip('View management metrics')"} if current_user.mediator? and !Forum.active.tracked.limit1.empty? %>
   </div>
 <% end %>
 
@@ -23,36 +25,23 @@
 
 <!--  -->
 <% form_tag(search_forums_path, :class => 'cssform searchform', :name => 'search' ) do -%>
-  <div id="search_help" style="display:none;" >  
-    <p style="font-size:1.2em">
-      The following search options are supported:
-    </p>
-    <ul style="font-size:1.2em">
-      <li><b>AND</b>: This is the default option. 'cat dog' will find records 
-      matching 'cat' AND 'dog'.</li>
-      <li><b>NOT</b>: 'cat -dog' will find records matching 'cat' AND NOT 'dog'.</li>
-      <li><b>INCLUDE</b>: 'cat +me' will find records matching 'cat' and 'me',
-      even if 'me' is smaller than the +min_word_size+</li>
-      <li><b>""</b>: Quoted terms are matched as phrases. '"cat dog"' will find 
-        records matching the whole phrase. Quoted terms can be preceded <br/>by the NOT 
-        operator; 'cat -"big dog"' etc. Quoted terms can include words shorter than 
-      the +min_word_size+.</li>
-    </ul>
-  </div>
   <p>
     <label for="search">Search Forums:</label>
-    <%= text_field_tag 'search', 
-      "", 
-      options = { :id => "forum_search", :size => "50",
-      :onmouseover=>"TagToTip('search_help')" } %>
+    <%= text_field_tag 'search',
+      "",
+      options = { :id => "forum_search", :size => "50" } %>
     <%= submit_tag 'Search', html_options = {:name => nil, :class=> "button",
       :onmouseover => "Tip('Search topics and topic comments')"} %>
+    <br/>
+    <%= link_to "search syntax help", {:controller => 'static', :action => 'search'},
+      :popup => true %>
   </p>
 <% end %>
+<% cache(:controller => "forums", :action => "list_forums", :user_id => (logged_in? ? current_user.id : -1)) do %>
+  <%=render(:partial => "forum_group", :locals => { :forums => @forums })%>
 
-<%=render(:partial => "forum_group", :locals => { :forums => @forums })%>
-
-<% for forum_group in @forum_groups %>
-  <h2><%= forum_group.short_name %></h2>
-  <%=render(:partial => "forum_group", :locals => { :forums => forum_group.forums })%>
+  <% for forum_group in @forum_groups %>
+    <h2><%= forum_group.short_name %></h2>
+    <%=render(:partial => "forum_group", :locals => { :forums => forum_group.forums })%>
+  <% end %>
 <% end %>

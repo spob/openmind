@@ -1,7 +1,9 @@
 <%= error_messages_for :user %>
 <% form_for :user do |f| -%>
-  <p class="form"></p><label for="login">Login</label><br/>
-  <%= f.text_field :login %>
+  <p class="form">
+    <label for="login">Login</label>
+    <br/>
+    <%= f.text_field :login %>
   </p>
 
   <p class="form">

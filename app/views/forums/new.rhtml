@@ -12,12 +12,20 @@
       <%= form.text_field :name, { :size => 20, :maxlength => 50 } %>
     </p>
     <p>
-      <label for="description">Description</label>
+      <label for="description">Description:</label>
       <%= form.text_field :description, { :size => 30, :maxlength => 150 } %>
     </p>
     <p>
-      <label>Mediators:</label>
-      <% for user in @mediators %>
+      <label for="display_order">Display Order:</label>
+      <%= form.text_field :display_order %>
+    </p>
+    <p>
+      <label>Tracking Enabled:</label>
+      <%= form.check_box :tracked %>
+    </p>
+    <p>
+      <label>Moderators:</label>
+      <% for user in User.mediators %>
         <span style="display:block;margin-left:10px;">
           <%= check_box_tag "forum[mediator_ids][]", user.id, @forum.mediators.include?(user) %>
           <%= h user_display_name(user) %>
@@ -25,12 +33,12 @@
       <% end %>
     </p>
     <p>
-      <label for="active">Blog Style Forum:</label>      
-      <%= form.check_box :restrict_topic_creation %>
+      <label for="active">Type:</label>
+      <%= form.select :forum_type, types %>
     </p>
     <p>
       <label>Restrict to User Groups:</label>
-      <% for group in Group.list_all %>
+      <% for group in Group.by_name %>
         <span style="display:block;margin-left:10px;">
           <%= check_box_tag "forum[group_ids][]", group.id, @forum.groups.include?(group) %>
           <%= h group.name %>
@@ -38,8 +46,13 @@
       <% end %>
     </p>
     <p>
+      <label>Power User Group:</label>
+      <%= form.collection_select :power_user_group_id,
+        Group.findall(true), :id, :name_and_description, { :prompt => "Please select..." } %>
+    </p>
+    <p>
       <label>Restrict to Enterprise Types:</label>
-      <% for etype in EnterpriseType.list_all %>
+      <% for etype in EnterpriseType.by_sort_value %>
         <span style="display:block;margin-left:10px;">
           <%= check_box_tag "forum[enterprise_type_ids][]", etype.id, @forum.enterprise_types.include?(etype) %>
           <%= h etype.short_name %>

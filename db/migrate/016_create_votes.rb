@@ -4,7 +4,7 @@ class CreateVotes < ActiveRecord::Migration
   extend MigrationHelpers
   
   def self.up
-    create_table :votes do |t|
+    create_table :votes, :options => 'ENGINE=InnoDB DEFAULT CHARSET=utf8' do |t|
       t.references :user, :null => false
       t.references :allocation, :null => false
       t.references :idea, :null => false

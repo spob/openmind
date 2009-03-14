@@ -1,7 +1,7 @@
 class PopulateMediatorRole < ActiveRecord::Migration
   def self.up
     Role.create(:title => "mediator", 
-      :description => "Forum Mediator",
+      :description => "Forum Moderator",
       :default_role => false)
     
     assign_user 'all@openmindsw.com', "mediator"

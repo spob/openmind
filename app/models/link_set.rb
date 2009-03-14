@@ -16,7 +16,7 @@ class LinkSet < ActiveRecord::Base
   before_save  :unset_default_link_sets
   
   validates_presence_of :name, :label
-  validates_uniqueness_of :name 
+  validates_uniqueness_of :name, :case_sensitive => false
   validates_length_of :name, :label, :maximum => 30
   
   has_many :links, :order => :position, :dependent => :destroy
@@ -42,7 +42,7 @@ class LinkSet < ActiveRecord::Base
     # if this link set is set to true, then unset the previous default link sets
     if self.default_link_set
       for linkset in LinkSet.find_all_by_default_link_set(true)
-        linkset.update_attribute(:default_link_set, false)
+        linkset.update_attribute(:default_link_set, false) unless linkset.id == self.id
       end
     end
   end

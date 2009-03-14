@@ -19,8 +19,8 @@
 # 
 
 class Idea < ActiveRecord::Base
-  acts_as_ordered :order => 'id' 
   acts_as_taggable
+  acts_as_solr :fields => [:title, :description], :include => [:comments]
   
   belongs_to :user
   belongs_to :release
@@ -51,12 +51,21 @@ class Idea < ActiveRecord::Base
   # validates_presence_of :user_id, :product_id, :release_id
   validates_presence_of :user_id, :product_id
   validates_presence_of :title, :description
-  validates_uniqueness_of :title
+  validates_uniqueness_of :title, :case_sensitive => false
   validates_length_of :title, :maximum => 100
   
   attr_accessor :nondb_tag_list #used for calculating changed email notifications
   
   xss_terminate :except => [:description]
+
+  named_scope :next,
+    lambda{|id|{:conditions => ['id > ?', id],
+      :order => 'id',
+      :limit => 1}}
+  named_scope :previous,
+    lambda{|id|{:conditions => ['id < ?', id],
+      :order => 'id desc',
+      :limit => 1}}
   
   def self.list_watched_ideas(page, user, properties, do_paginate)
     list(page, user, properties, do_paginate, 
@@ -153,9 +162,23 @@ class Idea < ActiveRecord::Base
     
     title_filter = properties[:title_filter]
     # title filter
-    condition_params = add_criteria(condition_params, 
-      "title like ?", 
-      "%#{title_filter}%") unless title_filter.nil? or title_filter.length == 0
+    unless title_filter.nil? or title_filter.blank?
+      search_results = []
+      begin
+        search_results = 
+          Idea.find_by_solr(StringUtils.sanitize_search_terms(title_filter),
+          :lazy => true).docs.collect(&:id)
+      rescue RuntimeError => e
+        logger.error(e)
+      end
+      condition_params = add_criteria(condition_params,
+        "ideas.id in (?)",
+        search_results,
+        true)
+    end
+    #    condition_params = add_criteria(condition_params,
+    #      "title like ?",
+    #      "%#{title_filter}%") unless title_filter.nil? or title_filter.length == 0
     
     # tag filter
     condition_params = add_criteria(condition_params,
@@ -176,13 +199,13 @@ class Idea < ActiveRecord::Base
         :joins => joins,
         :order => order_by, 
         :group => group_by,
-        :per_page => user.row_limit, :include => ['product']
+        :per_page => user.row_limit, :include => ['product', 'watchers']
     else
       Idea.find :all,
         :conditions => condition_params,
         :joins => joins,
         :order => order_by, 
-        :group => group_by, :include => ['product']
+        :group => group_by, :include => ['product', 'votes']
     end
   end
   
@@ -209,8 +232,13 @@ class Idea < ActiveRecord::Base
     read = user_idea_reads.find_by_user_id(user.id)
     # idea never been read so comments must be unread
     return true if read.nil?
-    
-    !comments.find(:first, :conditions => ["comments.created_at > ?", read.last_read]).nil?
+
+    # comments are cached, so iterate through rather than doing another fetch
+    for comment in comments
+      return true if comment.created_at > read.last_read
+    end
+    false
+    #    !comments.find(:first, :conditions => ["comments.created_at > ?", read.last_read]).nil?
   end
   
   def formatted_description
@@ -243,13 +271,18 @@ class Idea < ActiveRecord::Base
   end  
   
   def rescindable_votes?(user_id)
-    !votes.find(:first, :conditions => ['created_at > ? and user_id = ?', 
-        (Time.zone.now - Vote.rescind_seconds).to_s(:db), user_id]).nil?
+    # we're already cached in memory, so iterate through it
+    for vote in votes
+      return true if vote.user_id == user_id and vote.created_at > (Time.zone.now - Vote.rescind_seconds)
+    end
+    false
+    #    !votes.find(:first, :conditions => ['created_at > ? and user_id = ?',
+    #        (Time.zone.now - Vote.rescind_seconds).to_s(:db), user_id]).nil?
   end
   
   def rescind_vote(user)
-    vote = votes.find(:first, 
-      :conditions => ['created_at > ? and user_id = ?', 
+    vote = votes.find(:first,
+      :conditions => ['created_at > ? and user_id = ?',
         (Time.zone.now - Vote.rescind_seconds).to_s(:db), user.id],
       :order => 'created_at DESC')
    
@@ -259,16 +292,16 @@ class Idea < ActiveRecord::Base
   
   def vote(user)
     # first try to consume the user allocations
-    found = allocation_votes user.active_allocations,
+    found = allocation_votes user.allocations.active,
       user
     # if that didn't work, try to consume the enterprise allocations
-    found = allocation_votes(user.enterprise.active_allocations,
+    found = allocation_votes(user.enterprise.allocations.active,
       user) unless found
     raise VoteException unless found
   end
   
   # list of all users who have created an idea
-  def self.authors    
+  def self.authors
     @users = User.find(:all,
       :conditions => "exists (select null from ideas as i where i.user_id = users.id)",
       :order => 'email')
@@ -294,6 +327,11 @@ class Idea < ActiveRecord::Base
   def watched? user
     watchers.include? user
   end
+
+  def self.send_reminder_to_vote idea_id
+    idea = Idea.find(idea_id)
+    EmailNotifier.deliver_reminder_to_vote(idea_id) unless idea.votes.collect(&:user).include? idea.user
+  end
   
   private
   
@@ -313,10 +351,6 @@ class Idea < ActiveRecord::Base
   
   # Create a vote, if possible, against a list of allocations
   def allocation_votes(allocations, user)
-    # TODO: We probably want to add a flag to the allocations table to allow
-    #       us to not have to iterate through every allocation to find one with
-    #       open votes
-    # 
     #  Loop through allocations looking for an open allocation, oldest first
     for allocation in allocations
       if allocation.available_quantity > 0

@@ -23,11 +23,11 @@
         font-family: Helvetica, Arial, sans-serif;
         text-align: justify;
       }
-      
+
       #BodyImposter p, #BodyImposter ol, #BodyImposter ul {
         margin: 0em 0em 1em 0em;
       }
-      
+
       #BodyImposter small {
         font-size: 10px;
         line-height: 1.3em;
@@ -48,10 +48,10 @@
         margin: 0px;
         list-style: none;
       }
-      
+
       /* links
       --------------------------------------------------*/
-      
+
       #BodyImposter a {
         text-decoration: underline;
       }
@@ -71,10 +71,10 @@
         background: #fff;
         text-decoration: none;
       }
-      
+
       /* heads
       --------------------------------------------------*/
-      
+
       #BodyImposter h1, #BodyImposter h2 {
         color: #4F4F4F;
         background-color: #fff;
@@ -85,8 +85,8 @@
         padding: 0px;
         text-align: left;
       }
-      
-      
+
+
       #Masthead h1 {
         font-size: 36px;
         color: #fff;
@@ -98,10 +98,10 @@
         padding-bottom: 5px;
         border-bottom: dotted 1px #999;
       }
-      
+
       /* boxes
       --------------------------------------------------*/
-      
+
       #Box {
         color: #666;
         background: #fff;
@@ -170,22 +170,22 @@
                       </tr>
                       <tr>
                         <td style="padding:8px 10px 10px 10px;">
-                            <table width="100%">
-                              <% for comment in topic.unread_comments(@user) %>
-                                <tr>
-                                    <td colspan="2"><div style="margin:6px 0 0 0;padding:10px 0 0 0; border-top:dotted 1px #999;"></div></td>
-                                 </tr>
-                                 <tr>   
-                                    <td style="vertical-align:top;"><img src="<%= @email_image_url %>/user_48.png" style="padding:0; margin:0;"  /></td>
-                                    <td style="font-size:11px;vertical-align:top;"><%= comment.user.display_name %><br />
-                                    <%= comment.created_at.strftime("%b %d, %Y %I:%M%p") %></td>
-                                </tr>
-                                <tr>
-                                  <td></td>
-                                  <td valign="top" style="margin:0;padding:0 10px 10px 0;"><span style="font-style:italic;font-size:11px; line-height:12px;"><%= comment.body %></span></td>
-                                </tr>
-                              <% end %>
-                            </table>
+                          <table width="100%">
+                            <% for comment in topic.unread_comments(@user).find_all{|c| !c.private or topic.forum.mediators.include? @user} %>
+                              <tr>
+                                <td colspan="2"><div style="margin:6px 0 0 0;padding:10px 0 0 0; border-top:dotted 1px #999;"></div></td>
+                              </tr>
+                              <tr>
+                                <td style="vertical-align:top;"><img src="<%= @email_image_url %>/user_48.png" style="padding:0; margin:0;"  /></td>
+                                <td style="font-size:11px;vertical-align:top;"><%= comment.user.display_name %><br />
+                                <%= comment.created_at.strftime("%b %d, %Y %I:%M%p") %></td>
+                              </tr>
+                              <tr>
+                                <td></td>
+                                <td valign="top" style="margin:0;padding:0 10px 10px 0;"><span style="font-style:italic;font-size:11px; line-height:12px;"><%= comment.body %></span></td>
+                              </tr>
+                            <% end %>
+                          </table>
                         </td>
                       </tr>
                     </table>

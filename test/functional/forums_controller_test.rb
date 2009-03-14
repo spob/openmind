@@ -21,7 +21,6 @@ class ForumsControllerTest < Test::Unit::TestCase
     should_render_template 'new'
     should_not_set_the_flash
     should_assign_to :forum
-    should_assign_to :mediators
   end
   
   context "on get to :show" do
@@ -37,6 +36,7 @@ class ForumsControllerTest < Test::Unit::TestCase
     should_respond_with :success
     should_render_template 'search'
     should_not_set_the_flash
+    #    assert_nil flash[:error]`
     should_assign_to :hits
   end
   
@@ -49,6 +49,16 @@ class ForumsControllerTest < Test::Unit::TestCase
   end
 
   def test_index
+    get :index
+
+    assert_response :success
+    assert_template 'index'
+
+    assert_not_nil assigns(:forums)
+  end
+
+  def test_index_without_login
+    login_as nil
     get :index
 
     assert_response :success
@@ -101,8 +111,8 @@ class ForumsControllerTest < Test::Unit::TestCase
   
   def test_access_denied
     assert_equal "You must be logged on to access this forum", 
-      ForumsController.forum_access_denied(:false)
+      ForumsController.flash_for_forum_access_denied(:false)
     assert_equal "You have insuffient permissions to access this forum", 
-      ForumsController.forum_access_denied(users(:quentin))
+      ForumsController.flash_for_forum_access_denied(users(:quentin))
   end
 end

@@ -158,7 +158,6 @@ class PollsController < ApplicationController
     @poll = Poll.find(params[:id])
     if @poll.taken_survey?(current_user)
       flash[:error] = "You can only answer this survey once"
-      puts "...........here"
       redirect_to poll_path(@poll)
     end
   end

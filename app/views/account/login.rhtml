@@ -1,5 +1,5 @@
 <%content_for :bodyTag do -%>
-           <%= set_focus_to_id 'login' -%>
+  <%= set_focus_to_id 'login' -%>
 <%end%>
 <div style="width:450px;">
   <div class="formTitle">Login</div>
@@ -18,13 +18,13 @@
     <p><%= submit_tag 'Sign in', html_options = {:class=> "button", :disable_with => "Please wait..."} %></p>
   <% end %>
   <p>
-    <%= link_to 'Register', new_user_request_path %>
+    <%= link_to 'Request Account', new_user_request_path %>
     &nbsp;|&nbsp;
     <%= link_to 'Forgot your password?', { :controller => :users,
-                  :action => 'lost_password' } %>
+      :action => 'lost_password' } %>
     &nbsp;|&nbsp;
-<%= theme_image_tag("icons/14x14/openid-14x14.gif", 
-          options = {:alt=>"OpenID"}) %>
+    <%= theme_image_tag("icons/14x14/openid-14x14.gif",
+      options = {:alt=>"OpenID"}) %>
     <%= link_to 'Login using Open ID', { :action => 'login_openid' } %>
   </p>
 </div>

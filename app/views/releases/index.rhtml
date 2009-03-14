@@ -1,62 +1,65 @@
 <%= javascript_include_tag "wz_tooltip.js", :cache => "cache/tooltip" %> 
 
-<%= error_messages_for 'release' %>
-<h1>Releases for Product <%= @product.name %></h1>
-<div id="actionButtons">  
-  <%= link_to 'New Release', new_release_path(:product_id => @product.id),
-    html_options = {:class => "button",
-    :onmouseover => "Tip('Create a new release')"} %>
-</div>
-
-<%= link_to 'All Products', products_path, html_options = {
-  :onmouseover => "Tip('Return to list products')"}%> ->
-<%=  link_to "Product: #{@product.name}", product_path(@product),
-  html_options = {
-  :onmouseover => "Tip('Return to showing details for #{@product.name}')"} %>
--> All Releases for <%= @product.name %>
-
-
-<table cellspacing="0" cellpadding="0" class="cssform">
-  <tr>
-    <th>Version Number</th>
-    <th>Status</th>
-    <th>Release Date</th>
-    <th>Release Date Label</th>
-    <th>Action</th>
-  </tr>
-
-  <% for release in @releases %>
-    <tr>
-      <td><%= link_to release.version, release_path(release) %></td>
-      <td><%=h release.release_status.description %></td>
-      <td><%= h nvl(format_date(release.release_date), '-') %></td>
-      <td><%= h nvl(release.user_release_date, '-') %></td>
-      <td>
-        <%= link_to theme_image_tag("icons/16x16/viewAction.png", :alt=>"view", :title=> "view"),
-          release_path(release),
-          html_options = {
-          :onmouseover => "Tip('View details for this release')"} %>
-
-        <%= link_to theme_image_tag("icons/16x16/editAction.png", :alt=>"edit", :title=> "edit"),
-          edit_release_path(release),
-          html_options = {
-          :onmouseover => "Tip('Edit this release')"}
-      %>
-
-        <%= link_to(
-          theme_image_tag("icons/16x16/deleteAction.png", :alt=>"delete", :title=> "delete"),
-          release_path(release),
-          html_options = {:confirm => 'Are you sure?', :method => :delete,
-            :onmouseover => "Tip('Delete this release')"} ) if release.can_delete? %>
-      </td>
-    </tr>
-  <% end %>
-</table>
-<p>
-  <div class="digg_pagination">
-    <div class="page_info">
-      <%= page_entries_info @releases %>
-    </div>
-    <%= will_paginate @releases, :container => false %>
+<%= render :partial => "products/tab_menu" %>
+<div id="tabBody" style="position:relative; padding-top:15px;">
+  <%= error_messages_for 'release' %>
+  <h1>Releases for Product <%= @product.name %></h1>
+  <div id="actionButtons">
+    <%= link_to 'New Release', new_release_path(:product_id => @product.id),
+      html_options = {:class => "button",
+      :onmouseover => "Tip('Create a new release')"} %>
   </div>
-</p>
+
+  <%= link_to 'All Products', products_path, html_options = {
+    :onmouseover => "Tip('Return to list products')"}%> ->
+  <%=  link_to "Product: #{@product.name}", product_path(@product),
+    html_options = {
+    :onmouseover => "Tip('Return to showing details for #{@product.name}')"} %>
+  -> All Releases for <%= @product.name %>
+
+
+  <table cellspacing="0" cellpadding="0" class="cssform">
+    <tr>
+      <th>Version Number</th>
+      <th>Status</th>
+      <th>Release Date</th>
+      <th>Release Date Label</th>
+      <th>Action</th>
+    </tr>
+
+    <% for release in @releases %>
+      <tr>
+        <td><%= link_to release.version, release_path(release) %></td>
+        <td><%=h release.release_status.description %></td>
+        <td><%= h nvl(format_date(release.release_date), '-') %></td>
+        <td><%= h nvl(release.user_release_date, '-') %></td>
+        <td>
+          <%= link_to theme_image_tag("icons/16x16/viewAction.png", :alt=>"view", :title=> "view"),
+            release_path(release),
+            html_options = {
+            :onmouseover => "Tip('View details for this release')"} %>
+
+          <%= link_to theme_image_tag("icons/16x16/editAction.png", :alt=>"edit", :title=> "edit"),
+            edit_release_path(release),
+            html_options = {
+            :onmouseover => "Tip('Edit this release')"}
+        %>
+
+          <%= link_to(
+            theme_image_tag("icons/16x16/deleteAction.png", :alt=>"delete", :title=> "delete"),
+            release_path(release),
+            html_options = {:confirm => 'Are you sure?', :method => :delete,
+              :onmouseover => "Tip('Delete this release')"} ) if release.can_delete? %>
+        </td>
+      </tr>
+    <% end %>
+  </table>
+  <p>
+    <div class="digg_pagination">
+      <div class="page_info">
+        <%= page_entries_info @releases %>
+      </div>
+      <%= will_paginate @releases, :container => false %>
+    </div>
+  </p>
+</div>

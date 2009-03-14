@@ -1,6 +1,6 @@
 class CreateLookupCodes < ActiveRecord::Migration
   def self.up
-    create_table :lookup_codes, :options => 'DEFAULT CHARSET=utf8', :force => true do |t|
+    create_table :lookup_codes, :options => 'ENGINE=InnoDB DEFAULT CHARSET=utf8', :force => true do |t|
       t.column :code_type,  :string, :limit => 30, :null => false
       t.column :short_name,  :string, :limit => 20, :null => false
       t.column :description,  :string, :limit => 50, :null => false

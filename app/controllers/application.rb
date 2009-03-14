@@ -4,7 +4,7 @@
 class ApplicationController < ActionController::Base
   include AuthenticatedSystem 
   include SimpleCaptcha::ControllerHelpers 
-  helper_method :prodmgr?, :voter?, :allocmgr?, :sysadmin?, :can_edit_idea?, 
+  helper_method :prodmgr?, :voter?, :allocmgr?, :sysadmin?, :mediator?, :can_edit_idea?,
     :can_delete_idea?, :flash_error_string, :flash_notice_string
   filter_parameter_logging :password, :password_confirmation# controllers/application.rb
   
@@ -36,39 +36,28 @@ class ApplicationController < ActionController::Base
   end
   
   def prodmgr?
-    return false if current_user == :false
-    pmgr = false
-    restrict_to 'prodmgr' do 
-      pmgr = true
-    end
-    pmgr
+    return false unless logged_in?
+    current_user.prodmgr?
   end
   
   def voter?
-    return false if current_user == :false
-    voter = false
-    restrict_to 'voter' do 
-      voter = true
-    end
-    voter
+    return false unless logged_in?
+    current_user.voter?
   end
   
   def sysadmin?
-    return false if current_user == :false
-    sysadmin = false
-    restrict_to 'sysadmin' do 
-      sysadmin = true
-    end
-    sysadmin
+    return false unless logged_in?
+    current_user.sysadmin?
+  end
+
+  def mediator?
+    return false unless logged_in?
+    current_user.mediator?
   end
   
   def allocmgr?
-    return false if current_user == :false
-    allocmgr = false
-    restrict_to 'allocmgr' do 
-      allocmgr = true
-    end
-    allocmgr
+    return false unless logged_in?
+    current_user.allocmgr?
   end
   
   def flash_error_string text

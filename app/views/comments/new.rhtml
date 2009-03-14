@@ -14,31 +14,31 @@
 <% form_for :comment, :html => {:id => "new-comment"}, 
   :url => comments_path(:id => object.id) do |form| %>
   <input type="hidden" value="<%= object.class.to_s %>" name="type"/>
-  <div class="formTitle"><%= theme_image_tag("icons/32x32/comment.png", 
+  <div class="formTitle"><%= theme_image_tag("icons/32x32/comment.png",
     options = {:alt=>"New Comment"}) %>Add Comment</div>
   <div class="cssform widerLabel">
     <% if object.class.to_s == "Idea" %>
       <p>
         <label for="id">Idea #:</label>
-        <%= @idea.id %>  
+        <%= @idea.id %>
       </p>
       <p>
         <label for="title">Title:</label>
-        <%= h @idea.title %>  
+        <%= h @idea.title %>
       </p>
       <p>
         <label for="description">Description:</label>
-        <%= textilize(@idea.description).gsub(/<[pP]>|<\/[pP]>/, '') if @idea.textiled? %> 
-        <%= @idea.description unless @idea.textiled? %>  
+        <%= textilize(@idea.description).gsub(/<[pP]>|<\/[pP]>/, '') if @idea.textiled? %>
+        <%= @idea.description unless @idea.textiled? %>
       </p>
     <% else %>
       <p>
         <label for="topic">Forum:</label>
-        <%= h @topic.forum.name %>  
+        <%= h @topic.forum.name %>
       </p>
       <p>
         <label for="topic">Topic:</label>
-        <%= h @topic.title %>  
+        <%= h @topic.title %>
       </p>
     <% end %>
     <p>
@@ -61,12 +61,19 @@
             {:onmouseover => "Tip('Start watching this topic to be notified whenever a comment is added')"} %>Watch this topic
         </p>
       <% end %>
-    <% end %>
+      <% if @topic.forum.mediators.include? current_user %>
         <p>
           <label></label>
-          <%= check_box_tag 'attach', 'yes', false,
-            {:onmouseover => "Tip('Attach images to this comment')"} %>Attach Images
+          <%= check_box_tag 'private', 'yes', false,
+            {:onmouseover => "Tip('Make private to make this topic visible only to moderators')"} %>Mark Private
         </p>
+      <% end %>
+    <% end %>
+    <p>
+      <label></label>
+      <%= check_box_tag 'attach', 'yes', false,
+        {:onmouseover => "Tip('Attach images to this comment')"} %>Attach Images
+    </p>
     <p>
       <label></label>
       <% text = "Create this comment for idea ##{@idea.id}" if object.class.to_s == "Idea" %>
@@ -75,13 +82,13 @@
         :onmouseover => "Tip('#{text}')"}  %>
       <%= link_to "Cancel",
         options = { :controller=> 'ideas', :action => 'show', :id => @idea},
-        html_options = {:class=> "button", 
+        html_options = {:class=> "button",
         :onmouseover => "Tip('Return to idea ##{@idea.id}')"} if object.class.to_s == "Idea" %>
-    
+
       <%=  link_to 'Cancel', topic_path(@topic.id) , html_options = {:class=> "button",
         :onmouseover => "Tip('Return to topic ##{@topic.title}')"} if object.class.to_s == "Topic" %>
     </p>
-  </div>  
+  </div>
 <% end %>
 
 <% if object.class.to_s == "Idea"%>
@@ -89,5 +96,5 @@
   <%=render(:partial => "comments/comment_item", :collection => @idea.comments)  %>
 <% else %>
   <%= "<h3>In Reply To</h3>" unless @topic.comments.empty? %>
-  <%=render(:partial => "comments/comment_item", :collection => @topic.comments)  %>
+  <%=render(:partial => "comments/comment_item", :collection => @topic.comments.find_all{|c| !c.private or @topic.forum.mediators.include? current_user})  %>
 <% end %>

@@ -20,7 +20,7 @@ class GroupTest < Test::Unit::TestCase
   end
   
   should "list all" do
-    assert !Group.list_all.empty?
+    assert !Group.by_name.empty?
   end
   
   should "list" do

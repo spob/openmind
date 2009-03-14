@@ -70,7 +70,7 @@
     </p>
     <p>
       <label>User Groups:</label>
-      <% for group in Group.list_all %>
+      <% for group in Group.by_name %>
         <span style="display:block;margin-left:10px;">
           <%= check_box_tag "user[group_ids][]", group.id, @user.groups.include?(group) %>
           <%= h group.name %>: <%= h group.description %>

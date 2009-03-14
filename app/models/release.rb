@@ -34,7 +34,7 @@ class Release < ActiveRecord::Base
     :foreign_key => "release_status_id"
 
   validates_presence_of :version
-  validates_uniqueness_of :version, :scope => "product_id"
+  validates_uniqueness_of :version, :scope => "product_id", :case_sensitive => false
   validates_length_of :version, :maximum => 20
   
   xss_terminate :except => [:description]

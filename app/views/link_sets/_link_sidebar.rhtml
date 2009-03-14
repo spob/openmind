@@ -1,6 +1,9 @@
 <% unless link_set.nil? %>
-  <div class="sideBarTitle"><%= link_set.label %> </div>
-  <div class="sideBarItem">
-    <%=  show_links link_set %>
-  </div>
+  <% cache(:controller => "link_sets", :action => "show_links",
+    :link_set_id => link_set.id) do %>
+    <div class="sideBarTitle"><%= link_set.label %> </div>
+    <div class="sideBarItem">
+      <%=  show_links link_set %>
+    </div>
+  <% end %>
 <% end %>

@@ -61,7 +61,9 @@ class ReleasesController < ApplicationController
         @release.product_id = product_id
         @release.change_logs <<  ReleaseChangeLog.new(:message => "Release created",
           :user => current_user)
+        
         if @release.save
+          run_change_log_job @release.id
           flash[:notice] = "Release #{@release.version} was successfully created."
           redirect_to releases_path(:product_id => product_id)
         else
@@ -99,12 +101,8 @@ class ReleasesController < ApplicationController
     @release.release_date = params[:release][:release_date]
     Release.transaction do
       calc_change_history @release
+      run_change_log_job @release.id
 
-      # run job in the feature to notify of changes (in case user makes several
-      # changes, we will only ping watchers once
-      RunOncePeriodicJob.create(
-        :job => "Release.send_change_notifications(#{@release.id})",
-        :next_run_at => Time.zone.now + 10.minutes)
       if @release.save
         flash[:notice] = "Release #{@release.version} was successfully updated."
         redirect_to release_path(@release)
@@ -126,6 +124,14 @@ class ReleasesController < ApplicationController
 
   private
   
+  def run_change_log_job release_id
+    # run job in the feature to notify of changes (in case user makes several
+    # changes, we will only ping watchers once
+    RunOncePeriodicJob.create(
+      :job => "Release.send_change_notifications(#{release_id})",
+      :next_run_at => Time.zone.now + 10.minutes)
+  end
+
   def calc_change_history release    
     add_change_history_from_message release, "Description updated" if release.description_changed?
     add_change_history_old_new release, "Release Date",

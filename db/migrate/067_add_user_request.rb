@@ -4,7 +4,7 @@ class AddUserRequest < ActiveRecord::Migration
   extend MigrationHelpers
   
   def self.up
-    create_table :user_requests, :options => 'DEFAULT CHARSET=utf8', :force => true do |t|
+    create_table :user_requests, :options => 'ENGINE=InnoDB DEFAULT CHARSET=utf8', :force => true do |t|
       t.column "email",                     :string,            :null => false
       t.timestamps
       t.column "first_name",                :string

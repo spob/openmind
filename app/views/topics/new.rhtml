@@ -28,6 +28,12 @@
       </p>
     <% end %>
     <p>
+      <label for="tag_list">Tags:</label>
+      <%= form.text_field :tag_list %>
+      <br/>
+      (separate with commas)
+    </p>
+    <p>
       <label></label>
       <%= check_box_tag 'attach', 'yes', false,
         {:onmouseover => "Tip('Attach images to this topic comment')"} %>Attach Images

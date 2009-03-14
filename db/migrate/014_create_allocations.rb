@@ -4,7 +4,7 @@ class CreateAllocations < ActiveRecord::Migration
   extend MigrationHelpers
   
   def self.up 
-    create_table :allocations, :options => 'DEFAULT CHARSET=utf8' do |t|
+    create_table :allocations, :options => 'ENGINE=InnoDB DEFAULT CHARSET=utf8' do |t|
       t.column :quantity, :integer, :default => 0, :null => false 
       t.column :comments, :string, :limit => 255
       t.references :user

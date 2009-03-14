@@ -30,7 +30,8 @@ class EnterpriseTypeTest < Test::Unit::TestCase
   end
   
   should "list all" do
-    assert !EnterpriseType.list_all.empty?
+    assert !EnterpriseType.by_sort_value.empty?
+    assert !EnterpriseType.by_short_name.empty?
   end
   
   should "all delete" do

@@ -1,6 +1,17 @@
 <%=render(:partial => "show_hide_topic_details", :object => @topic)%>
 <div id="topic_details" class="cssform" style="<%= topic_details_box_display_style %>">
   <% if can_edit_topic? @topic %>
+    <% if @topic.forum.tracked %>
+      <p>
+        <label>Status:</label>
+        <%= (@topic.open_status ? "Open" : "Closed") %>
+        <i><%= "at #{om_date_time(@topic.closed_at)}" unless @topic.closed_at.nil?  %></i>
+      </p>
+      <p>
+        <label>Owner:</label>
+        <%= h user_display_name(@topic.owner) %>
+      </p>
+    <% end %>
     <p>
       <label>Watchers:</label>
       <% for user in @topic.watchers %><br />
@@ -8,4 +19,8 @@
       <% end %>
     </p>
   <% end %>
+  <p>
+    <label>Tags:</label>
+    <%= h @topic.tag_list %>
+  </p>
 </div>

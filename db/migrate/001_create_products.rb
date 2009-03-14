@@ -1,6 +1,6 @@
 class CreateProducts < ActiveRecord::Migration
   def self.up
-    create_table :products, :options => 'DEFAULT CHARSET=utf8' do |t|
+    create_table :products, :options => 'ENGINE=InnoDB DEFAULT CHARSET=utf8' do |t|
       t.column :name,  :string, :limit => 30, :null => false
       t.column :description,  :string, :limit => 200, :null => false
       t.column :active, :boolean, :default => true, :null => false

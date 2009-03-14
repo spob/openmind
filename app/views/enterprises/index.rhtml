@@ -1,12 +1,28 @@
 <%content_for :head do -%>
-
   <%= javascript_include_tag "tablecloth" %>
+<%end%>
+<%content_for :bodyTag do -%>
+  <%= set_focus_to_id 'enterprises_search' -%>
 <%end%>
 <%= javascript_include_tag "wz_tooltip.js", :cache => "cache/tooltip" %> 
 <%= error_messages_for 'enterprise' %>
 <h1><%= theme_image_tag("icons/32x32/enterprises.png", 
   options = {:alt=>"Enterprises"}) %>Enterprises</h1>
 
+
+  <% form_tag(search_enterprises_path, :class => 'cssform searchform', :name => 'search' ) do -%>
+    <p>
+      <label for="search">Search:</label>
+      <%= text_field_tag 'search',
+        session[:enterprises_search],
+        options = { :id => "enterprises_search" } %>
+      <%= submit_tag 'Search', html_options = {:name => nil, :class=> "button",
+        :onmouseover => "Tip('Search enterprises')"} %>
+      <br/>
+      <%= link_to "search syntax help", {:controller => 'static', :action => 'search'},
+        :popup => true %>
+    </p>
+  <% end %>
 
 <% if @tag1_begin %>
   <%= enterprise_filter_link "All", "All" %>
@@ -53,7 +69,6 @@
       </td>
     </tr>
   <% end %>
-  <%= set_focus_to_id_in_list_form 'enterprise_name' -%>
   
   <%= render :partial => 'enterprise_item', :collection => @enterprises %>
 </table>

@@ -348,6 +348,13 @@ ul#headerLowerNavMenu  {
     padding-right:15px;
 }
 
+/********* Sample Text *************/
+.sample {
+    font-family: monospace;
+    font-size: x-large;
+    padding: 10px
+}
+
 /********* Comment Boxes ***********/
 .commentbox {
     font-size: 1em; /* 11px*/
@@ -450,6 +457,15 @@ ul#headerLowerNavMenu  {
     color: #fff;
 }
 
+dt {
+    font-weight: bold;
+}
+
+dd {
+    text-indent: 20px;
+    padding-bottom: 10px;
+}
+
 
 /********* From Original CSS file (save for now) ***********/
 
@@ -522,10 +538,10 @@ span.highlight {
     font-weight: bold;
 }
 
-.css1 { font-size: 1.0em; }
-.css2 { font-size: 1.4em; }
-.css3 { font-size: 2.1em; }
-.css4 { font-size: 2.5em; }
+.css1 { font-size: 0.8em; }
+.css2 { font-size: 1.0em; }
+.css3 { font-size: 1.3em; }
+.css4 { font-size: 1.5em; }
 
 .nobr {white-space:nowrap;}
 

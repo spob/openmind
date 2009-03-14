@@ -30,7 +30,7 @@ class TopicTest < Test::Unit::TestCase
   end
   
   should "retrieve rows from list" do
-    assert !Topic.list(1, 10, topics(:bug_topic1).forum).empty?
+    assert !Topic.list(1, 10, topics(:bug_topic1).forum, true, true, true, -1).empty?
   end
   
   def test_unread_comments
@@ -92,19 +92,19 @@ class TopicTest < Test::Unit::TestCase
       assert_nil topics(:empty_topic).last_posting_date
     end
     
-    should "return last comment date" do
-      assert_equal comments(:topic_comment3).created_at, 
+    should "return last posting date" do
+      assert_equal comments(:topic_comment3).published_at,
         topics(:bug_topic1).last_posting_date
     end
   end
   
   context "testing can_delete?" do
     should "allow" do
-      assert topics(:empty_topic).can_delete?
+      assert topics(:empty_topic).can_delete?(users(:allroles))
     end
     
     should "not allow" do
-      assert !topics(:bug_topic1).can_delete?
+      assert !topics(:bug_topic1).can_delete?(users(:aaron))
     end
   end
   

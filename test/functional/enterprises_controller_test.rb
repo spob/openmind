@@ -108,10 +108,13 @@ class EnterprisesControllerTest < Test::Unit::TestCase
     #    assert assigns(:enterprise).valid?
   end
   
-  def test_update
-    put :update, :id => @enterprise, :enterprise => { :active => :true }
-    assert_response :redirect
-    assert_redirected_to :action => 'show', :id => @enterprise
+  context "on put to :update" do
+    setup {
+      @enterprise = enterprises(:active_enterprise)
+      put :update, :id => @enterprise.id, :enterprise => { :name => 'EnterpriseX' }
+    }
+    should_respond_with :redirect
+#    should_redirect_to :action => 'show', :id => @enterprise.id
   end
   
   def test_destroy

@@ -3,7 +3,8 @@
     <%  tagtip = "" %>
     <% if product_item.current_release and !product_item.current_release.description.nil? and !product_item.current_release.description.strip.empty? %>
       <%  tagtip = "TagToTip('release_body#{product_item.id}')" %>
-      <%= truncate(StringUtils.strip_html(product_item.current_release.description), 500) %>
+      <%= truncate(StringUtils.strip_html(product_item.current_release.description),
+        :length => 500) %>
     <% end %>
   </div>
   <td><%= link_to product_item.name, product_path(product_item) %></td>

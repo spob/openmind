@@ -27,6 +27,6 @@ module UsersHelper
 
   def filter_label start_tag, end_tag
     return start_tag if start_tag == end_tag
-    "#{truncate(start_tag, 15)} to #{truncate(end_tag, 15)}"
+    "#{truncate(start_tag, :length => 15)} to #{truncate(end_tag, :length => 15)}"
   end
 end

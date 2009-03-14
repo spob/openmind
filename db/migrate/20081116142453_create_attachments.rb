@@ -4,7 +4,7 @@ class CreateAttachments < ActiveRecord::Migration
   extend MigrationHelpers
   
   def self.up
-    create_table :attachments do |t|
+    create_table :attachments, :options => 'ENGINE=InnoDB DEFAULT CHARSET=utf8' do |t|
       t.column :filename, :string, :limit => 50, :null => false
       t.column :description, :string, :limit => 200, :null => false
       t.column :content_type, :string, :limit => 100, :null => false

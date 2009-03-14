@@ -9,41 +9,65 @@ class EnterprisesController < ApplicationController
   verify :method => :delete, :only => [ :destroy ],
     :redirect_to => { :action => :index }
   
-  
   def index
     @enterprise ||= Enterprise.new(:initial_allocation => 0)
     session[:enterprise_start_filter] = params[:start_filter] unless params[:start_filter].nil?
     session[:enterprise_end_filter] = params[:end_filter] unless params[:end_filter].nil?
     session[:enterprise_start_filter] = "All" if session[:enterprise_start_filter].nil?
     session[:enterprise_end_filter] = "All" if session[:enterprise_end_filter].nil?
-    count = Enterprise.count
-    if count > 50
-      @tag1_begin = Enterprise.find(:first, :select => "name", :order => "name").name
-      @tag1_end = Enterprise.find(:first, :select => "name", :offset => count/5, :order => "name").name
-      @tag2_begin = Enterprise.find(:first, :select => "name", :offset => count/5 + 1, :order => "name").name
-      @tag2_end = Enterprise.find(:first, :select => "name", :offset => 2*count/5, :order => "name").name
-      @tag3_begin = Enterprise.find(:first, :select => "name", :offset => 2*count/5 + 1, :order => "name").name
-      @tag3_end = Enterprise.find(:first, :select => "name", :offset => 3*count/5, :order => "name").name
-      @tag4_begin = Enterprise.find(:first, :select => "name", :offset => 3*count/5 + 1, :order => "name").name
-      @tag4_end = Enterprise.find(:first, :select => "name", :offset => 4*count/5, :order => "name").name
-      @tag5_begin = Enterprise.find(:first, :select => "name", :offset => 4*count/5 + 1, :order => "name").name
-      @tag5_end = Enterprise.find(:first, :select => "name", :offset => count-1, :order => "name").name
+    unless session[:enterprise_start_filter].nil?
+      session[:enterprises_search] = nil
     end
     @enterprises = Enterprise.list params[:page], current_user.row_limit, 
-      session[:enterprise_start_filter], session[:enterprise_end_filter]
-  end  
+      session[:enterprise_start_filter], session[:enterprise_end_filter], nil
+    set_start_end_tags
+  end
+
+  def search
+    session[:enterprise_start_filter] = "All"
+    session[:enterprise_end_filter] = "All"
+    session[:enterprises_search] = params[:search]
+
+    params[:search] = StringUtils.sanitize_search_terms params[:search]
+    set_start_end_tags
+    begin
+      search_results = Enterprise.find_by_solr(params[:search], :lazy => true).docs.collect(&:id)
+    rescue RuntimeError => e
+      flash[:error] = "An error occurred while executing your search. Perhaps there is a problem with the syntax of your search string."
+      logger.error(e)
+      redirect_to enterprises_path
+    else
+      @enterprises = Enterprise.list params[:page], 999,
+        session[:enterprise_start_filter],
+        session[:enterprise_end_filter],
+        search_results
+      render :action => 'index'
+    end      
+  end
 
   def show
     @enterprise = Enterprise.find(params[:id])
   end
 
   def next
-    @enterprise = Enterprise.find(params[:id]).next
+    enterprise = Enterprise.find(params[:id])
+    enterprises = Enterprise.next(enterprise.name)
+    if enterprises.empty?
+      @enterprise = enterprise
+    else
+      @enterprise = enterprises.first
+    end
     render :action => 'show'
   end
 
   def previous
-    @enterprise = Enterprise.find(params[:id]).previous
+    enterprise = Enterprise.find(params[:id])
+    enterprises = Enterprise.previous(enterprise.name)
+    if enterprises.empty?
+      @enterprise = enterprise
+    else
+      @enterprise = enterprises.first
+    end
     render :action => 'show'
   end
   
@@ -99,5 +123,22 @@ class EnterprisesController < ApplicationController
     flash[:notice] = "Enterprise #{name} was successfully deleted."
     redirect_to enterprises_path
   end  
+
+  private
   
+  def set_start_end_tags
+    count = Enterprise.count
+    if count > 50
+      @tag1_begin = Enterprise.find(:first, :select => "name", :order => "name").name
+      @tag1_end = Enterprise.find(:first, :select => "name", :offset => count/5, :order => "name").name
+      @tag2_begin = Enterprise.find(:first, :select => "name", :offset => count/5 + 1, :order => "name").name
+      @tag2_end = Enterprise.find(:first, :select => "name", :offset => 2*count/5, :order => "name").name
+      @tag3_begin = Enterprise.find(:first, :select => "name", :offset => 2*count/5 + 1, :order => "name").name
+      @tag3_end = Enterprise.find(:first, :select => "name", :offset => 3*count/5, :order => "name").name
+      @tag4_begin = Enterprise.find(:first, :select => "name", :offset => 3*count/5 + 1, :order => "name").name
+      @tag4_end = Enterprise.find(:first, :select => "name", :offset => 4*count/5, :order => "name").name
+      @tag5_begin = Enterprise.find(:first, :select => "name", :offset => 4*count/5 + 1, :order => "name").name
+      @tag5_end = Enterprise.find(:first, :select => "name", :offset => count-1, :order => "name").name
+    end
+  end
 end

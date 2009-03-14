@@ -1,30 +1,81 @@
 <%content_for :bodyTag do -%>
   <%= set_focus_to_id 'attachment_description' -%>
 <%end%>
+
 <%= javascript_include_tag "wz_tooltip.js", :cache => "cache/tooltip" %> 
 <%= error_messages_for 'attachment' %>
 <% form_for :attachment, :url => attachment_path(@attachment), 
   :html => {:method => :put } do |form| %>
-  <div class="formTitle"><%= theme_image_tag("icons/16x16/paperclip.png", 
+  <div class="formTitle"><%= theme_image_tag("icons/16x16/paperclip.png",
       options = {:alt=>"attachment"}) %>
-  Edit Attachment
+    Edit Attachment
   </div>
   <div class="cssform">
     <p>
       <label for="attachment_name">File Name:</label>
-      <%= @attachment.filename %>
+      <%= form.text_field :filename, { :size => 50, :maxlength => 200 } %>
     </p>
     <p>
-      <label for="attachment_name">Description</label>
+      <label for="attachment_name">Description:</label>
       <%= form.text_field :description, { :size => 50, :maxlength => 200 } %>
     </p>
-    <%= render(:partial => "details") %>
     <p>
-      <label></label>
-      <%= submit_tag 'Save', html_options = {:class=> "button", :disable_with => "Please wait...",
-        :onmouseover => "Tip('Save changes to attachment')"} %>
-      <%= link_to 'Cancel', attachment_path(@attachment), html_options = {:class=> "button",
-        :onmouseover => "Tip('Do not save changes to attachment')"} %>
+      <label for="attachment_alias">Alias:</label>
+      <%= form.text_field :alias, { :size => 40, :maxlength => 40 } %>
+      <%= form.hidden_field :confirm_alias, { :size => 40, :maxlength => 40 } %>
     </p>
+    <% if @attachment.content_type == 'text/html' %>
+      <p>
+        <label for="data">HTML:</label>
+        <%= form.text_area :data,  {:cols => 50, :rows => 12 } %>
+      </p>
+    <% end %>
+    <%= render(:partial => "details", :object => @attachment) %>
+    <p>
+      <label for="attachment_public">Public:</label>
+      <td class="center"><%= form.check_box :public,
+          {:onmouseover => "Tip('Public attachments can be viewed even if a user is not logged in')"},
+          "true", "false" %></td>
+        <%= observe_field(:attachment_public,
+          :url => { :action => :toggle_etypes, :id => @attachment },
+          :with => "'selected=' + document.getElementById('attachment_public').checked") %>
+
+    </p>
+    <div id="etypes" style="display:<%= @attachment.public ? 'none' : 'block'%>;">
+      <p>
+        <label>Restrict to Enterprise Types:</label>
+        <% for etype in EnterpriseType.by_sort_value %>
+          <span style="display:block;margin-left:10px;">
+            <%= check_box_tag "attachment[enterprise_type_ids][]", etype.id, @attachment.enterprise_types.include?(etype) %>
+            <%= h etype.short_name %>: <%= h etype.description %>
+          </span>
+        <% end %>
+      </p>
+      <p>
+        <label>Restrict to User Groups:</label>
+        <% for group in Group.by_name %>
+          <span style="display:block;margin-left:10px;">
+            <%= check_box_tag "attachment[group_ids][]", group.id, @attachment.groups.include?(group) %>
+            <%= h group.name %>: <%= h group.description %>
+          </span>
+        <% end %>
+      </p>
+    </div>
+    <div id="buttons">
+      <%= render(:partial => "buttons", :object => @attachment) %>
+    </div>
   </div>
 <% end %>
+
+<script type="text/javascript" language="JavaScript">
+  <!--
+  function toggleETypes() {
+    if(document.getElementById("attachment_public").checked) {
+      document.getElementById("etypes").style.display = "none";
+    }
+    else {
+      document.getElementById("etypes").style.display = "block";
+    }
+  }
+  //-->
+</script>

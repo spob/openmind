@@ -1,16 +1,36 @@
 <%content_for :bodyTag do -%>
-  <%= set_focus_to_id 'attachment_description' -%>
+  <%= set_focus_to_id 'attachments_search' -%>
 <%end%>
 <%= javascript_include_tag "wz_tooltip.js", :cache => "cache/tooltip" %> 
 <%= error_messages_for 'attachment' %>
-<div id="tabBody" style="position:relative; padding-top:15px;">
-  <h1><%= theme_image_tag("icons/32x32/paperclip.png", options = {:alt=>"Attachments"}) %>Attachments</h1>
+<h1><%= theme_image_tag("icons/32x32/paperclip.png", options = {:alt=>"Attachments"}) %>Attachments</h1>
+<% form_tag(search_attachments_path, :class => 'cssform searchform', :name => 'search' ) do -%>
+  <p>
+    <label for="search">Search:</label>
+    <%= text_field_tag 'search',
+      session[:attachments_search],
+      options = { :id => "attachments_search" } %>
+    <%= submit_tag 'Search', html_options = {:name => nil, :class=> "button",
+      :onmouseover => "Tip('Search attachments')"} %>
+    <br/>
+    <%= link_to "search syntax help", {:controller => 'static', :action => 'search'},
+      :popup => true %>
+  </p>
+<% end %>
+<% cache({:controller => "attachments",
+  :action => "list_attachments",
+  :user_id => current_user.id,
+  :page => (params[:page] || 1),
+  :action_type => params["action"]}) do %>
   <table cellspacing="0" cellpadding="0" class="cssform">
     <tr>
       <th>File Name</th>
       <th>Description</th>
+      <th>Public</th>
+      <th>Alias</th>
       <th>Filesize</th>
       <th>Type</th>
+      <th>Hits</th>
       <th>Author</th>
       <th>Uploaded At</th>
       <th>Action</th>
@@ -27,17 +47,20 @@
           <% end %>
         </td>
         <td><%= form.text_field :description, { :size => 30, :maxlength => 200 } %></td>
+        <td class="center"><%= form.check_box :public,
+            {:onmouseover => "Tip('Public attachments can be viewed even if a user is not logged in')"},
+            "true", "false" %></td>
+       <td><%= form.text_field :alias, { :size => 30, :maxlength => 40 } %></td>
         <td>-</td>
         <td>-</td>
+        <td>0</td>
         <td>-</td>
         <td>-</td>
         <td><%= submit_tag 'Upload', options = {:class=> "button", :disable_with => "Please wait...",
           :onmouseover => "Tip('Create a new attachment')"} %></td>
       </tr>
     <% end %>
-
     <%= render :partial => @attachments %>
-
   </table>
   <p>
     <div class="digg_pagination">
@@ -47,4 +70,4 @@
       <%= will_paginate @attachments, :container => false %>
     </div>
   </p>
-</div>
+<% end %>

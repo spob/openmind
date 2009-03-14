@@ -63,7 +63,7 @@ class GroupsControllerTest < Test::Unit::TestCase
   end
 
   context "on PUT to :update" do
-    setup { put :update, :id => groups(:group1) }
+    setup { put :update, :id => groups(:group1), :group => {} }
     
     should_respond_with :redirect
     should_redirect_to "groups_path"

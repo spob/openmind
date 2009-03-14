@@ -15,7 +15,7 @@
 class PollOption < ActiveRecord::Base
   validates_presence_of :description
   validates_length_of :description, :maximum => 120
-  validates_uniqueness_of :description, :scope => "poll_id"
+  validates_uniqueness_of :description, :scope => "poll_id", :case_sensitive => false
   
   belongs_to :poll
   has_and_belongs_to_many :user_responses, :join_table => 'poll_user_responses', :class_name => 'User'

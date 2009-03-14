@@ -14,7 +14,7 @@
   <table class="ideaTitle">
     <tr>
       <td style="width:26px;"><%= theme_image_tag("icons/24x24/ideas.png",  options = {:alt=>"Idea Details"}) %></td>
-      <td style="width:95px;white-space: nowrap;">Idea #<%= h @idea.id %> - </td>
+      <td style="width:105px;white-space: nowrap;">Idea #<%= h @idea.id %> - </td>
       <td><%= h @idea.title  %></td>
       <td style="vertical-align:bottom;text-align:right;white-space: nowrap;"><%=render(:partial => "list_actions", :object => @idea, :locals => { :from => "show"})%></td>
     </tr>

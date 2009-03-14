@@ -19,7 +19,6 @@
 #
 
 class UserRequest < ActiveRecord::Base  
-  acts_as_ordered :order => 'id DESC' 
   validates_presence_of     :email, :last_name, :enterprise_name, :time_zone, :status
   validates_length_of       :email,    :within => 3..100
   validates_email_format_of :email
@@ -35,6 +34,15 @@ class UserRequest < ActiveRecord::Base
   belongs_to :enterprise_type
   has_and_belongs_to_many :groups
   has_and_belongs_to_many :roles
+
+  named_scope :next,
+    lambda{|id|{:conditions => ['id > ?', id],
+      :order => 'id desc',
+      :limit => 1}}
+  named_scope :previous,
+    lambda{|id|{:conditions => ['id < ?', id],
+      :order => 'id',
+      :limit => 1}}
   
   attr_accessor :enterprise_action
   

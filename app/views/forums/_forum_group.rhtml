@@ -2,11 +2,16 @@
   <table cellspacing="0" cellpadding="0" class="cssform">
     <tr>
       <th>Forum</th>
-      <th>Topics (Unread)</th>
-      <th>Last Post</th>
+      <th>
+        Topics (Unread)
+        <% if logged_in? and current_user.mediator? and !forums.find_all{|f| f.tracked}.empty? %>
+          [Open]
+        <% end %>
+      </th>
       <th>Replies</th>
+      <th>Last Post</th>
       <th>Action</th>
-    </tr>  
+    </tr>
     <%=render(:partial => "forum_item", :collection => forums)%>
   </table>
 <% end %>

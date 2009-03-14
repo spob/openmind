@@ -1,7 +1,0 @@
-==========
-CHANGE LOG
-==========
-
-2.3
-===
-* Converted project to use GIT

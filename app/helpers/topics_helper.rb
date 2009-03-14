@@ -24,6 +24,11 @@ module TopicsHelper
     end
   end
 
+  def mediators
+    mediators = @topic.forum.mediators
+    mediators.insert(0, User.new)
+  end
+
   def expand_contract_box_image
     image = "show.png"
     help = "Show topic details"

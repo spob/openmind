@@ -13,10 +13,10 @@
 #
 
 class Enterprise < ActiveRecord::Base
-  acts_as_ordered :order => 'name' 
+  acts_as_solr :fields => [:name]
   
-  validates_presence_of :name, :active
-  validates_uniqueness_of :name 
+  validates_presence_of :name #, :active
+  validates_uniqueness_of :name, :case_sensitive => false
   validates_length_of :name, :maximum => 50
   
   # to allow user to create an allocation at the same time they create an
@@ -25,27 +25,35 @@ class Enterprise < ActiveRecord::Base
   
   has_many :users, :dependent => :destroy, :order => "email ASC"   
   has_many :allocations, :dependent => :destroy, :order => "created_at ASC"  
-  has_many :active_allocations, :conditions => ["expiration_date > ?", Date.current.to_s(:db)], 
-    :order => "created_at ASC"   
+#  has_many :active_allocations, :conditions => ["expiration_date > ?", Date.current.to_s(:db)],
+#    :order => "created_at ASC"
   has_many :votes, :through => :allocations, :order => "votes.id ASC"
   belongs_to :enterprise_type
+
+  named_scope :active, :conditions => {:active => true}, :order => "name ASC"
+  named_scope :next,
+    lambda{|name|{:conditions => ['name > ?', name],
+      :order => 'name',
+      :limit => 1}}
+  named_scope :previous,
+    lambda{|name|{:conditions => ['name < ?', name],
+      :order => 'name desc',
+      :limit => 1}}
   
-  def self.list(page, per_page, start_filter, end_filter)
+  def self.list(page, per_page, start_filter, end_filter, ids)
+    conditions = []
+    unless start_filter == 'All'
+      conditions << "name >= ? and name <= ?"
+      conditions << start_filter
+      conditions << end_filter
+    end
+    unless ids.nil?
+      conditions << "id in (?)"
+      conditions << ids
+    end
     paginate :page => page, :order => 'name', 
       :per_page => per_page,
-      :conditions => ["(name >= ? and name <= ?) or ? = 'All'",
-      start_filter, end_filter, start_filter
-    ]
-  end
-  
-  def active_allocations
-    allocations.find(:all, 
-      :conditions => ['expiration_date >= ?', (Date.current).to_s(:db)],
-      :order => 'expiration_date asc')
-  end
-  
-  def active_users 
-    users.find(:all, :conditions => [ "active = ? and activated_at is not null", true])
+      :conditions => conditions
   end
 
   def can_delete?
@@ -54,13 +62,9 @@ class Enterprise < ActiveRecord::Base
   
   def available_votes
     enterprise_allocations = 0
-    for allocation in active_allocations
+    for allocation in allocations.active
       enterprise_allocations += allocation.quantity - allocation.votes.size
     end
     enterprise_allocations
-  end
-
-  def self.active_enterprises
-    Enterprise.find_all_by_active(true, :order => "name ASC")
   end
 end

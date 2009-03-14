@@ -1,26 +1,20 @@
 <div id="action_buttons<%= topic_action.id %>">
-  
+
   <%= link_to theme_image_tag("icons/16x16/viewAction.png", :alt=>"view", :title=> "view"),
-    topic_path(topic_action), 
+    topic_path(topic_action),
     html_options = {
-    :onmouseover => "Tip('View details for this topic')"} 
+    :onmouseover => "Tip('View details for this topic')"}
 %>
   <% if can_edit? topic_action.forum %>
-    <%= link_to theme_image_tag("icons/16x16/editAction.png", :alt=>"edit", :title=> "edit"), 
+    <%= link_to theme_image_tag("icons/16x16/editAction.png", :alt=>"edit", :title=> "edit"),
       edit_topic_path(topic_action),
       html_options = {
       :onmouseover => "Tip('Edit this topic')"} %>
-  
-    <%= link_to(
-      theme_image_tag("icons/16x16/deleteAction.png", :alt=>"delete", :title=> "delete"),
-      topic_path(topic_action),
-      html_options = {:confirm => 'Are you sure?', :method => :delete,
-        :onmouseover => "Tip('Delete this topic')"} ) if topic_action.can_delete? %>
   <% end %>
   <%= show_topic_watch_icon(topic_action) %>
-  <%= link_to theme_image_tag("icons/24x24/commentAdd.png", 
-    :alt=>"add comment", :title=> "add comment"), 
-    new_comment_path(:id => topic_action, :type => 'Topic'), 
+  <%= link_to theme_image_tag("icons/24x24/commentAdd.png",
+    :alt=>"add comment", :title=> "add comment"),
+    new_comment_path(:id => topic_action, :type => 'Topic'),
     html_options = {
-    :onmouseover => "Tip('Add a comment to discussion forum for this topic')" } %>
+    :onmouseover => "Tip('Add a comment to discussion forum for this topic')" } if topic_action.can_add_comment? current_user %>
 </div>

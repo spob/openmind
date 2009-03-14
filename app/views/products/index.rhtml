@@ -1,36 +1,40 @@
-<%= javascript_include_tag "wz_tooltip.js", :cache => "cache/tooltip" %> 
-<%= error_messages_for 'product' %>
-<h1>
-<%= theme_image_tag("icons/32x32/products.png", options = {:alt=>"Products"}) %>Products</h1>
-<table cellspacing="0" cellpadding="0" class="cssform">
-  <tr>
-    <th>Name</th>
-    <th>Description</th>
-    <th class="center">Active</th>
-    <th class="center">Current Release</th>
-    <th>Action</th>
-  </tr>
-  <% if prodmgr? %>
+<%= javascript_include_tag "wz_tooltip.js", :cache => "cache/tooltip" %>
+<%= render :partial => "tab_menu" %>
+<div id="tabBody" style="position:relative; padding-top:15px;">
+  <%= error_messages_for 'product' %>
+  <h1>
+    <%= theme_image_tag("icons/32x32/products.png", options = {:alt=>"Products"}) %>Products
+  </h1>
+  <table cellspacing="0" cellpadding="0" class="cssform">
     <tr>
-      <% form_for :product, :url => products_path do |form| %>
-        <td><%= form.text_field :name, { :size => 30, :maxlength => 30 } %></td>
-        <td><%= form.text_field :description, { :size => 50, :maxlength => 200 } %></td>
-        <td class="center">Active</td>
-        <td class="center">-</td>
-        <td><%= submit_tag 'Create', options = {:class=> "button", :disable_with => "Please wait...",
-          :onmouseover => "Tip('Create a new product')"} %></td>
-      <% end %>
-      <%= set_focus_to_id_in_list_form 'product_name' -%>
+      <th>Name</th>
+      <th>Description</th>
+      <th class="center">Active</th>
+      <th class="center">Current Release</th>
+      <th>Action</th>
     </tr>
-  <% end %>
-  <%= render :partial => 'product_item', :collection => @products %>
-  
-</table>
-<p>
-  <div class="digg_pagination">
-    <div class="page_info">
-      <%= page_entries_info @products %>
+    <% if prodmgr? %>
+      <tr>
+        <% form_for :product, :url => products_path do |form| %>
+          <td><%= form.text_field :name, { :size => 30, :maxlength => 30 } %></td>
+          <td><%= form.text_field :description, { :size => 50, :maxlength => 200 } %></td>
+          <td class="center">Active</td>
+          <td class="center">-</td>
+          <td><%= submit_tag 'Create', options = {:class=> "button", :disable_with => "Please wait...",
+            :onmouseover => "Tip('Create a new product')"} %></td>
+        <% end %>
+        <%= set_focus_to_id_in_list_form 'product_name' -%>
+      </tr>
+    <% end %>
+    <%= render :partial => 'product_item', :collection => @products %>
+
+  </table>
+  <p>
+    <div class="digg_pagination">
+      <div class="page_info">
+        <%= page_entries_info @products %>
+      </div>
+      <%= will_paginate @products, :container => false %>
     </div>
-    <%= will_paginate @products, :container => false %>
-  </div>
-</p>
+  </p>
+</div>

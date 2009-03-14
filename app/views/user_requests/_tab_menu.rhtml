@@ -11,7 +11,7 @@
       html_options = {
       :onmouseover => "Tip('View logons in the last 90 days')",
       :method => :get } %></li>
-    <li class="selected"><%= link_to "Account Requests",  
+    <li class="selected"><%= link_to "Account Requests#{'(*)' if UserRequest.pending_requests?}",
       user_requests_path, 
       html_options = {
       :onmouseover => "Tip('View account requests')",

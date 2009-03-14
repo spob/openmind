@@ -1,34 +1,45 @@
-<%content_for :head do -%>
-     
-                     
-<%end%>
 <%content_for :bodyTag do -%>
-	<%= set_focus_to_id 'forum_search' -%>              
+  <%= set_focus_to_id 'forum_search' -%>
 <%end%>
 <%= javascript_include_tag "wz_tooltip.js", :cache => "cache/tooltip" %> 
 <div id="actionButtons2">
   <%= link_to 'View Topics', forum_path(@forum), html_options = {:class=> "button",
-          :onmouseover => "Tip('Return to list of topics for this forum')"}%>
+    :onmouseover => "Tip('Return to list of topics for this forum')"}%>
 </div>
 <%= error_messages_for 'forum' %>
 <h1><%= theme_image_tag("icons/32x32/forums.png", options = {:alt=>"Search Forum"}) %>Search Topics in Forum: <%= h @forum.name %></h1>
 
 <% form_tag(search_topics_path(:forum_id => @forum), :class => 'cssform searchform', :name => 'search' ) do -%>
-	<p>
-        <label for="search">Search Forum:</label>
-        <%= text_field_tag 'search', 
-	        session[:forums_search], 
-	        options = { :id => "forum_search", :size => "50" } %>
-		<%= hidden_field_tag(:forum_id, value = @forum.id) %>
-        <%= submit_tag 'Search', html_options = {:name => nil, :class=> "button",
-	        	:onmouseover => "Tip('Search topics and topic comments')"} %>
-	</p>
+  <p>
+    <label for="search">Search Forum:</label>
+    <%= text_field_tag 'search',
+      session[:forums_search],
+      options = { :id => "forum_search", :size => "50" } %>
+    <%= hidden_field_tag(:forum_id, value = @forum.id) %>
+    <%= submit_tag 'Search', html_options = {:name => nil, :class=> "button",
+      :onmouseover => "Tip('Search topics and topic comments')"} %>
+    <br/>
+    <%= link_to "search syntax help", {:controller => 'static', :action => 'search'},
+      :popup => true %>
+  </p>
 <% end %>
 
-<% @hits.each do |topic_hit| %>
-	<h3><%= link_to topic_hit.topic.title, topic_path(topic_hit.topic.id) %></h3>
-	<%=render(:partial => "comments/comment_item", :collection => topic_hit.comments)%>
-	<br/>
+<% for topic_hit in @hits.sort_by{|h| h.score*-1} %>
+  <h3><%= link_to highlight(topic_hit.topic.title,
+      StringUtils.strip_wildcards(session[:forums_search]).split.delete_if { |x| x == "OR" or x == "AND" or x == "NOT" },
+      '<span class="highlight">\1</span>'), topic_path(topic_hit.topic.id) %>
+    <i><small><small>Score <%= '%.1f' % (topic_hit.score) %></small></small></i>
+  <%= ratings_for topic_hit.topic, :static, :wrap => false %></h3>
+  <%=render(:partial => "comments/comment_item", :collection => topic_hit.comments)%>
+  <br/>
 <% end %>
 
 <%= "No matches" if @hits.empty? %>
+
+<%  unless @forum.restrict_topic_creation %>
+  <br/><br/>
+  <b>Didn't find what you were looking for? Consider asking your question by creating a new topic:</b>
+  <%= link_to 'Create New Topic', new_topic_path(:forum_id => @forum.id),
+    html_options = {:class=> "button",
+    :onmouseover => "Tip('Create a new topic')"}%>
+<% end %>

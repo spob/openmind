@@ -314,4 +314,28 @@ class IdeaTest < Test::Unit::TestCase
       assert_equal 1, @idea.unprocessed_change_logs.size
     end
   end
+
+  context "next" do
+    setup do
+      @idea = ideas(:first_idea)
+    end
+
+    should "find next idea" do
+      assert_nothing_thrown("next") {
+        Idea.next(@idea.id)
+      }
+    end
+  end
+
+  context "previous" do
+    setup do
+      @idea = ideas(:first_idea)
+    end
+
+    should "find previous idea" do
+      assert_nothing_thrown("next") {
+        Idea.previous(@idea.id)
+      }
+    end
+  end
 end

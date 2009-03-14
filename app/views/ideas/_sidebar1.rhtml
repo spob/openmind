@@ -1,65 +1,71 @@
 <div id="sidebar1" class="sidebar">
-  <div class="sideBarTitle">My Allocations</div>
-  <div class="sideBarItem countbox">
-    <div id="countcontainer">
-      <div class="countbutton64 red64">
-        <div id="user_count" class="count">
-          <%= link_to current_user.available_user_votes, 
+  <% cache(:controller => "allocations", :action => "my_allocations",
+    :user_id => (logged_in? ? current_user.id : -1)) do %>
+    <div class="sideBarTitle">My Allocations</div>
+    <div class="sideBarItem countbox">
+      <div id="countcontainer">
+        <div class="countbutton64 red64">
+          <div id="user_count" class="count">
+            <%= link_to current_user.available_user_votes,
               allocations_path(:allocations_filter_user => "yes",
-              :allocations_filter_enterprise => "no", 
-              :active_only => "yes"), 
+              :allocations_filter_enterprise => "no",
+              :active_only => "yes"),
               html_options = {
               :onmouseover => "Tip('View my user allocations')"} %>
+          </div>
+          <div class="description">User</div>
         </div>
-        <div class="description">User</div>
-      </div>
-      <div class="countbutton64 red64">
-        <div id="enterprise_count" class="count">
-          <%= link_to current_user.available_enterprise_votes,
+        <div class="countbutton64 red64">
+          <div id="enterprise_count" class="count">
+            <%= link_to current_user.available_enterprise_votes,
               allocations_path(:allocations_filter_user => "no",
-              :allocations_filter_enterprise => "yes", 
-              :active_only => "yes"), 
+              :allocations_filter_enterprise => "yes",
+              :active_only => "yes"),
               html_options = {
               :onmouseover => "Tip('View my enterprise allocations')"} %>
+          </div>
+          <div class="description">Enterprise</div>
         </div>
-        <div class="description">Enterprise</div>
-      </div>
-      <div class="countbutton64 black64">
-        <div id="total_count" class="count">           
-          <%= link_to current_user.available_votes,
+        <div class="countbutton64 black64">
+          <div id="total_count" class="count">
+            <%= link_to current_user.available_votes,
               allocations_path(:allocations_filter_user => "yes",
-              :allocations_filter_enterprise => "yes", 
-              :active_only => "yes"), 
+              :allocations_filter_enterprise => "yes",
+              :active_only => "yes"),
               html_options = {
               :onmouseover => "Tip('View all of my allocations')"} %>
+          </div>
+          <div class="description">Total</div>
         </div>
-        <div class="description">Total</div>
       </div>
     </div>
-  </div>
-  
+  <% end %>
+
   <div class="sideBarTitle">Jump to Idea</div>
   <div class="sideBarItem">
     <% form_tag({:action => 'jump_to'}, {:method => :get}) do -%>
       <label for="goto_id">Idea #:</label>
       <%= text_field_tag 'goto_id', '', { :size => 6 } %>
       <%= submit_tag 'Go', html_options = {:class=> "button"} %>
-  <% end %>
+    <% end %>
   </div>
-  
-  <div class="sideBarTitle">Announcements</div>
-  <div class="sideBarItem">
-    <div class="unorderListNavContainer">
-      <ul class="navlist2">
-        <% for announcement in Announcement.list(1, 5, 5) %>
-          <li>
-            <%= announcement_link announcement %>
-          </li>
-        <% end %>
-      </ul>
+
+  <% cache(:controller => "announcements", :action => "top_five",
+    :user_id => (logged_in? ? current_user.id : -1)) do %>
+    <div class="sideBarTitle">Announcements</div>
+    <div class="sideBarItem">
+      <div class="unorderListNavContainer">
+        <ul class="navlist2">
+          <% for announcement in Announcement.list(1, 5, 5) %>
+            <li>
+              <%= announcement_link announcement %>
+            </li>
+          <% end %>
+        </ul>
+      </div>
     </div>
-  </div>
-  
+  <% end %>
+
   <%=render(:partial => "link_sets/link_sidebar", :locals => {:link_set => LinkSet.get_default_link_set})%>
 
   <% tiptxt= "Subscribe to be notified of new ideas" %>

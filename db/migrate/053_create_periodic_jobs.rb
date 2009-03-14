@@ -1,6 +1,6 @@
 class CreatePeriodicJobs < ActiveRecord::Migration
   def self.up
-    create_table :periodic_jobs do |t|
+    create_table :periodic_jobs, :options => 'ENGINE=InnoDB DEFAULT CHARSET=utf8' do |t|
       t.column :type, :string
       t.column :job, :text
       t.column :interval, :integer

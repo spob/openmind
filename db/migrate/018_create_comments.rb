@@ -4,7 +4,7 @@ class CreateComments < ActiveRecord::Migration
   extend MigrationHelpers
   
   def self.up
-    create_table :comments, :options => 'DEFAULT CHARSET=utf8' do |t|
+    create_table :comments, :options => 'ENGINE=InnoDB DEFAULT CHARSET=utf8' do |t|
       t.references :user, :null => false
       t.references :idea, :null => false
       t.column :body, :string, :null => false

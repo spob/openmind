@@ -6,6 +6,7 @@ class AccountController < ApplicationController
   # If you want "remember me" functionality, add this before_filter to Application Controller
   before_filter :login_from_cookie
   before_filter :login_required, :only => [ :logout ]
+  cache_sweeper :allocations_sweeper, :only => [ :login, :continue_openid ]
 
   # say something nice, you goof!  something sweet.
   def index
@@ -125,6 +126,8 @@ class AccountController < ApplicationController
   
   def logged_in
     self.current_user.user_logons.create
+    # put the current user's email in the session for ease of debugging
+    session[:current_user] = current_user.email
     if params[:remember_me] == "1"
       self.current_user.remember_me
       cookies.delete :auth_token

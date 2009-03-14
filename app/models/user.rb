@@ -31,12 +31,17 @@
 require 'digest/sha1'
 
 class User < ActiveRecord::Base
-  acts_as_ordered :order => 'email' 
+  extend ActiveSupport::Memoizable
+  
+  ajaxful_rater
+  acts_as_solr :fields => [:email, :first_name, :last_name], 
+    :include => [:enterprise]
+
   
   # Virtual attribute for the unencrypted password
   attr_accessor :password
   attr_accessor :initial_allocation # to allow user to create an allocation at the
-                                    # same time they create a user
+  # same time they create a user
   attr_protected :activated_at 
 
   validates_presence_of     :email, :row_limit, :last_name, :enterprise
@@ -46,7 +51,7 @@ class User < ActiveRecord::Base
   validates_confirmation_of :password,                   :if => :password_required?
   validates_length_of       :email,    :within => 3..100
   validates_uniqueness_of   :email, :case_sensitive => false
-  validates_email_format_of :email
+  validates_email_format_of :email, :allow_nil => true
   validates_numericality_of :row_limit 
   validates_length_of       :first_name, :maximum => 40, :allow_nil => true
   validates_length_of       :last_name, :maximum => 40, :allow_nil => true
@@ -75,8 +80,8 @@ class User < ActiveRecord::Base
   has_many :user_logons, :order => "created_at DESC", :dependent => :destroy   
   has_many :ideas,:dependent => :destroy, :order => "id ASC"   
   has_many :allocations, :dependent => :destroy, :order => "created_at ASC"   
-  has_many :active_allocations, :conditions => ["expiration_date > ?", Date.current.to_s(:db)], 
-    :order => "created_at ASC"   
+  #  has_many :active_allocations, :conditions => ["expiration_date > ?", Date.current.to_s(:db)],
+  #    :order => "created_at ASCactive_allocations"
   # all votes by this user based only on user allocations
   has_many :votes, :through => :allocations, :order => "votes.id ASC"
   # all votes by this user regardless of allocation
@@ -84,18 +89,47 @@ class User < ActiveRecord::Base
   has_many :comments,:dependent => :destroy, :order => "id ASC"
   has_many :topic_comments,:dependent => :destroy, :order => "id ASC"
   has_many :user_idea_reads,:dependent => :destroy
+  has_many :rates
+  has_many :owned_topics, :class_name => 'Topic', :foreign_key => "owner_id"
   
   before_create :make_activation_code
 
+  
+  named_scope :active,
+    :conditions => [ "active = ?", true],
+    :order => 'email asc'
+
+  # imported users have both activated_at and activation_code as null
+  named_scope :imported_users,
+    :conditions => ["activated_at is null and activation_code is null" ]
+
+  named_scope :sysadmins,
+    :joins => [:roles],
+    :conditions => {:active => 1, :roles => {:title => 'sysadmin'}},
+    :order => :email
+
+  named_scope :voters,
+    :joins => [:roles],
+    :conditions => {:active => 1, :roles => {:title => 'voter'}},
+    :order => 'users.email'
+
+  named_scope :mediators,
+    :joins => [:roles],
+    :conditions => {:active => 1, :roles => {:title => 'mediator'}},
+    :order => 'users.email'
+
+  named_scope :next,
+    lambda{|email|{:conditions => ['email > ?', email],
+      :order => 'email',
+      :limit => 1}}
+
+  named_scope :previous,
+    lambda{|email|{:conditions => ['email < ?', email],
+      :order => 'email desc',
+      :limit => 1}}
+
   def self.row_limit_options
     [10, 25, 50, 100]
-  end
-  
-  def self.sysadmins
-    User.find(:all, 
-      :include => [:roles], 
-      :conditions => ['users.active = 1 and roles.title = ?', 'sysadmin'], 
-      :order => :email)
   end
   
   def sysadmin?
@@ -105,27 +139,29 @@ class User < ActiveRecord::Base
   def prodmgr?
     roles.collect(&:title).include? 'prodmgr'
   end
+
+  def voter?
+    roles.collect(&:title).include? 'voter'
+  end
+
+  def allocmgr?
+    roles.collect(&:title).include? 'allocmgr'
+  end
+
+  def mediator?
+    roles.collect(&:title).include? 'mediator'
+  end
   
   def user_logons_90_days
     user_logons.find(:all, :conditions => ['created_at > ?', (Time.zone.now - 60*60*24*90).to_s(:db)])
-  end
-  
-  def active_allocations
-    allocations.find(:all, 
-      :conditions => ['expiration_date >= ?', (Date.current).to_s(:db)],
-      :order => 'expiration_date asc')
-  end
-  
-  # imported users have both activated_at and activation_code as null
-  def self.imported_users
-    User.find(:all, :conditions => ["activated_at is null and activation_code is null" ])
   end
   
   def last_logon_date
     last_logon.created_at unless last_logon.nil?
   end
   
-  # Authenticates a user by their email and unencrypted password.  Returns the user or nil.
+  # Authenticates a user by their email and unencrypted password.  Returns the
+  # user or nil.
   def self.authenticate(email, password)
     # hide records with a nil activated_at
     u = User.find :first, :conditions => ['email = ? and activated_at IS NOT NULL', email]
@@ -159,7 +195,8 @@ class User < ActiveRecord::Base
     self.email = p_login
   end
 
-  # These create and unset the fields required for remembering users between browser closes
+  # These create and unset the fields required for remembering users between
+  # browser closes
   def remember_me
     self.remember_token_expires_at = 2.weeks.from_now.utc
     self.remember_token            = encrypt("#{email}--#{remember_token_expires_at}")
@@ -177,43 +214,43 @@ class User < ActiveRecord::Base
   end
   
   def available_user_votes
-    count = 0
-    for allocation in active_allocations
-      count += allocation.quantity - allocation.votes.size
+    if @available_user_votes.nil?
+      @available_user_votes = 0
+      for allocation in allocations.active
+        @available_user_votes += allocation.quantity - allocation.votes.size
+      end
     end
-    count
+    @available_user_votes
   end
   
   def available_enterprise_votes
-    count = 0
-    for allocation in enterprise.active_allocations
-      count += allocation.quantity - allocation.votes.size
+    if @available_enterprise_votes.nil?
+      @available_enterprise_votes = 0
+      for allocation in enterprise.allocations.active
+        @available_enterprise_votes += allocation.quantity - allocation.votes.size
+      end
     end
-    count
+    @available_enterprise_votes
   end
   
   def available_votes
     available_user_votes + available_enterprise_votes
   end
     
-  def self.list(page, per_page, start_filter, end_filter)
-    paginate :page => page, :order => 'email', 
+  def self.list(page, per_page, start_filter, end_filter, ids)
+    conditions = []
+    unless start_filter == 'All'
+      conditions << "email >= ? and email <= ?"
+      conditions << start_filter
+      conditions << end_filter
+    end
+    unless ids.nil?
+      conditions << "id in (?)"
+      conditions << ids
+    end
+    paginate :page => page, :order => 'email',
       :per_page => per_page, :include => 'enterprise',
-      :conditions => ["(email >= ? and email <= ?) or ? = 'All'",
-      start_filter, end_filter, start_filter
-    ]
-  end
-  
-  def self.active_users
-    User.find_all_by_active(true, :order => 'email')
-  end
-  
-  def self.active_voters
-    User.find_all_by_active(true, 
-      :joins => "inner join roles_users as ru on users.id = ru.user_id inner join roles as r on ru.role_id = r.id", 
-      :conditions => "r.title = 'Voter'", 
-      :select => 'users.*',
-      :order => 'email')
+      :conditions => conditions
   end
   
   def full_name
@@ -251,7 +288,7 @@ class User < ActiveRecord::Base
   end
   
   def display_name always_full=false
-    return "#{self.short_name}" if self.hide_contact_info and !always_full
+    return "#{self.short_name}" if (self.hide_contact_info and !always_full) or self.email.nil?
     "#{self.full_name} (#{self.email})"
   end
   
@@ -278,7 +315,7 @@ class User < ActiveRecord::Base
   end
 
   protected
-  # before filter 
+  # before filter
   def encrypt_password
     return if password.blank?
     self.salt = Digest::SHA1.hexdigest("--#{Time.zone.now.to_s}--#{email}--") if new_record?
@@ -298,7 +335,9 @@ class User < ActiveRecord::Base
     if self.activation_code == 'SKIP'
       self.activation_code = nil
     else
-      self.activation_code = Digest::SHA1.hexdigest( Time.zone.now.to_s.split(//).sort_by {rand}.join ) 
+      self.activation_code = Digest::SHA1.hexdigest( Time.zone.now.to_s.split(//).sort_by {rand}.join )
     end
   end
+
+  memoize :mediator?, :prodmgr?, :sysadmin?
 end

@@ -4,6 +4,9 @@ class VotesController < ApplicationController
   helper :idea_action, :ideas
   before_filter :login_required
   access_control [:create, :destroy] => 'voter'
+  cache_sweeper :allocations_sweeper, :only => [ :create,
+    :destroy
+  ]
 
   def index
     if params[:form_based] == "yes"

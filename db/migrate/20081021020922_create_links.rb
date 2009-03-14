@@ -4,7 +4,7 @@ class CreateLinks < ActiveRecord::Migration
   extend MigrationHelpers
   
   def self.up
-    create_table :links do |t|
+    create_table :links, :options => 'ENGINE=InnoDB DEFAULT CHARSET=utf8' do |t|
       t.string :name, :limit => 30, :null => false
       t.string :url, :null => false
       t.references :link_set

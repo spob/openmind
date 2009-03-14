@@ -63,5 +63,10 @@ class XssTerminateTest < Test::Unit::TestCase
     session = CGI::Session::ActiveRecordStore::Session.new(:session_id => 'foo', :data => 'blah')
     assert session.save
   end
-    
+
+  def test_do_not_save_invalid_models_after_sanitizing
+    c = Comment.new(:title => "<br />")
+    assert !c.save
+    assert_not_nil c.errors.on(:title)
+  end
 end

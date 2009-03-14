@@ -6,7 +6,7 @@
 
 .formContainer li
 {
-    font-size: 0.9em;
+    font-size: 1.0em;
 }
 
 .cssform {
@@ -74,6 +74,11 @@
 .cssform ul li {
     font-size: 1.0em;
     line-height: 1.0em;
+}
+
+.cssform ul.ajaxful-rating {
+    padding:0;
+    border: none
 }
 
 .cssform p:hover, .cssform ul:hover {

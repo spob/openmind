@@ -39,7 +39,8 @@ class PollsControllerTest < Test::Unit::TestCase
     post :create, :poll => { :title => "x", :close_date => 119.days.since.to_s(:db) }
 
     assert_response :redirect
-    assert_redirected_to :controller => 'polls', :action => 'edit'
+    p = Poll.find_by_title('x')
+    assert_redirected_to :controller => 'polls', :action => 'edit', :id => p.id
 
     assert_equal num_polls + 1, Poll.count
   end

@@ -1,10 +1,6 @@
 <tr>
   <td>
-    <% if prodmgr? %>
-      <%= link_to h(release_item.product.name), product_path(release_item.product) %>
-    <% else %>
-      <%=h release_item.product.name %>
-    <% end %>
+    <%= link_to h(release_item.product.name), product_path(release_item.product) %>
   </td>
   <td>
     <%= link_to h(release_item.version), release_path(release_item) %>
@@ -14,7 +10,7 @@
     <% if !release_item.description.nil? and !release_item.description.blank? %>
       <b>Description:</b><br/>
       <%= textilize(white_list(release_item.description)).gsub(/<[pP]>/,'<p class="releases">').gsub(/<[uU][lL]>/,'<ul class="releases_desc">') if release_item.textiled %>
-      <%= white_list(release_item.description) unless release_item.textiled %>	    
+      <%= white_list(release_item.description) unless release_item.textiled %>
     <% end %>
     &nbsp;
     <% if !release_item.ideas.empty? %>
@@ -23,7 +19,7 @@
         <% for idea in release_item.ideas %>
           <li><%= link_to h(idea.user_friendly_idea_name),
               :controller => 'ideas',
-              :action => 'show', 
+              :action => 'show',
               :id => idea.id %> </li>
           <% end %>
       </ul>

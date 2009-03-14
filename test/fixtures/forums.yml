@@ -17,13 +17,14 @@ bugs_forum:
   name: bugs_forum
   mediators: allroles
   description: A forum to discuss product defects and work arounds
-  restrict_topic_creation: false
+  forum_type: forum
+  power_user_group: bob
 
 bugs_forum_restrict_creation:
   name: bugs_forum restricted
   mediators: allroles
   description: A forum to discuss product defects and work arounds
-  restrict_topic_creation: true
+  forum_type: blog
 
 empty_bugs_forum:
   name: empty
@@ -51,5 +52,12 @@ forum_with_link_set:
   name: link_set_forum
   mediators: allroles
   description: A forum with a link set
-  restrict_topic_creation: false
+  forum_type: forum
+  link_set: forum_link_set
+
+announcment_forum:
+  name: announcment_forum
+  mediators: allroles
+  description: A forum of type announcement
+  forum_type: announcment
   link_set: forum_link_set

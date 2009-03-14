@@ -7,14 +7,14 @@ module XssTerminate
 
   module ClassMethods
     def xss_terminate(options = {})
-      before_save :sanitize_fields
+      before_validation :sanitize_fields
 
       write_inheritable_attribute(:xss_terminate_options, {
         :except => (options[:except] || []),
         :html5lib_sanitize => (options[:html5lib_sanitize] || []),
         :sanitize => (options[:sanitize] || [])
       })
-
+      
       class_inheritable_reader :xss_terminate_options
       
       include XssTerminate::InstanceMethods
@@ -46,6 +46,7 @@ module XssTerminate
           self[field] = RailsSanitize.full_sanitizer.sanitize(value)
         end
       end
+      
     end
   end
 end

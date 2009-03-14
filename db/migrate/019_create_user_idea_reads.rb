@@ -4,7 +4,7 @@ class CreateUserIdeaReads < ActiveRecord::Migration
   extend MigrationHelpers
   
   def self.up
-    create_table :user_idea_reads do |t|
+    create_table :user_idea_reads, :options => 'ENGINE=InnoDB DEFAULT CHARSET=utf8' do |t|
       t.references :user, :null => false
       t.references :idea, :null => false
       t.column :last_read, :datetime, :null => false, :default => Time.zone.now

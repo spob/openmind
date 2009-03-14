@@ -5,66 +5,67 @@
     <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
     <meta http-equiv="Content-Language" content="en-us" />
     <%= theme_stylesheet_link_tag 'global', 'forms', 'tables', 'ideas', 'tabs', 'pagination' %>
+    <%= ajaxful_rating_style %>
     <%= javascript_include_tag 'prototype', 'effects', 'tablecloth', :cache => "cache/app" %>
     <%= yield :head %>
     <!--[if lte IE 6]>
-    <%= theme_stylesheet_link_tag 'png_fix', 'peekaboobug_fix' %>
-    <%= yield :ieOnlyCss-%>
+<%= theme_stylesheet_link_tag 'png_fix', 'peekaboobug_fix' %>
+<%= yield :ieOnlyCss-%>
     <![endif]-->
   </head>
   <body<%= yield :bodyTag-%>>
     <a name="top"/>
     <div id="headerBackground">
-    <div id="headerBrandingAreaPageWrap">
-      <div class="inside">
-        <div id="headerTopNavBar">
-          <ul class="headerTopNavMenu">
-            <li><%= link_to "Help", { :controller => 'static', :action => 'help'} %></li>
-            <% if logged_in? %>
-              <li><a href="/account/change_password">Change Password</a></li>
-              <li><a href="/users/edit_profile">Update Profile</a></li>
-              <li><a href="/account/logout">Logout</a></li>
-            <% elsif params[:action] != "login" %>
-              <li><a href="/account/login">Login</a></li>
-            <% end %>
-          </ul>
-        </div>
-        <div id="headerBrandingArea"><a href="/ideas"><img alt="branding logo" src="/themes/<%=APP_CONFIG['app_theme']%>/images/headers/headerBrandingLogo.jpg" /></a>
+      <div id="headerBrandingAreaPageWrap">
+        <div class="inside">
+          <div id="headerTopNavBar">
+            <ul class="headerTopNavMenu">
+              <li><%= link_to "Help", { :controller => 'static', :action => 'help'} %></li>
+              <% if logged_in? %>
+                <li><a href="/account/change_password">Change Password</a></li>
+                <li><a href="/users/edit_profile">Update Profile</a></li>
+                <li><a href="/account/logout">Logout</a></li>
+              <% elsif params[:action] != "login" %>
+                <li><a href="/account/login">Login</a></li>
+              <% end %>
+            </ul>
+          </div>
+          <div id="headerBrandingArea"><a href="/ideas"><img alt="branding logo" src="/themes/<%=APP_CONFIG['app_theme']%>/images/headers/headerBrandingLogo.jpg" /></a>
             <!-- flash notices -->
             <% if flash[:notice]-%>
               <div id="flash_notice" class="flash flashNotice"><%= flash_notice_string flash[:notice] %></div>
             <%else%>
-            <div id="flash_notice" class="flash flashNotice" style="display:none;"></div>
+              <div id="flash_notice" class="flash flashNotice" style="display:none;"></div>
             <% end %>
-            
+
             <% if flash[:error]-%>
-            <div id="flash_error" class="flash flashError"><%= flash_error_string flash[:error] %></div>
+              <div id="flash_error" class="flash flashError"><%= flash_error_string flash[:error] %></div>
             <%else%>
-            <div id="flash_error" class="flash flashError" style="display:none;"></div>
-            <% end %>        
+              <div id="flash_error" class="flash flashError" style="display:none;"></div>
+            <% end %>
+          </div>
+          <% if true %>
+            <ul id="headerLowerNavMenu">
+              <%= render_menus  %>
+            </ul>
+          <%else%>
+            <div id="headerLowerNavMenu"></div>
+          <% end %>
+          <br style="clear: left" />
         </div>
-        <% if true %>
-          <ul id="headerLowerNavMenu">
-            <%= render_menus  %>
-          </ul>
-        <%else%>
-          <div id="headerLowerNavMenu"></div>
-        <% end %>
-        <br style="clear: left" />
       </div>
     </div>
-    </div>
-    
+
     <div id="mainBodyPageWrap">
       <div class="inside">
         <%
         #<div style="display: none;" id="secondarySubnav">
         #Expandable Secondary Nav Area: <a href="#">Link 1</a> | <a href="#">Link 2</a> | <a href="#">Link 3</a> | <a href="#">Link 4</a> | <a href="#">Link 5</a>
         #</div>
-        %>
+      %>
         <%= yield :sidebar1-%>
         <%= yield :sidebar2-%>
-                
+
         <div id="main-contentShell">
           <div id="main-content">
             <!-- form container start -->
@@ -76,11 +77,11 @@
         </div>
         <div id="footer">
           <div id="footerLeft"><% if logged_in? %>Logged in as: <%= current_user.display_name(true) %><span class="separator">|</span><% end %>
-          Contact <%= mail_to(APP_CONFIG['admin_email'], 'System Administrator', :encode => "javascript" ) %></div> 
+          Contact <%= mail_to(APP_CONFIG['admin_email'], 'System Administrator', :encode => "javascript" ) %></div>
           <div id="footerRight">Powered by <a href="http://openmind.sourceforge.net/">Openmind</a> v<%= OpenmindVersion.version %><span class="separator">|</span>Distributed under the <%= link_to "GNU GPL license", { :controller => 'static', :action => 'license'} %></div>
         </div>
       </div>
-    <div style="clear: both;"></div>
+      <div style="clear: both;"></div>
     </div>
   </body>
 </html>

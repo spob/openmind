@@ -10,50 +10,73 @@
     :alt=>"endorsed",
     :title=> "endorsed",
     :class => "floatRight",
-    :onmouseover => "Tip('This comment has been endorsed by the forum mediator')") if comment_item.endorsed? %>
+    :onmouseover => "Tip('This comment has been endorsed by the forum moderator')") if comment_item.endorsed? %>
   <%= highlight(white_list(comment_item.body),
-    session[:forums_search].split,
+    StringUtils.strip_wildcards(session[:forums_search]).split.delete_if { |x| x == "OR" or x == "AND" or x == "NOT" },
     '<span class="highlight">\1</span>') unless comment_item.textiled %>
   <%= highlight(textilize(white_list(comment_item.body)), session[:forums_search].split, '<span class="highlight">\1</span>') if comment_item.textiled %>
-  
-  <%= link_to '[Endorse]', endorse_comment_path(comment_item),
-    html_options = { :class=> "btTxt editButton",
-    :method => :post,
-    :onmouseover => "Tip('Endorse this comment')"} if comment_item.can_endorse? current_user %>
-  
-  <%= link_to '[Un-Endorse]', unendorse_comment_path(comment_item),
-    html_options = { :class=> "btTxt editButton",
-    :method => :post,
-    :onmouseover => "Tip('Remove the endorsement for this comment')"} if comment_item.can_unendorse? current_user %>
-  
-  <%= "&nbsp;" if ( comment_item.can_unendorse? current_user or  comment_item.can_endorse? current_user) and can_edit_comment? comment_item %>
-  <%= link_to '[Edit]', edit_comment_path(comment_item),
-    html_options = { :class=> "btTxt editButton",
-    :onmouseover => "Tip('Edit this comment')"} if can_edit_comment? comment_item %>
-  <%= "&nbsp;" if can_edit_comment? comment_item %>
-  <%= link_to '[Add Image]', attach_comment_path(comment_item),
-    html_options = { :class=> "btTxt editButton",
-    :onmouseover => "Tip('Add an image to this comment')"} if can_edit_comment? comment_item %>
-  
+
   <% unless comment_item.comment_attachments.empty? %>
     <strong>Images:</strong>
     <br/>
     <% for attachment in comment_item.comment_attachments %>
-      <a href="<%= download_attachment_path(attachment) %>" 
-         title="<%= attachment.description %>" 
+      <a href="<%= download_attachment_path(attachment) %>"
+         title="<%= attachment.description %>"
          rel="lightbox[comment_<%= comment_item.id %>]">
-         <img src="<%= download_attachment_path(attachment.thumbnail) %>"
-           alt="<%= attachment.description %>"
-           onmouseover="Tip('Click to expand')"
-           style="border-style: solid;" />
-         </a>
+        <img src="<%= download_attachment_path(attachment.thumbnail) %>"
+             alt="<%= attachment.description %>"
+             onmouseover="Tip('Click to expand')"
+             style="border-style: solid;" />
+      </a>
     <% end %>
   <% end %>
 </div>
 <div class="commentfooter">
   Posted by <%= "#{user_display_name comment_item.user}" %>
+  <%= theme_image_tag("icons/16x16/power_user.png",
+    :alt=>"Power User",
+    :title=> "endorsed",
+    :class => "Power User",
+    :onmouseover => "Tip('This user is a Power User')") if comment_item.class.to_s == "TopicComment" and comment_item.topic.forum.power_user? comment_item.user %>
   on <%=  om_date_time comment_item.created_at %>
   <a href="#top" onmouseover="Tip('Return to top of page')">
     <%= theme_image_tag("icons/16x16/arrow_up.png", options = {:alt=>"Return to top"}) %>
   </a>
+  <span style="position: absolute; right: 0; width: 50%; text-align: right;">
+    <% if show_comment_edit_links %>
+      <% if comment_item.class.to_s == "TopicComment" %>
+        <%= link_to '[Make Private]', privatize_comment_path(comment_item),
+          html_options = { :class=> "btTxt editButton",
+          :method => :post,
+          :onmouseover => "Tip('Make this comment only visible to forum moderators')"} if !comment_item.private and comment_item.topic.forum.mediators.include? current_user %>
+        <%= link_to '[Make Public]', publicize_comment_path(comment_item),
+          html_options = { :class=> "btTxt editButton",
+          :method => :post,
+          :onmouseover => "Tip('Make this comment publically visible')"} if comment_item.private and comment_item.topic.forum.mediators.include? current_user %>
+        <%= link_to '[Endorse]', endorse_comment_path(comment_item),
+          html_options = { :class=> "btTxt editButton",
+          :method => :post,
+          :onmouseover => "Tip('Endorse this comment')"} if comment_item.can_endorse? current_user %>
+
+        <%= link_to '[Un-Endorse]', unendorse_comment_path(comment_item),
+          html_options = { :class=> "btTxt editButton",
+          :method => :post,
+          :onmouseover => "Tip('Remove the endorsement for this comment')"} if comment_item.can_unendorse? current_user %>
+        <%= link_to '[Promote User]', promote_power_user_comment_path(comment_item),
+          html_options = { :class=> "btTxt editButton",
+          :method => :post,
+          :onmouseover => "Tip('Promote the author of this comment to be a power user for this forum')"} unless !comment_item.topic.forum.mediators.include? current_user or comment_item.topic.forum.power_user_group.nil? or comment_item.topic.forum.power_user? comment_item.user %>
+      <% end %>
+
+      <!-- <%= "&nbsp;" if ( comment_item.can_unendorse? current_user or comment_item.can_endorse? current_user) and can_edit_comment? comment_item %> -->
+  <%= link_to '[Edit]', edit_comment_path(comment_item),
+    html_options = { :class=> "btTxt editButton",
+    :onmouseover => "Tip('Edit this comment')"} if can_edit_comment? comment_item %>
+      <!-- <%= "&nbsp;" if can_edit_comment? comment_item %> -->
+  <%= link_to '[Add Image]', attach_comment_path(comment_item),
+    html_options = { :class=> "btTxt editButton",
+    :onmouseover => "Tip('Add an image to this comment')"} if can_edit_comment? comment_item %>
+  <%= "&nbsp;&nbsp;" if comment_item.class.to_s == "IdeaComment" %>
+<% end %>
+  </span>
 </div>

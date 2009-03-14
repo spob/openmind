@@ -4,7 +4,7 @@ class CreateRolesUserRequests < ActiveRecord::Migration
   extend MigrationHelpers
   
   def self.up
-    create_table :roles_user_requests, :id => false  do |t|
+    create_table :roles_user_requests, :options => 'ENGINE=InnoDB DEFAULT CHARSET=utf8', :id => false  do |t|
       t.references :user_request, :null => false
       t.references :role,  :null => false
       t.column :lock_version, :integer, :default => 0

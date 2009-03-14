@@ -23,6 +23,10 @@ class Allocation < ActiveRecord::Base
   validates_numericality_of :quantity, :only_integer => true, 
     :allow_nil => false, :minimum => 1
   
+  named_scope :active, 
+    lambda{{:conditions => ['expiration_date >= ?', (Date.current).to_s(:db)],
+      :order => 'expiration_date asc'}}
+  
   def self.inheritance_column
     'allocation_type'
   end
@@ -32,8 +36,8 @@ class Allocation < ActiveRecord::Base
   end
   
   def self.expiring_allocation_days(user)
-    min(first_expiration_days(user.active_allocations), 
-      first_expiration_days(user.enterprise.active_allocations))
+    min(first_expiration_days(user.allocations.active), 
+      first_expiration_days(user.enterprise.allocations.active))
   end
   
   def self.list_all_for_user(user, page, per_page, active_only)

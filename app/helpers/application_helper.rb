@@ -13,15 +13,14 @@ module ApplicationHelper
       # Menu Label       # controller url       # role restrictions   # other
       # controllers e.g., aliases
       ["Ideas",           "/ideas"                             ],
-      ["Products",        products_path,                       ],
-      ["Releases",        list_releases_path,   [],                  [ "releases" ] ],
       ["Forums",          forums_path,          [],                  [ "topics" ] ],
+      ["Roadmap",        list_releases_path,   [],                    [ "products", "releases" ]   ],
       ["Users",           "/users",             ["sysadmin", "allocmgr"], ["groups", "user_requests", "user_logons"] ],
       ["Enterprises",     enterprises_path,     ["sysadmin", "allocmgr"] ],
       ["Allocations",     allocations_path,                    ],
       ["Votes",           votes_path                           ],
       ["Announcements",   announcements_path ,  ["sysadmin", "prodmgr"]  ],
-      ["Attachments",     attachments_path,     ["sysadmin", "prodmgr"]  ],
+      ["Attachments",     attachments_path,     ["sysadmin", "prodmgr", "mediator"]  ],
       ["Polls",           polls_path,           ],
       ["Admin",           periodic_jobs_path,    ["sysadmin"],  ["lookup_codes", "link_sets"] ],
     ]
@@ -39,8 +38,9 @@ module ApplicationHelper
       accessible = (menu[2].nil? or menu[2].empty?)  # no restrictions specified
       if !accessible and logged_in? then         # otherwise you'll need to loop through
         for priviledge in menu[2] # and explicitly see if user has access
-          restrict_to priviledge do 
+          if current_user.roles.collect(&:title).include? priviledge
             accessible = true
+            break;
           end
         end
       end
@@ -142,9 +142,9 @@ module ApplicationHelper
   end
 
   def announcement_link announcement
-    text = truncate(announcement.headline, 25)
+    text = truncate(announcement.headline, :length => 25)
     if current_user == :false or announcement.unread?(current_user)
-      text = "<b>#{truncate(announcement.headline, 21)}</b>"
+      text = "<b>#{truncate(announcement.headline, :length => 21)}</b>"
     end
     link_to text, "#{announcements_path}##{announcement.id}"
   end  
@@ -161,8 +161,8 @@ module ApplicationHelper
   end
   
   def user_display_name user
-    full = prodmgr? or sysadmin? or allocmgr? unless current_user == :false
-    user.display_name full
+    full = (prodmgr? or sysadmin? or allocmgr? or current_user.mediator?) unless current_user == :false
+    user.display_name full unless user.nil?
   end
   
   # Required to support hard line breaks See
@@ -182,6 +182,9 @@ module ApplicationHelper
     "<strike>#{text}</strike>"
   end
 
+  def show_comment_edit_links
+    params["action"] != "new"
+  end
   
   private
   

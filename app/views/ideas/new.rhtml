@@ -20,14 +20,14 @@
     </p>
     <p>
       <label for="product">Product:</label>
-      <%=form.collection_select :product_id, Product.all_active_products, :id, :name,
+      <%=form.collection_select :product_id, Product.active.by_name, :id, :name,
         options = { :prompt => true} %>    
     </p>
     <p>
       <label for="tag_list">Tags:</label>
       <%= form.text_field :tag_list %>
       <br/>
-      (separate with spaces, use quotes for multi-word tags)
+      (separate with commas)
     </p>
     <p>
       <label></label>

@@ -54,6 +54,6 @@ class TopicCommentTest < Test::Unit::TestCase
   end
   
   should "format rss_body" do
-    assert_equal "<i>Jim P wrote:</i><br/>topic comment", comments(:topic_comment).rss_body
+    assert_equal "<i>Jim P wrote:</i><br/>topic comment1", comments(:topic_comment).rss_body
   end
 end

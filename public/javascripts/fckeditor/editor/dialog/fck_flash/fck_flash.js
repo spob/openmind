@@ -129,7 +129,7 @@ function Ok()
 	oEditor.FCKUndo.SaveUndoStep() ;
 	if ( !oEmbed )
 	{
-		oEmbed		= FCK.EditorDocument.createElement( 'EMBED' ) ;
+		oEmbed		= FCK.EditorDocument.createElement( 'IFRAME' ) ;
 		oFakeImage  = null ;
 	}
 	UpdateEmbed( oEmbed ) ;
@@ -201,7 +201,7 @@ function UpdatePreview()
 	else
 	{
 		var oDoc	= ePreview.ownerDocument || ePreview.document ;
-		var e		= oDoc.createElement( 'EMBED' ) ;
+		var e		= oDoc.createElement( 'IFRAME' ) ;
 
 		SetAttribute( e, 'src', GetE('txtUrl').value ) ;
 		SetAttribute( e, 'type', 'application/x-shockwave-flash' ) ;

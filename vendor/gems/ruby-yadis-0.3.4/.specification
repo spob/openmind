@@ -3,74 +3,41 @@ name: ruby-yadis
 version: !ruby/object:Gem::Version 
   version: 0.3.4
 platform: ruby
-authors: 
-- Brian Ellin (JanRain, Inc), Eugene Eric Kim (Blue Oxen Associates)
-autorequire: yadis
+authors: []
+
+autorequire: 
 bindir: bin
-cert_chain: 
-date: 2007-01-04 00:00:00 -05:00
+cert_chain: []
+
+date: 2009-03-06 00:00:00 -05:00
 default_executable: 
 dependencies: []
 
 description: 
-email: brian@janrian.com, eekim@blueoxen.com
+email: 
 executables: []
 
 extensions: []
 
-extra_rdoc_files: 
-- README
-- INSTALL
-- COPYING
+extra_rdoc_files: []
+
 files: 
-- examples/openid.rb
-- lib/yadis.rb
+- lib
 - lib/yadis
-- lib/yadis/parsehtml.rb
-- lib/yadis/xrds.rb
-- lib/yadis/yadis.rb
-- lib/yadis/fetcher.rb
-- lib/yadis/htmltokenizer.rb
-- lib/yadis/manager.rb
-- lib/yadis/service.rb
-- lib/yadis/xri.rb
-- lib/yadis/xrires.rb
-- test/test_parse.rb
-- test/data
-- test/test_discovery.rb
-- test/test_yadis.rb
-- test/test_xrds.rb
-- test/runtests.rb
-- test/test_xri.rb
-- test/data/manifest.txt
-- test/data/brian.xrds
-- test/data/brian_priority.xrds
-- test/data/brian.multi.xrds
-- test/data/index.html
-- test/data/brian.multi_uri.xrds
-- test/data/index_yadis.html
-- test/data/index_xrds.html
-- test/data/proxy-june1.xrds
-- test/data/weirdver.xrds
-- test/data/keturn.xrds
-- test/data/brianellin.mylid.xrds
-- README
-- INSTALL
-- COPYING
-has_rdoc: true
-homepage: http://www.openidenabled.com/yadis/libraries/ruby
+- lib/yadis.rb
+has_rdoc: false
+homepage: 
 post_install_message: 
-rdoc_options: 
-- --main
-- README
+rdoc_options: []
+
 require_paths: 
 - bin
 - lib
 required_ruby_version: !ruby/object:Gem::Requirement 
   requirements: 
-  - - ">"
+  - - ">="
     - !ruby/object:Gem::Version 
-      version: 0.0.0
+      version: "0"
   version: 
 required_rubygems_version: !ruby/object:Gem::Requirement 
   requirements: 
@@ -81,9 +48,9 @@ required_rubygems_version: !ruby/object:Gem::Requirement
 requirements: []
 
 rubyforge_project: 
-rubygems_version: 1.2.0
+rubygems_version: 1.3.1
 signing_key: 
-specification_version: 1
-summary: A library for performing Yadis service discovery
-test_files: 
-- test/runtests.rb
+specification_version: 2
+summary: 
+test_files: []
+

@@ -13,7 +13,7 @@
 
 class Group < ActiveRecord::Base
   validates_presence_of :name
-  validates_uniqueness_of :name 
+  validates_uniqueness_of :name, :case_sensitive => false
   validates_presence_of :description
   validates_length_of   :name, :maximum => 50
   validates_length_of   :description, :maximum => 150
@@ -21,13 +21,17 @@ class Group < ActiveRecord::Base
     :class_name => 'User', :order => 'email ASC'
   has_and_belongs_to_many :forums
   has_and_belongs_to_many :polls
+
+  named_scope :by_name, :order => "name ASC"
   
   def can_delete?
     true
   end
-  
-  def self.list_all
-    Group.find(:all, :order => 'name ASC')
+
+  def self.findall include_empty = false
+    list = Group.by_name
+    list.insert(0, Group.new(:id => 0, :name => "")) if include_empty
+    list
   end
   
   def self.list(page, per_page)
@@ -37,5 +41,9 @@ class Group < ActiveRecord::Base
   
   def can_edit? user
    true
+  end
+
+  def name_and_description
+    "#{name}#{":" if description} #{description}"
   end
 end

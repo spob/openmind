@@ -6,10 +6,10 @@ class IdeasController < ApplicationController
   helper_method :tab_body_partial
   before_filter :login_required, :except => [:rss]
   access_control [:new, :edit, :create, :update, :destroy] => 'prodmgr | voter'
-
+  
   verify :method => :post, 
-    :only => [ :destroy, :create, :update ],
-    :redirect_to => { :action => :list }
+  :only => [ :destroy, :create, :update ],
+  :redirect_to => { :action => :list }
   
   def tag_cloud
     @tags = Idea.tag_counts
@@ -18,11 +18,11 @@ class IdeasController < ApplicationController
   def self.view_types
     @@view_types
   end
-
+  
   # Build an rss feed
   def rss
     render_rss_feed_for Idea.find(:all, :order => 'created_at DESC',
-      :limit => 10), {
+    :limit => 10), {
       :feed => {
         :title => 'OpenMind New Ideas',
         :link => url_for(:controller => 'ideas', :action => 'list', :only_path => false),
@@ -32,20 +32,20 @@ class IdeasController < ApplicationController
         :title => :title,
         :description => :formatted_description,
         :link => Proc.new{|idea| url_for(:controller => 'ideas',
-            :action => 'show', :id => idea.id)}
+          :action => 'show', :id => idea.id)}
       }
     }
   end
- 
+  
   def index
     list
     render :action => 'list' unless request.xhr?
   end
-    
+  
   def preview
     render :layout => false
   end
-
+  
   def list    
     session[:idea_search_box_display] ||= "HIDE"
     session[:idea_view_type] = params[:view_type] unless params[:view_type].nil?
@@ -95,7 +95,7 @@ class IdeasController < ApplicationController
           @ideas.each do |idea|
             release = idea.release.version unless idea.release.nil?
             cols = [idea.id, idea.title, idea.display_status, idea.votes.size,
-              idea.product.name, release]
+            idea.product.name, release]
             csv << cols
           end
         end        
@@ -113,16 +113,11 @@ class IdeasController < ApplicationController
   def jump_to
     redirect_to :action => :show, :id => params[:goto_id]
   end
-
+  
   def show
-    TagList.delimiter = " "
     begin
       @idea = Idea.find(params[:id])
-      session[:selected_tab] = params[:selected_tab] if !params[:selected_tab].nil?
-      session[:selected_tab] = "DETAILS" if session[:selected_tab] == "VOTES" && @idea.votes.empty?
-      session[:selected_tab] = "DETAILS" if session[:selected_tab] == "CHANGES" && !
-      session[:selected_tab] = "DETAILS" if session[:selected_tab] == "COMMENTS" && @idea.comments.empty?
-      session[:selected_tab] ||= "DETAILS"
+      set_selected_tab(@idea)
     rescue ActiveRecord::RecordNotFound
       flash[:error] = "No such idea '#{params[:id]}'"
       redirect_to :controller => 'ideas', :action => 'index'
@@ -148,35 +143,46 @@ class IdeasController < ApplicationController
       render :action => 'new_email_request'
     end
     RunOncePeriodicJob.create(
-      :job => "IdeaEmailRequest.email_idea(#{@idea_email_request.id})")
+                              :job => "IdeaEmailRequest.email_idea(#{@idea_email_request.id})")
   end
-
+  
   def next
-    @idea = Idea.find(params[:id]).next
-    mark_as_read @idea
+    ideas = Idea.next(params[:id])
+    if ideas.empty?
+      @idea = Idea.find(params[:id])
+    else
+      @idea = ideas.first
+      mark_as_read @idea
+    end
+    set_selected_tab @idea
     render :action => 'show'
   end
-
+  
   def previous
-    @idea = Idea.find(params[:id]).previous
-    mark_as_read @idea
+    ideas = Idea.previous(params[:id])
+    if ideas.empty?
+      @idea = Idea.find(params[:id])
+    else
+      @idea = ideas.first
+      mark_as_read @idea
+    end
+    set_selected_tab @idea
     render :action => 'show'
   end
-
+  
   def new
     @idea ||= Idea.new
   end
-
+  
   def create
-    TagList.delimiter = " "
     #    params['idea'].each_pair {|key, value| puts "[#{key}] #{value}"}
     @idea = Idea.new(params[:idea])
     @idea.user_id = current_user.id
     # author should watch the idea by default
     @idea.watchers << current_user
     @idea.change_logs <<  IdeaChangeLog.new(:message => "Idea created", 
-      :user => current_user
-      #          :processed_at => Time.zone.now
+    :user => current_user
+    #          :processed_at => Time.zone.now
     )
     if @idea.save
       # also create a user read record so it doesn't show up as an unread record
@@ -189,13 +195,12 @@ class IdeasController < ApplicationController
       render :action => 'new'
     end
   end
-
+  
   def edit
-    TagList.delimiter = " "
     @idea = Idea.find(params[:id])
     authorize_edit @idea
   end
-
+  
   def  filtered_product_select
     @releases = [["Not scheduled", 0]]
     for release in Release.find_all_by_product_id(params["product_id"], :order => "version ASC")
@@ -206,9 +211,8 @@ class IdeasController < ApplicationController
     #    @releases =  Release.find_all_by_product_id(params["product_id"], :order => "version ASC")
     render :partial => 'options'
   end
-
+  
   def update
-    TagList.delimiter = " "
     params[:idea][:release_id] = nil if !params[:idea].nil? and params[:idea][:release_id] == "0"
     @idea = Idea.find(params[:id])
     original_idea = Idea.find(@idea.id, :readonly => true)
@@ -226,7 +230,7 @@ class IdeasController < ApplicationController
           merged_idea.update_attributes(:release_id => @idea.release.id) if merged_idea.release.nil? and merged_idea.product.id == @idea.product.id
         end
       end
-       
+      
       generate_change_log(original_idea, @idea)
       
       flash[:notice] = "Idea number #{@idea.id} was successfully updated."      
@@ -235,7 +239,7 @@ class IdeasController < ApplicationController
       render :action => 'edit'
     end
   end
-
+  
   def destroy
     idea = Idea.find(params[:id])
     id = idea.id
@@ -249,10 +253,10 @@ class IdeasController < ApplicationController
   #    headers['content-type'] = 'text/javascript'
   #    render :layout => false
   #  end
-
+  
   
   #  THESE ARE NEW
-    
+  
   def select_details
     session[:selected_tab] = "DETAILS"
     render_tab_bodies
@@ -267,7 +271,7 @@ class IdeasController < ApplicationController
     session[:selected_tab] = "CHANGES"
     render_tab_bodies
   end
-
+  
   def select_votes
     session[:selected_tab] = "VOTES"
     render_tab_bodies
@@ -304,46 +308,54 @@ class IdeasController < ApplicationController
   
   private
   
+  def set_selected_tab idea    
+    session[:selected_tab] = params[:selected_tab] if !params[:selected_tab].nil?
+    session[:selected_tab] = "DETAILS" if session[:selected_tab] == "VOTES" && idea.votes.empty?
+    session[:selected_tab] = "DETAILS" if session[:selected_tab] == "CHANGES" && idea.change_logs.empty?
+    session[:selected_tab] = "DETAILS" if session[:selected_tab] == "COMMENTS" && idea.comments.empty?
+    session[:selected_tab] ||= "DETAILS"
+  end
+  
   def fetch_ideas filter_properties, do_paginate
     case session[:idea_view_type]
-    when "my_ideas"
+      when "my_ideas"
       @ideas = Idea.list_my_ideas params[:page], current_user,
-        filter_properties, do_paginate
-    when "voted_ideas"
+      filter_properties, do_paginate
+      when "voted_ideas"
       @ideas = Idea.list_voted_ideas params[:page], current_user,
-        filter_properties, do_paginate
-    when "commented_ideas"
+      filter_properties, do_paginate
+      when "commented_ideas"
       @ideas = Idea.list_commented_ideas params[:page], current_user,
-        filter_properties, do_paginate
-    when "unread_comments"
+      filter_properties, do_paginate
+      when "unread_comments"
       @ideas = Idea.list_unread_comments params[:page], current_user,
-        filter_properties, do_paginate
-    when "watched"
+      filter_properties, do_paginate
+      when "watched"
       @ideas = Idea.list_watched_ideas params[:page], current_user,
-        filter_properties, do_paginate
-    when "unread"
+      filter_properties, do_paginate
+      when "unread"
       @ideas = Idea.list_unread_ideas params[:page], current_user,
-        filter_properties, do_paginate
-    when "most_votes"
+      filter_properties, do_paginate
+      when "most_votes"
       @ideas = Idea.list_most_votes params[:page], current_user,
-        filter_properties, do_paginate
-    when "most_views"
+      filter_properties, do_paginate
+      when "most_views"
       @ideas = Idea.list_most_views params[:page], current_user,
-        filter_properties, do_paginate
-    when "tags"
+      filter_properties, do_paginate
+      when "tags"
       @ideas = Idea.list_by_tags params[:page], current_user,
-        filter_properties, do_paginate
+      filter_properties, do_paginate
     else
       @ideas = Idea.list params[:page], current_user,
-        filter_properties, do_paginate
+      filter_properties, do_paginate
     end
   end
-
+  
   def stream_csv
     filename = "ideas.csv"    
-
+    
     CsvUtils.setup_request_for_csv headers, request, filename
-
+    
     render :text => Proc.new { |response, output|
       csv = FasterCSV.new(output, :row_sep => "\r\n") 
       yield csv
@@ -353,7 +365,7 @@ class IdeasController < ApplicationController
   def do_rjs_toggle_search_box 
     render :update do |page|
       page.replace "search_area", 
-        :partial => "show_hide_search_box_button"
+      :partial => "show_hide_search_box_button"
       if session[:idea_search_box_display] == "HIDE"
         page.visual_effect :blind_up, :idea_search, :duration => 0.5
       else
@@ -394,7 +406,7 @@ class IdeasController < ApplicationController
   def mark_as_read(idea)
     idea.update_attribute(:view_count, idea.view_count + 1)
     user_idea_read = idea.user_idea_reads.find(:first, :conditions => ["user_id = ?",
-        current_user.id])
+    current_user.id])
     if user_idea_read.nil?
       user_idea_read = UserIdeaRead.new(:user_id => current_user.id, :last_read => Time.zone.now)
       idea.user_idea_reads << user_idea_read
@@ -407,26 +419,26 @@ class IdeasController < ApplicationController
   
   def generate_change_log before_idea, after_idea
     @@change_loggers ||= [ 
-      IdeaTitleChangeLog.new, 
-      IdeaDescriptionChangeLog.new,
-      IdeaProductChangeLog.new,
-      IdeaTagsChangeLog.new,
-      IdeaReleaseChangeLog.new,
+    IdeaTitleChangeLog.new, 
+    IdeaDescriptionChangeLog.new,
+    IdeaProductChangeLog.new,
+    IdeaTagsChangeLog.new,
+    IdeaReleaseChangeLog.new,
     ]
     for change_logger in @@change_loggers 
       change_log = change_logger.calc_change_log(before_idea, after_idea, current_user)
       after_idea.change_logs << change_log unless change_log.nil?
     end
     RunOncePeriodicJob.create(
-      :job => "Idea.send_change_notifications(#{after_idea.id})")
+                              :job => "Idea.send_change_notifications(#{after_idea.id})")
   end
   
   class IdeaTitleChangeLog
     def calc_change_log before_idea, after_idea, current_user
       if before_idea.title != after_idea.title
         return IdeaChangeLog.new(
-          :message => "Title was changed from '#{before_idea.title}' to '#{after_idea.title}'", 
-          :user => current_user)
+                                 :message => "Title was changed from '#{before_idea.title}' to '#{after_idea.title}'", 
+        :user => current_user)
       end
     end
   end
@@ -435,8 +447,8 @@ class IdeasController < ApplicationController
     def calc_change_log before_idea, after_idea, current_user
       if before_idea.description != after_idea.description
         return IdeaChangeLog.new(
-          :message =>  "Description was updated", 
-          :user => current_user)
+                                 :message =>  "Description was updated", 
+        :user => current_user)
       end
     end
   end
@@ -445,8 +457,8 @@ class IdeasController < ApplicationController
     def calc_change_log before_idea, after_idea, current_user
       if before_idea.nondb_tag_list != after_idea.tag_list
         return IdeaChangeLog.new(
-          :message => "Tags were updated to: #{after_idea.tag_list}", 
-          :user => current_user)
+                                 :message => "Tags were updated to: #{after_idea.tag_list}", 
+        :user => current_user)
       end
     end
   end
@@ -455,8 +467,8 @@ class IdeasController < ApplicationController
     def calc_change_log before_idea, after_idea, current_user
       if before_idea.product.id != after_idea.product.id
         return IdeaChangeLog.new(
-          :message => "Product was updated from '#{before_idea.product.name}' to '#{after_idea.product.name}'", 
-          :user => current_user)
+                                 :message => "Product was updated from '#{before_idea.product.name}' to '#{after_idea.product.name}'", 
+        :user => current_user)
       end
     end
   end
@@ -465,17 +477,17 @@ class IdeasController < ApplicationController
     def calc_change_log before_idea, after_idea, current_user
       if before_idea.release.nil? and !after_idea.release.nil?
         return IdeaChangeLog.new(
-          :message => "Idea was scheduled for release #{after_idea.release.version}", 
-          :user => current_user)
+                                 :message => "Idea was scheduled for release #{after_idea.release.version}", 
+        :user => current_user)
       elsif !before_idea.release.nil? and after_idea.release.nil?
         return IdeaChangeLog.new(
-          :message => "Idea was previously scheduled for release #{before_idea.release.version} and is now unscheduled", 
-          :user => current_user)
+                                 :message => "Idea was previously scheduled for release #{before_idea.release.version} and is now unscheduled", 
+        :user => current_user)
       elsif !before_idea.release.nil? and !after_idea.release.nil? and
-          before_idea.release.id != after_idea.release.id
+        before_idea.release.id != after_idea.release.id
         return IdeaChangeLog.new(
-          :message =>  "Idea was previously scheduled for release #{before_idea.release.version} and is now scheduled for release #{after_idea.release.version}", 
-          :user => current_user)
+                                 :message =>  "Idea was previously scheduled for release #{before_idea.release.version} and is now scheduled for release #{after_idea.release.version}", 
+        :user => current_user)
       end
     end
   end

@@ -1,24 +1,37 @@
-<%content_for :head do -%>
-
-
-<%end%>
 <%= javascript_include_tag "wz_tooltip.js", :cache => "cache/tooltip" %> 
 
+<%content_for :bodyTag do -%>
+  <%= set_focus_to_id 'users_search' -%>
+<%end%>
 <%= render :partial => "tab_menu"%>
 <div id="tabBody" style="position:relative; padding-top:15px;">
   <h1><%=theme_image_tag("icons/32x32/user.png", :alt=>"users")%>Users</h1>
   <div id="actionButtons" style="top:30px;">
     <% restrict_to "sysadmin" do %>
-      <%= button_to 'Create User', option = {:action => 'new'}, 
-        html_options = {:class=> "button", 
+      <%= button_to 'Create User', option = {:action => 'new'},
+        html_options = {:class=> "button",
         :onmouseover => "Tip('Create a new user')"} %>
-      <%= button_to 'Bulk Load', option = {:action => 'export_import'}, 
-        html_options = {:class=> "button", 
+      <%= button_to 'Bulk Load', option = {:action => 'export_import'},
+        html_options = {:class=> "button",
         :onmouseover => "Tip('Bulk load users into the users table')",
         :method => :get } %>
     <% end %>
   </div>
-  
+
+  <% form_tag({:action => 'search'}, :class => 'cssform searchform', :name => 'search' ) do -%>
+    <p>
+      <label for="search">Search:</label>
+      <%= text_field_tag 'search',
+        session[:users_search],
+        options = { :id => "users_search" } %>
+      <%= submit_tag 'Search', html_options = {:name => nil, :class=> "button",
+        :onmouseover => "Tip('Search users')"} %>
+      <br/>
+      <%= link_to "search syntax help", {:controller => 'static', :action => 'search'},
+        :popup => true %>
+    </p>
+  <% end %>
+
   <% if @tag1_begin %>
     <div style="padding:5px 0; margin:10px;">
       <%= user_filter_link "All", "All" %>
@@ -34,7 +47,7 @@
       <%= user_filter_link @tag5_begin, @tag5_end %>
     </div>
   <% end %>
-    
+
   <table cellspacing="0" cellpadding="0"  class="cssform" style="padding-top:0; margin-top:0;">
     <tr>
       <th>Email</th>
@@ -46,11 +59,11 @@
       <th>Last Logon</th>
       <th>Action</th>
     </tr>
-    
+
     <%= render :partial => @users %>
-        
+
   </table>
-  
+
 </div>
 <p>
   <div class="digg_pagination">

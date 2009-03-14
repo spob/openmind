@@ -4,7 +4,7 @@ class AddIdeaChangeLog < ActiveRecord::Migration
   extend MigrationHelpers
   
   def self.up
-    create_table :idea_change_logs do |t|
+    create_table :idea_change_logs, :options => 'ENGINE=InnoDB DEFAULT CHARSET=utf8' do |t|
       t.references :idea, :null => false
       t.references :user, :null => false
       t.text :message, :null => false

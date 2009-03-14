@@ -4,7 +4,7 @@ class CreateUserTopicReads < ActiveRecord::Migration
   extend MigrationHelpers
   
   def self.up
-    create_table :user_topic_reads  do |t|
+    create_table :user_topic_reads, :options => 'ENGINE=InnoDB DEFAULT CHARSET=utf8'  do |t|
       t.references :user, :null => false
       t.references :topic, :null => false
       t.column :lock_version, :integer, :default => 0

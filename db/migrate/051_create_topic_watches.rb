@@ -4,7 +4,7 @@ class CreateTopicWatches < ActiveRecord::Migration
   extend MigrationHelpers
   
   def self.up
-    create_table :topic_watches  do |t|
+    create_table :topic_watches, :options => 'ENGINE=InnoDB DEFAULT CHARSET=utf8' do |t|
       t.references :user, :null => false
       t.references :topic, :null => false
       t.column :lock_version, :integer, :default => 0

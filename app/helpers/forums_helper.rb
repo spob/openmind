@@ -1,11 +1,11 @@
 module ForumsHelper
   def can_edit? forum
     sysadmin? or forum.can_edit? current_user unless current_user == :false
-  end
-  
+  end  
     
   def last_forum_post forum
-    last_comment = forum.comments.first #this isn't very efficient...replace by sql?
+    last_comment = forum.comments.public.most_recent.first unless forum.mediators.include? current_user
+    last_comment = forum.comments.most_recent.first if forum.mediators.include? current_user
     return '-' if last_comment.nil?
     subject = ""
     subject += "RE: " if forum.comments.size > 1
@@ -19,9 +19,33 @@ module ForumsHelper
     
     author = user_display_name last_comment.user
     author = boldify(author) if last_comment.topic.unread_comment?(current_user)
-    "#{subject}<br/>#{author} wrote \"#{truncate StringUtils.strip_html(comment), 40}\"<br/>#{om_date_time last_comment.created_at}"
+    "#{subject}<br/>#{author} wrote \"#{truncate StringUtils.strip_html(comment), 
+    :length => 40}\"<br/>#{om_date_time last_comment.created_at}"
   end
-  
+
+  def dummy_all_forum
+    forum = Forum.new(:name => "All Forums")
+    forum.mediators = User.mediators
+    forum
+  end
+
+  def dummy_unassigned_mediator
+    user = User.new(:last_name => "Un-owned")
+    user
+  end
+
+  def mediator_owner_filter_list
+    names = []
+    names << ["All", -1]
+    names << ["Un-owned", 0]
+    for user in @forum.mediators
+      name = user_display_name(user)
+      name = "#{user_display_name(user)} (inactive)" if !user.active
+      names << [name, user.id]
+    end
+    names.sort!{|x,y| x[0].upcase <=> y[0].upcase }
+    names
+  end
     
   def last_topic_post topic
     return if topic.last_comment.nil?
@@ -30,7 +54,7 @@ module ForumsHelper
     
     author = user_display_name topic.last_comment.user
     author = boldify(author) if topic.unread_comment?(current_user)
-    "#{author} wrote \"#{link_to truncate(StringUtils.strip_html(comment), 40), 
+    "#{author} wrote \"#{link_to truncate(StringUtils.strip_html(comment), :length => 40),
     topic_path(topic.id, :anchor => topic.last_comment.id)}\"<br/>#{om_date_time topic.last_comment.created_at}"
   end
   
@@ -58,6 +82,14 @@ module ForumsHelper
         :html => {  }, 
         :method => :post
     end
+  end
+
+  def types
+    [
+      ["Forum (Any user can create new topics and add comments to existing topics)",  "forum"],
+      ["Blog (Only moderators can create new topics, all users can add comments to existing topics)",  "blog"],
+      ["Announcement (Only moderators can create new topics and add comments to existing topics)",  "announcement"]
+    ]
   end
   
 
@@ -118,6 +150,16 @@ module ForumsHelper
   def forum_details_box_display_style
     return "display:block;" if session[:forum_details_box_display] == "SHOW"
     return "display:none;"
+  end
+
+  def get_tags forum
+    if forum.nil?
+      # Restrict tags for forums that the user has access to
+      Topic.tag_counts(:limit => 100, :conditions => ["topics.id in (?)",
+          Forum.find(:all).find_all{|f| f.can_see? current_user}.collect(&:topics).flatten.collect(&:id)])
+    else
+      forum.topics.tag_counts(:limit => 100)
+    end
   end
   
   private

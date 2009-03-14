@@ -4,7 +4,7 @@ class CreateReleases < ActiveRecord::Migration
   extend MigrationHelpers
 
   def self.up
-    create_table :releases do |t|
+    create_table :releases, :options => 'ENGINE=InnoDB DEFAULT CHARSET=utf8' do |t|
       t.column :version,  :string, :limit => 20, :null => false
       t.references :product,  :null => false
       t.references :release_status, :null => false

@@ -7,22 +7,37 @@
   </p>
   <% if can_edit? @forum %>
     <p>
+      <label for="display_order">Display Order:</label>
+      <%= @forum.display_order %>
+    </p>
+    <p>
       <label>Active:</label>
       <%= @forum.active %>
     </p>
     <p>
-      <label>Mediators:</label>
+      <label>Tracking Enabled:</label>
+      <%= @forum.tracked %>
+    </p>
+    <p>
+      <label>Moderators:</label>
       <% for user in @forum.mediators %><br />
         &bull;&nbsp;<%= h user_display_name(user) %><br />
       <% end %>
     </p>
     <p>
-      <label>Blog Style Forum:</label>
-      <%= @forum.restrict_topic_creation %> (if true, only mediators can create new topics)
+      <label>Type:</label>
+      <%= StringUtils.init_cap @forum.forum_type %>
+      <% if @forum.forum_type == 'forum' %>
+        (Any user can create new topics and add comments to existing topics)
+      <% elsif @forum.forum_type == 'forum' %>
+        (Only moderators can create new topics, all users can add comments to existing topics)
+      <% else %>
+        (Only moderators can create new topics and add comments to existing topics)
+      <% end %>
     </p>
     <p>
       <label>Access:</label>
-      <% if  @forum.groups.empty? and @forum.enterprise_types.empty? %>
+      <% if @forum.public? %>
         Public
       <% else  %>
         <% unless @forum.groups.empty?  %>
@@ -56,6 +71,10 @@
     <p>
       <label for="forum_group">Forum Group:</label>
       <%= @forum.forum_group.short_name unless @forum.forum_group.nil? %>
+    </p>
+    <p>
+      <label for="power_user_group">Power User Group:</label>
+      <%= @forum.power_user_group.name unless @forum.power_user_group.nil? %>
     </p>
   <% end %>
 </div>

@@ -4,7 +4,7 @@ class CreateGroupsUserRequests < ActiveRecord::Migration
   extend MigrationHelpers
   
   def self.up
-    create_table :groups_user_requests, :id => false  do |t|
+    create_table :groups_user_requests, :options => 'ENGINE=InnoDB DEFAULT CHARSET=utf8', :id => false  do |t|
       t.references :user_request, :null => false
       t.references :group,  :null => false
       t.column :lock_version, :integer, :default => 0

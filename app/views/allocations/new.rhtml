@@ -22,14 +22,14 @@
     <div ID="user_assigned_to" style="display:block;">
       <p>
         <label for="user">User:</label>
-        <%=form.collection_select :user_id, User.active_voters, :id, 
+        <%=form.collection_select :user_id, User.active.voters, :id,
           :email, { :prompt => "Please select..." } %>
       </p>
     </div>
     <div ID="enterprise_assigned_to" style="display:none;">
       <p>
         <label for="enterprise">Enterprise: </label>
-        <%=form.collection_select :enterprise_id, Enterprise.active_enterprises,
+        <%=form.collection_select :enterprise_id, Enterprise.active,
           :id, :name, { :prompt => "Please select..." } %>
       </p>
     </div>

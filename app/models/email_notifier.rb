@@ -13,6 +13,16 @@ class EmailNotifier < ActionMailer::Base
       :id => user.activation_code,
       :only_path  => false
   end
+
+  def reminder_to_vote(idea_id)
+    idea = Idea.find(idea_id)
+    setup_email(idea.user)
+    @subject    += "Don't forget to vote"
+    @body[:idea] = idea
+    @body[:url]  = url_for :controller => 'account',
+      :action => 'login',
+      :only_path  => false
+  end
   
   def signup_notification(user)
     setup_email(user)
@@ -95,7 +105,7 @@ class EmailNotifier < ActionMailer::Base
     setup_allocation_email allocation
     @subject   += "#{allocation.enterprise.name} just received a new allocation for #{StringUtils.pluralize(allocation.quantity, 'unit')}"
     @recipients = ''
-    @bcc = allocation.enterprise.active_users.collect(&:email)
+    @bcc = allocation.enterprise.users.active.collect(&:email)
     set_expiration_date allocation
   end
   

@@ -6,7 +6,7 @@ class ForumTest < Test::Unit::TestCase
 
   should_have_many :topics, :dependent => :delete_all
   should_have_many :comments, :comments_by_topic
-  should_belong_to :link_set, :forum_group
+  should_belong_to :link_set, :forum_group, :power_user_group
   should_have_and_belong_to_many :mediators, :watchers, :groups, 
     :enterprise_types
   should_require_attributes :description
@@ -33,6 +33,12 @@ class ForumTest < Test::Unit::TestCase
       assert !forums(:bugs_forum).can_edit?(users(:quentin))
     end
   end
+
+  context "testing power_user?" do
+    should "indicate no for no power_user on forum" do
+      assert !forums(:bugs_forum_restrict_creation).power_user?(users(:quentin))
+    end
+  end
   
   context "testing unread comment logic" do
     should "return unread comment" do
@@ -42,7 +48,7 @@ class ForumTest < Test::Unit::TestCase
     should "not return unread comment" do
       # forum with no topics
       assert forums(:empty_bugs_forum).unread_topics(users(:quentin)).empty?
-      
+
       # forum that has been read
       assert topics(:bug_topic1).forum.unread_topics(users(:aaron)).empty?
     end
@@ -69,7 +75,7 @@ class ForumTest < Test::Unit::TestCase
       # prodmgr
       assert users(:prodmgr).prodmgr?
       assert forums(:forum_restricted_to_user_group).can_see?(users(:prodmgr))
-      assert !forums(:forum_restricted_to_user_group).can_edit?(users(:prodmgr))
+      assert forums(:forum_restricted_to_user_group).can_edit?(users(:prodmgr))
       # group member
       assert forums(:forum_restricted_to_user_group).can_see?(users(:bob))
       assert !forums(:forum_restricted_to_user_group).can_edit?(users(:bob))
@@ -82,7 +88,7 @@ class ForumTest < Test::Unit::TestCase
       # prodmgr
       assert users(:prodmgr).prodmgr?
       assert forums(:forum_restricted_to_enterprise_type).can_see?(users(:prodmgr))
-      assert !forums(:forum_restricted_to_enterprise_type).can_edit?(users(:prodmgr))
+      assert forums(:forum_restricted_to_enterprise_type).can_edit?(users(:prodmgr))
       # group member
       assert forums(:forum_restricted_to_enterprise_type).can_see?(users(:judy))
       assert !forums(:forum_restricted_to_enterprise_type).can_edit?(users(:judy))

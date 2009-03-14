@@ -1,53 +1,56 @@
 <%=render(:partial => "show_hide_search_box_button", :object => @idea)%>
-  <div id="idea_search" style="<%= search_box_display_style %>" >
-    <% form_tag('/ideas', :method => :get, :class => 'cssform widerLabel', :name => 'search' ) do -%>
-      <p>  
-        <label for="product">View by Product:</label>
-        <%= select_tag :product, 
+<div id="idea_search" style="<%= search_box_display_style %>" >
+  <% form_tag('/ideas', :method => :get, :class => 'cssform widerLabel', :name => 'search' ) do -%>
+    <p>
+      <label for="product">View by Product:</label>
+      <%= select_tag :product,
         options_for_select(all_products_with_all, session[:idea_product_filter].to_i),
         html_options = { :onchange => 'document.search.submit();'} %>
-      </p>
-      <p>
-        <label for="product">View by Release:</label>
-        <%= select_tag :release, 
+    </p>
+    <p>
+      <label for="product">View by Release:</label>
+      <%= select_tag :release,
         options_for_select(
-          releases_with_all_and_unscheduled(session[:idea_product_filter]), 
-          session[:idea_release_filter].to_i),
+        releases_with_all_and_unscheduled(session[:idea_product_filter]),
+        session[:idea_release_filter].to_i),
         html_options = { :onchange => 'document.search.submit();'} %>
-      </p>
-      <p>
-        <label for="product">View by Author:</label>
-        <%= select_tag :author, 
+    </p>
+    <p>
+      <label for="product">View by Author:</label>
+      <%= select_tag :author,
         options_for_select(all_authors_with_all, session[:author_filter].to_i),
         html_options = { :onchange => 'document.search.submit();'} %>
-      </p>
-      <p>
-        <label for="title">View by Title:</label>
-        <%= text_field_tag 'title_lookup', 
-        session[:title_filter], 
+    </p>
+    <p>
+      <label for="title">View by Keyword:</label>
+      <%= text_field_tag 'title_lookup',
+        session[:title_filter],
         options = { :id => "title_lookup", :size => "80" } %>
-    
-        <div class="auto_complete" id="title_lookup_auto_complete"></div>
-        <!--
-          <%= javascript_tag("new Autocompleter.Local('title_lookup', 'title_lookup_auto_complete',
-          titles,
-          { fullSearch: true, frequency: 0, minChars: 1
-          }
-          );")%>
-          -->
-      </p>
-      <p>
-        <label></label>
-        <%= submit_tag 'Search', :name => nil, :class=> "button" %>
-        <%= link_to 'Clear Filters',
-        options = { :product => 0, 
-          :release => 0, 
-          :author => nil,
-          :tags => nil,
-          :reset => 'yes',
-          :title_lookup => nil}, 
+      <br/>
+      <%= link_to "search syntax help", {:controller => 'static', :action => 'search'},
+        :popup => true %>
+
+      <div class="auto_complete" id="title_lookup_auto_complete"></div>
+      <!--
+  <%= javascript_tag("new Autocompleter.Local('title_lookup', 'title_lookup_auto_complete',
+    titles,
+    { fullSearch: true, frequency: 0, minChars: 1
+    }
+    );")%>
+            -->
+    </p>
+    <p>
+      <label></label>
+      <%= submit_tag 'Search', :name => nil, :class=> "button" %>
+      <%= link_to 'Clear Filters',
+        options = { :product => 0,
+        :release => 0,
+        :author => nil,
+        :tags => nil,
+        :reset => 'yes',
+        :title_lookup => nil},
         html_options = {:class=> "button"}
-        -%>
-      </p>
-    <% end -%>
-  </div>
+      -%>
+    </p>
+  <% end -%>
+</div>

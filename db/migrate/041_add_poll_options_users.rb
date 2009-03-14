@@ -4,7 +4,7 @@ class AddPollOptionsUsers < ActiveRecord::Migration
   extend MigrationHelpers
   
   def self.up
-    create_table :poll_user_responses, :id => false  do |t|
+    create_table :poll_user_responses, :options => 'ENGINE=InnoDB DEFAULT CHARSET=utf8', :id => false  do |t|
       t.references :user, :null => false
       t.references :poll_option, :null => false
       t.column :lock_version, :integer, :default => 0

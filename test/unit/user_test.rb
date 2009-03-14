@@ -168,20 +168,20 @@ class UserTest < Test::Unit::TestCase
   
   def test_active_users
     assert_nothing_raised {
-      User.active_users
+      User.active
     } 
-    assert !User.active_users.empty?
-    assert_not_nil User.active_users.index(users(:allroles))
-    assert_nil User.active_users.index(users(:inactive_user))
+    assert !User.active.empty?
+    assert_not_nil User.active.index(users(:allroles))
+    assert_nil User.active.index(users(:inactive_user))
   end
   
   def test_active_voters
     assert_nothing_raised {
-      User.active_voters
+      User.active.voters
     } 
-    assert User.active_users.size > User.active_voters.size
-    assert_not_nil User.active_voters.index(users(:allroles))
-    assert_nil User.active_voters.index(users(:user_no_roles))
+    assert User.active.size > User.active.voters.size
+    assert_not_nil User.active.voters.index(users(:allroles))
+    assert_nil User.active.voters.index(users(:user_no_roles))
   end
   
   def test_watch_topic

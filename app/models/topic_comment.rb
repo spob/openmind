@@ -16,16 +16,33 @@
 #
 
 class TopicComment < Comment
+  acts_as_solr :fields => [:body, {:created_at => :date}]
   belongs_to :topic, :counter_cache => true
   belongs_to :endorser, :class_name => 'User'
-  
-  acts_as_indexed :fields => [ :body ]
+  before_create :update_topic_commented_at_on_create
+  before_update :update_topic_commented_at_on_update
   
   validates_presence_of :topic_id
+
+  def update_topic_commented_at_on_create
+    unless private
+      self.topic.update_attribute(:last_commented_at, Time.zone.now)
+      self.published_at = Time.zone.now
+    end
+  end
+
+  def update_topic_commented_at_on_update
+    update_topic_commented_at_on_create if !private and published_at.nil?
+  end
+
+  def can_see? current_user
+    !self.private or topic.forum.mediators.include? current_user
+  end
   
   def can_edit? current_user, role_override=false
     return true if role_override
-    topic.last_comment?(self) and user.id == current_user.id
+    (topic.last_comment?(self) and user.id == current_user.id) or
+      topic.forum.mediators.include? current_user
   end
 
   def endorsed?
@@ -40,17 +57,21 @@ class TopicComment < Comment
     !self.endorser.nil? and topic.forum.mediators.include? current_user
   end
   
-  def self.top_users
+  def self.top_users forum=nil
     sql = %Q{
         select u.id, u.first_name, u.last_name, u.email, u.hide_contact_info, count(*)
         from users as u
         inner join comments as c on u.id = c.user_id
+        inner join topics as t on t.id = c.topic_id
         where c.type = 'TopicComment'
+          and t.forum_id = ? or ? = -1
         group by u.id, u.first_name, u.last_name, u.email, u.hide_contact_info
         order by count(*) desc
         limit 5
     }
-    User.find(:all, :conditions => ["id in (?)", User.find_by_sql(sql).collect(&:id)]).sort_by{|u| u.topic_comments.size * -1}
+    forum_id = (forum.nil? ? -1 : forum.id)
+    User.find(:all, :conditions => ["id in (?)",
+        User.find_by_sql([sql, forum_id, forum_id]).collect(&:id)]).sort_by{|u| u.topic_comments.size * -1}
   end
   
   def rss_headline

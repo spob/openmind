@@ -109,7 +109,7 @@ module IdeasHelper
   
   def all_products_with_all
     products = [["All Products", 0]]
-    for product in Product.all_products
+    for product in Product.by_name
       name = product.name
       name = "#{product.name} (inactive)" if !product.active
       products << [name, product.id]

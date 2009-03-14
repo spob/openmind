@@ -18,17 +18,16 @@ class EnterpriseType < LookupCode
     :dependent => :destroy
   has_and_belongs_to_many :polls
   has_many :users, :through => :enterprises
-  
-  def self.list_all
-    EnterpriseType.find(:all, :order => 'short_name ASC')
-  end
+
+  named_scope :by_short_name, :order => "short_name ASC"
+  named_scope :by_sort_value, :order => "sort_value ASC"
   
   def can_delete?
     enterprises.empty?
   end
   
   def self.findall include_empty = false
-    list = EnterpriseType.find(:all, :order => "sort_value")
+    list = EnterpriseType.by_sort_value
     list.insert(0, EnterpriseType.new(:id => 0, :short_name => "")) if include_empty
     list
   end

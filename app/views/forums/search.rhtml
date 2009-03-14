@@ -1,49 +1,47 @@
-<%content_for :head do -%>
-<%end%>
 <%content_for :bodyTag do -%>
-  <%= set_focus_to_id 'forum_search' -%>              
+  <%= set_focus_to_id 'forum_search' -%>
 <%end%>
 <%= javascript_include_tag "wz_tooltip.js", :cache => "cache/tooltip" %> 
-<div id="actionButtons2" style="float:right; margin-top:30px;">
+<div id="actionButtons2">
   <%= link_to 'View Forums', forums_path, html_options = {:class=> "button",
     :onmouseover => "Tip('Return to list of forums')"}%>
 </div>
 <%= error_messages_for 'forum' %>
-<h1><%= theme_image_tag("icons/32x32/forums.png", options = {:alt=>"Search Forum"}) %>Search Forums</h1>
+<h1>
+  <%= theme_image_tag("icons/32x32/forums.png", options = {:alt=>"Search Forum"}) %>Search Forums
+  <% unless @tags.nil? %>
+    by Tag "<%= @tags %>"
+  <% end %>
+</h1>
 
-<% form_tag(search_forums_path, :class => 'cssform searchform', :name => 'search' ) do -%>
-  <div id="search_help" style="display:none;" >  
-    <p style="font-size:1.2em">
-      The following search options are supported:
+<% if @tags.nil? %>
+  <% form_tag(search_forums_path, :class => 'cssform searchform', :name => 'search' ) do -%>
+    <p>
+      <label for="search">Search Forums:</label>
+      <%= text_field_tag 'search',
+        session[:forums_search],
+        options = { :id => "forum_search"} %>
+      <%= submit_tag 'Search', html_options = {:name => nil, :class=> "button",
+        :onmouseover => "Tip('Search topics and topic comments')"} %>
+      <br/>
+      <%= link_to "search syntax help", {:controller => 'static', :action => 'search'},
+        :popup => true %>
     </p>
-    <ul style="font-size:1.2em">
-      <li><b>AND</b>: This is the default option. 'cat dog' will find records 
-      matching 'cat' AND 'dog'.</li>
-      <li><b>NOT</b>: 'cat -dog' will find records matching 'cat' AND NOT 'dog'.</li>
-      <li><b>INCLUDE</b>: 'cat +me' will find records matching 'cat' and 'me',
-      even if 'me' is smaller than the +min_word_size+</li>
-      <li><b>""</b>: Quoted terms are matched as phrases. '"cat dog"' will find 
-        records matching the whole phrase. Quoted terms can be preceded <br/>by the NOT 
-        operator; 'cat -"big dog"' etc. Quoted terms can include words shorter than 
-      the +min_word_size+.</li>
-    </ul>
-  </div>
-  <p>
-    <label for="search">Search Forums:</label>
-    <%= text_field_tag 'search', 
-      "", 
-      options = { :id => "forum_search",
-      :onmouseover=>"TagToTip('search_help')"} %>
-    <%= submit_tag 'Search', html_options = {:name => nil, :class=> "button",
-      :onmouseover => "Tip('Search topics and topic comments')"} %>
-  </p>
+  <% end %>
 <% end %>
 
-
 <% session[:forums_search] ||= "" %>
-<% @hits.each_value do |topic_hit| %>
-  <h3><%= link_to highlight(topic_hit.topic.title, session[:forums_search].split, '<span class="highlight">\1</span>'),
-    topic_path(topic_hit.topic.id) %></h3>
+
+<% unless @tags.nil? %>
+  <h2>Topics</h2>
+<% end %>
+<% for topic_hit in @hits.values.sort_by{|h| h.score*-1} %>
+  <h3><%= link_to highlight(topic_hit.topic.title,
+      StringUtils.strip_wildcards(session[:forums_search]).split.delete_if { |x| x == "OR" or x == "AND" or x == "NOT" },
+      '<span class="highlight">\1</span>'),
+      topic_path(topic_hit.topic.id) %> (forum "<%= topic_hit.topic.forum.name %>")
+    <i><small><small>Score <%= '%.1f' % (topic_hit.score) %></small></small></i>
+  <%= ratings_for topic_hit.topic, :static, :wrap => true %> </h3>
   <%=render(:partial => "comments/comment_item", :collection => topic_hit.comments)%>
   <br/>
 <% end %>

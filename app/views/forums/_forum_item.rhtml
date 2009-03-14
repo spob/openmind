@@ -8,9 +8,14 @@
     </td>
     <td>
       <%= forum_item.topics.count %> (<%= forum_item.unread_topics(current_user).size %>)
+      <% if logged_in? and forum_item.tracked and forum_item.mediators.include? current_user %>
+        [<%= link_to forum_item.topics.open.count,
+          forum_path(forum_item, :show_open=>'yes',
+          :show_closed=>'no', :owner_filter=> -1)%>]
+      <% end %>
     </td>
-    <td><%= last_forum_post forum_item %></td>
     <td><%= forum_item.comments.count - forum_item.topics.count %></td>
+    <td><%= last_forum_post forum_item %></td>
     <td style="white-space:nowrap;">
       <%=render(:partial => "forum_action", :object => forum_item)%>
     </td>

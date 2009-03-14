@@ -14,7 +14,7 @@
 #
 
 class ForumGroup < LookupCode  
-  has_many :forums, :order => 'name ASC'
+  has_many :forums, :order => 'display_order ASC, name ASC'
   
   def self.list_all user
     groups = ForumGroup.find(:all, :order => 'sort_value ASC')

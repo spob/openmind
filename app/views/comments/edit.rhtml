@@ -9,31 +9,21 @@
 <%= error_messages_for 'comment' %>
 <% form_for(:comment, :url => comment_path(@comment), 
   :html => {:method => :put }) do |form| %>
-  <div id="actionButtons2">
-    <%= link_to theme_image_tag("icons/24x24/ideasList.png", 
-      :alt=>"Show Idea", :title=> "Show Idea"),
-      options = { :controller=> 'ideas', :action => 'show', :id => @comment.idea},
-      html_options = {:onmouseover => "Tip('Return to idea ##{@comment.idea.id}')"} if @comment.class.to_s == "IdeaComment"    
-  %>
-    <%=  link_to 'View Topic', topic_path(@comment.topic.id) , html_options = {:class=> "button",
-      :onmouseover => "Tip('Return to topic ##{@comment.topic.title}')"} if @comment.class.to_s == "TopicComment"    
-  %>
-  </div>
   <div class="formTitle">Edit Comment</div>
   <div class="cssform widerLabel">
     <% if @comment.class.to_s == "IdeaComment"  %>
       <p>
         <label for="idea">For Idea:</label>
-        <%= h @comment.idea.user_friendly_idea_name %>  
+        <%= h @comment.idea.user_friendly_idea_name %>
       </p>
     <% else %>
       <p>
         <label for="topic">Forum</label>
-        <%= h @comment.topic.forum.name %>  
+        <%= h @comment.topic.forum.name %>
       </p>
       <p>
         <label for="topic">Topic:</label>
-        <%= h @comment.topic.title %>  
+        <%= h @comment.topic.title %>
       </p>
     <% end%>
     <p>
@@ -44,6 +34,13 @@
     <p>
       <label></label>
       <%= submit_tag 'Save', html_options = {:class=> "button", :disable_with => "Please wait..."} %>
-    </p>
-  </div>
-<% end %>
+      <%= link_to  "Cancel",
+        options = { :controller=> 'ideas', :action => 'show', :id => @comment.idea},
+        html_options = {:class=> "button", :onmouseover => "Tip('Return to idea ##{@comment.idea.id}')"} if @comment.class.to_s == "IdeaComment"
+      %>
+        <%=  link_to 'Cancel', topic_path(@comment.topic.id) , html_options = {:class=> "button",
+          :onmouseover => "Tip('Return to topic ##{@comment.topic.title}')"} if @comment.class.to_s == "TopicComment"
+      %>
+      </p>
+    </div>
+  <% end %>

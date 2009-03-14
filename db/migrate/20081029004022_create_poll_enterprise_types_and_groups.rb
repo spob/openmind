@@ -4,7 +4,7 @@ class CreatePollEnterpriseTypesAndGroups < ActiveRecord::Migration
   extend MigrationHelpers
   
   def self.up
-    create_table :enterprise_types_polls, :id => false  do |t|
+    create_table :enterprise_types_polls, :options => 'ENGINE=InnoDB DEFAULT CHARSET=utf8', :id => false  do |t|
       t.references :poll, :null => false
       t.references :enterprise_type, :null => false
       t.column :lock_version, :integer, :default => 0
@@ -17,7 +17,7 @@ class CreatePollEnterpriseTypesAndGroups < ActiveRecord::Migration
     add_index :enterprise_types_polls, [:poll_id, :enterprise_type_id], 
       :unique => true, :name => ':enterprise_types_polls_u1'
     
-    create_table :groups_polls, :id => false  do |t|
+    create_table :groups_polls, :options => 'ENGINE=InnoDB DEFAULT CHARSET=utf8', :id => false  do |t|
       t.references :poll, :null => false
       t.references :group, :null => false
       t.column :lock_version, :integer, :default => 0

@@ -3,7 +3,7 @@ require File.dirname(__FILE__) + '/../test_helper'
 class EnterpriseTest < Test::Unit::TestCase
   fixtures :enterprises, :users
 
-  should_require_attributes :name, :active
+  should_require_attributes :name #, :active
   should_require_unique_attributes :name
   
   should_not_allow_values_for :name,  
@@ -16,7 +16,7 @@ class EnterpriseTest < Test::Unit::TestCase
   should_have_many :votes, :through => :allocations
   should_belong_to :enterprise_type
   
-  should_have_instance_methods :name, :active, :enterprise_type, :active_allocations
+  should_have_instance_methods :name, :active, :enterprise_type
   should_have_db_columns :enterprise_type_id
   should_have_index :name
   
@@ -27,9 +27,9 @@ class EnterpriseTest < Test::Unit::TestCase
   
   should "retrieve active users" do
     e = enterprises(:active_enterprise)
-    assert e.active_users.collect(&:id).include?(users(:quentin).id)
-    assert !e.active_users.collect(&:id).include?(users(:inactive_user).id)
-    assert !e.active_users.collect(&:id).include?(users(:imported_user).id)
+    assert e.users.active.collect(&:id).include?(users(:quentin).id)
+    assert !e.users.active.collect(&:id).include?(users(:inactive_user).id)
+    assert !e.users.active.collect(&:id).include?(users(:imported_user).id)
   end
   
   should "enforce uniqueness" do
@@ -52,6 +52,6 @@ class EnterpriseTest < Test::Unit::TestCase
   end
   
   should "retrieve active enterprises" do
-    assert_equal 5, Enterprise.active_enterprises.size
+    assert_equal 5, Enterprise.active.size
   end
 end

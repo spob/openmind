@@ -4,7 +4,7 @@ class EmailRequest < ActiveRecord::Migration
   extend MigrationHelpers
   
   def self.up
-    create_table :email_requests do |t|
+    create_table :email_requests, :options => 'ENGINE=InnoDB DEFAULT CHARSET=utf8' do |t|
       t.references :idea
       t.timestamps
       t.datetime :sent_at

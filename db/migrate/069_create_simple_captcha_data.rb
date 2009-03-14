@@ -2,7 +2,7 @@
 
 class CreateSimpleCaptchaData < ActiveRecord::Migration
   def self.up
-    create_table :simple_captcha_data do |t|
+    create_table :simple_captcha_data, :options => 'ENGINE=InnoDB DEFAULT CHARSET=utf8' do |t|
       t.column :key, :string, :limit => 40
       t.column :value, :string, :limit => 6
       t.column :created_at, :datetime

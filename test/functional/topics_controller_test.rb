@@ -82,7 +82,8 @@ class TopicsControllerTest < Test::Unit::TestCase
       :forum_id => forums(:bugs_forum).id}
     should_respond_with :success
     should_render_template 'search'
-    should_not_set_the_flash
+        should_not_set_the_flash
+    #    assert_nil flash[:error]
     should_assign_to :hits
   end
 
@@ -102,8 +103,10 @@ class TopicsControllerTest < Test::Unit::TestCase
       :topic => { :title=>title, :comment_body=>"fda"
     }
 
+    topic = Topic.find(:first, :order => 'created_at desc')
+
     assert_response :redirect
-    assert_redirected_to forum_path(:id => topic.forum.id)
+    assert_redirected_to topic_path(:id => topic.id)
 
     assert_equal num_topics + 1, Topic.count
     topic = Topic.find_by_title(title)
@@ -124,7 +127,7 @@ class TopicsControllerTest < Test::Unit::TestCase
   def test_update
     put :update, {:id => topics(:bug_topic1)}
     assert_response :redirect
-    assert_redirected_to forum_path(topics(:bug_topic1).forum)
+    assert_redirected_to topic_path(topics(:bug_topic1))
   end
 
   def test_destroy

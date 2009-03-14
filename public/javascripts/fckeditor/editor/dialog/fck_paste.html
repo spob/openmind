@@ -236,7 +236,6 @@ function CleanWord( oNode, bIgnoreFont, bRemoveStyles )
 
 	html = html.replace( /<SPAN\s*>(.*?)<\/SPAN>/gi, '$1' ) ;
 
-	html = html.replace( /<FONT\s*>(.*?)<\/FONT>/gi, '$1' ) ;
 
 	// Remove XML elements and declarations
 	html = html.replace(/<\\?\?xml[^>]*>/gi, '' ) ;
@@ -246,10 +245,19 @@ function CleanWord( oNode, bIgnoreFont, bRemoveStyles )
 
 	// Remove comments [SF BUG-1481861].
 	html = html.replace(/<\!--.*?-->/g, '' ) ;
+    html = html.replace( /<w:[^>]*>(.*?)<\/w:[^>]*>/gi, '' ) ;
+    html = html.replace( /<meta[^>]*>/gi, '' ) ;
+    html = html.replace( /<link[^>]*>/gi, '' ) ;
+    html = html.replace( /<style[^>]*>([\w|\W|\n]*?)<\/style>/gim, '' ) ;
+    html = html.replace( /<\!--([\w|\W|\n]*?)-->/gm, '' ) ;
 
 	html = html.replace( /<(U|I|STRIKE)>&nbsp;<\/\1>/g, '&nbsp;' ) ;
 
 	html = html.replace( /<H\d>\s*<\/H\d>/gi, '' ) ;
+
+
+	// html = html.replace( /<FONT\s*>(.*?)<\/FONT>/gi, '$1' ) ;
+    html = html.replace( /<font>|<\/font>/gi, '');
 
 	// Remove "display:none" tags.
 	html = html.replace( /<(\w+)[^>]*\sstyle="[^"]*DISPLAY\s?:\s?none(.*?)<\/\1>/ig, '' ) ;

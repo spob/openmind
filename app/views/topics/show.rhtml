@@ -3,35 +3,59 @@
 <%end%>
 <%= javascript_include_tag "wz_tooltip.js", :cache => "cache/tooltip" %> 
 <div id="actionButtons2">
-  <%= link_to "Add Comment", 
-    new_comment_path(:id => @topic, :type => 'Topic'), 
+  <%= link_to "Add Comment",
+    new_comment_path(:id => @topic, :type => 'Topic'),
     html_options = {:class=> "button",
-    :onmouseover => "Tip('Add a comment to discussion forum for this topic')" } %>
+    :onmouseover => "Tip('Add a comment to discussion forum for this topic')" } if @topic.can_add_comment? current_user %>
+        
   <%= show_topic_watch_button @topic %>
   <% if can_edit_topic? @topic %>
     <%= link_to 'Edit', edit_topic_path(@topic) , html_options = {:class=> "button",
       :onmouseover => "Tip('Edit topic')"}%>
+    <%= link_to(
+      "Delete Topic",
+      topic_path(@topic),
+      html_options = {:class=> "button",
+        :confirm => 'Are you sure?', :method => :delete,
+        :onmouseover => "Tip('Delete this topic')"} ) if @topic.can_delete? current_user %>
+    <% if @topic.forum.tracked %>
+      <% if @topic.open_status %>
+        <%= link_to 'Mark as Closed', toggle_status_topic_path(@topic) , html_options = {:class=> "button",
+          :onmouseover => "Tip('Mark this topic as closed')",
+          :method => :put}%>
+      <% else %>
+        <%= link_to 'Mark as Open', toggle_status_topic_path(@topic) , html_options = {:class=> "button",
+          :onmouseover => "Tip('Mark this topic as open')",
+          :method => :put}%>
+      <% end %>
+    <% end %>
   <% end %>
 </div>
 
 <%content_for :sidebar1 do -%>
   <%=render(:partial => "sidebar1", :object => @topic)%>
-<%end%> 
+<%end%>
 
 <%= link_to "All Forums", forums_path , html_options = {
   :onmouseover => "Tip('Return to list forums')"}%>
 ->
-<%= link_to "Forum: #{truncate @topic.forum.name, 40}", forum_path(@topic.forum.id) , html_options = {
+<%= link_to "Forum: #{truncate @topic.forum.name, :length => 40}",
+  forum_path(@topic.forum.id) , html_options = {
   :onmouseover => "Tip('Return to list of topics for the #{@topic.forum.name} forum')"}%>
 ->
-Topic: <%= truncate @topic.title, 40 %>
+Topic: <%= truncate @topic.title, :length => 40 %>
 
 <%=render(:partial => "topic_heading")%>
 <br/>
-<%=render(:partial => "comments/comment_item", :collection => @topic.comments)%>
-<%= link_to "Add Comment", 
-  new_comment_path(:id => @topic, :type => 'Topic'), 
+<%=render(:partial => "comments/comment_item", :collection => @topic.comments.find_all{|c| !c.private or @topic.forum.mediators.include? current_user})%>
+
+<% if logged_in? %>
+  <b>Rate this topic: </b><%= ratings_for @topic %>
+  <br/>
+<% end %>
+<%= link_to "Add Comment",
+  new_comment_path(:id => @topic, :type => 'Topic'),
   html_options = {:class=> "button",
-  :onmouseover => "Tip('Add a comment to discussion forum for this topic')" } %>
+  :onmouseover => "Tip('Add a comment to discussion forum for this topic')" } if @topic.can_add_comment? current_user %>
 <%= link_to 'Back to Topics', forum_path(@topic.forum.id) , html_options = {:class=> "button",
   :onmouseover => "Tip('Return to list of topics for the #{@topic.forum.name} forum')"}%>

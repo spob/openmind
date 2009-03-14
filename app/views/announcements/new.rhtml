@@ -28,11 +28,3 @@
     </p>
   </div>
 <% end %>
-
-<%= observe_form "new-announcement",
-  :frequency => 1,
-  :update => "live-preview",
-  :complete => "Element.show('live-preview')",
-  :url => preview_announcements_path %>
-
-<div id="live-preview" style="display: none, border => 1px solid"></div>

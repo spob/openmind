@@ -4,7 +4,7 @@ class CreateTopics < ActiveRecord::Migration
   extend MigrationHelpers
   
   def self.up
-    create_table :topics, :options => 'DEFAULT CHARSET=utf8' do |t|
+    create_table :topics, :options => 'ENGINE=InnoDB DEFAULT CHARSET=utf8' do |t|
       t.column :title, :string, :limit => 120, :null => false
       t.column :lock_version, :integer, :default => 0
       t.references :forum, :null => false

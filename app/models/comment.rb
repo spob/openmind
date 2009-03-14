@@ -17,12 +17,16 @@
 
 class Comment < ActiveRecord::Base
   belongs_to :user
-  has_many :comment_attachments
+  has_many :comment_attachments, :dependent => :destroy
   
   validates_presence_of :user_id
   validates_presence_of :body
   
   xss_terminate :except => [:body]
+
+  named_scope :private, :conditions => {:private => true}
+  named_scope :public, :conditions => {:private => false}
+  named_scope :most_recent, :order => "published_at DESC", :limit => 1
   
   def can_edit? current_user, role_override=false
     true

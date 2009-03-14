@@ -1,6 +1,7 @@
 class LinkSetsController < ApplicationController
   before_filter :login_required
   access_control [:index, :show, :new,  :edit, :create, :update, :destroy ] => 'sysadmin'
+  cache_sweeper :link_sets_sweeper, :only => [ :create, :update, :destroy ]
 
   # GETs should be safe (see http://www.w3.org/2001/tag/doc/whenToUseGet.html)
   verify :method => :post, :only => [:create, :sort ],

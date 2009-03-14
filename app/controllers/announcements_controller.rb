@@ -1,6 +1,8 @@
 class AnnouncementsController < ApplicationController
   before_filter :login_required, :except => [:rss]
   access_control [:edit, :update, :destroy, :new, :create] => 'prodmgr | sysadmin'
+  cache_sweeper :announcements_sweeper, :only => [ :create, :update, :destroy,
+    :index ]
   
 
   # GETs should be safe (see http://www.w3.org/2001/tag/doc/whenToUseGet.html)

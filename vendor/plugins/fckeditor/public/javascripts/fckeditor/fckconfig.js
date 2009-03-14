@@ -187,7 +187,7 @@ FCKConfig.DefaultFontSizeLabel = '' ;
 FCKConfig.DefaultLinkTarget = '' ;
 
 // The option switches between trying to keep the html structure or do the changes so the content looks like it was in Word
-FCKConfig.CleanWordKeepsStructure = false ;
+FCKConfig.CleanWordKeepsStructure = true ;
 
 // Only inline elements are valid.
 FCKConfig.RemoveFormatTags = 'b,big,code,del,dfn,em,font,i,ins,kbd,q,samp,small,span,strike,strong,sub,sup,tt,u,var' ;

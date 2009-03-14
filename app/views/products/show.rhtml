@@ -1,79 +1,82 @@
 <%= javascript_include_tag "wz_tooltip.js", :cache => "cache/tooltip" %>
-<div id="actionButtons2">
-  <% if prodmgr? %>
-    <%= link_to 'Edit Product', edit_product_url(@product), html_options = {:class=> "button",
-      :onmouseover => "Tip('Edit this product')"} %>
-  <% end %>
-  <%= show_product_watch_button @product %>
-</div>
-
-<%= link_to 'All Products', products_path , html_options = {
-  :onmouseover => "Tip('Return to list products')"}%> -> Product: <%=  @product.name %>
-
-<div class="formTitle">Product Detail</div>
-<div class="cssform">
-  <p>
-    <label for="name">Name:</label>
-    <%= h @product.name %>
-  </p>
-  <p>
-    <label for="description">Description:</label>
-    <%= h @product.description %>
-  </p>
-  <p>
-    <label for="description">Active:</label>
-    <input type="checkbox" name="active" value="active" <%= "checked" if @product.active?  %> disabled />
-  </p>
-</div>
-<br/>
-
-<div style="position:relative;">
-  <h3>
-    Releases
-  </h3>
-  <div id="actionButtons" style="top:6px;right:0">
+<%= render :partial => "tab_menu" %>
+<div id="tabBody" style="position:relative; padding-top:15px;">
+  <div id="actionButtons2">
     <% if prodmgr? %>
-      <%= link_to 'Add New Release', new_release_path(:product_id => @product.id),
-        html_options = {:class => "button",
-        :onmouseover => "Tip('Create a new release')"} if prodmgr? %>
+      <%= link_to 'Edit Product', edit_product_url(@product), html_options = {:class=> "button",
+        :onmouseover => "Tip('Edit this product')"} %>
     <% end %>
+    <%= show_product_watch_button @product %>
   </div>
-  <table cellspacing="0" cellpadding="0" class="cssform" width="25%">
-    <tr>
-      <th>Version</th>
-      <th>Release Date</th>
+
+  <%= link_to 'All Products', products_path , html_options = {
+    :onmouseover => "Tip('Return to list products')"}%> -> Product: <%=  @product.name %>
+
+  <div class="formTitle">Product Detail</div>
+  <div class="cssform">
+    <p>
+      <label for="name">Name:</label>
+      <%= h @product.name %>
+    </p>
+    <p>
+      <label for="description">Description:</label>
+      <%= h @product.description %>
+    </p>
+    <p>
+      <label for="description">Active:</label>
+      <input type="checkbox" name="active" value="active" <%= "checked" if @product.active?  %> disabled />
+    </p>
+  </div>
+  <br/>
+
+  <div style="position:relative;">
+    <h3>
+      Releases
+    </h3>
+    <div id="actionButtons" style="top:6px;right:0">
       <% if prodmgr? %>
-        <th>Release Date Label</th>
+        <%= link_to 'Add New Release', new_release_path(:product_id => @product.id),
+          html_options = {:class => "button",
+          :onmouseover => "Tip('Create a new release')"} if prodmgr? %>
       <% end %>
-      <th>Status</th>
-      <th>Action</th>
-    </tr>
-    <% for release in @product.releases %>
+    </div>
+    <table cellspacing="0" cellpadding="0" class="cssform" width="25%">
       <tr>
-        <td><%= link_to h(release.version), release_path(release) %></td>
+        <th>Version</th>
+        <th>Release Date</th>
         <% if prodmgr? %>
-          <td><%= h nvl(format_date(release.release_date), '-') %></td>
+          <th>Release Date Label</th>
         <% end %>
-        <td><%= h nvl(release.user_release_date, '-') %></td>
-        <td><%= h release.release_status.description %></td>
-        <td>
-          <%= link_to theme_image_tag("icons/16x16/viewAction.png", :alt=>"view", :title=> "view"),
-            release_path(release),
-            html_options = {
-            :onmouseover => "Tip('View details for this release')"} %>
-
-          <%= link_to theme_image_tag("icons/16x16/editAction.png", :alt=>"edit", :title=> "edit"),
-            edit_release_path(release),
-            html_options = {
-            :onmouseover => "Tip('Edit this release')"} if prodmgr? %>
-
-          <%= link_to(
-            theme_image_tag("icons/16x16/deleteAction.png", :alt=>"delete", :title=> "delete"),
-            release_path(release),
-            html_options = {:confirm => 'Are you sure?', :method => :delete,
-              :onmouseover => "Tip('Delete this release')"} ) if release.can_delete? and prodmgr? %>
-        </td>
+        <th>Status</th>
+        <th>Action</th>
       </tr>
-    <% end %>
-  </table>
+      <% for release in @product.releases %>
+        <tr>
+          <td><%= link_to h(release.version), release_path(release) %></td>
+          <% if prodmgr? %>
+            <td><%= h nvl(format_date(release.release_date), '-') %></td>
+          <% end %>
+          <td><%= h nvl(release.user_release_date, '-') %></td>
+          <td><%= h release.release_status.description %></td>
+          <td>
+            <%= link_to theme_image_tag("icons/16x16/viewAction.png", :alt=>"view", :title=> "view"),
+              release_path(release),
+              html_options = {
+              :onmouseover => "Tip('View details for this release')"} %>
+
+            <%= link_to theme_image_tag("icons/16x16/editAction.png", :alt=>"edit", :title=> "edit"),
+              edit_release_path(release),
+              html_options = {
+              :onmouseover => "Tip('Edit this release')"} if prodmgr? %>
+
+            <%= link_to(
+              theme_image_tag("icons/16x16/deleteAction.png", :alt=>"delete", :title=> "delete"),
+              release_path(release),
+              html_options = {:confirm => 'Are you sure?', :method => :delete,
+                :onmouseover => "Tip('Delete this release')"} ) if release.can_delete? and prodmgr? %>
+          </td>
+        </tr>
+      <% end %>
+    </table>
+  </div>
 </div>

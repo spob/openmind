@@ -1,31 +1,63 @@
 <%= javascript_include_tag "wz_tooltip.js", :cache => "cache/tooltip" %> 
-<div id="tabBody" style="position:relative; padding-top:15px;">
-  <div id="actionButtons2">
-    <%= link_to 'Edit', edit_attachment_path(@attachment), html_options = {:class=> "button",
-      :onmouseover => "Tip('Edit this attachment')"} %>
-  </div>
-  <div class="formTitle"><%= theme_image_tag("icons/16x16/paperclip.png",
-    options = {:alt=>"attachment"}) %>Attachment Detail</div>
-  <div class="cssform" style="margin-top:0;">
-    <p>
-      <label>File Name:</label>
-      <%= @attachment.filename %>
-    </p>
-    <p>
-      <label>Description:</label>
-      <%= @attachment.description %>
-    </p>
-    <%= render(:partial => "details") %>
-    <p>
-      <label></label>
-      <%= link_to 'Download', download_attachment_path(@attachment), html_options = {:class=> "button",
-        :onmouseover => "Tip('Download this file')"} %>
-    </p>
-    <% if @attachment.image? %>
-      <p>
-        <label>Image Preview:</label>
-        <img src="<%= download_attachment_path(@attachment) %>"/>
-      </p>
-    <% end %>
-  </div>
+<div id="actionButtons2">
+  <%= link_to 'Edit', edit_attachment_path(@attachment), html_options = {:class=> "button",
+    :onmouseover => "Tip('Edit this attachment')"} %>
 </div>
+<div class="formTitle"><%= theme_image_tag("icons/16x16/paperclip.png",
+  options = {:alt=>"attachment"}) %>Attachment Detail</div>
+<div class="cssform" style="margin-top:0;">
+  <p>
+    <label>File Name:</label>
+    <%= @attachment.filename %>
+  </p>
+  <p>
+    <label>Description:</label>
+    <%= @attachment.description %>
+  </p>
+  <p>
+    <label>Alias:</label>
+    <%= @attachment.alias %>
+  </p>
+  <p>
+    <label>Access:</label>
+    <% if @attachment.public %>
+      Public viewable
+    <% elsif @attachment.enterprise_types.empty? and @attachment.groups.empty? %>
+      Must be logged in
+    <% else  %>
+      <% unless @attachment.groups.empty?  %>
+        Restricted to the following User Groups:
+        <% for group in @attachment.groups %><br />
+          &bull;&nbsp;<%= h group.name %><br />
+        <% end %>
+      <% end %>
+      <% unless @attachment.enterprise_types.empty?  %>
+        <%= "<br/>" unless @attachment.groups.empty? %>
+        Restricted to the following Enterprise Types:
+        <% for etype in @attachment.enterprise_types %><br />
+          &bull;&nbsp;<%= h etype.short_name %><br />
+        <% end %>
+      <% end %>
+    <% end %>
+  </p>
+  <p>
+    <label>Hits:</label>
+    <%= @attachment.downloads %>
+  </p>
+  <%= render(:partial => "details", :object => @attachment) %>
+  <p>
+    <label></label>
+    <%= link_to 'Download', download_attachment_path(@attachment), html_options = {:class=> "button",
+      :onmouseover => "Tip('Download this file')"} %>
+  </p>
+  <% if @attachment.image? %>
+    <p>
+      <label>Image Preview:</label>
+      <img src="<%= download_attachment_path(@attachment) %>"/>
+    </p>
+  <% end %>
+</div>
+<% if @attachment.content_type == 'text/html' %>
+<h2>Preview</h2>
+<%= @attachment.data %>
+<% end %>

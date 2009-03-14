@@ -1,6 +1,6 @@
 class CreateLinkSets < ActiveRecord::Migration
   def self.up
-    create_table :link_sets do |t|
+    create_table :link_sets, :options => 'ENGINE=InnoDB DEFAULT CHARSET=utf8' do |t|
       t.string :name, :limit => 30, :null => false
       t.timestamps
     end

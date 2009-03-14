@@ -1,33 +1,45 @@
 <div id="sidebar1" class="sidebar"> 
-    
-  <div class="sideBarTitle">Announcements</div>
-  <div class="sideBarItem">
-    <div class="unorderListNavContainer">
-      <ul class="navlist2">
-        <% for announcement in Announcement.list(1, 5, 5) %>
-          <li>
-            <%= announcement_link announcement %>
-          </li>
-        <% end %>
-      </ul>
+  <% cache(:controller => "announcements", :action => "top_five",
+    :user_id => (logged_in? ? current_user.id : -1)) do %>
+    <div class="sideBarTitle">Announcements</div>
+    <div class="sideBarItem">
+      <div class="unorderListNavContainer">
+        <ul class="navlist2">
+          <% for announcement in Announcement.list(1, 5, 5) %>
+            <li>
+              <%= announcement_link announcement %>
+            </li>
+          <% end %>
+        </ul>
+      </div>
     </div>
-  </div>
-  
+  <% end %>
+
   <%=render(:partial => "link_sets/link_sidebar", :locals => {:link_set => nvl(@topic.forum.link_set, LinkSet.get_default_link_set)})%>
 
-  
-  <div class="sideBarTitle">Most Active Users</div>
-  <div class="sideBarItem">
-    <div class="unorderListNavContainer">
-      <ul class="navlist2">
-        <% for user in TopicComment.top_users %>
-          <li>
-            <%= user_display_name user %> (<%= pluralize user.topic_comments.size, "post"  %>)
-          </li>
-        <% end %>
-      </ul>
+  <% cache(:controller => "forums", :action => "most_active",
+    :forum => @topic.forum.id,
+    :user_id => (logged_in? ? current_user.id : -1)) do %>
+    <div class="sideBarTitle">Tag Cloud</div>
+    <div class="sideBarItem">
+      <% tag_cloud @topic.forum.topics.tag_counts(:limit => 100), %w(css1 css2 css3 css4) do |tag, css_class| %>
+        <%= link_to tag.name, { :action => :tag, :id => tag.name, :forum => @topic.forum }, :class => css_class %>
+      <% end %>
     </div>
-  </div>
-  
+
+    <div class="sideBarTitle">Most Active Users</div>
+    <div class="sideBarItem">
+      <div class="unorderListNavContainer">
+        <ul class="navlist2">
+          <% for user in TopicComment.top_users(@topic.forum) %>
+            <li>
+              <%= user_display_name user %> (<%= pluralize user.topic_comments.find(:all, :conditions => ["topic_id in (select id from topics where forum_id = ?)", @topic.forum.id]).size, "post"  %>)
+            </li>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+  <% end %>
+
   <div style="clear: left"></div>
 </div>

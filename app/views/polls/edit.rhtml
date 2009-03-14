@@ -22,7 +22,7 @@
     </p>
     <p>
       <label>Restrict to User Groups:</label>
-      <% for group in Group.list_all %>
+      <% for group in Group.by_name %>
         <span style="display:block;margin-left:10px;">
           <%= check_box_tag "poll[group_ids][]", group.id, @poll.groups.include?(group) %>
           <%= h group.name %>: <%= h group.description %>
@@ -31,7 +31,7 @@
     </p>
     <p>
       <label>Restrict to Enterprise Types:</label>
-      <% for etype in EnterpriseType.list_all %>
+      <% for etype in EnterpriseType.by_sort_value %>
         <span style="display:block;margin-left:10px;">
           <%= check_box_tag "poll[enterprise_type_ids][]", etype.id, @poll.enterprise_types.include?(etype) %>
           <%= h etype.short_name %>: <%= h etype.description %>

@@ -1,68 +1,71 @@
-<% if prodmgr? %>
-  <div id="actionButtons2">
-    <%= link_to 'Edit', edit_release_path(@release) , options = {:class=> "button",
-      :onmouseover => "Tip('Edit this release')"}%>
-  </div>
-<% end %>
-
-<%= link_to 'All Products', products_path, html_options = {
-  :onmouseover => "Tip('Return to list products')"}%> ->
-<%= link_to  "Product: #{@release.product.name}", product_path(@release.product),
-  html_options = {
-  :onmouseover => "Tip('Return to showing details for #{@release.product.name}')"} %>
--> Release <%= @release.version %>
-<div class="formTitle">Detail for Release <%=h @release.version %></div>
-<div class="cssform widerLabel">
-  <p>
-    <label for="release_product">Product:</label>
-    <%= link_to @release.product.name, product_path(@release.product.id) %>
-  </p>
-  <p>
-    <label for="release_version">Release Status:</label>
-    <%=h @release.release_status.description %>
-  </p>
-  <p>
-    <label for="release_date">Release Date:</label>
-    <%=h format_date(@release.release_date) %>
-  </p>
-  <p>
-    <label for="user_release_date">Label for Release Date:</label>
-    <%=h @release.user_release_date %>
-  </p>
-  <p>
-    <label for="release_description">Description:</label>
-    <%=  textilize(white_list(@release.description)) unless @release.description.nil? || !@release.textiled %>
-    <%= white_list(@release.description) unless @release.description.nil? || @release.textiled %>
-  </p>
-  <% unless @release.download_url.nil? %>
-    <p>
-      <label for="download_url">Download URL:</label>
-      <%= link_to @release.download_url, @release.download_url, :popup => true  %>
-    </p>
+<%= render :partial => "products/tab_menu" %>
+<div id="tabBody" style="position:relative; padding-top:15px;">
+  <% if prodmgr? %>
+    <div id="actionButtons2">
+      <%= link_to 'Edit', edit_release_path(@release) , options = {:class=> "button",
+        :onmouseover => "Tip('Edit this release')"}%>
+    </div>
   <% end %>
-  <p>
-    <label for="ideas">Scheduled Ideas:</label>
-  </p>
-  <% for idea in @release.ideas %>
+
+  <%= link_to 'All Products', products_path, html_options = {
+    :onmouseover => "Tip('Return to list products')"}%> ->
+  <%= link_to  "Product: #{@release.product.name}", product_path(@release.product),
+    html_options = {
+    :onmouseover => "Tip('Return to showing details for #{@release.product.name}')"} %>
+  -> Release <%= @release.version %>
+  <div class="formTitle">Detail for Release <%=h @release.version %></div>
+  <div class="cssform widerLabel">
     <p>
-      <label for="ideas"></label><%= link_to h(idea.user_friendly_idea_name),
-        :controller => 'ideas',
-        :action => 'show',
-        :id => idea.id %>
+      <label for="release_product">Product:</label>
+      <%= link_to @release.product.name, product_path(@release.product.id) %>
+    </p>
+    <p>
+      <label for="release_version">Release Status:</label>
+      <%=h @release.release_status.description %>
+    </p>
+    <p>
+      <label for="release_date">Release Date:</label>
+      <%=h format_date(@release.release_date) %>
+    </p>
+    <p>
+      <label for="user_release_date">Label for Release Date:</label>
+      <%=h @release.user_release_date %>
+    </p>
+    <p>
+      <label for="release_description">Description:</label>
+      <%=  textilize(white_list(@release.description)) unless @release.description.nil? || !@release.textiled %>
+      <%= white_list(@release.description) unless @release.description.nil? || @release.textiled %>
+    </p>
+    <% unless @release.download_url.nil? %>
+      <p>
+        <label for="download_url">Download URL:</label>
+        <%= link_to @release.download_url, @release.download_url, :popup => true  %>
+      </p>
     <% end %>
-  </p>
-  <p>
-    <label>Change History:</label>
-  </p>
-  <br/>
-  <div style="margin: 0px 20px 0px 140px">
-    <table cellspacing="0" cellpadding="0" class="cssform">
-      <tr>
-        <th>Editor</th>
-        <th>Change At</th>
-        <th>Change</th>
-      </tr>
-      <%= render :partial => "ideas/change_log", :collection => @release.change_logs %>
-    </table>
+    <p>
+      <label for="ideas">Scheduled Ideas:</label>
+    </p>
+    <% for idea in @release.ideas %>
+      <p>
+        <label for="ideas"></label><%= link_to h(idea.user_friendly_idea_name),
+          :controller => 'ideas',
+          :action => 'show',
+          :id => idea.id %>
+      <% end %>
+    </p>
+    <p>
+      <label>Change History:</label>
+    </p>
+    <br/>
+    <div style="margin: 0px 20px 0px 140px">
+      <table cellspacing="0" cellpadding="0" class="cssform">
+        <tr>
+          <th>Editor</th>
+          <th>Change At</th>
+          <th>Change</th>
+        </tr>
+        <%= render :partial => "ideas/change_log", :collection => @release.change_logs %>
+      </table>
+    </div>
   </div>
 </div>

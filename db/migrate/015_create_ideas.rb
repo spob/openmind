@@ -4,7 +4,7 @@ class CreateIdeas < ActiveRecord::Migration
   extend MigrationHelpers
   
   def self.up
-    create_table :ideas, :options => 'DEFAULT CHARSET=utf8' do |t|
+    create_table :ideas, :options => 'ENGINE=InnoDB DEFAULT CHARSET=utf8' do |t|
       t.references :user, :null => false
       t.references :product, :null => false
       t.references :release

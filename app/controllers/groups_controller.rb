@@ -43,6 +43,7 @@ class GroupsController < ApplicationController
   end
 
   def update
+    params[:group][:user_ids] ||= []
     @group = Group.find(params[:id])
     if @group.update_attributes(params[:group])
       flash[:notice] = "User group '#{@group.name}' was successfully updated."

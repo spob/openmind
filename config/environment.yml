@@ -38,3 +38,14 @@ default_user_timezone: Eastern Time (US & Canada)
 
 # Max file upload size for non-prodmgr and non-sysadmin users (in KB)
 max_file_upload_size: 500
+
+# The number of minutes to wait before, when an idea is created, sending a
+# reminder to the author of an idea to vote. A value of -1 signifies no reminder
+# should be sent
+# have not already done so.
+minutes_to_send_vote_reminder: 60
+
+# The number of minutes to wait for a periodic job to complete. If the job does
+# not complete in this timeframe, OpenMind will assume it is dead and initiate
+# a recovery
+periodic_job_timeout: 30

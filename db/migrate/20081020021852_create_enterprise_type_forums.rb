@@ -4,7 +4,7 @@ class CreateEnterpriseTypeForums < ActiveRecord::Migration
   extend MigrationHelpers
   
   def self.up
-    create_table :enterprise_types_forums, :id => false  do |t|
+    create_table :enterprise_types_forums, :options => 'ENGINE=InnoDB DEFAULT CHARSET=utf8', :id => false  do |t|
       t.references :forum, :null => false
       t.references :enterprise_type, :null => false
       t.column :lock_version, :integer, :default => 0

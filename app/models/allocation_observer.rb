@@ -6,8 +6,8 @@ class AllocationObserver < ActiveRecord::Observer
       # EmailNotifier.deliver_new_user_allocation_notification(allocation) if allocation.user.active && !allocation.user.activated_at.nil?
     else
       RunOncePeriodicJob.create(
-      	:job => "EmailNotifier.deliver_new_enterprise_allocation_notification(#{allocation.id})") unless allocation.enterprise.active_users.empty?
-      # EmailNotifier.deliver_new_enterprise_allocation_notification(allocation) unless allocation.enterprise.active_users.empty?
+      	:job => "EmailNotifier.deliver_new_enterprise_allocation_notification(#{allocation.id})") unless allocation.enterprise.users.active.empty?
+      # EmailNotifier.deliver_new_enterprise_allocation_notification(allocation) unless allocation.enterprise.users.active.empty?
     end
   end
 end
