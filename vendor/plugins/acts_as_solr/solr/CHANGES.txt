@@ -1,0 +1,1207 @@
+                      Apache Solr Version 1.3.0
+                            Release Notes
+
+Introduction
+------------
+Apache Solr is an open source enterprise search server based on the Lucene Java
+search library, with XML/HTTP and JSON APIs, hit highlighting, faceted search,
+caching, replication, and a web administration interface. It runs in a Java
+servlet container such as Tomcat.
+
+See http://lucene.apache.org/solr for more information.
+
+
+Getting Started
+---------------
+You need a Java 1.5 VM or later installed.
+In this release, there is an example Solr server including a bundled 
+servlet container in the directory named "example".
+See the tutorial at http://lucene.apache.org/solr/tutorial.html
+
+
+$Id: CHANGES.txt 694377 2008-09-11 17:40:11Z klaas $
+
+================== Release 1.3.0 ==================
+
+
+Upgrading from Solr 1.2
+-----------------------
+IMPORTANT UPGRADE NOTE: In a master/slave configuration, all searchers/slaves
+should be upgraded before the master!  If the master were to be updated
+first, the older searchers would not be able to read the new index format.
+
+The Porter snowball based stemmers in Lucene were updated (LUCENE-1142),
+and are not guaranteed to be backward compatible at the index level
+(the stem of certain words may have changed).  Re-indexing is recommended.
+
+Older Apache Solr installations can be upgraded by replacing
+the relevant war file with the new version.  No changes to configuration
+files should be needed.  
+
+This version of Solr contains a new version of Lucene implementing
+an updated index format.  This version of Solr/Lucene can still read
+and update indexes in the older formats, and will convert them to the new
+format on the first index change.  Be sure to backup your index before 
+upgrading in case you need to downgrade.
+
+Solr now recognizes HTTP Request headers related to HTTP Caching (see
+RFC 2616 sec13) and will by default respond with "304 Not Modified"
+when appropriate.  This should only affect users who access Solr via
+an HTTP Cache, or via a Web-browser that has an internal cache, but if
+you wish to suppress this behavior an '<httpCaching never304="true"/>'
+option can be added to your solrconfig.xml.  See the wiki (or the
+example solrconfig.xml) for more details...  
+   http://wiki.apache.org/solr/SolrConfigXml#HTTPCaching
+
+In Solr 1.2, DateField did not enforce the canonical representation of
+the ISO 8601 format when parsing incoming data, and did not generation
+the canonical format when generating dates from "Date Math" strings
+(particularly as it pertains to milliseconds ending in trailing zeros)
+-- As a result equivalent dates could not always be compared properly.
+This problem is corrected in Solr 1.3, but DateField users that might
+have been affected by indexing inconsistent formats of equivilent
+dates (ie: 1995-12-31T23:59:59Z vs 1995-12-31T23:59:59.000Z) may want
+to consider reindexing to correct these inconsistencies.  Users who
+depend on some of the the "broken" behavior of DateField in Solr 1.2
+(specificly: accepting any input that ends in a 'Z') should consider
+using the LegacyDateField class as a possible alternative.  Users that
+desire 100% backwards compatibility should consider using the Solr 1.2
+version of DateField.
+
+Due to some changes in the lifecycle of TokenFilterFactories, users of
+Solr 1.2 who have written Java code which constructs new instances of
+StopFilterFactory, SynonymFilterFactory, or EnglishProterFilterFactory
+will need to modify their code by adding a line like the following
+prior to using the factory object...   
+  factory.inform(SolrCore.getSolrCore().getSolrConfig().getResourceLoader()); 
+These lifecycle changes do not affect people who use Solr "out of the
+box" or who have developed their own TokenFilterFactory plugins. More
+info can be found in SOLR-594.
+
+The python client that used to ship with Solr is no longer included in 
+the distribution (see client/python/README.txt).
+   
+Detailed Change List
+--------------------
+
+New Features
+ 1. SOLR-69: Adding MoreLikeThisHandler to search for similar documents using
+    lucene contrib/queries MoreLikeThis.  MoreLikeThis is also available from
+    the StandardRequestHandler using ?mlt=true. (bdelacretaz, ryan)
+
+ 2. SOLR-253: Adding KeepWordFilter and KeepWordFilterFactory.  A TokenFilter
+    that keeps tokens with text in the registered keeplist.  This behaves like
+    the inverse of StopFilter. (ryan)
+
+ 3. SOLR-257: WordDelimiterFilter has a new parameter splitOnCaseChange,
+    which can be set to 0 to disable splitting "PowerShot" => "Power" "Shot".
+    (klaas)
+    
+ 4. SOLR-193: Adding SolrDocument and SolrInputDocument to represent documents
+    outside of the lucene Document infrastructure.  This class will be used 
+    by clients and for processing documents. (ryan) 
+
+ 5. SOLR-244: Added ModifiableSolrParams - a SolrParams implementation that 
+    help you change values after initialization. (ryan)
+
+ 6. SOLR-20: Added a java client interface with two implementations.  One 
+    implementation uses commons httpclient to connect to solr via HTTP.  The 
+    other connects to solr directly.  Check client/java/solrj.  This addition
+    also includes tests that start jetty and test a connection using the full
+    HTTP request cycle.  (Darren Erik Vengroff, Will Johnson, ryan)
+ 
+ 7. SOLR-133: Added StaxUpdateRequestHandler that uses StAX for XML parsing.
+    This implementation has much better error checking and lets you configure
+    a custom UpdateRequestProcessor that can selectively process update 
+    requests depending on the request attributes.  This class will likely 
+    replace XmlUpdateRequestHandler.  (Thorsten Scherler, ryan)
+
+ 8. SOLR-264: Added RandomSortField, a utility field with a random sort order.
+    The seed is based on a hash of the field name, so a dynamic field
+    of this type is useful for generating different random sequences.
+    This field type should only be used for sorting or as a value source
+    in a FunctionQuery (ryan, hossman, yonik) 
+
+ 9. SOLR-266: Adding show=schema to LukeRequestHandler to show the parsed
+    schema fields and field types.  (ryan)
+
+10. SOLR-133: The UpdateRequestHandler now accepts multiple delete options 
+    within a single request.  For example, sending:
+     <delete><id>1</id><id>2</id></delete> will delete both 1 and 2. (ryan)
+
+11. SOLR-269: Added UpdateRequestProcessor plugin framework.  This provides
+    a reasonable place to process documents after they are parsed and 
+    before they are committed to the index.  This is a good place for custom 
+    document manipulation or document based authorization. (yonik, ryan)
+
+12. SOLR-260: Converting to a standard PluginLoader framework.  This reworks
+    RequestHandlers, FieldTypes, and QueryResponseWriters to share the same
+    base code for loading and initializing plugins.  This adds a new 
+    configuration option to define the default RequestHandler and 
+    QueryResponseWriter in XML using default="true".  (ryan)
+
+13. SOLR-225: Enable pluggable highlighting classes.  Allow configurable
+    highlighting formatters and Fragmenters.  (ryan)
+
+14. SOLR-273/376/452/516: Added hl.maxAnalyzedChars highlighting parameter, defaulting 
+    to 50k, hl.alternateField, which allows the specification of a backup
+    field to use as summary if no keywords are matched, and hl.mergeContiguous,
+    which combines fragments if they are adjacent in the source document.
+    (klaas, Grant Ingersoll, Koji Sekiguchi via klaas)
+
+15. SOLR-291: Control maximum number of documents to cache for any entry
+    in the queryResultCache via queryResultMaxDocsCached solrconfig.xml 
+    entry. (Koji Sekiguchi via yonik)
+
+16. SOLR-240: New <lockType> configuration setting in <mainIndex> and
+    <indexDefaults> blocks supports all Lucene builtin LockFactories.
+    'single' is recommended setting, but 'simple' is default for total
+    backwards compatibility.
+    (Will Johnson via hossman)
+    
+17. SOLR-248: Added CapitalizationFilterFactory that creates tokens with 
+    normalized capitalization.  This filter is useful for facet display,
+    but will not work with a prefix query.  (ryan)
+    SOLR-468: Change to the semantics to keep the original token, not the token in the Map.  Also switched to
+    use Lucene's new reusable token capabilities.  (gsingers)
+
+18. SOLR-307: Added NGramFilterFactory and EdgeNGramFilterFactory.
+    (Thomas Peuss via Otis Gospodnetic)
+
+19. SOLR-305: analysis.jsp can be given a fieldtype instead of a field
+    name.  (hossman)
+
+20. SOLR-102: Added RegexFragmenter, which splits text for highlighting
+    based on a given pattern.  (klaas)
+
+21. SOLR-258: Date Faceting added to SimpleFacets.  Facet counts
+    computed for ranges of size facet.date.gap (a DateMath expression) 
+    between facet.date.start and facet.date.end.  (hossman)
+
+22. SOLR-196: A PHP serialized "phps" response writer that returns a
+    serialized array that can be used with the PHP function unserialize,
+    and a PHP response writer "php" that may be used by eval.
+    (Nick Jenkin, Paul Borgermans, Pieter Berkel via yonik)
+
+23. SOLR-308: A new UUIDField class which accepts UUID string values, 
+    as well as the special value of "NEW" which triggers generation of 
+    a new random UUID.
+    (Thomas Peuss via hossman)
+
+24. SOLR-349: New FunctionQuery functions: sum, product, div, pow, log,
+    sqrt, abs, scale, map.  Constants may now be used as a value source.
+    (yonik)
+
+25. SOLR-359: Add field type className to Luke response, and enabled access
+    to the detailed field information from the solrj client API.
+    (Grant Ingersoll via ehatcher)
+
+26. SOLR-334: Pluggable query parsers.  Allows specification of query
+    type and arguments as a prefix on a query string. (yonik)
+
+27. SOLR-351: External Value Source.  An external file may be used
+     to specify the values of a field, currently usable as
+     a ValueSource in a FunctionQuery. (yonik)
+
+28. SOLR-395: Many new features for the spell checker implementation, including
+    an extended response mode with much richer output, multi-word spell checking,
+    and a bevy of new and renamed options (see the wiki).
+    (Mike Krimerman, Scott Taber via klaas).
+
+29. SOLR-408: Added PingRequestHandler and deprecated SolrCore.getPingQueryRequest().
+    Ping requests should be configured using standard RequestHandler syntax in
+    solrconfig.xml rather then using the <pingQuery></pingQuery> syntax.
+    (Karsten Sperling via ryan)
+
+30. SOLR-281: Added a 'Search Component' interface and converted StandardRequestHandler
+    and DisMaxRequestHandler to use this framework.  
+    (Sharad Agarwal, Henri Biestro, yonik, ryan) 
+    
+31. SOLR-176: Add detailed timing data to query response output.  The SearchHandler
+    interface now returns how long each section takes.  (klaas)
+    
+32. SOLR-414: Plugin initialization now supports SolrCore and ResourceLoader "Aware" 
+    plugins.  Plugins that implement SolrCoreAware or ResourceLoaderAware are 
+    informed about the SolrCore/ResourceLoader. (Henri Biestro, ryan)
+
+33. SOLR-350: Support multiple SolrCores running in the same solr instance and allows
+    runtime runtime management for any running SolrCore.  If a solr.xml file exists 
+    in solr.home, this file is used to instanciate multiple cores and enables runtime 
+    core manipulation.  For more informaion see:  http://wiki.apache.org/solr/CoreAdmin  
+    (Henri Biestro, ryan)
+
+34. SOLR-447: Added an single request handler that will automatically register all
+    standard admin request handlers.  This replaces the need to register (and maintain)
+    the set of admin request handlers.  Assuming solrconfig.xml includes:
+     <requestHandler name="/admin/" class="org.apache.solr.handler.admin.AdminHandlers" />
+    This will register: Luke/SystemInfo/PluginInfo/ThreadDump/PropertiesRequestHandler.
+    (ryan)
+    
+35. SOLR-142: Added RawResponseWriter and ShowFileRequestHandler.  This returns config
+    files directly.  If AdminHandlers are configured, this will be added automatically.
+    The jsp files /admin/get-file.jsp and /admin/raw-schema.jsp have been deprecated.
+    The deprecated <admin><gettableFiles> will be automatically registered with
+    a ShowFileRequestHandler instance for backwards compatibility. (ryan)
+
+36. SOLR-446: TextResponseWriter can write SolrDocuments and SolrDocumentLists the 
+    same way it writes Document and DocList.  (yonik, ryan)
+
+37. SOLR-418: Adding a query elevation component.  This is an optional component to
+    elevate some documents to the top positions (or exclude them) for a given query.
+    (ryan)
+
+38. SOLR-478: Added ability to get back unique key information from the LukeRequestHandler. (gsingers)    
+
+39. SOLR-127: HTTP Caching awareness.  Solr now recognizes HTTP Request
+    headers related to HTTP Caching (see RFC 2616 sec13) and will respond
+    with "304 Not Modified" when appropriate.  New options have been added
+    to solrconfig.xml to influence this behavior.
+    (Thomas Peuss via hossman)
+
+40. SOLR-303: Distributed Search over HTTP.  Specification of shards
+    argument causes Solr to query those shards and merge the results
+    into a single response.  Querying, field faceting (sorted only),
+    query faceting, highlighting, and debug information are supported
+    in distributed mode.
+    (Sharad Agarwal, Patrick O'Leary, Sabyasachi Dalal, Stu Hood,
+     Jayson Minard, Lars Kotthoff, ryan, yonik)
+
+41. SOLR-356: Pluggable functions (value sources) that allow 
+    registration of new functions via solrconfig.xml
+    (Doug Daniels via yonik)
+
+42. SOLR-494: Added cool admin Ajaxed schema explorer.
+    (Greg Ludington via ehatcher)
+
+43. SOLR-497: Added date faceting to the QueryResponse in SolrJ
+    and QueryResponseTest (Shalin Shekhar Mangar via gsingers)
+
+44. SOLR-486: Binary response format, faster and smaller
+    than XML and JSON response formats (use wt=javabin).
+    BinaryResponseParser for utilizing the binary format via SolrJ
+    and is now the default.
+    (Noble Paul, yonik)
+
+45. SOLR-521: StopFilterFactory support for "enablePositionIncrements"
+    (Walter Ferrara via hossman)
+
+46. SOLR-557: Added SolrCore.getSearchComponents() to return an unmodifiable Map. (gsingers)
+
+47. SOLR-516: Added hl.maxAlternateFieldLength parameter, to set max length for hl.alternateField
+    (Koji Sekiguchi via klaas)
+
+48. SOLR-319: Changed SynonymFilterFactory to "tokenize" synonyms file.
+    To use a tokenizer, specify "tokenizerFactory" attribute in <filter>.
+    For example:
+    <tokenizer class="solr.CJKTokenizerFactory"/>
+    <filter class="solr.SynonymFilterFactory" synonyms="synonyms.txt" expand="true"
+      ignoreCase="true" tokenizerFactory="solr.CJKTokenizerFactory"/>
+    (koji)
+
+49. SOLR-515: Added SimilarityFactory capability to schema.xml,
+    making config file parameters usable in the construction of
+    the global Lucene Similarity implementation.
+    (ehatcher)
+    
+50. SOLR-536: Add a DocumentObjectBinder to solrj that converts Objects to and
+    from SolrDocuments.  (Noble Paul via ryan)
+
+51. SOLR-595: Add support for Field level boosting in the MoreLikeThis Handler.  (Tom Morton, gsingers)
+
+52. SOLR-572: Added SpellCheckComponent and org.apache.solr.spelling package to support more spell checking functionality.
+              Also includes ability to add your own SolrSpellChecker implementation that plugs in.
+              See http://wiki.apache.org/solr/SpellCheckComponent for more details
+              (Shalin Shekhar Mangar, Bojan Smid, gsingers)
+53. SOLR-679: Added accessor methods to Lucene based spell checkers (gsingers)
+
+54. SOLR-423: Added Request Handler close hook notification so that RequestHandlers can be notified when a core is closing.  (gsingers, ryan)
+
+55. SOLR-603: Added ability to partially optimize. (gsingers)
+
+56. SOLR-483: Add byte/short sorting support (gsingers)
+
+57. SOLR-14: Add preserveOriginal flag to WordDelimiterFilter
+    (Geoffrey Young, Trey Hyde, Ankur Madnani, yonik)
+
+58. SOLR-502: Add search timeout support. (Sean Timm via yonik)
+    
+59. SOLR-605: Add the ability to register callbacks programatically (ryan, Noble Paul)
+
+60. SOLR-610: hl.maxAnalyzedChars can be -1 to highlight everything (Lars Kotthoff via klaas)
+
+61. SOLR-522: Make analysis.jsp show payloads. (Tricia Williams via yonik)
+
+62. SOLR-611: Expose sort_values returned by QueryComponent in SolrJ's QueryResponse (Dan Rosher via shalin)
+
+63. SOLR-256: Support exposing Solr statistics through JMX (Sharad Agrawal, shalin)
+
+64. SOLR-666: Expose warmup time in statistics for SolrIndexSearcher and LRUCache (shalin)
+
+65. SOLR-663: Allow multiple files for stopwords, keepwords, protwords and synonyms (Otis Gospodnetic, shalin)
+
+66. SOLR-469: Added DataImportHandler as a contrib project which makes indexing data from Databases, XML files and HTTP
+              data sources into Solr quick and easy. Includes API and implementations for supporting multiple
+              data sources, processors and transformers for importing data. Supports full data imports as well as
+              incremental (delta) indexing. See http://wiki.apache.org/solr/DataImportHandler for more details.
+              (Noble Paul, shalin)
+
+67. SOLR-622: SpellCheckComponent supports auto-loading indices on startup and optionally, (re)builds indices
+              on newSearcher event, if configured in solrconfig.xml
+              (shalin)
+
+68. SOLR-554: Hierarchical JDK log level selector for SOLR Admin replaces logging.jsp (Sean Timm via shalin)
+
+69. SOLR-506: Emitting HTTP Cache headers can be enabled or disabled through configuration
+              on a per-handler basis (shalin)
+
+70. SOLR-716: Added support for properties in configuration files. Properties can be specified in solr.xml
+              and can be used in solrconfig.xml and schema.xml
+              (Henri Biestro, hossman, ryan, shalin) 
+    
+Changes in runtime behavior
+ 1. SOLR-559: use Lucene updateDocument, deleteDocuments methods.  This
+   removes the maxBufferedDeletes parameter added by SOLR-310 as Lucene
+   now manages the deletes.  This provides slightly better indexing 
+   performance and makes overwrites atomic, eliminating the possibility of
+   a crash causing duplicates. (yonik)
+
+ 2. SOLR-689 / SOLR-695: If you have used "MultiCore" functionality in an unreleased
+   version of 1.3-dev, many classes and configs have been renamed for the official 
+   1.3 release.  Speciffically, solr.xml has replaced multicore.xml, and uses a slightly 
+   different syntax.  The solrj classes: MultiCore{Request/Response/Params} have been 
+   renamed:  CoreAdmin{Request/Response/Params}  (hossman, ryan, Henri Biestro)
+
+ 3. SOLR-647: reference count the SolrCore uses to prevent a premature
+    close while a core is still in use.  (Henri Biestro, Noble Paul, yonik)
+
+ 4. SOLR-737: SolrQueryParser now uses a ConstantScoreQuery for wildcard
+    queries that prevent an exception from being thrown when the number
+    of matching terms exceeds the BooleanQuery clause limit.  (yonik)
+    
+Optimizations
+ 1. SOLR-276: improve JSON writer speed. (yonik)
+ 
+ 2. SOLR-310: bound and reduce memory usage by providing <maxBufferedDeletes> parameter,
+    which flushes deleted without forcing the user to use <commit/> for this purpose.
+    (klaas) 
+
+ 3. SOLR-348: short-circuit faceting if less than mincount docs match. (yonik)
+
+ 4. SOLR-354: Optimize removing all documents.  Now when a delete by query
+    of *:* is issued, the current index is removed. (yonik)
+
+ 5. SOLR-377: Speed up response writers. (yonik)
+
+ 6. SOLR-342:  Added support into the SolrIndexWriter for using several new
+ features of the new LuceneIndexWriter, including: setRAMBufferSizeMB(), setMergePolicy(), setMergeScheduler.  Also, added support
+ to specify Lucene's autoCommit functionality (not to be confused with Solr's similarily named autoCommit functionality) via
+  the <luceneAutoCommit> config. item.  See the test and example solrconfig.xml <indexDefaults> section for usage.  Performance during
+  indexing should be significantly increased by moving up to 2.3 due to Lucene's new indexing capabilities.  Furthermore,
+  the setRAMBufferSizeMB makes it more logical to decide on tuning factors related to indexing.  For best performance, leave the
+  mergePolicy and mergeScheduler as the defaults and set ramBufferSizeMB instead of maxBufferedDocs.  The best value for this
+    depends on the types of documents in use.  32 should be a good starting point, but reports have shown up to 48 MB provides
+    good results. Note, it is acceptable to set both ramBufferSizeMB and maxBufferedDocs, and Lucene will flush based on whichever
+    limit is reached first. (gsingers)
+    
+ 7. SOLR-330: Converted TokenStreams to use Lucene's new char array based
+    capabilities. (gsingers)
+
+ 8. SOLR-624: Only take snapshots if there are differences to the index (Richard Trey Hyde via gsingers)
+
+ 9. SOLR-587: Delete by Query performance greatly improved by using
+    new underlying Lucene IndexWriter implementation.  (yonik)
+
+10. SOLR-730: Use read-only IndexReaders that don't synchronize
+    isDeleted().  This will speed up function queries and *:* queries
+    as well as improve their scalability on multi-CPU systems.
+    (Mark Miller via yonik)
+
+Bug Fixes
+ 1. Make TextField respect sortMissingFirst and sortMissingLast fields.
+    (J.J. Larrea via yonik)
+
+ 2. autoCommit/maxDocs was not working properly when large autoCommit/maxTime
+    was specified (klaas)
+
+ 3. SOLR-283: autoCommit was not working after delete. (ryan)
+
+ 4. SOLR-286: ContentStreamBase was not using default encoding for getBytes()
+    (Toru Matsuzawa via ryan)
+
+ 5. SOLR-292: Fix MoreLikeThis facet counting. (Pieter Berkel via ryan)
+
+ 6. SOLR-297: Fix bug in RequiredSolrParams where requiring a field
+    specific param would fail if a general default value had been supplied.
+    (hossman)
+
+ 7. SOLR-331: Fix WordDelimiterFilter handling of offsets for synonyms or 
+    other injected tokens that can break highlighting. (yonik)
+
+ 8. SOLR-282: Snapshooter does not work on Solaris and OS X since the cp command
+    there does not have the -l option.  Also updated commit/optimize related
+    scripts to handle both old and new response format.  (bill)
+
+ 9. SOLR-294: Logging of elapsed time broken on Solaris because the date command
+    there does not support the %s output format.  (bill)
+
+10. SOLR-136: Snappuller - "date -d" and locales don't mix.  (Jürgen Hermann via    bill)
+
+11. SOLR-333: Changed distributiondump.jsp to use Solr HOME instead of CWD to set path.
+ 
+12. SOLR-393: Removed duplicate contentType from raw-schema.jsp. (bill)
+
+13. SOLR-413: Requesting a large numbers of documents to be returned (limit)
+    can result in an out-of-memory exception, even for a small index. (yonik)
+
+14. The CSV loader incorrectly threw an exception when given
+    header=true (the default).  (ryan, yonik)
+
+15. SOLR-449: the python and ruby response writers are now able to correctly 
+    output NaN and Infinity in their respective languages.  (klaas)
+
+16. SOLR-42: HTMLStripReader tokenizers now preserve correct source
+    offsets for highlighting.  (Grant Ingersoll via yonik)
+
+17. SOLR-481: Handle UnknownHostException in _info.jsp (gsingers)
+
+18. SOLR-324: Add proper support for Long and Doubles in sorting, etc. (gsingers) 
+
+19. SOLR-496: Cache-Control max-age changed to Long so Expires
+    calculation won't cause overflow.  (Thomas Peuss via hossman)
+
+20. SOLR-535: Fixed typo (Tokenzied -> Tokenized) in schema.jsp (Thomas Peuss via billa)
+
+21. SOLR-529: Better error messages from SolrQueryParser when field isn't
+    specified and there is no defaultSearchField in schema.xml
+    (Lars Kotthoff via hossman)
+
+22. SOLR-530: Better error messages/warnings when parsing schema.xml:
+    field using bogus fieldtype and multiple copyFields to a non-multiValue
+    field.  (Shalin Shekhar Mangar via hossman)
+
+23. SOLR-528: Better error message when defaultSearchField is bogus or not
+    indexed.  (Lars Kotthoff via hossman)
+
+24. SOLR-533: Fixed tests so they don't use hardcoded port numbers. 
+    (hossman)
+
+25. SOLR-400: SolrExceptionTest should now handle using OpenDNS as a DNS provider (gsingers)
+
+26. SOLR-541: Legacy XML update support (provided by SolrUpdateServlet
+    when no RequestHandler is mapped to "/update") now logs error correctly.
+    (hossman)
+
+27. SOLR-267: Changed logging to report number of hits, and also provide a mechanism to add log messages to be output by the SolrCore via a NamedList toLog
+    member variable.  (Will Johnson, yseeley, gsingers)
+   SOLR-267: Removed adding values to the HTTP headers in SolrDispatchFilter (gsingers)
+
+28. SOLR-509: Moved firstSearcher event notification to the end of the SolrCore constructor (Koji Sekiguchi via gsingers)
+
+29. SOLR-470, SOLR-552, SOLR-544, SOLR-701: Multiple fixes to DateField
+    regarding lenient parsing of optional milliseconds, and correct
+    formating using the canonical representation.  LegacyDateField has
+    been added for people who have come to depend on the existing
+    broken behavior. (hossman, Stefan Oestreicher)
+
+30. SOLR-539: Fix for non-atomic long counters and a cast fix to avoid divide
+    by zero. (Sean Timm via Otis Gospodnetic)
+
+31. SOLR-514: Added explicit media-type with UTF* charset to *.xsl files that
+    don't already have one. (hossman) 
+
+32. SOLR-505: Give RequestHandlers the possiblity to suppress the generation
+    of HTTP caching headers.  (Thomas Peuss via Otis Gospodnetic)
+
+33. SOLR-553: Handle highlighting of phrase terms better when
+    hl.usePhraseHighligher=true URL param is used.
+    (Bojan Smid via Otis Gospodnetic)
+
+34. SOLR-590: Limitation in pgrep on Linux platform breaks script-utils fixUser.    (Hannes Schmidt via billa)
+
+35. SOLR-597: SolrServlet no longer "caches" SolrCore.  This was causing
+    problems in Resin, and could potentially cause problems for customized
+    usages of SolrServlet.
+
+36. SOLR-585: Now sets the QParser on the ResponseBuilder (gsingers)
+
+37. SOLR-604: If the spellchecking path is relative, make it relative to the Solr Data Directory.  (Shalin Shekhar Mangar via gsingers)
+
+38. SOLR-584: Make stats.jsp and stats.xsl more robust.
+    (Yousef Ourabi and hossman)
+
+39. SOLR-443: SolrJ: Declare UTF-8 charset on POSTed parameters
+    to avoid problems with servlet containers that default to latin-1
+    and allow switching of the exact POST mechanism for parameters
+    via useMultiPartPost in CommonsHttpSolrServer.
+    (Lars Kotthoff, Andrew Schurman, ryan, yonik)
+
+40. SOLR-556: multi-valued fields always highlighted in disparate snippets (Lars Kotthoff via klaas)
+
+41. SOLR-501: Fix admin/analysis.jsp UTF-8 input for some other servlet
+    containers such as Tomcat. (Hiroaki Kawai, Lars Kotthoff via yonik)
+    
+42. SOLR-616: SpellChecker accuracy configuration is not applied for FileBasedSpellChecker.
+    Apply it for FileBasedSpellChecker and IndexBasedSpellChecker both.
+    (shalin)
+    
+43. SOLR-648: SpellCheckComponent throws NullPointerException on using spellcheck.q request
+    parameter after restarting Solr, if reload is called but build is not called.
+    (Jonathan Lee, shalin)
+
+44. SOLR-598: DebugComponent now always occurs last in the SearchHandler list unless the components are explicitly declared. (gsingers)
+
+45. SOLR-676: DataImportHandler should use UpdateRequestProcessor API instead of directly using UpdateHandler. (shalin)
+
+46. SOLR-696: Fixed bug in NamedListCodec in regards to serializing Iterable objects.  (gsingers)
+
+47. SOLR-669: snappuler fix for FreeBSD/Darwin (Richard "Trey" Hyde via Otis Gospodnetic)
+
+48. SOLR-606: Fixed spell check collation offset issue. (Stefan Oestreicher , Geoffrey Young, gsingers)
+
+49. SOLR-589: Improved handling of badly formated query strings (Sean Timm via Otis Gospodnetic)
+
+50. SOLR-749: Allow QParser and ValueSourceParsers to be extended with same name (hossman, gsingers)
+
+Other Changes
+ 1. SOLR-135: Moved common classes to org.apache.solr.common and altered the
+    build scripts to make two jars: apache-solr-1.3.jar and 
+    apache-solr-1.3-common.jar.  This common.jar can be used in client code; 
+    It does not have lucene or junit dependencies.  The original classes
+    have been replaced with a @Deprecated extended class and are scheduled
+    to be removed in a later release.  While this change does not affect API
+    compatibility, it is recommended to update references to these
+    deprecated classes.  (ryan)
+
+ 2. SOLR-268: Tweaks to post.jar so it prints the error message from Solr.
+    (Brian Whitman via hossman)
+
+ 3. Upgraded to Lucene 2.2.0; June 18, 2007.
+
+ 4. SOLR-215: Static access to SolrCore.getSolrCore() and SolrConfig.config
+    have been deprecated in order to support multiple loaded cores.
+    (Henri Biestro via ryan)
+
+ 5. SOLR-367: The create method in all TokenFilter and Tokenizer Factories
+    provided by Solr now declare their specific return types instead of just
+    using "TokenStream" (hossman)
+
+ 6. SOLR-396: Hooks add to build system for automatic generation of (stub)
+    Tokenizer and TokenFilter Factories.
+    Also: new Factories for all Tokenizers and TokenFilters provided by the
+    lucene-analyzers-2.2.0.jar -- includes support for German, Chinese,
+    Russan, Dutch, Greek, Brazilian, Thai, and French.   (hossman)
+
+ 7. Upgraded to commons-CSV r609327, which fixes escaping bugs and
+    introduces new escaping and whitespace handling options to
+    increase compatibility with different formats.  (yonik)
+
+ 8.  Upgraded to Lucene 2.3.0; Jan 23, 2008.
+
+ 9. SOLR-451: Changed analysis.jsp to use POST instead of GET, also made the input area a bit bigger (gsingers)
+
+10. Upgrade to Lucene 2.3.1
+
+11. SOLR-531: Different exit code for rsyncd-start and snappuller if disabled (Thomas Peuss via billa)
+
+12. SOLR-550: Clarified DocumentBuilder addField javadocs (gsingers)
+
+13. Upgrade to Lucene 2.3.2
+
+14. SOLR-518: Changed luke.xsl to use divs w/css for generating histograms
+    instead of SVG  (Thomas Peuss via hossman)
+
+15. SOLR-592: Added ShardParams interface and changed several string literals
+    to references to constants in CommonParams.
+    (Lars Kotthoff via Otis Gospodnetic)
+
+16. SOLR-520: Deprecated unused LengthFilter since already core in
+    Lucene-Java (hossman)
+
+17. SOLR-645: Refactored SimpleFacetsTest (Lars Kotthoff via hossman)
+
+18. SOLR-591: Changed Solrj default value for facet.sort to true (Lars Kotthoff via Shalin) 
+    
+19. Upgraded to Lucene 2.4-dev (r669476) to support SOLR-572 (gsingers)
+
+20. SOLR-636: Improve/simplify example configs; and make index.jsp
+    links more resilient to configs loaded via an InputStream
+    (Lars Kotthoff, hossman)
+
+21. SOLR-682: Scripts now support FreeBSD (Richard Trey Hyde via gsingers)
+
+22. SOLR-489: Added in deprecation comments.  (Sean Timm, Lars Kothoff via gsingers)
+
+23. SOLR-692: Migrated to stable released builds of StAX API 1.0.1 and StAX 1.2.0 (shalin)
+24. Upgraded to Lucene 2.4-dev (r686801) (yonik)
+25. Upgraded to Lucene 2.4-dev (r688745) 27-Aug-2008 (yonik)
+26. Upgraded to Lucene 2.4-dev (r691741) 03-Sep-2008 (yonik)
+27. Replaced the StAX reference implementation with the geronimo
+    StAX API jar, and the Woodstox StAX implementation. (yonik)
+
+Build
+ 1. SOLR-411.  Changed the names of the Solr JARs to use the defacto standard JAR names based on
+    project-name-version.jar.  This yields, for example:
+      apache-solr-common-1.3-dev.jar
+      apache-solr-solrj-1.3-dev.jar
+      apache-solr-1.3-dev.jar
+
+ 2. SOLR-479: Added clover code coverage targets for committers and the nightly build.  Requires the Clover library, as licensed to Apache and only available privately.  To run:
+   	     ant -Drun.clover=true clean clover test generate-clover-reports
+
+ 3. SOLR-510: Nightly release includes client sources. (koji)
+
+ 4. SOLR-563: Modified the build process to build contrib projects
+    (Shalin Shekhar Mangar via Otis Gospodnetic)
+
+ 5. SOLR-673: Modify build file to create javadocs for core, solrj, contrib and "all inclusive" (shalin)
+
+ 6. SOLR-672: Nightly release includes contrib sources. (Jeremy Hinegardner, shalin)
+
+ 7. SOLR-586: Added ant target and POM files for building maven artifacts of the Solr core, common,
+              client and contrib. The target can publish artifacts with source and javadocs.
+              (Spencer Crissman, Craig McClanahan, shalin)
+
+================== Release 1.2, 20070602 ==================
+
+Upgrading from Solr 1.1
+-------------------------------------
+IMPORTANT UPGRADE NOTE: In a master/slave configuration, all searchers/slaves
+should be upgraded before the master!  If the master were to be updated
+first, the older searchers would not be able to read the new index format.
+
+Older Apache Solr installations can be upgraded by replacing
+the relevant war file with the new version.  No changes to configuration
+files should be needed.  
+
+This version of Solr contains a new version of Lucene implementing
+an updated index format.  This version of Solr/Lucene can still read
+and update indexes in the older formats, and will convert them to the new
+format on the first index change.  One change in the new index format 
+is that all "norms" are kept in a single file, greatly reducing the number
+of files per segment. Users of compound file indexes will want to consider
+converting to the non-compound format for faster indexing and slightly better
+search concurrency.
+
+The JSON response format for facets has changed to make it easier for
+clients to retain sorted order.  Use json.nl=map explicitly in clients
+to get the old behavior, or add it as a default to the request handler
+in solrconfig.xml
+
+The Lucene based Solr query syntax is slightly more strict.
+A ':' in a field value must be escaped or the whole value must be quoted.
+
+The Solr "Request Handler" framework has been updated in two key ways:
+First, if a Request Handler is registered in solrconfig.xml with a name
+starting with "/" then it can be accessed using path-based URL, instead of
+using the legacy "/select?qt=name" URL structure.  Second, the Request
+Handler framework has been extended making it possible to write Request
+Handlers that process streams of data for doing updates, and there is a
+new-style Request Handler for XML updates given the name of "/update" in
+the example solrconfig.xml.  Existing installations without this "/update"
+handler will continue to use the old update servlet and should see no
+changes in behavior.  For new-style update handlers, errors are now
+reflected in the HTTP status code, Content-type checking is more strict,
+and the response format has changed and is controllable via the wt
+parameter.
+
+
+
+Detailed Change List
+--------------------
+
+New Features
+ 1. SOLR-82: Default field values can be specified in the schema.xml.
+    (Ryan McKinley via hossman)
+
+ 2. SOLR-89: Two new TokenFilters with corresponding Factories...
+    * TrimFilter - Trims leading and trailing whitespace from Tokens
+    * PatternReplaceFilter - applies a Pattern to each token in the
+      stream, replacing match occurances with a specified replacement.
+    (hossman)
+
+ 3. SOLR-91: allow configuration of a limit of the number of searchers 
+    that can be warming in the background.  This can be used to avoid
+    out-of-memory errors, or contention caused by more and more searchers
+    warming in the background.  An error is thrown if the limit specified
+    by maxWarmingSearchers in solrconfig.xml is exceeded. (yonik)
+
+ 4. SOLR-106: New faceting parameters that allow specification of a
+    minimum count for returned facets (facet.mincount), paging through facets
+    (facet.offset, facet.limit), and explicit sorting (facet.sort).
+    facet.zeros is now deprecated.  (yonik)
+
+ 5. SOLR-80: Negative queries are now allowed everywhere.  Negative queries
+    are generated and cached as their positive counterpart, speeding
+    generation and generally resulting in smaller sets to cache.
+    Set intersections in SolrIndexSearcher are more efficient,
+    starting with the smallest positive set, subtracting all negative
+    sets, then intersecting with all other positive sets.  (yonik)
+
+ 6. SOLR-117: Limit a field faceting to constraints with a prefix specified
+    by facet.prefix or f.<field>.facet.prefix. (yonik)
+
+ 7. SOLR-107: JAVA API: Change NamedList to use Java5 generics
+    and implement Iterable<Map.Entry> (Ryan McKinley via yonik)
+
+ 8. SOLR-104: Support for "Update Plugins" -- RequestHandlers that want
+    access to streams of data for doing updates.  ContentStreams can come
+    from the raw POST body, multi-part form data, or remote URLs.
+    Included in this change is a new SolrDispatchFilter that allows
+    RequestHandlers registered with names that begin with a "/" to be
+    accessed using a URL structure based on that name.
+    (Ryan McKinley via hossman)
+
+ 9. SOLR-126: DirectUpdateHandler2 supports autocommitting after a specified time
+    (in ms), using <autoCommit><maxTime>10000</maxTime></autoCommit>.
+    (Ryan McKinley via klaas).
+
+10. SOLR-116: IndexInfoRequestHandler added. (Erik Hatcher)
+
+11. SOLR-79: Add system property ${<sys.prop>[:<default>]} substitution for
+    configuration files loaded, including schema.xml and solrconfig.xml.
+    (Erik Hatcher with inspiration from Andrew Saar)
+
+12. SOLR-149: Changes to make Solr more easily embeddable, in addition
+    to logging which request handler handled each request.
+    (Ryan McKinley via yonik)
+
+13. SOLR-86: Added standalone Java-based command-line updater.
+    (Erik Hatcher via Bertrand Delecretaz)
+
+14. SOLR-152: DisMaxRequestHandler now supports configurable alternate
+    behavior when q is not specified.  A "q.alt" param can be specified
+    using SolrQueryParser syntax as a mechanism for specifying what query
+    the dismax handler should execute if the main user query (q) is blank.
+    (Ryan McKinley via hossman)
+
+15. SOLR-158: new "qs" (Query Slop) param for DisMaxRequestHandler
+    allows for specifying the amount of default slop to use when parsing
+    explicit phrase queries from the user.
+    (Adam Hiatt via hossman)
+
+16. SOLR-81: SpellCheckerRequestHandler that uses the SpellChecker from
+    the Lucene contrib.
+    (Otis Gospodnetic and Adam Hiatt)    
+
+17. SOLR-182: allow lazy loading of request handlers on first request.
+    (Ryan McKinley via yonik)
+
+18. SOLR-81: More SpellCheckerRequestHandler enhancements, inlcluding
+    support for relative or absolute directory path configurations, as
+    well as RAM based directory. (hossman)   
+
+19. SOLR-197: New parameters for input: stream.contentType for specifying
+    or overriding the content type of input, and stream.file for reading
+    local files. (Ryan McKinley via yonik)
+
+20. SOLR-66: CSV data format for document additions and updates. (yonik)
+
+21. SOLR-184: add echoHandler=true to responseHeader, support echoParams=all
+    (Ryan McKinley via ehatcher)
+    
+22. SOLR-211: Added a regex PatternTokenizerFactory.  This extracts tokens 
+    from the input string using a regex Pattern. (Ryan McKinley)
+    
+23. SOLR-162: Added a "Luke" request handler and other admin helpers.
+    This exposes the system status through the standard requestHandler
+    framework. (ryan)
+    
+24. SOLR-212: Added a DirectSolrConnection class.  This lets you access
+    solr using the standard request/response formats, but does not require
+    an HTTP connection.  It is designed for embedded applications. (ryan)    
+
+25. SOLR-204: The request dispatcher (added in SOLR-104) can handle
+    calls to /select.  This offers uniform error handling for /update and 
+    /select.  To enable this behavior, you must add:
+      <requestDispatcher handleSelect="true" > to your solrconfig.xml
+    See the example solrconfig.xml for details.  (ryan)
+
+26. SOLR-170: StandardRequestHandler now supports a "sort" parameter.
+    Using the ';' syntax is still supported, but it is recommended to 
+    transition to the new syntax. (ryan)
+
+27. SOLR-181: The index schema now supports "required" fields.  Attempts
+    to add a document without a required field will fail, returning a
+    descriptive error message.  By default, the uniqueKey field is
+    a required field.  This can be disabled by setting required=false
+    in schema.xml.  (Greg Ludington via ryan)
+
+28. SOLR-217: Fields configured in the schema to be neither indexed or
+    stored will now be quietly ignored by Solr when Documents are added.
+    The example schema has a comment explaining how this can be used to
+    ignore any "unknown" fields.
+    (Will Johnson via hossman)
+
+29. SOLR-227: If schema.xml defines multiple fieldTypes, fields, or 
+    dynamicFields with the same name, a severe error will be logged rather 
+    then quietly continuing. Depending on the <abortOnConfigurationError> 
+    settings, this may halt the server.  Likewise, if solrconfig.xml 
+    defines multiple RequestHandlers with the same name it will also add
+    an error.  (ryan)
+
+30. SOLR-226: Added support for dynamic field as the destination of a 
+    copyField using glob (*) replacement. (ryan)
+    
+31. SOLR-224: Adding a PhoneticFilterFactory that uses apache commons codec
+    language encoders to build phonetically similar tokens.  This currently
+    supports: DoubleMetaphone, Metaphone, Soundex, and RefinedSoundex (ryan)
+
+32. SOLR-199: new n-gram tokenizers available via NGramTokenizerFactory 
+    and EdgeNGramTokenizerFactory. (Adam Hiatt via yonik)
+
+33. SOLR-234: TrimFilter can update the Token's startOffset and endOffset 
+    if updateOffsets="true".  By default the Token offsets are unchanged.
+    (ryan)
+
+34. SOLR-208: new example_rss.xsl and example_atom.xsl to provide more
+    examples for people about the Solr XML response format and how they
+    can transform it to suit different needs.
+    (Brian Whitman via hossman)
+
+35. SOLR-249: Deprecated SolrException( int, ... ) constructors in favor 
+    of constructors that takes an ErrorCode enum.  This will ensure that
+    all SolrExceptions use a valid HTTP status code. (ryan)
+    
+36. SOLR-386: Abstracted SolrHighlighter and moved existing implementation
+    to DefaultSolrHighlighter.  Adjusted SolrCore and solrconfig.xml so 
+    that highlighter is configurable via a class attribute.  Allows users 
+    to use their own highlighter implementation. (Tricia Williams via klaas) 
+        
+Changes in runtime behavior
+ 1. Highlighting using DisMax will only pick up terms from the main 
+    user query, not boost or filter queries (klaas).
+
+ 2. SOLR-125: Change default of json.nl to flat, change so that
+    json.nl only affects items where order matters (facet constraint
+    listings).  Fix JSON output bug for null values.  Internal JAVA API:
+    change most uses of NamedList to SimpleOrderedMap. (yonik)
+
+ 3. A new method "getSolrQueryParser" has been added to the IndexSchema
+    class for retrieving a new SolrQueryParser instance with all options
+    specified in the schema.xml's <solrQueryParser> block set.  The
+    documentation for the SolrQueryParser constructor and it's use of
+    IndexSchema have also been clarified.
+    (Erik Hatcher and hossman)
+
+ 4. DisMaxRequestHandler's bq, bf, qf, and pf parameters can now accept
+    multiple values (klaas).
+
+ 5. Query are re-written before highlighting is performed.  This enables
+    proper highlighting of prefix and wildcard queries (klaas).
+
+ 6. A meaningful exception is raised when attempting to add a doc missing 
+    a unique id if it is declared in the schema and allowDups=false.
+    (ryan via klaas)
+
+ 7. SOLR-183: Exceptions with error code 400 are raised when
+    numeric argument parsing fails.  RequiredSolrParams class added
+    to facilitate checking for parameters that must be present.
+    (Ryan McKinley, J.J. Larrea via yonik)
+
+ 8. SOLR-179: By default, solr will abort after any severe initalization
+    errors.  This behavior can be disabled by setting:
+    <abortOnConfigurationError>false</abortOnConfigurationError>
+    in solrconfig.xml (ryan)
+
+ 9. The example solrconfig.xml maps /update to XmlUpdateRequestHandler using 
+    the new request dispatcher (SOLR-104).  This requires posted content to 
+    have a valid contentType: curl -H 'Content-type:text/xml; charset=utf-8' 
+    The response format matches that of /select and returns standard error 
+    codes.  To enable solr1.1 style /update, do not map "/update" to any 
+    handler in solrconfig.xml (ryan)
+
+10. SOLR-231: If a charset is not specified in the contentType, 
+    ContentStream.getReader() will use UTF-8 encoding.  (ryan)
+
+11. SOLR-230: More options for post.jar to support stdin, xml on the
+    commandline, and defering commits.  Tutorial modified to take
+    advantage of these options so there is no need for curl.
+    (hossman)
+
+12. SOLR-128: Upgraded Jetty to the latest stable release 6.1.3 (ryan)
+    
+Optimizations 
+ 1. SOLR-114: HashDocSet specific implementations of union() and andNot()
+    for a 20x performance improvement for those set operations, and a new
+    hash algorithm speeds up exists() by 10% and intersectionSize() by 8%.
+    (yonik)
+   
+ 2. SOLR-115: Solr now uses BooleanQuery.clauses() instead of
+    BooleanQuery.getClauses() in any situation where there is no risk of
+    modifying the original query.
+    (hossman)
+
+ 3. SOLR-221: Speed up sorted faceting on multivalued fields by ~60%
+    when the base set consists of a relatively large portion of the
+    index. (yonik)
+
+ 4. SOLR-221: Added a facet.enum.cache.minDf parameter which avoids
+    using the filterCache for terms that match few documents, trading
+    decreased memory usage for increased query time. (yonik)
+
+Bug Fixes
+ 1. SOLR-87: Parsing of synonym files did not correctly handle escaped
+    whitespace such as \r\n\t\b\f. (yonik)
+
+ 2. SOLR-92: DOMUtils.getText (used when parsing config files) did not 
+    work properly with many DOM implementations when dealing with 
+    "Attributes". (Ryan McKinley via hossman)
+
+ 3. SOLR-9,SOLR-99: Tighten up sort specification error checking, throw
+    exceptions for missing sort specifications or a sort on a non-indexed
+    field. (Ryan McKinley via yonik)
+    
+ 4. SOLR-145: Fix for bug introduced in SOLR-104 where some Exceptions
+    were being ignored by all "out of the box" RequestHandlers. (hossman)
+      
+ 5. SOLR-166: JNDI solr.home code refactoring.  SOLR-104 moved
+    some JNDI related code to the init method of a Servlet Filter -
+    according to the Servlet Spec, all Filter's should be initialized
+    prior to initializing any Servlets, but this is not the case in at
+    least one Servlet Container (Resin).  This "bug fix" refactors
+    this JNDI code so that it should be executed the first time any
+    attempt is made to use the solr.home dir.
+    (Ryan McKinley via hossman)
+
+ 6. SOLR-173: Bug fix to SolrDispatchFilter to reduce "too many open
+    files" problem was that SolrDispatchFilter was not closing requests
+    when finished.  Also modified ResponseWriters to only fetch a Searcher
+    reference if necessary for writing out DocLists.
+    (Ryan McKinley via hossman)
+
+ 7. SOLR-168: Fix display positioning of multiple tokens at the same
+    position in analysis.jsp (yonik)
+
+ 8. SOLR-167: The SynonymFilter sometimes generated incorrect offsets when
+    multi token synonyms were mached in the source text. (yonik) 
+
+ 9. SOLR-188: bin scripts do not support non-default webapp names.  Added "-U"
+    option to specify a full path to the update url, overriding the
+    "-h" (hostname), "-p" (port) and "-w" (webapp name) parameters.
+    (Jeff Rodenburg via billa)
+
+10. SOLR-198: RunExecutableListener always waited for the process to
+    finish, even when wait="false" was set. (Koji Sekiguchi via yonik)
+
+11. SOLR-207: Changed distribution scripts to remove recursive find
+    and avoid use of "find -maxdepth" on platforms where it is not
+    supported. (yonik)
+
+12. SOLR-222: Changing writeLockTimeout in solrconfig.xml did not
+    change the effective timeout. (Koji Sekiguchi via yonik)
+
+13. Changed the SOLR-104 RequestDispatcher so that /select?qt=xxx can not 
+    access handlers that start with "/".  This makes path based authentication
+    possible for path based request handlers.  (ryan)
+
+14. SOLR-214: Some servlet containers (including Tomcat and Resin) do not
+    obey the specified charset.  Rather then letting the the container handle 
+    it solr now uses the charset from the header contentType to decode posted
+    content.  Using the contentType: "text/xml; charset=utf-8" will force
+    utf-8 encoding.  If you do not specify a contentType, it will use the 
+    platform default.  (Koji Sekiguchi via ryan)
+
+15. SOLR-241: Undefined system properties used in configuration files now
+    cause a clear message to be logged rather than an obscure exception thrown.
+    (Koji Sekiguchi via ehatcher) 
+
+Other Changes
+ 1. Updated to Lucene 2.1
+
+ 2. Updated to Lucene 2007-05-20_00-04-53
+
+================== Release 1.1.0, 20061222 ==================
+
+Status
+------
+This is the first release since Solr joined the Incubator, and brings many
+new features and performance optimizations including highlighting,
+faceted browsing, and JSON/Python/Ruby response formats.
+
+
+Upgrading from previous Solr versions
+-------------------------------------
+Older Apache Solr installations can be upgraded by replacing
+the relevant war file with the new version.  No changes to configuration
+files are needed and the index format has not changed.
+
+The default version of the Solr XML response syntax has been changed to 2.2.
+Behavior can be preserved for those clients not explicitly specifying a 
+version by adding a default to the request handler in solrconfig.xml
+
+By default, Solr will no longer use a searcher that has not fully warmed,
+and requests will block in the meantime.  To change back to the previous
+behavior of using a cold searcher in the event there is no other
+warm searcher, see the useColdSearcher config item in solrconfig.xml
+
+The XML response format when adding multiple documents to the collection
+in a single <add> command has changed to return a single <result>.
+
+
+Detailed Change List
+--------------------
+
+New Features
+ 1. added support for setting Lucene's positionIncrementGap
+ 2. Admin: new statistics for SolrIndexSearcher
+ 3. Admin: caches now show config params on stats page
+ 3. max() function added to FunctionQuery suite
+ 4. postOptimize hook, mirroring the functionallity of the postCommit hook,
+    but only called on an index optimize.
+ 5. Ability to HTTP POST query requests to /select in addition to HTTP-GET
+ 6. The default search field may now be overridden by requests to the
+    standard request handler using the df query parameter. (Erik Hatcher)
+ 7. Added DisMaxRequestHandler and SolrPluginUtils. (Chris Hostetter)
+ 8. Support for customizing the QueryResponseWriter per request
+    (Mike Baranczak / SOLR-16 / hossman)
+ 9. Added KeywordTokenizerFactory (hossman)
+10. copyField accepts dynamicfield-like names as the source.
+    (Darren Erik Vengroff via yonik, SOLR-21)
+11. new DocSet.andNot(), DocSet.andNotSize() (yonik)
+12. Ability to store term vectors for fields. (Mike Klaas via yonik, SOLR-23)
+13. New abstract BufferedTokenStream for people who want to write
+    Tokenizers or TokenFilters that require arbitrary buffering of the
+    stream. (SOLR-11 / yonik, hossman)
+14. New RemoveDuplicatesToken - useful in situations where
+    synonyms, stemming, or word-deliminater-ing produce identical tokens at
+    the same position. (SOLR-11 / yonik, hossman)
+15. Added highlighting to SolrPluginUtils and implemented in StandardRequestHandler
+    and DisMaxRequestHandler (SOLR-24 / Mike Klaas via hossman,yonik)
+16. SnowballPorterFilterFactory language is configurable via the "language"
+    attribute, with the default being "English".  (Bertrand Delacretaz via yonik, SOLR-27)
+17. ISOLatin1AccentFilterFactory, instantiates ISOLatin1AccentFilter to remove accents.
+    (Bertrand Delacretaz via yonik, SOLR-28)
+18. JSON, Python, Ruby QueryResponseWriters: use wt="json", "python" or "ruby"
+    (yonik, SOLR-31)
+19. Make web admin pages return UTF-8, change Content-type declaration to include a
+    space between the mime-type and charset (Philip Jacob, SOLR-35)
+20. Made query parser default operator configurable via schema.xml:
+         <solrQueryParser defaultOperator="AND|OR"/>
+    The default operator remains "OR".
+21. JAVA API: new version of SolrIndexSearcher.getDocListAndSet() which takes
+    flags (Greg Ludington via yonik, SOLR-39)
+22. A HyphenatedWordsFilter, a text analysis filter used during indexing to rejoin
+    words that were hyphenated and split by a newline. (Boris Vitez via yonik, SOLR-41)
+23. Added a CompressableField base class which allows fields of derived types to
+    be compressed using the compress=true setting.  The field type also gains the
+    ability to specify a size threshold at which field data is compressed.
+    (klaas, SOLR-45)
+24. Simple faceted search support for fields (enumerating terms)
+    and arbitrary queries added to both StandardRequestHandler and
+    DisMaxRequestHandler. (hossman, SOLR-44)
+25. In addition to specifying default RequestHandler params in the
+    solrconfig.xml, support has been added for configuring values to be
+    appended to the multi-val request params, as well as for configuring
+    invariant params that can not overridden in the query. (hossman, SOLR-46)
+26. Default operator for query parsing can now be specified with q.op=AND|OR
+    from the client request, overriding the schema value. (ehatcher)
+27. New XSLTResponseWriter does server side XSLT processing of XML Response.
+    In the process, an init(NamedList) method was added to QueryResponseWriter
+    which works the same way as SolrRequestHandler.
+    (Bertrand Delacretaz / SOLR-49 / hossman)
+28. json.wrf parameter adds a wrapper-function around the JSON response,
+    useful in AJAX with dynamic script tags for specifying a JavaScript
+    callback function. (Bertrand Delacretaz via yonik, SOLR-56)
+29. autoCommit can be specified every so many documents added (klaas, SOLR-65)
+30. ${solr.home}/lib directory can now be used for specifying "plugin" jars
+    (hossman, SOLR-68)
+31. Support for "Date Math" relative "NOW" when specifying values of a
+    DateField in a query -- or when adding a document.
+    (hossman, SOLR-71)
+32. useColdSearcher control in solrconfig.xml prevents the first searcher
+    from being used before it's done warming.  This can help prevent
+    thrashing on startup when multiple requests hit a cold searcher.
+    The default is "false", preventing use before warm. (yonik, SOLR-77)
+    
+Changes in runtime behavior
+ 1. classes reorganized into different packages, package names changed to Apache
+ 2. force read of document stored fields in QuerySenderListener
+ 3. Solr now looks in ./solr/conf for config, ./solr/data for data
+    configurable via solr.solr.home system property
+ 4. Highlighter params changed to be prefixed with "hl."; allow fragmentsize
+    customization and per-field overrides on many options 
+    (Andrew May via klaas, SOLR-37)
+ 5. Default param values for DisMaxRequestHandler should now be specified
+    using a '<lst name="defaults">...</lst>' init param, for backwards
+    compatability all init prams will be used as defaults if an init param
+    with that name does not exist. (hossman, SOLR-43)
+ 6. The DisMaxRequestHandler now supports multiple occurances of the "fq"
+    param. (hossman, SOLR-44)
+ 7. FunctionQuery.explain now uses ComplexExplanation to provide more
+    accurate score explanations when composed in a BooleanQuery.
+    (hossman, SOLR-25)
+ 8. Document update handling locking is much sparser, allowing performance gains
+    through multiple threads.  Large commits also might be faster (klaas, SOLR-65)
+ 9. Lazy field loading can be enabled via a solrconfig directive.  This will be faster when
+    not all stored fields are needed from a document (klaas, SOLR-52)   
+10. Made admin JSPs return XML and transform them with new XSL stylesheets
+    (Otis Gospodnetic, SOLR-58)
+11. If the "echoParams=explicit" request parameter is set, request parameters are copied 
+    to the output. In an XML output, they appear in new <lst name="params"> list inside 
+    the new <lst name="responseHeader"> element, which replaces the old <responseHeader>. 
+    Adding a version=2.1 parameter to the request produces the old format, for backwards 
+    compatibility (bdelacretaz and yonik, SOLR-59).
+
+Optimizations 
+ 1. getDocListAndSet can now generate both a DocList and a DocSet from a 
+    single lucene query.
+ 2. BitDocSet.intersectionSize(HashDocSet) no longer generates an intermediate
+    set
+ 3. OpenBitSet completed, replaces BitSet as the implementation for BitDocSet.
+    Iteration is faster, and BitDocSet.intersectionSize(BitDocSet) and unionSize
+    is between 3 and 4 times faster. (yonik, SOLR-15)
+ 4. much faster unionSize when one of the sets is a HashDocSet: O(smaller_set_size)
+ 5. Optimized getDocSet() for term queries resulting in a 36% speedup of facet.field
+    queries where DocSets aren't cached (for example, if the number of terms in the field
+    is larger than the filter cache.) (yonik)
+ 6. Optimized facet.field faceting by as much as 500 times when the field has
+    a single token per document (not multiValued & not tokenized) by using the
+    Lucene FieldCache entry for that field to tally term counts.  The first request
+    utilizing the FieldCache will take longer than subsequent ones.
+
+Bug Fixes
+ 1. Fixed delete-by-id for field types who's indexed form is different
+    from the printable form (mainly sortable numeric types).
+ 2. Added escaping of attribute values in the XML response (Erik Hatcher)
+ 3. Added empty extractTerms() to FunctionQuery to enable use in
+    a MultiSearcher (Yonik)
+ 4. WordDelimiterFilter sometimes lost token positionIncrement information
+ 5. Fix reverse sorting for fields were sortMissingFirst=true
+    (Rob Staveley, yonik)
+ 6. Worked around a Jetty bug that caused invalid XML responses for fields
+    containing non ASCII chars.  (Bertrand Delacretaz via yonik, SOLR-32)
+ 7. WordDelimiterFilter can throw exceptions if configured with both
+    generate and catenate off.  (Mike Klaas via yonik, SOLR-34)
+ 8. Escape '>' in XML output (because ]]> is illegal in CharData) 
+ 9. field boosts weren't being applied and doc boosts were being applied to fields (klaas)
+10. Multiple-doc update generates well-formed xml (klaas, SOLR-65)
+11. Better parsing of pingQuery from solrconfig.xml (hossman, SOLR-70)
+12. Fixed bug with "Distribution" page introduced when Versions were
+    added to "Info" page (hossman)
+13. Fixed HTML escaping issues with user input to analysis.jsp and action.jsp
+    (hossman, SOLR-74)
+
+Other Changes
+ 1. Upgrade to Lucene 2.0 nightly build 2006-06-22, lucene SVN revision 416224,
+    http://svn.apache.org/viewvc/lucene/java/trunk/CHANGES.txt?view=markup&pathrev=416224
+ 2. Modified admin styles to improve display in Internet Explorer (Greg Ludington via billa, SOLR-6)
+ 3. Upgrade to Lucene 2.0 nightly build 2006-07-15, lucene SVN revision 422302,
+ 4. Included unique key field name/value (if available) in log message of add (billa, SOLR-18)
+ 5. Updated to Lucene 2.0 nightly build 2006-09-07, SVN revision 462111
+ 6. Added javascript to catch empty query in admin query forms (Tomislav Nakic-Alfirevic via billa, SOLR-48
+ 7. blackslash escape * in ssh command used in snappuller for zsh compatibility, SOLR-63
+ 8. check solr return code in admin scripts, SOLR-62
+ 9. Updated to Lucene 2.0 nightly build 2006-11-15, SVN revision 475069
+10. Removed src/apps containing the legacy "SolrTest" app (hossman, SOLR-3)
+11. Simplified index.jsp and form.jsp, primarily by removing/hiding XML
+    specific params, and adding an option to pick the output type. (hossman)
+12. Added new numeric build property "specversion" to allow clean
+    MANIFEST.MF files (hossman)
+13. Added Solr/Lucene versions to "Info" page (hossman)
+14. Explicitly set mime-type of .xsl files in web.xml to
+    application/xslt+xml (hossman)
+15. Config parsing should now work useing DOM Level 2 parsers -- Solr
+    previously relied on getTextContent which is a DOM Level 3 addition
+    (Alexander Saar via hossman, SOLR-78)
+
+2006/01/17 Solr open sourced, moves to Apache Incubator

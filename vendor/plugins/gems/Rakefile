@@ -1,0 +1,21 @@
+require 'rake/rdoctask'
+
+plugin_name = File.basename(File.dirname(__FILE__))
+
+task :default => :doc
+task :rdoc => :doc
+
+desc "Generate rdoc for #{plugin_name}"
+Rake::RDocTask.new(:doc) do |t|
+  t.rdoc_dir = 'doc'
+  t.main     = 'README'
+  t.title    = "#{plugin_name}"
+  t.template = ENV['RDOC_TEMPLATE']
+  t.options  = ['--line-numbers', '--inline-source']
+  t.rdoc_files.include('README', 'MIT-LICENSE')
+  t.rdoc_files.include('lib/**/*.rb')
+end
+
+namespace :doc do 
+  task :all => :doc
+end

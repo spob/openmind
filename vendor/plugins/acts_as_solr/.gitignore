@@ -1,0 +1,8 @@
+*.log
+*.log
+*_pid
+coverage/*
+coverage.data
+solr/solr/data/*
+.svn
+test/db/*.db

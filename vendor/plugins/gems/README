@@ -1,0 +1,69 @@
+http://plugins.ardes.com > gems
+
+= NOTE: Rails edge has the gems tasks now - use them instead!
+
+= gems
+
+Adapted from technoweenies freeze gems plugin.  This version adds two features:
+
+1. gems are unpacked into vendor/gems to make clear what they are
+
+2. it's possible to have multiple versions of gems with architecture dependent features
+
+== Usage
+  
+==== freeze
+
+  rake gems:freeze GEM=gemname [VERSION=version] [ARCH=detect|archname] [TO=dirname]
+
+Running the above task will unpack the named gem into RAILS_ROOT/vendor/gems/ARCH/
+
+If ARCH is unspecified, and the gem has no extensions, the gem will be unpacked into gems/ruby
+If ARCH is unspecified, and the gem has extensions, ARCH will be detected and the gem will
+be unpacked into gems/ARCH.  
+
+==== unfreeze
+
+  rake gems:unfreeze GEM=gemname
+  
+will remove the named gem from all ARCHS
+
+==== loading
+
+The init.rb file loads gems from gems/ARCH and then gems/ruby, automatically.
+This means that you can have two different versions of a gem, for different architectures, 
+and the correct one will be loaded.
+  
+== Example
+
+_hpricot_ builds native extensions, while _syntax_ does not.  Here's how this gems:freeze plugin handles that.
+
+On my dev platform (a mac):
+
+  rake gems:freeze GEM=hpricot
+  rake gems:freeze GEM=syntax
+  
+results in the following lqyout:
+
+  vendor/
+    gems/
+      i686-apple-darwin8.9.1/
+        hpricot-0.5/
+      ruby/
+        syntax-1.0.0/
+
+I can add these to svn, or whatever.  On my deployment platform (Fedora box), the hpricot gem will not be
+loaded, because the arch is for the mac.  So i need to add the linux version of hpricot:
+
+So I log into the fedora box, and do:
+
+  rake gems:freeze GEM=hpricot
+  
+which results in adding:
+
+  vendor/
+    gems/
+      i386-redhat-linux-gnu/
+        hpricot-0.5/  
+
+I can add this to my scm, and the correct version will be loaded on each machine.
