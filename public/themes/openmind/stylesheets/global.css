@@ -565,3 +565,44 @@ span.highlight {
 #openid_url {
   width:210px;
 }
+
+
+/********* Faq Accordian menus ***********/
+h3.faqSections
+{
+    border-top: dotted 1px #999;
+    border-bottom: none;
+    margin-bottom: 3px;
+    font-size:14px;
+}
+
+.faqSections
+{
+    /*header of 1st demo*/
+    cursor: hand;
+    cursor: pointer;
+    padding: 0 5px;
+}
+
+.theSection 
+{
+    padding: 0 10px;
+}    
+
+
+h3.openSectionHeader
+{
+    background: #ccc;
+    border-bottom: dotted 1px #999;
+}
+
+h3.closedSectionHeader
+{
+    background-color: #efefef;
+    border-bottom: dotted 1px #999;
+}
+
+h3.closedSectionHeader:hover
+{
+    background-color: #ccc;
+}

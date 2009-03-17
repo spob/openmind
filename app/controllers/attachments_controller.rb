@@ -70,7 +70,7 @@ class AttachmentsController < ApplicationController
           if params[:attachment][:alias] == params[:attachment][:confirm_alias]
             # user has confirmed the change
             if params[:delete_old_alias] == "true"
-              Attachment.delete(other_attachment.id)
+              Attachment.destroy(other_attachment.id)
             else
               other_attachment.alias = nil
               other_attachment.save!
