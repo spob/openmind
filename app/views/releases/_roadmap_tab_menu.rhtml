@@ -1,0 +1,12 @@
+<div id="tabs">
+  <ul class="tabs">
+    <li class="selected"><%= link_to "Roadmap", list_releases_path,
+        html_options = {
+        :onmouseover => "Tip('View roadmap')",
+        :method => :get } %></li>
+    <li><%= link_to "Products", products_path,
+        html_options = {
+        :onmouseover => "Tip('View products')" } %></li>
+  </ul>
+</div>
+<div id="menuline"></div>

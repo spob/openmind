@@ -1,0 +1,29 @@
+<% if forum_metric.can_see? current_user %>
+  <h3>
+    <% if forum_metric.id.nil? %>
+      <%= forum_metric.name %>
+    <% else %>
+      <%= link_to forum_metric.name, forum_path(forum_metric),
+        html_options = {:onmouseover => "Tip('View details for the #{forum_metric.name} forum')"} %>
+    <% end %>
+  </h3>
+  <table cellspacing="0" cellpadding="0" class="cssform">
+    <tr>
+      <th rowspan="2">Moderator</th>
+      <th colspan="3">Open Topics</th>
+      <th colspan="8">Closed Topics in Week Beginning</th>
+    </tr>
+    <tr>
+      <th>Count</th>
+      <th>Average Days Open</th>
+      <th>Oldest Days Open</th>
+      <% (1..ForumsController.week_size).each do |i| %>
+        <th><%= @weeks[i].strftime("%b %d") %> </th>
+      <% end %>
+    </tr>
+    <%=render(:partial => "mediator_forum_metric", :collection => forum_metric.mediators,
+      :locals => {:forum => forum_metric} )%>
+    <%=render(:partial => "mediator_forum_metric",
+      :locals => {:mediator_forum_metric => dummy_unassigned_mediator, :forum => forum_metric} )%>
+  </table>
+<% end %>

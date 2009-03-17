@@ -1,0 +1,18 @@
+<% unless buttons.confirm_alias.blank? %>
+<p>
+    <label for="delete_old_alias">
+        Delete old file?:
+    </label>
+    <%= check_box_tag("delete_old_alias", "true", false) %>
+</p>
+<% end %>
+<p>
+    <label>
+    </label>
+    <%= submit_tag 'Save', html_options = {:class=> "button", :disable_with => "Please wait...",
+    :onmouseover => "Tip('Save changes to attachment')"} if buttons.confirm_alias.blank? %>
+    <%= submit_tag 'Confirm', html_options = {:class=> "button", :disable_with => "Please wait...",
+    :onmouseover => "Tip('Confirm changes to attachment. By confirming, the alias will be removed from the previous document onto this document')"} unless buttons.confirm_alias.blank? %>
+    <%= link_to 'Cancel', attachment_path(buttons), html_options = {:class=> "button",
+    :onmouseover => "Tip('Do not save changes to attachment')"} %>
+</p>

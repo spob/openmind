@@ -1,0 +1,5 @@
+<%= javascript_include_tag "wz_tooltip.js", :cache => "cache/tooltip" %>
+
+<h1>Forum Management Metrics</h1>
+<%=render(:partial => "forum_metric", :locals => {:forum_metric => dummy_all_forum })%>
+<%=render(:partial => "forum_metric", :collection => @forums)%>
