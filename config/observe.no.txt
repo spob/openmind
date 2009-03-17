@@ -1,0 +1,6 @@
+This is a total hack...caused by the fact that by instantiating the observers,
+rails will look at the models, which will cause acts_as_solr to look for the
+tables, which will not have been created yet in the case of the initial migration.
+
+Once the initial migration has run, enable observers by copying this file to
+$RAILS_ROOT/config/observe.txt
