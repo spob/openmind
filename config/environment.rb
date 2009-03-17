@@ -22,8 +22,6 @@ Rails::Initializer.run do |config|
   
   config.gem 'thoughtbot-shoulda', :lib => 'shoulda/rails', :source => "http://gems.github.com"
   
-  config.gem "RedCloth", :lib => 'redcloth', :source => "http://code.whytheluckystiff.net/"
-  
   config.gem "ruby-yadis",  :lib => 'yadis',  :version => '0.3.4'
   
   config.gem "ruby-openid", :lib => 'openid', :version => '1.1.4'
