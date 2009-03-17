@@ -6,4 +6,7 @@ config/environments/development.rb
 nbproject
 db/schema.rb
 **/.specification
-**/cache
+**/cache/**/*
+vendor/gems/RedCloth-3.0.4/.specification
+public/javascripts/cache/
+public/themes/openmind/cache/
