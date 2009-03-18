@@ -4,7 +4,7 @@ require 'groups_controller'
 # Re-raise errors caught by the controller.
 class GroupsController; def rescue_action(e) raise e end; end
 
-class GroupsControllerTest < ActiveSupport::TestCase 
+class GroupsControllerTest < ActionController::TestCase 
   fixtures :groups, :users
 
   def setup

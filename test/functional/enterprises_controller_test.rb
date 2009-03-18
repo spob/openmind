@@ -4,7 +4,7 @@ require 'enterprises_controller'
 # Re-raise errors caught by the controller.
 class EnterprisesController; def rescue_action(e) raise e end; end
 
-class EnterprisesControllerTest < ActiveSupport::TestCase 
+class EnterprisesControllerTest < ActionController::TestCase 
   fixtures :enterprises, :users
   
   def setup

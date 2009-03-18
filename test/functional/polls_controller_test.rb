@@ -4,7 +4,7 @@ require 'polls_controller'
 # Re-raise errors caught by the controller.
 class PollsController; def rescue_action(e) raise e end; end
 
-class PollsControllerTest < ActiveSupport::TestCase 
+class PollsControllerTest < ActionController::TestCase 
   fixtures :polls, :users, :poll_options
 
   def setup

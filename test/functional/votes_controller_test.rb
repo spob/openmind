@@ -4,7 +4,7 @@ require 'votes_controller'
 # Re-raise errors caught by the controller.
 class VotesController; def rescue_action(e) raise e end; end
 
-class VotesControllerTest < ActiveSupport::TestCase 
+class VotesControllerTest < ActionController::TestCase 
   # BOB -- So, I'm supposed to include this? 
   # I don't think you need it...
   # include AuthenticatedTestHelper

@@ -4,7 +4,7 @@ require 'comments_controller'
 # Re-raise errors caught by the controller.
 class CommentsController; def rescue_action(e) raise e end; end
 
-class CommentsControllerTest < ActiveSupport::TestCase 
+class CommentsControllerTest < ActionController::TestCase 
   fixtures :comments, :users, :ideas, :forums, :topics
 
   def setup
