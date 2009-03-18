@@ -4,7 +4,7 @@ require 'static_controller'
 # Re-raise errors caught by the controller.
 class StaticController; def rescue_action(e) raise e end; end
 
-class StaticControllerTest < Test::Unit::TestCase
+class StaticControllerTest < ActiveSupport::TestCase 
   def setup
     @controller = StaticController.new
     @request    = ActionController::TestRequest.new

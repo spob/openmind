@@ -10,7 +10,7 @@
 # 
 require File.dirname(__FILE__) + '/../test_helper'
 
-class UserLogonTest < Test::Unit::TestCase
+class UserLogonTest < ActiveSupport::TestCase 
   fixtures :user_logons, :users, :enterprises
 
   should_belong_to :user

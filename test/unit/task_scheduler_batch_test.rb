@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
-class TaskSchedulerBatchTest < Test::Unit::TestCase
+class TaskSchedulerBatchTest < ActiveSupport::TestCase 
   
   should_require_attributes :run_counter
   

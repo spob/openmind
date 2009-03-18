@@ -1,18 +1,18 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
-class UserTest < Test::Unit::TestCase
+class UserTest < ActiveSupport::TestCase 
   # Be sure to include AuthenticatedTestHelper in test/test_helper.rb instead.
   # Then, you can remove it from this and the functional test.
   include AuthenticatedTestHelper
   fixtures :users, :enterprises, :allocations, :votes, :roles, :topics, :polls, 
-    :poll_options
-
+  :poll_options
+  
   should_have_and_belong_to_many :roles
   should_have_many :topic_watches
   should_have_many :user_logons, :dependent => :destroy
   should_have_many :ideas,:dependent => :destroy
   should_have_many :allocations, :dependent => :destroy
-
+  
   def test_full_name
     user = User.new(:last_name => "xxx")
     assert_equal "xxx", user.full_name
@@ -55,91 +55,91 @@ class UserTest < Test::Unit::TestCase
   
   def test_create_and_destroy
     user = User.new({ :email => 'changeme@openmind.org', 
-        :password => 'changeme', :password_confirmation => 'changeme',
-        :last_name => "xxx",
-        :salt => 'sodiumchrolide',
-        :enterprise_id => enterprises(:active_enterprise).id })
+      :password => 'changeme', :password_confirmation => 'changeme',
+      :last_name => "xxx",
+      :salt => 'sodiumchrolide',
+      :enterprise_id => enterprises(:active_enterprise).id })
     user.save!
     user.destroy
   end
   
   def test_should_create_user
-    assert_difference 'User.count', 1 do
-      user = create_user
-      assert_equal 10, user.row_limit
-      assert !user.new_record?, "#{user.errors.full_messages.to_sentence}"
-    end
+    count = User.count
+    user = create_user
+    assert_equal 10, user.row_limit
+    assert !user.new_record?, "#{user.errors.full_messages.to_sentence}"
+    assert_equal User.count, count + 1
   end
-
+  
   def test_should_not_require_login
     u = create_user( :email => 'dummy@openmind.com',
-      :enterprise_id => enterprises(:active_enterprise).id)
+    :enterprise_id => enterprises(:active_enterprise).id)
     assert u.valid?
   end
-
+  
   def test_should_require_password
-    assert_no_difference 'User.count' do
-      u = create_user(:password => nil)
-      assert u.errors.on(:password)
-    end
+    count = User.count
+    u = create_user(:password => nil)
+    assert u.errors.on(:password)
+    assert_equal count, User.count
   end
-
+  
   def test_should_require_password_confirmation
-    assert_no_difference 'User.count' do
-      u = create_user(:password_confirmation => nil)
-      assert u.errors.on(:password_confirmation)
-    end
+    count = User.count
+    u = create_user(:password_confirmation => nil)
+    assert u.errors.on(:password_confirmation)
+    assert_equal count, User.count
   end
-
+  
   def test_should_require_email
-    assert_no_difference 'User.count' do
-      u = create_user(:email => nil)
-      assert u.errors.on(:email)
-    end
+    count = User.count
+    u = create_user(:email => nil)
+    assert u.errors.on(:email)
+    assert_equal count, User.count
   end
-
+  
   def test_should_require_valid_email
-    assert_no_difference 'User.count' do
-      u = create_user(:email => "xxx")
-      assert u.errors.on(:email)
-    end
+    count = User.count
+    u = create_user(:email => "xxx")
+    assert u.errors.on(:email)
+    assert_equal count, User.count
   end
   
   def test_should_require_row_count_greater_than_one
-    assert_no_difference 'User.count' do
-      u = create_user(:row_limit => 0)
-      assert u.errors.on(:row_limit)
-    end
+    count = User.count
+    u = create_user(:row_limit => 0)
+    assert u.errors.on(:row_limit)
+    assert_equal count, User.count
   end
-
+  
   def test_should_reset_password
     users(:quentin).update_attributes(:password => 'new password', :password_confirmation => 'new password')
     assert_equal users(:quentin), User.authenticate('quentin@example.com', 'new password')
   end
-
+  
   def test_should_not_rehash_password
     users(:quentin).update_attributes(:login => 'quentin@example.com')
     assert_equal users(:quentin), User.authenticate('quentin@example.com', 'secret')
   end
-
+  
   def test_should_authenticate_user
     assert_equal users(:quentin), User.authenticate('quentin@example.com', 'secret')
   end
-
+  
   def test_should_not_authenticate_user_inactive_enterprise
     assert_not_equal users(:active_user_inactive_enterprise), User.authenticate('inactiveenterprise@example.com', 'secret')
   end
-
+  
   def test_should_not_authenticate_inactive_user
     assert_not_equal users(:inactive_user), User.authenticate('inactive@example.com', 'secret')
   end
-
+  
   def test_should_set_remember_token
     users(:quentin).remember_me
     assert_not_nil users(:quentin).remember_token
     assert_not_nil users(:quentin).remember_token_expires_at
   end
-
+  
   def test_should_unset_remember_token
     users(:quentin).remember_me
     assert_not_nil users(:quentin).remember_token
@@ -223,23 +223,23 @@ class UserTest < Test::Unit::TestCase
   end
   
   context "testing the make logic for activation codes" do
-    should "create a code" do
-      @u = create_user
-      assert_not_nil @u.activation_code
-    end
-    
-    should "not create a code" do
-      @u = create_user(:activation_code => "SKIP")
-      assert @u.activation_code.nil?
-    end
+  should "create a code" do
+    @u = create_user
+    assert_not_nil @u.activation_code
   end
+  
+  should "not create a code" do
+    @u = create_user(:activation_code => "SKIP")
+    assert @u.activation_code.nil?
+  end
+end
 
-  protected
-  def create_user(options = {})
-    User.create({ :email => 'quire@example.com', 
-        :password => 'quire', 
-        :password_confirmation => 'quire',
-        :last_name => 'Blah',
-        :enterprise_id => enterprises(:active_enterprise).id }.merge(options))
-  end
+protected
+def create_user(options = {})
+  User.create({ :email => 'quire@example.com', 
+    :password => 'quire', 
+    :password_confirmation => 'quire',
+    :last_name => 'Blah',
+    :enterprise_id => enterprises(:active_enterprise).id }.merge(options))
+end
 end

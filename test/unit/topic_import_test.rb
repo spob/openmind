@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
-class TopicTest < Test::Unit::TestCase
+class TopicTest < ActiveSupport::TestCase 
   fixtures :topics, :forums, :users, :comments
   
   context "testing bad topic imports" do

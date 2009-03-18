@@ -4,7 +4,7 @@ require 'ideas_controller'
 # Re-raise errors caught by the controller.
 class IdeasController; def rescue_action(e) raise e end; end
 
-class IdeasControllerTest < Test::Unit::TestCase
+class IdeasControllerTest < ActiveSupport::TestCase 
   fixtures :ideas, :users, :products, :releases
 
   def setup

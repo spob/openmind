@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
-class PeriodicJobTest < Test::Unit::TestCase
+class PeriodicJobTest < ActiveSupport::TestCase 
   fixtures :periodic_jobs
 
   context "running job" do

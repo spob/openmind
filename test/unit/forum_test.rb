@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
-class ForumTest < Test::Unit::TestCase
+class ForumTest < ActiveSupport::TestCase 
   fixtures :users, :roles, :topics, :forums, :lookup_codes,
     :user_topic_reads, :groups
 

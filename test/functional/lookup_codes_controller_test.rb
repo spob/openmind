@@ -4,7 +4,7 @@ require 'lookup_codes_controller'
 # Re-raise errors caught by the controller.
 class LookupCodesController; def rescue_action(e) raise e end; end
 
-class LookupCodesControllerTest < Test::Unit::TestCase
+class LookupCodesControllerTest < ActiveSupport::TestCase 
   fixtures :lookup_codes, :users
 
   def setup

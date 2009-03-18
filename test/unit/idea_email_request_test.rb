@@ -11,7 +11,7 @@
 
 require File.dirname(__FILE__) + '/../test_helper'
 
-class IdeaEmailRequestTest < Test::Unit::TestCase
+class IdeaEmailRequestTest < ActiveSupport::TestCase 
   fixtures :ideas, :users, :email_requests, :products
 
   should_require_attributes :idea

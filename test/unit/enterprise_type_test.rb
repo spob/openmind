@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
-class EnterpriseTypeTest < Test::Unit::TestCase
+class EnterpriseTypeTest < ActiveSupport::TestCase 
   fixtures :enterprises, :lookup_codes
 
   should_require_attributes :description

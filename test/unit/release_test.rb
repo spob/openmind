@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
-class ReleaseTest < Test::Unit::TestCase
+class ReleaseTest < ActiveSupport::TestCase 
   fixtures :releases, :products, :lookup_codes, :users, :release_change_logs
   
   should_have_many :ideas, :dependent => :destroy

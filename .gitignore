@@ -14,3 +14,4 @@ doc/~$Manual.docx
 .project
 config/observe.txt
 tmp/pids/*.pid
+debug.log

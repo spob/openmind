@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
-class TopicCommentTest < Test::Unit::TestCase
+class TopicCommentTest < ActiveSupport::TestCase 
   fixtures :comments, :ideas, :users, :topics
   
   should_belong_to :topic

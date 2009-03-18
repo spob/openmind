@@ -8,9 +8,6 @@ class ApplicationController < ActionController::Base
     :can_delete_idea?, :flash_error_string, :flash_notice_string
   filter_parameter_logging :password, :password_confirmation# controllers/application.rb
   
-  # Pick a unique cookie name to distinguish our session data from others'
-  session :session_key => '_OpenMind_session_id'
-  
   before_filter :login_from_cookie, :set_time_zone, :set_charset
   
   def set_charset

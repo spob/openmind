@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
-class ProductTest < Test::Unit::TestCase
+class ProductTest < ActiveSupport::TestCase 
   fixtures :products, :lookup_codes
 
   should_have_and_belong_to_many :watchers

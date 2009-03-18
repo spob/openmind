@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
-class ReleaseStatusTest < Test::Unit::TestCase
+class ReleaseStatusTest < ActiveSupport::TestCase 
   fixtures :lookup_codes
 
   def test_invalid_with_empty_attributes

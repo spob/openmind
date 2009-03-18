@@ -4,7 +4,7 @@ require 'topics_controller'
 # Re-raise errors caught by the controller.
 class TopicsController; def rescue_action(e) raise e end; end
 
-class TopicsControllerTest < Test::Unit::TestCase
+class TopicsControllerTest < ActiveSupport::TestCase 
   fixtures :topics, :users, :forums, :groups, :roles, :topic_watches
 
   def setup

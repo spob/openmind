@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
-class PollOptionTest < Test::Unit::TestCase
+class PollOptionTest < ActiveSupport::TestCase 
   fixtures :users, :polls, :poll_options
 
   def test_invalid_with_empty_attributes

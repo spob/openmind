@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
-class RoleTest < Test::Unit::TestCase
+class RoleTest < ActiveSupport::TestCase 
   fixtures :roles
 
   should_require_unique_attributes :title, :description

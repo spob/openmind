@@ -4,7 +4,7 @@ require 'merge_ideas_controller'
 # Re-raise errors caught by the controller.
 class MergeIdeasController; def rescue_action(e) raise e end; end
 
-class MergeIdeasControllerTest < Test::Unit::TestCase
+class MergeIdeasControllerTest < ActiveSupport::TestCase 
   fixtures :users, :enterprises, :ideas
   
   def setup

@@ -4,7 +4,7 @@ require 'releases_controller'
 # Re-raise errors caught by the controller.
 class ReleasesController; def rescue_action(e) raise e end; end
 
-class ReleasesControllerTest < Test::Unit::TestCase
+class ReleasesControllerTest < ActiveSupport::TestCase 
   fixtures :releases, :users, :lookup_codes, :products, :roles
 
   def setup

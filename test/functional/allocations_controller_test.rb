@@ -4,7 +4,7 @@ require 'allocations_controller'
 # Re-raise errors caught by the controller.
 class AllocationsController; def rescue_action(e) raise e end; end
 
-class AllocationsControllerTest < Test::Unit::TestCase
+class AllocationsControllerTest < ActiveSupport::TestCase 
   fixtures :allocations, :users, :enterprises
 
   def setup

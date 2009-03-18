@@ -4,7 +4,7 @@ require 'forums_controller'
 # Re-raise errors caught by the controller.
 class ForumsController; def rescue_action(e) raise e end; end
 
-class ForumsControllerTest < Test::Unit::TestCase
+class ForumsControllerTest < ActiveSupport::TestCase 
   fixtures :forums, :users, :lookup_codes, :topics, :comments
 
   def setup

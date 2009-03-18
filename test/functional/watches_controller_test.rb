@@ -4,7 +4,7 @@ require 'watches_controller'
 # Re-raise errors caught by the controller.
 class WatchesController; def rescue_action(e) raise e end; end
 
-class WatchesControllerTest < Test::Unit::TestCase
+class WatchesControllerTest < ActiveSupport::TestCase 
   fixtures :users, :watches, :ideas, :forums, :topics, :products
   
   def setup

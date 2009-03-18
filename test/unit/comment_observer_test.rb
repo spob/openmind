@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
-class CommentObserverTest < Test::Unit::TestCase
+class CommentObserverTest < ActiveSupport::TestCase 
   fixtures :ideas, :comments, :users, :watches
 
   context "while testing comments observer" do

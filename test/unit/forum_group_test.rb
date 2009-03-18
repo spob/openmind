@@ -14,7 +14,7 @@
 #
 require File.dirname(__FILE__) + '/../test_helper'
 
-class ForumGroupTest < Test::Unit::TestCase
+class ForumGroupTest < ActiveSupport::TestCase 
   fixtures :forums, :lookup_codes
 
   should_have_many :forums
