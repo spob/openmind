@@ -73,7 +73,7 @@ class PeriodicJobTest < ActiveSupport::TestCase
       minutes = minutes - 60
     end
     #    puts "#{"%02d" % hours}:#{"%02d" % minutes}"
-    time = Time.parse("#{"%02d" % hours}:#{"%02d" % minutes}")
+    time = Time.zone.parse("#{"%02d" % hours}:#{"%02d" % minutes}")
     next_job = periodic_jobs(:run_interval_job_never_run_at_future).calc_next_run
     next_job.save
     assert_equal time, next_job.next_run_at
