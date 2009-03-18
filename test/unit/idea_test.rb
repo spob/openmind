@@ -46,7 +46,7 @@ class IdeaTest < Test::Unit::TestCase
   end
   
   should "format as redcloth" do
-    assert_equal "<p>#{ideas(:first_idea).description}</p>", ideas(:first_idea).formatted_description
+    assert_equal "#{ideas(:first_idea).description}", ideas(:first_idea).formatted_description
   end
   
   context "testing can edit?" do

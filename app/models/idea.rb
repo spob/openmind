@@ -242,6 +242,7 @@ class Idea < ActiveRecord::Base
   end
   
   def formatted_description
+    return description unless textiled
     r = RedCloth.new description
     r.to_html
   end

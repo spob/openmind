@@ -20,18 +20,21 @@ first_comment:
   idea: first_idea
   body: first comment for first idea
   type: IdeaComment
+  textiled: false
 
 second_comment:
   user: aaron
   idea: first_idea
   body: second comment for first idea
   type: IdeaComment
+  textiled: false
 
 third_comment:
   user: prodmgr
   idea: no_votes_idea
   body: third comment for no votes idea
   type: IdeaComment
+  textiled: false
 
 topic_comment:
   user: prodmgr
@@ -40,6 +43,7 @@ topic_comment:
   type: TopicComment
   published_at: <%= (Time.zone.now - 3.day).to_s(:db) %>
   created_at: <%= (Time.zone.now - 3.day).to_s(:db) %>
+  textiled: false
 
 topic_comment2:
   user: aaron
@@ -48,6 +52,7 @@ topic_comment2:
   type: TopicComment
   published_at: <%= (Time.zone.now - 2.day).to_s(:db) %>
   created_at: <%= (Time.zone.now - 2.day).to_s(:db) %>
+  textiled: false
 
 topic_comment3:
   user: judy
@@ -56,3 +61,4 @@ topic_comment3:
   type: TopicComment
   published_at: <%= (Time.zone.now - 1.day).to_s(:db) %>
   created_at: <%= (Time.zone.now - 1.day).to_s(:db) %>
+  textiled: false
