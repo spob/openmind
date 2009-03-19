@@ -1,0 +1,21 @@
+.formContainer {
+    position:relative;
+    float:none;
+}
+
+.cssform p{height: 1%;
+}
+
+.cssform label {
+    float:none;
+    position:relative;
+}
+
+#data
+{
+    height: 1%;
+}
+
+.inside {
+    width: 1000px;
+}
