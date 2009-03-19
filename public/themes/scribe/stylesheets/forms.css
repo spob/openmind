@@ -1,0 +1,343 @@
+.formContainer {
+    float: left;
+    width: 100%;
+    position:relative;
+}
+
+.formContainer li
+{
+    font-size: 1.0em;
+}
+
+.cssform {
+    font-family: "Lucida Grande" , Tahoma, Arial, sans-serif;
+    background-color: #fff;
+    margin: 0 0 20px 0;
+    padding: 0 0 20px 0;
+    border-left: solid 1px #ccc;
+    border-right: solid 1px #ccc;
+    border-bottom: solid 1px #ccc;
+}
+
+.searchform {
+    margin:10px 0;
+    border-top: solid 1px #ccc;
+    padding:6px 6px 4px 6px;
+    background-color:#f5f5f5;
+}
+
+.formTitle {
+    background-color: #525252;
+    color: #EFEFEF;
+    padding: 1px 5px 1px 8px;
+    font-size: 1.5em; /*18px */
+    line-height: 1.5em; /* 22px */
+    padding-left: 0.25em;
+    margin-top:10px;
+    background-repeat: repeat-x;
+    background-image: url(../images/forms/headerBgTile.gif);
+    vertical-align: middle;
+}
+
+.formTitle img {
+    padding-right:5px
+}
+
+.secondary {
+ margin-top:45px;
+}
+
+.cssform p {
+    position: relative;
+    clear: left;
+    margin: 0;
+    padding: 5px 0 8px 0;
+    padding-left: 155px; /*width of left column containing the label elements*/
+    border-bottom:dotted 1px #ccc;
+    height: 1%;
+}
+
+.searchform p {
+    border-bottom:none;
+}
+
+.cssform p.releases, .cssform p.forums {
+    padding: 10px 10px 10px 15px; /*width of left column containing the label elements*/
+    border-bottom:none;
+}
+
+.cssform ul {
+    padding-left: 175px; /*width of left column containing the label elements*/
+    border-bottom:dotted 1px #ccc;
+}
+
+.cssform ul li {
+    font-size: 1.0em;
+    line-height: 1.0em;
+}
+
+.cssform ul.ajaxful-rating {
+    padding:0;
+    border: none
+}
+
+.cssform p:hover, .cssform ul:hover {
+    background-color: #f5f5f5;
+}
+
+.cssform ul.releases {
+    padding:0;
+    margin:15px;
+    list-style-type:none;
+    list-style-position: inside;
+}
+
+.cssform ul.releases_desc {
+    padding:0;
+    margin:15px;
+    list-style-position: inside;
+    border-bottom:none;
+}
+
+.cssform ul.releases  li {
+    font-size: 1.0em;
+    line-height: 1.0em;
+}
+
+.cssform ul.releases:hover {
+    background-color: transparent;
+}
+
+.cssform label {
+    float: left;
+    line-height: 150%;
+    padding: 0 5px 1px 10px;
+    border: none;
+    color: #222;
+    display: block;
+    font-weight: bold;
+    margin-left: -155px;
+    width: 140px;
+    text-align:right;
+}
+
+.widerLabel label {
+    width: 150px;
+}
+
+.cssform input[type="text"], .cssform textarea, .cssform select, .cssform input[type="password"] {
+    font-family: "Lucida Grande" , Tahoma, Arial, sans-serif;
+}
+
+.cssform input[type="text"], .cssform textarea, .cssform select, .cssform input[type="password"] {
+    width: 95%;
+    border:solid 1px #999;
+    padding:2px;
+}
+
+input.narrowText[type="text"]
+{
+    width: 100px;
+}
+
+.cssform  .narrowSelect
+{
+    width: 200px;
+}
+
+.cssform input[type="file"] {
+    font-family: "Lucida Grande" , Tahoma, Arial, sans-serif;
+    color: #000;
+    background-color: #eee;
+    padding: 0 7px;
+    margin-right:3px;
+    width: auto;
+    overflow: visible;
+    border: solid 1px #999;
+}
+
+.cssform textarea {
+    font-size: 1em;
+    height:100px;
+}
+
+.cssform input[type="checkbox"], .cssform input[type="radio"] {
+    margin-right: 8px;
+}
+
+.cssform .insideFormTitle {
+    font-weight:bold; 
+    margin:5px 0 0 80px;
+    text-decoration:underline;
+}
+
+.pollOptions {
+    padding:20px;
+    margin:0px;
+}
+
+.pollOptions .button {
+    margin:20px 0 0 15px;
+}
+
+input.pollTxtField[type="text"]
+{
+    width: 550px;
+}
+
+#pollChart {
+    float:right; 
+    margin:0; 
+    text-align:center; 
+    padding:15px; 
+    width:55%;
+    border:solid 1px #ccc;    
+}
+
+.req {
+    float: none;
+    color: red !important;
+    font-weight: bold;
+    margin: 0;
+}
+
+input.button {
+    font-family: "Lucida Grande" , Tahoma, Arial, sans-serif;
+    /*margin-top: 20px;*/
+    color: #000;
+    background-color: #eee;
+    padding: 0 7px;
+    margin-right:3px;
+    width: auto;
+    overflow: visible;
+    border: solid 1px #999;
+    font-size:12px;
+}
+
+input.buttonInTitle {
+    font-family: "Lucida Grande" , Tahoma, Arial, sans-serif;
+    /*margin-top: 20px;*/
+    color: #000;
+    background-color: #eee;
+    padding: 0 7px;
+    margin:10px;
+    width: auto;
+    overflow: visible;
+    border: solid 1px #999;
+    font-size:0.75em;
+    float:left;
+}
+
+input.button:hover {
+    color: #000;
+    background-color: #ccc;
+    border: solid 1px #999;
+}
+
+a.button:link, a.button:visited, a.button:active {
+    font-family: "Lucida Grande" , Tahoma, Arial, sans-serif;
+    color: #000;
+    background-color: #eee;
+    padding: 1px 7px;
+    margin-right:3px;
+    width: auto;
+    overflow: visible;
+    border: solid 1px #999;
+    text-decoration:none;
+    font-size:12px;
+}
+
+a.button:hover {
+    color: #000;
+    background-color: #ccc;
+    border: solid 1px #999;
+    padding: 1px 7px;
+    margin-right:3px;
+    text-decoration:none;
+}
+form .instructions {
+    position: absolute;
+    font-size: 0.83em;
+    z-index: 1000;
+    margin: 0 0 0 10px;
+    padding: 0 8px;
+    background: #FEFF8F;
+    color: #222;
+    border: solid 1px #999;
+    visibility: hidden;
+    width: 20%;
+}
+
+form p:hover .instructions {
+    visibility: visible;
+}
+
+#actionButtons
+{
+    position:absolute;
+    top:15px;
+    right:17px;
+    white-space:nowrap;
+    display:inline;
+    padding-bottom:1px
+}
+
+#actionButtons img
+{
+    padding:0;
+    margin:0;
+}
+
+form.button-to
+{
+    display: inline;    
+    padding:0;
+    margin:0;
+}
+
+form.button-to div {
+    display: inline;    
+    padding:0;
+    margin:0;
+}
+
+#actionButtons2
+{
+    white-space:nowrap;
+    text-align:right;
+}
+
+#actionButtons2 input{
+    border: solid 1px #2F2F2F;
+}
+
+#actionButtons2 a.button:link,#actionButtons2 a.button:visited,#actionButtons2 a.button:active {
+    border: solid 1px #2F2F2F;
+}
+
+#mypassword_text
+{
+    margin-left: 155px; 
+}
+
+#mypassword_bar
+{
+    font-size: 1px; 
+    height: 5px; 
+    width: 0px; 
+    border: 1px solid white;
+    margin-left: 155px; 
+	max-width:395px;
+}
+
+.cssform .release_description p
+{
+  margin:0;
+  padding:10px
+}
+
+.cssform .release_description ul
+{
+  margin:5px 10px 5px 30px ;
+  padding:0;
+}

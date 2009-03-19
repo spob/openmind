@@ -8,11 +8,11 @@ host: localhost
 
 # The port number. This is used to construct the url for the link that appears in
 # email notifications
-port: 3000
+port: 80
 
 # The email address of the administrator. This email will be used as the "from"
 # address in emails sent by openmind.
-admin_email: admin@openmind.org
+admin_email: openmind@scribesoftware.com
 
 # The subject prefix. This will be the prefix in the subject for emails sent by 
 # openmind. For example, "OpenMind: Your new account has been created..."
@@ -25,11 +25,11 @@ rescind_minutes: 240
 allocation_expiration_days: 120
 
 # The url to the directory where the images for emails are stored
-email_image_url: http://localhost:3000/themes/openmind/images/email
+email_image_url: http://openmind.scribesoftware.com/themes/scribe/images/email
 
 # The name of the theme (e.g., skin). This should correspond to a directory 
 # under the public/themes directory
-app_theme: openmind
+app_theme: scribe
 
 # The number of days within which to warn the user of unused allocations
 # about to expire. A value of 0 means never warn the user.

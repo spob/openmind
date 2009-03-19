@@ -4,6 +4,9 @@
 <%content_for :bodyTag do -%>
   <%= set_focus_to_id 'login', "sevenUp.test()" -%>
 <%end%>
+<table>
+<tr>
+<td>
 <div style="width:450px;">
   <div class="formTitle">Login</div>
   <% form_tag({}, {:class => "cssform"}) do -%>
@@ -31,3 +34,27 @@
     <%= link_to 'Login using Open ID', { :action => 'login_openid' } %>
   </p>
 </div>
+</td>
+<td valign="top" style="padding-left: 20px;">
+
+                                                                                <br/>
+                                                                                <p style="font-size: 1.5em;">
+                                                                                        Help make Scribe products better!
+                                                                                </p>
+                                                                                <br/>
+                                                                                <p> OpenMind is an online community which allows Scribe customers and resellers to:
+  <ul>
+        <li>Log ideas for enhancements and feature requests</li>
+        <li>Vote for ideas you value most</li>
+        <li>Discuss ideas with other partners and Scribe product management</li>
+        <li>See information on upcoming releases</li>
+ </ul>
+                                                                                </p>
+                                                                                <p style="font-weight: bold;">
+                                                                                        To request an OpenMind account, click "Request Account"
+
+                                                                                </p>
+
+</td>
+</tr>
+</table>

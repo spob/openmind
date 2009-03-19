@@ -20,14 +20,13 @@ config.cache_store = :file_store, File.dirname(__FILE__) + '/../../tmp/cache'
 # config.action_controller.asset_host                  = "http://assets.example.com"
 
 # Disable delivery errors, bad email addresses will be ignored
-# config.action_mailer.raise_delivery_errors = false
+config.action_mailer.raise_delivery_errors = true
 
   ActionMailer::Base.smtp_settings = {
-    :address => 'smtp.gmail.com',
+    :address => 'mail.scribesoftware.com',
     :port => 587,
     :tls => true,
-    :domain => 'sturim.org',
     :authentication => :plain,
-    :user_name => 'openmind@sturim.org',
-    :password => 'brgmiata'
+    :user_name => 'admin@openmind.scribesoftware.com',
+    :password => '3ma1l0p3nm1nd'
   }

@@ -1,0 +1,20 @@
+#main-content {
+    background-image: url(../images/sidebar.gif);
+    background-repeat: repeat-y;
+    margin: 0;
+    padding: 10px 20px 10px 240px;
+}
+
+/********* Side Bar Left ***********/
+#sidebar1 {
+    width: 190px;
+    float: left;
+    padding-left: 15px;
+    padding-top: 10px;
+}
+
+#actionButtons
+{
+    top:180px;
+    right:40px;
+}
