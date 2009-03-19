@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/../test_helper'
 require 'email_notifier'
 
-class EmailNotifierTest < Test::Unit::TestCase
+class EmailNotifierTest < ActiveSupport::TestCase 
   FIXTURES_PATH = File.dirname(__FILE__) + '/../fixtures'
   CHARSET = "utf-8"
 

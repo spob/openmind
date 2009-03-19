@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
-class AllocationObserverTest < Test::Unit::TestCase
+class AllocationObserverTest < ActiveSupport::TestCase
   fixtures :enterprises, :allocations, :users
 
   context "while testing allocation observer" do

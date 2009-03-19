@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/../test_helper'
 require 'exceptions/vote_exception'
 
-class IdeaTest < Test::Unit::TestCase
+class IdeaTest < ActiveSupport::TestCase 
   fixtures :ideas, :votes, :users, :products, :releases, :comments, :idea_change_logs
   
   should_have_many :change_logs

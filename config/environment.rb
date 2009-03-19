@@ -73,6 +73,10 @@ Rails::Initializer.run do |config|
   #   inflect.irregular 'person', 'people'
   #   inflect.uncountable %w( fish sheep )
   # end
+
+
+  # set our session key to distinguish it from others
+  config.action_controller.session =  {:key => '_OpenMind_session_id'}
   
   # See Rails::Configuration for more options
   # This is a total hack...caused by the fact that by instantiating the observers,

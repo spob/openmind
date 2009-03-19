@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
-class WatchesTest < Test::Unit::TestCase
+class WatchesTest < ActiveSupport::TestCase 
     fixtures :ideas, :users
 
   def test_list_watched_ideas 

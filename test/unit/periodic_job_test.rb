@@ -1,8 +1,8 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
-class PeriodicJobTest < Test::Unit::TestCase
+class PeriodicJobTest < ActiveSupport::TestCase 
   fixtures :periodic_jobs
-
+  
   context "running job" do
     should "run successfully" do
       jobs = PeriodicJob.find_jobs_to_run
@@ -10,7 +10,7 @@ class PeriodicJobTest < Test::Unit::TestCase
       assert !jobs.include?(periodic_jobs(:run_once_job_null_next_run))
       assert !jobs.include?(periodic_jobs(:run_once_job_future_next_run))    
       assert jobs.include?(periodic_jobs(:run_once_job_past_next_run))  
-
+      
       PeriodicJob.cleanup
     end
     
@@ -65,30 +65,22 @@ class PeriodicJobTest < Test::Unit::TestCase
   end
   
   def test_calc_next_date_run_at
-    hours = Time.zone.now.hour
-    minutes = Time.zone.now.min + 5
-    #    puts "#{"%02d" % hours}:#{"%02d" % minutes}"
-    if minutes >= 60
-      hours += 1
-      minutes = minutes - 60
-    end
-    #    puts "#{"%02d" % hours}:#{"%02d" % minutes}"
-    time = Time.parse("#{"%02d" % hours}:#{"%02d" % minutes}")
     next_job = periodic_jobs(:run_interval_job_never_run_at_future).calc_next_run
     next_job.save
-    assert_equal time, next_job.next_run_at
+    
+    assert_equal calc_next_interval(5), next_job.next_run_at
     assert_equal periodic_jobs(:run_interval_job_never_run_at_future).run_at_minutes, 
-      next_job.run_at_minutes
+    next_job.run_at_minutes
     assert_equal periodic_jobs(:run_interval_job_never_run_at_future).job, 
-      next_job.job
+    next_job.job
     
     next_job = periodic_jobs(:run_interval_job_recently_run_at_future).calc_next_run
     next_job.save
-    assert_equal time, next_job.next_run_at
+    assert_equal calc_next_interval(5), next_job.next_run_at
     assert_equal periodic_jobs(:run_interval_job_recently_run_at_future).run_at_minutes,
-      next_job.run_at_minutes
+    next_job.run_at_minutes
     assert_equal periodic_jobs(:run_interval_job_recently_run_at_future).job, 
-      next_job.job
+    next_job.job
     
     time = 1.days.since
     hours = (periodic_jobs(:run_interval_job_run_at_past).run_at_minutes)/60
@@ -107,9 +99,9 @@ class PeriodicJobTest < Test::Unit::TestCase
     assert_equal time.hour, next_job.next_run_at.hour
     assert_equal time.min, next_job.next_run_at.min
     assert_equal periodic_jobs(:run_interval_job_run_at_past).run_at_minutes,
-      next_job.run_at_minutes
+    next_job.run_at_minutes
     assert_equal periodic_jobs(:run_interval_job_run_at_past).job, 
-      next_job.job
+    next_job.job
   end
   
   def test_run
@@ -117,5 +109,19 @@ class PeriodicJobTest < Test::Unit::TestCase
       periodic_jobs(:run_once_job_null_next_run).run!
       PeriodicJob.run_jobs
     }
+  end
+  
+  private
+  
+  def calc_next_interval interval
+    #    puts "#{"%02d" % hours}:#{"%02d" % minutes}"
+    hours = Time.zone.now.hour
+    minutes = Time.zone.now.min + interval
+    #    puts "#{"%02d" % hours}:#{"%02d" % minutes}"
+    if minutes >= 60
+      hours += 1
+      minutes = minutes - 60
+    end
+    Time.zone.parse("#{"%02d" % hours}:#{"%02d" % minutes}")
   end
 end

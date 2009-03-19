@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
-class DateUtilsTest < Test::Unit::TestCase
+class DateUtilsTest < ActiveSupport::TestCase 
   
   context "testing time_to_datetime" do
     t_now = Time.zone.now

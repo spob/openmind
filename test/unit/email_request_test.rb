@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/../test_helper'
     
-class EmailRequestTest < Test::Unit::TestCase
+class EmailRequestTest < ActiveSupport::TestCase 
   fixtures :users, :ideas, :email_requests
 
   should_belong_to :user

@@ -4,7 +4,7 @@ require 'products_controller'
 # Re-raise errors caught by the controller.
 class ProductsController; def rescue_action(e) raise e end; end
 
-class ProductsControllerTest < Test::Unit::TestCase
+class ProductsControllerTest < ActionController::TestCase 
   fixtures :products, :users
 
   def setup

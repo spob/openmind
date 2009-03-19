@@ -7,7 +7,7 @@
 
 require File.dirname(__FILE__) + '/../test_helper'
 
-class IdeaChangeLogTest < Test::Unit::TestCase
+class IdeaChangeLogTest < ActiveSupport::TestCase 
   fixtures :ideas, :users, :idea_change_logs
 
   should_require_attributes :user, :message

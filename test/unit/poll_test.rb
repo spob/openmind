@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
-class PollTest < Test::Unit::TestCase
+class PollTest < ActiveSupport::TestCase 
   fixtures :polls, :poll_options, :users, :roles, :groups
   
   should_require_attributes :close_date

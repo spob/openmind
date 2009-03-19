@@ -1,14 +1,14 @@
 class TopicsController < ApplicationController
   before_filter :login_required, :except => [:index, :show, :search]
   cache_sweeper :topics_sweeper, :only => [ :create, :update, :destroy, :toggle_status ]
-
+  
   # GETs should be safe (see http://www.w3.org/2001/tag/doc/whenToUseGet.html)
   verify :method => :post, :only => [:create, :rate ],
-    :redirect_to => { :action => :index }
+  :redirect_to => { :action => :index }
   verify :method => :put, :only => [ :update, :toggle_status ],
-    :redirect_to => { :action => :index }
+  :redirect_to => { :action => :index }
   verify :method => :delete, :only => [ :destroy ],
-    :redirect_to => { :action => :index }
+  :redirect_to => { :action => :index }
   
   def index
     redirect_to forums_path
@@ -21,7 +21,7 @@ class TopicsController < ApplicationController
       flash[:error] = ForumsController.flash_for_forum_access_denied(current_user)
       redirect_to redirect_path_on_access_denied(current_user)
     end
-
+    
     if @forum.restrict_topic_creation and !@forum.mediator? current_user
       flash[:error] = 'You are not able to create new topics in this forum'
       redirect_to forum_path(@forum)
@@ -30,7 +30,7 @@ class TopicsController < ApplicationController
     @topic ||= Topic.new(:forum => @forum)
     @comment ||= TopicComment.new(:topic => @topic)
   end
-
+  
   def create    
     forum_id = params[:forum_id]
     forum = Forum.find(forum_id)
@@ -45,16 +45,16 @@ class TopicsController < ApplicationController
     if @topic.save   
       @topic.add_user_read(current_user)
       comment = TopicComment.new(
-        :user_id => current_user.id,
-        :body => @topic.comment_body)
+                                 :user_id => current_user.id,
+                                 :body => @topic.comment_body)
       comment.endorser = current_user if @topic.forum.mediators.include? current_user
       @topic.comments << comment
-    
+      
       #      @topic = Topic.find(@topic.id)
       for user in @topic.forum.watchers
         @topic.watchers << user unless @topic.watchers.include? user
       end
-        
+      
       tw = TopicWatch.find_by_user_id_and_topic_id(current_user, @topic)
       @topic.watchers << current_user if tw.nil?
       @topic.save!
@@ -70,7 +70,7 @@ class TopicsController < ApplicationController
       render :action => 'new', :forum_id => forum_id
     end
   end
-
+  
   def preview
     render :layout => false
   end
@@ -89,16 +89,21 @@ class TopicsController < ApplicationController
       @topic.add_user_read(current_user).save unless current_user == :false
     end
   end
-
+  
   def destroy
     topic = Topic.find(params[:id])
     forum = topic.forum
     title = topic.title
-    topic.destroy
+    
+    # A bit bizarre, but if I don't clear the comments first, I get a stale object exception
+    topic.comments.clear
+    topic.save
+    Topic.destroy(topic.id)
+    
     flash[:notice] = "Topic '#{title}' was successfully deleted."
     redirect_to forum_path(forum)
   end
-
+  
   def edit
     @topic = Topic.find(params[:id])
     
@@ -107,10 +112,10 @@ class TopicsController < ApplicationController
       redirect_to redirect_path_on_access_denied(current_user)
     end
   end
-
+  
   def update
     @topic = Topic.find(params[:id])
-
+    
     unless @topic.forum.can_edit? current_user or prodmgr?
       flash[:error] = ForumsController.flash_for_forum_access_denied(current_user)
       redirect_to redirect_path_on_access_denied(current_user)
@@ -149,7 +154,7 @@ class TopicsController < ApplicationController
       end
       TopicComment.find_by_solr(params[:search], :scores => true).docs.each do |comment|
         if (comment.topic.forum.can_see?(current_user) or prodmgr?) and
-            (!comment.private or comment.topic.forum.mediators.include? current_user)
+         (!comment.private or comment.topic.forum.mediators.include? current_user)
           # first see if topic hit already exists
           topic_hit = hits[comment.topic.id]
           if topic_hit.nil?
@@ -166,7 +171,7 @@ class TopicsController < ApplicationController
       TopicHit.normalize_scores(@hits)
     end
   end
-
+  
   def toggle_status
     @topic = Topic.find(params[:id])
     @topic.open_status = !@topic.open_status
@@ -190,7 +195,7 @@ class TopicsController < ApplicationController
       format.js  { do_rjs_toggle_topic_details_box }
     end
   end
-
+  
   def rate
     @topic = Topic.find(params[:id])
     @topic.rate(params[:stars], current_user, params[:dimension])
@@ -200,7 +205,7 @@ class TopicsController < ApplicationController
       page.visual_effect :highlight, id
     end
   end
-
+  
   
   private
   
@@ -212,7 +217,7 @@ class TopicsController < ApplicationController
   def do_rjs_toggle_topic_details_box 
     render :update do |page|
       page.replace "topic_details_area", 
-        :partial => "show_hide_topic_details"
+      :partial => "show_hide_topic_details"
       if session[:topic_details_box_display] == "HIDE"
         page.visual_effect :blind_up, :topic_details, :duration => 0.5
       else

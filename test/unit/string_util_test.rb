@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
-class StringUtilTest < Test::Unit::TestCase  
+class StringUtilTest < ActiveSupport::TestCase   
   def test_strip_html
     assert_equal "this is a testTest and Test", 
       StringUtils.strip_html("<html><head>this is a test</head><body><p><b>Test and Test</b></p></body></html>")

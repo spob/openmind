@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
-class AllocationTest < Test::Unit::TestCase
+class AllocationTest < ActiveSupport::TestCase 
   fixtures :enterprises, :allocations, :votes, :users, :ideas
 
   should_have_many :votes,  :dependent => :destroy
