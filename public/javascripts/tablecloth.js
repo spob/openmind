@@ -13,10 +13,10 @@ this.tablecloth = function(){
 	var highlightCols = false;
 	
 	// if set to true then mouseover a table cell will highlight entire row	(except sibling headings)
-	var highlightRows = true;	
+	var highlightRows = false;	
 	
 	// if set to true then click on a table sell will select row or column based on config
-	var selectable = true;
+	var selectable = false;
 	
 	// this function is called when 
 	// add your own code if you want to add action 
@@ -76,6 +76,7 @@ this.tablecloth = function(){
 	};
 	
 	// appyling mouseover state for objects (th or td)
+	/*
 	this.over = function(table,obj,row,col){
 		if (!highlightCols && !highlightRows) obj.className = obj.css + " over";  
 		if(check1(obj,col)){
@@ -83,6 +84,7 @@ this.tablecloth = function(){
 			if(highlightRows) highlightRow(table,obj,row);		
 		};
 	};
+	*/
 	// appyling mouseout state for objects (th or td)	
 	this.out = function(table,obj,row,col){
 		if (!highlightCols && !highlightRows) obj.className = obj.css; 
@@ -90,14 +92,19 @@ this.tablecloth = function(){
 		unhighlightRow(table,row);
 	};
 	// appyling mousedown state for objects (th or td)	
+	/*
 	this.down = function(table,obj,row,col){
 		obj.className = obj.css + " down";  
 	};
+	*/
 	// appyling mouseup state for objects (th or td)	
+	/*
 	this.up = function(table,obj,row,col){
 		obj.className = obj.css + " over";  
-	};	
+	};
+	*/	
 	// onclick event for objects (th or td)	
+	/*
 	this.click = function(table,obj,row,col){
 		if(check1){
 			if(selectable) {
@@ -109,6 +116,7 @@ this.tablecloth = function(){
 		};
 		clickAction(obj); 		
 	};		
+	*/
 	
 	this.highlightCol = function(table,active,col,sel){
 		var css = (typeof(sel) != "undefined") ? "selected" : "over";
