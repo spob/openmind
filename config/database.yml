@@ -39,7 +39,8 @@ test:
 
 production:
   adapter: mysql
-  database: OpenMind_production
-  username: root
-  password: 
+  database: openmind
+  username: openmind
+  password: DB0p3nm1nd
   host: localhost
+  encoding: utf8
