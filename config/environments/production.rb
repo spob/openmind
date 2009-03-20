@@ -23,8 +23,8 @@ config.cache_store = :file_store, File.dirname(__FILE__) + '/../../tmp/cache'
 config.action_mailer.raise_delivery_errors = true
 
   ActionMailer::Base.smtp_settings = {
-    :address => 'mail.scribesoftware.com',
-    :port => 587,
+    :address => '192.168.254.13',
+    :port => 25,
     :tls => true,
     :authentication => :plain,
     :user_name => 'admin@openmind.scribesoftware.com',
