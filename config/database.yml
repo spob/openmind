@@ -21,13 +21,13 @@
 
 defaults: &defaults
   adapter: mysql
-  username: openmind_git
-  password: git
+  username: dev
+  password: openmind
   host: localhost
   encoding: utf8
 
 development:
-  database: OpenMind_git
+  database: OpenMind_dev
   <<: *defaults
 
 # Warning: The database defined as 'test' will be erased and
