@@ -1,7 +1,7 @@
 # To change this template, choose Tools | Templates
 # and open the template in the editor.
 
-class SearchUtils
+module SearchUtils
   def self.rebuild_indexes
     Topic.rebuild_solr_index
     TopicComment.rebuild_solr_index

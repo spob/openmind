@@ -3,7 +3,7 @@
 # and open the template in the editor.
  
 
-class CsvUtils
+module CsvUtils
     # this is required if you want this to work with IE
   def self.setup_request_for_csv headers, request, filename
     if request.env['HTTP_USER_AGENT'] =~ /msie/i

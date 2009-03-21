@@ -3,7 +3,7 @@
 # and open the template in the editor.
 
 
-class SessionCleaner
+module SessionCleaner
   def self.clean
     	sql = ActiveRecord::Base.connection();
 	sql.execute "SET autocommit=0";

@@ -7,7 +7,7 @@
 # and open the template in the editor.
  
 
-class StringUtils
+module StringUtils
   # I create this method here because the pluralize that is used in screens is
   # only available from within the rhtml or helper file
   def self.pluralize count, noun

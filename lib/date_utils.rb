@@ -1,5 +1,5 @@
 
-class DateUtils
+module DateUtils
   def self.time_to_datetime t
     return nil if t.nil?
     # convert to seconds + microseconds into a fractional number of seconds
