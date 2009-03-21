@@ -76,6 +76,7 @@ this.tablecloth = function(){
 	};
 	
 	// appyling mouseover state for objects (th or td)
+	/*
 	this.over = function(table,obj,row,col){
 		if (!highlightCols && !highlightRows) obj.className = obj.css + " over";  
 		if(check1(obj,col)){
@@ -83,6 +84,7 @@ this.tablecloth = function(){
 			if(highlightRows) highlightRow(table,obj,row);		
 		};
 	};
+	*/
 	// appyling mouseout state for objects (th or td)	
 	this.out = function(table,obj,row,col){
 		if (!highlightCols && !highlightRows) obj.className = obj.css; 
@@ -90,14 +92,19 @@ this.tablecloth = function(){
 		unhighlightRow(table,row);
 	};
 	// appyling mousedown state for objects (th or td)	
+	/*
 	this.down = function(table,obj,row,col){
 		obj.className = obj.css + " down";  
 	};
+	*/
 	// appyling mouseup state for objects (th or td)	
+	/*
 	this.up = function(table,obj,row,col){
 		obj.className = obj.css + " over";  
-	};	
+	};
+	*/	
 	// onclick event for objects (th or td)	
+	/*
 	this.click = function(table,obj,row,col){
 		if(check1){
 			if(selectable) {
@@ -109,6 +116,7 @@ this.tablecloth = function(){
 		};
 		clickAction(obj); 		
 	};		
+	*/
 	
 	this.highlightCol = function(table,active,col,sel){
 		var css = (typeof(sel) != "undefined") ? "selected" : "over";
