@@ -16,3 +16,4 @@ config/observe.txt
 tmp/pids/*.pid
 debug.log
 doc/api
+doc/app
