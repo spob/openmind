@@ -15,3 +15,4 @@ doc/~$Manual.docx
 config/observe.txt
 tmp/pids/*.pid
 debug.log
+doc/api
