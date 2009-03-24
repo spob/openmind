@@ -17,6 +17,10 @@ Rails::Initializer.run do |config|
   config.gem 'mislav-will_paginate', :lib => 'will_paginate', 
   :source => 'http://gems.github.com'
   
+  # Uncomment the following line if you are using RedCloth -- only required for implementations
+  # that upgraded from a 1.x version of OpenMind
+  #config.gem "RedCloth", :lib => 'redcloth', :source => "http://code.whytheluckystiff.net/"
+  
   # Require the latest version of mysql
   config.gem "mysql"
   
