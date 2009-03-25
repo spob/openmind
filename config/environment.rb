@@ -21,7 +21,7 @@ Rails::Initializer.run do |config|
   
   # Uncomment the following line if you are using RedCloth -- only required for implementations
   # that upgraded from a 1.x version of OpenMind
-  #config.gem "RedCloth", :lib => 'redcloth', :source => "http://code.whytheluckystiff.net/"
+config.gem "RedCloth", :lib => 'redcloth', :source => "http://code.whytheluckystiff.net/"
   
   # Require the latest version of mysql
   config.gem "mysql"
