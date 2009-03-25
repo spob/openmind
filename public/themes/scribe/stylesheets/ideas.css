@@ -1,0 +1,255 @@
+/* ideas.css */
+
+#headerBrandingAreaPageWrap {
+    min-width: 900px;
+    max-width: 1400px;
+    width: expression(document.body.clientWidth < 1002?  "1000px" : document.body.clientWidth > 1402? "1400px" : "auto" );
+}
+
+#mainBodyPageWrap {
+    min-width: 900px;
+    max-width: 1400px;
+    margin: 0px auto;
+    width: expression(document.body.clientWidth < 1002?  "1000px" : document.body.clientWidth > 1402? "1400px" : "auto" );
+}
+
+h3.ideaTitle
+{
+    text-transform:capitalize; 
+    padding-right:175px;
+    border: none;
+}
+
+table.ideaTitle 
+{
+    width:100%;
+}
+
+.ideaTitle td 
+{
+    padding:0;
+    margin:0;
+    vertical-align:top;
+    font-size: 1.50em; /*18px */
+    line-height: 1.83em; /* 22px */
+    text-transform:capitalize; 
+    border: none;
+}
+
+div.separator
+{
+    margin: 0 0 0.5em 0;
+    border-bottom: dotted 1px #999;
+}
+
+div.auto_complete {
+    width: 350px;
+    background: #fff;
+}
+
+div.auto_complete ul {
+    border:1px solid #888;
+    margin:0;
+    padding:0;
+    width:100%;
+    list-style-type:none;
+}
+
+div.auto_complete ul li {
+    margin:0;
+    padding:3px;
+}
+
+div.auto_complete ul li.selected { 
+    background-color: #ffb; 
+}
+
+div.auto_complete ul strong.highlight { 
+    color: #800; 
+    margin:0;
+    padding:0;
+}
+
+#main-content {
+    position:static;
+}
+
+#preview 
+{
+    font-size: 1em;
+}
+
+#preview p
+{
+    margin:0 0 10px 0;
+    font-size:0.88em;
+}
+
+.countbox {
+    background-color:#566275;
+}
+
+#countcontainer {
+    position: relative;
+    padding: 10px 50px 0 50px;
+    margin: 0;
+}
+
+#countcontainer128 {
+    position: relative;
+    padding: 10px 20px 0 20px;
+    margin-bottom: 0;
+}
+
+.countbutton64 {
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+    height: 64px;
+    width: 64px;
+    padding: 0;
+    margin-bottom: 10px;
+}
+
+.votes
+{ 
+    float:left;
+    padding:0;
+    margin:10px 10px 10px 0;
+}
+
+.countbutton128 {
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+    height: 128px;
+    width: 128px;
+    padding: 0;
+    margin-bottom: 10px;
+}
+
+.red64 {
+    background-image: url("../images/icons/64x64/bluesquareOff.png" );
+}
+
+.red64:hover {
+    background-image: url("../images/icons/64x64/bluesquareOn.png" );
+    cursor: pointer;
+}
+
+.black64 {
+    background-image: url("../images/icons/64x64/blacksquareOff.png" );
+}
+
+.black64:hover {
+    background-image: url("../images/icons/64x64/blacksquareOn.png" );
+    cursor: pointer;
+}
+
+.black128 {
+    background-image: url("../images/icons/128x128/blacksquareOff.png" );
+}
+
+.countbutton64 .description {
+    text-align: center;
+    top: 10px;
+    width: 64px;
+    position: absolute;
+    font-size: 11px;
+    font-family: Trebuchet MS, Verdana, Sans-Serif;
+    color: #fff;
+}
+
+.countbutton64 .count {
+    text-align: center;
+    bottom: 10px;
+    width: 64px;
+    position: absolute;
+    font-size: 20px;
+    font-weight: bold;
+    font-family: Trebuchet MS, Verdana, Sans-Serif;
+    color: #DFDFDF;
+}
+
+.countbutton64 .count a {
+    color: #DFDFDF;
+}
+
+.countbutton128 .description {
+    text-align: center;
+    top: 24px;
+    width: 128px;
+    position: absolute;
+    font-size: 24px;
+    font-family: Trebuchet MS, Verdana, Sans-Serif;
+    color: #000;
+}
+
+.countbutton128 .count {
+    text-align: center;
+    bottom: 24px;
+    width: 128px;
+    position: absolute;
+    font-size: 36px;
+    font-weight: bold;
+    font-family: Trebuchet MS, Verdana, Sans-Serif;
+    color: #DFDFDF;
+}
+
+/**** Idea Show Page  ***/
+#ideaContentContainer {
+    margin:20px 0 0 0;
+    position:relative;
+}
+
+#ideaContentContainer p {
+    margin:10px 0 0 80px;
+}
+
+#ideaContentContainer ul li {
+    margin:10px 0 0 80px;
+}
+
+#leftFooter
+{
+    margin-top:15px;
+    float:left;
+}
+
+#rightFooter {
+    margin:20px 0 0 0;
+    padding:3px 5px 0 0;
+    border-top:dotted 1px #999;
+    text-align:right;
+    font-style:italic;
+    font-size:0.75em;
+}
+
+#search_area img
+{
+    margin:0;
+}
+
+img.floatRight {
+    float: right;
+    margin: 8px;
+}
+
+.commentbox .editButton
+{
+    float: right;
+    margin-top:-15px;
+}
+
+.commentbox a:link, .commentbox a:visited, .commentbox a:active {
+    font-size:11px;
+    color: #BF0000;
+    text-decoration: none;
+}
+
+.commentbox a:hover {
+    list-style-image: url(../images/li_hover.gif);
+    text-decoration: underline;
+    color: #312F30;
+    background-color: Transparent;
+}

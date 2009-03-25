@@ -1,0 +1,50 @@
+/* tables.css */
+
+th{
+    font-weight: normal;
+    font-family: Trebuchet MS, Verdana, Sans-Serif;
+}
+
+td{
+    vertical-align:top;
+    font-size: 0.92em; /* 11 px*/
+}
+
+table {width:100%;border-collapse:collapse;margin:1em 0;}
+
+th, td {text-align:left;padding:.5em;border:1px solid #fff;}
+th {
+    background:#000 url(../images/menus/blockDefaultSmall.gif) repeat-x;color:#fff;
+    white-space:nowrap;
+}
+td {background:#EFEFEF;}
+
+/* tablecloth styles */
+
+tr.odd td {background:#EFEFEF;}
+tr.even td {background:#DEDCDC;}
+
+th.over, tr.even th.over, tr.odd th.over {background:#000;}
+th.down, tr.even th.down, tr.odd th.down {background:#999;}
+th.selected, tr.even th.selected, tr.odd th.selected{}
+
+td.over, tr.even td.over, tr.odd td.over{background:#CCCCCC;}
+td.down, tr.even td.down, tr.odd td.down{background:#000;color:#fff;}
+td.selected, tr.even td.selected, tr.odd td.selected{background:#999;color:red;}
+
+/* use this if you want to apply different styleing to empty table cells*/
+td.empty, tr.odd td.empty, tr.even td.empty{background:#fff;}
+
+
+/* custom */
+th.center { text-align:center;}
+th.nowrap { white-space:nowrap;}
+td.center { text-align:center;}
+td.nowrap { white-space:nowrap;}
+td img {
+    border: none;
+    margin:0 2px;
+}
+.cssform input[type="text"], .cssform textarea, .cssform select, .cssform input[type="password"] {
+    width: 90%;
+}
