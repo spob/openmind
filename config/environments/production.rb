@@ -22,6 +22,8 @@ config.cache_store = :file_store, File.dirname(__FILE__) + '/../../tmp/cache'
 # Disable delivery errors, bad email addresses will be ignored
 config.action_mailer.raise_delivery_errors = true
 
+ActionMailer::Base.default_content_type = "text/html"
+
   ActionMailer::Base.smtp_settings = {
     :address => '192.168.254.13',
     :port => 25,
