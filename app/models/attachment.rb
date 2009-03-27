@@ -18,6 +18,7 @@ class Attachment < ActiveRecord::Base
   include Magick
   after_create :create_thumbnail
   before_update :before_update
+  before_save :before_save
   acts_as_solr :fields => [:filename, :alias, :description, {:size => :integer}],  :if => proc{|a| a.parent.nil?}
   
   validates_presence_of :filename, :description, :content_type, :size
@@ -128,6 +129,12 @@ class Attachment < ActiveRecord::Base
       self.thumbnail.public = self.public
       self.thumbnail.save!
     end
+  end
+  
+  def before_save
+    self.alias = self.alias.try(:strip)
+    self.filename = self.filename.try(:strip)
+    self.description = self.description.try(:strip)
   end
 
   def gen_thumbnail_image width=100, height=100

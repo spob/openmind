@@ -102,9 +102,9 @@ class UsersController < ApplicationController
     params[:user][:role_ids] ||= []
     params[:user][:group_ids] ||= []
     @user = User.new(params[:user])
-    @user.first_name = @user.first_name.strip unless @user.first_name.nil?
-    @user.last_name = @user.last_name.strip unless @user.last_name.nil?
-    @user.login = @user.login.strip
+    @user.first_name = @user.first_name.try(:strip)
+    @user.last_name = @user.last_name.try(:strip)
+    @user.login = @user.login.try(:strip)
     @user.hide_contact_info = params[:user][:hide_contact_info]
     if CustomField.users_custom_boolean1
       @user.custom_boolean1 = params[:user][:custom_boolean1]
