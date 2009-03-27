@@ -266,19 +266,25 @@ class AttachmentsController < ApplicationController
   
   def fetch_attachment id
     attachment = Attachment.find_by_alias(id)
-    attachment = Attachment.find(id) if attachment.nil?
-    if !attachment.public and !logged_in?
-      flash[:error] = 'You must log on to see this file'
-      redirect_to :controller => 'account', :action => 'login'
-      return
-    elsif !attachment.can_see? current_user
-      flash[:error] = 'You do not have permission to access this file'
-      redirect_to :controller => 'ideas'
-      return
-    else
-      attachment.downloads += 1
-      attachment.save!
-      return attachment
+    begin
+      attachment = Attachment.find(id) if attachment.nil?
+      if !attachment.public and !logged_in?
+        flash[:error] = 'You must log on to see this file'
+        redirect_to :controller => 'account', :action => 'login'
+        return
+      elsif !attachment.can_see? current_user
+        flash[:error] = 'You do not have permission to access this file'
+        redirect_to :controller => 'ideas'
+        return
+      else
+        attachment.downloads += 1
+        attachment.save!
+        return attachment
+      end
+    rescue ActiveRecord::RecordNotFound
+        flash[:error] = 'No such attachment'
+        redirect_to :controller => 'ideas'
+        return
     end
   end
 end
