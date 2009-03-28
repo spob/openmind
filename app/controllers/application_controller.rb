@@ -15,18 +15,18 @@ class ApplicationController < ActionController::Base
   end
 
 
-  def login_from_cookie
-    # what it's saying is, if theres no session var but there is the token 
-    # cookie then do the following
-    return unless session[:user].nil? && cookies[:auth_token]
-    user = User.find_by_remember_token(cookies[:auth_token])
-    if !user.nil? 
-      if user.remember_token_expires_at >= Time.zone.now
-        self.current_user = user
-        self.current_user.user_logons.create
-      end
-    end
-  end
+#  def login_from_cookie
+#    # what it's saying is, if theres no session var but there is the token 
+#    # cookie then do the following
+#    return unless session[:user].nil? && cookies[:auth_token]
+#    user = User.find_by_remember_token(cookies[:auth_token])
+#    if !user.nil? 
+#      if user.remember_token_expires_at >= Time.zone.now
+#        self.current_user = user
+#        self.current_user.user_logons.create
+#      end
+#    end
+#  end
 
   def set_time_zone
     Time.zone = current_user.time_zone if current_user != :false
