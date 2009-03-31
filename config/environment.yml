@@ -8,7 +8,7 @@ host: openmind.scribesoftware.com
 
 # The port number. This is used to construct the url for the link that appears in
 # email notifications
-port: 80
+port: 443
 
 # The email address of the administrator. This email will be used as the "from"
 # address in emails sent by openmind.
