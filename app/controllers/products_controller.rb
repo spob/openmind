@@ -1,5 +1,5 @@
 class ProductsController < ApplicationController
-  before_filter :login_required
+  before_filter :login_required, :except => [:index, :show ]
   access_control [:new, :commit, :edit, :create, :update, :destroy] => 'prodmgr'
 
   # GETs should be safe (see http://www.w3.org/2001/tag/doc/whenToUseGet.html)
@@ -11,7 +11,8 @@ class ProductsController < ApplicationController
     :redirect_to => { :action => :index }
   
   def index
-    @products = Product.list params[:page], current_user.row_limit
+    @products = Product.list params[:page], 
+ (logged_in? ? current_user.row_limit : 10)
   end
 
   def show

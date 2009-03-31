@@ -1,15 +1,15 @@
 class ReleasesController < ApplicationController
-  before_filter :login_required
+  before_filter :login_required, :except => [:index, :list, :show]
   access_control [:new, :commit, :index, :edit, :create, :update, :destroy] => 'prodmgr'
   
   # GETs should be safe (see http://www.w3.org/2001/tag/doc/whenToUseGet.html)
   verify :method => :post, :only => [:create, :commit ],
-    :redirect_to => { :action => :index }
+  :redirect_to => { :action => :index }
   verify :method => :put, :only => [ :update ],
-    :redirect_to => { :action => :index }
+  :redirect_to => { :action => :index }
   verify :method => :delete, :only => [ :destroy ],
-    :redirect_to => { :action => :index }
-
+  :redirect_to => { :action => :index }
+  
   def index
     begin
       id = params[:product_id]
@@ -20,7 +20,8 @@ class ReleasesController < ApplicationController
       redirect_to products_path
       return false
     else
-      @releases = Release.list params[:page], @product.id, current_user.row_limit
+      @releases = Release.list params[:page], @product.id, 
+       (logged_in? ? current_user.row_limit : 10)
       @release_statuses = ReleaseStatus.find(:all, :order => "sort_value ASC")
       return true
     end
@@ -31,15 +32,15 @@ class ReleasesController < ApplicationController
     session[:release_status_id] = params[:release_status_id] unless params[:release_status_id].nil?
     session[:release_status_id] ||= @release_statuses[0].id
     @releases = Release.list_by_status params[:page], 
-      current_user.row_limit, 
-      session[:release_status_id]
+     (logged_in? ? current_user.row_limit : 10),
+    session[:release_status_id]
   end
-
+  
   def show
     id = params[:id]
     @release = Release.find(id)
   end
-
+  
   def new
     begin
       @product = Product.find(params[:product_id])
@@ -52,7 +53,7 @@ class ReleasesController < ApplicationController
       @release = Release.new
     end
   end
-
+  
   def create
     Release.transaction do
       Release.transaction do
@@ -60,7 +61,7 @@ class ReleasesController < ApplicationController
         @release = Release.new(params[:release])
         @release.product_id = product_id
         @release.change_logs <<  ReleaseChangeLog.new(:message => "Release created",
-          :user => current_user)
+        :user => current_user)
         
         if @release.save
           run_change_log_job @release.id
@@ -73,11 +74,11 @@ class ReleasesController < ApplicationController
       end
     end
   end
-
+  
   def preview
     render :layout => false
   end
-
+  
   def edit
     @release_statuses ||= ReleaseStatus.find(:all, :order => "sort_value ASC")
     @release ||= Release.find(params[:id])
@@ -90,7 +91,7 @@ class ReleasesController < ApplicationController
   def commit
     update
   end
-
+  
   def update
     @release = Release.find(params[:id])
     @release.description = params[:release][:description]
@@ -102,7 +103,7 @@ class ReleasesController < ApplicationController
     Release.transaction do
       calc_change_history @release
       run_change_log_job @release.id
-
+      
       if @release.save
         flash[:notice] = "Release #{@release.version} was successfully updated."
         redirect_to release_path(@release)
@@ -112,7 +113,7 @@ class ReleasesController < ApplicationController
       end
     end
   end
-
+  
   def destroy
     release = Release.find(params[:id])
     product = release.product
@@ -121,31 +122,31 @@ class ReleasesController < ApplicationController
     flash[:notice] = "Release #{version} for product #{product.name} was successfully deleted."
     redirect_to releases_path(:product_id => product.id)
   end
-
+  
   private
   
   def run_change_log_job release_id
     # run job in the feature to notify of changes (in case user makes several
     # changes, we will only ping watchers once
     RunOncePeriodicJob.create(
-      :job => "Release.send_change_notifications(#{release_id})",
-      :next_run_at => Time.zone.now + 10.minutes)
+                              :job => "Release.send_change_notifications(#{release_id})",
+    :next_run_at => Time.zone.now + 10.minutes)
   end
-
+  
   def calc_change_history release    
     add_change_history_from_message release, "Description updated" if release.description_changed?
     add_change_history_old_new release, "Release Date",
-      @release.user_release_date_was,
-      @release.user_release_date if release.user_release_date_changed?
+    @release.user_release_date_was,
+    @release.user_release_date if release.user_release_date_changed?
     add_change_history_old_new release, "Release Status",
-      ReleaseStatus.find(@release.release_status_id_was).short_name,
-      @release.release_status.short_name if release.release_status_id_changed?
+    ReleaseStatus.find(@release.release_status_id_was).short_name,
+    @release.release_status.short_name if release.release_status_id_changed?
     add_change_history_from_changes release, "Version Name",
-      release.changes['version'] if release.version_changed?
+    release.changes['version'] if release.version_changed?
     add_change_history_from_changes release, "Download URL",
-      release.changes['download_url'] if release.download_url_changed?
+    release.changes['download_url'] if release.download_url_changed?
   end
-
+  
   def add_change_history_old_new release, label, old_value, new_value
     if old_value.nil? or old_value.blank?
       add_change_history_from_message release, "#{label} set to \"#{new_value}\""
@@ -155,13 +156,13 @@ class ReleasesController < ApplicationController
       add_change_history_from_message release, "#{label} changed from \"#{old_value}\" to \"#{new_value}\""
     end
   end
-
+  
   def add_change_history_from_changes release, label, old_and_new_values
     add_change_history_old_new release, label, old_and_new_values[0], old_and_new_values[1]
   end
   
   def add_change_history_from_message release, message
     release.change_logs <<  ReleaseChangeLog.new(:message => message,
-      :user => current_user)
+                                                 :user => current_user)
   end
 end
