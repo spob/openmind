@@ -1,6 +1,6 @@
 # The protocol. This is used to construct the url for the link that appears in
 # email notifications
-protocol: http
+protocol: https
 
 # The host name. This is used to construct the url for the link that appears in
 # email notifications
