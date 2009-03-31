@@ -1,3 +1,7 @@
+# The protocol. This is used to construct the url for the link that appears in
+# email notifications
+protocol: http
+
 # The host name. This is used to construct the url for the link that appears in
 # email notifications
 host: localhost
