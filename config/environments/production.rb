@@ -1,8 +1,8 @@
 # Settings specified here will take precedence over those in config/environment.rb
 
 # uncomment the following if you wish to use gmail
-require 'tlsmail'
-Net::SMTP.enable_tls(OpenSSL::SSL::VERIFY_NONE)
+#require 'tlsmail'
+#Net::SMTP.enable_tls(OpenSSL::SSL::VERIFY_NONE)
 
 # The production environment is meant for finished, "live" apps.
 # Code is not reloaded between requests
@@ -26,9 +26,9 @@ ActionMailer::Base.default_content_type = "text/html"
 
   ActionMailer::Base.smtp_settings = {
     :address => '192.168.254.13',
-    :port => 25,
-    :tls => true,
-    :authentication => :plain,
-    :user_name => 'admin@openmind.scribesoftware.com',
-    :password => '3ma1l0p3nm1nd'
+    :port => 25
+#    :tls => true,
+#    :authentication => :plain,
+#    :user_name => 'admin@openmind.scribesoftware.com',
+#    :password => '3ma1l0p3nm1nd'
   }
