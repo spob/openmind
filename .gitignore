@@ -18,3 +18,4 @@ tmp/pids/*.pid
 debug.log
 doc/api
 doc/app
+public/themes/scribe/cache/
