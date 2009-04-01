@@ -21,7 +21,7 @@
         <th><%= @weeks[i].strftime("%b %d") %> </th>
       <% end %>
     </tr>
-    <%=render(:partial => "mediator_forum_metric", :collection => forum_metric.mediators,
+    <%=render(:partial => "mediator_forum_metric", :collection => forum_metric.mediators.find_all{|m| !m.owned_topics.open_or_recently_closed(@weeks[9]).by_forum(forum_metric.id).empty?},
       :locals => {:forum => forum_metric} )%>
     <%=render(:partial => "mediator_forum_metric",
       :locals => {:mediator_forum_metric => dummy_unassigned_mediator, :forum => forum_metric} )%>

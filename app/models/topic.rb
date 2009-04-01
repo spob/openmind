@@ -50,6 +50,9 @@ class Topic < ActiveRecord::Base
   named_scope :closed, :conditions => ['open_status != 1']
   named_scope :owned, :conditions => ['owner_id is not null']
   named_scope :unowned, :conditions => ['owner_id is null']
+  named_scope :open_or_recently_closed,
+  lambda{|end_date| {:conditions => 
+      ['open_status = 1 or (open_status = 0 and closed_at <= ?)', end_date]} }
   
   attr_accessor :comment_body
   
