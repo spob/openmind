@@ -129,7 +129,7 @@ class AttachmentsController < ApplicationController
   end
   
   def html
-    @attachment = fetch_attachment(params[:id])
+    @attachment = fetch_attachment(params[:id], true)
     if @attachment.nil?
       @html = "Access denied"
     elsif @attachment.content_type != 'text/html'
@@ -264,13 +264,17 @@ class AttachmentsController < ApplicationController
     end
   end
   
-  def fetch_attachment id
+  def fetch_attachment id, html_page=false
     attachment = Attachment.find_by_alias(id)
     begin
       attachment = Attachment.find(id) if attachment.nil?
       if !attachment.public and !logged_in?
         flash[:error] = 'You must log on to see this file'
-        redirect_to :controller => 'account', :action => 'login'
+        if html_page
+          access_denied
+        else
+          redirect_to :controller => 'account', :action => 'login'
+        end
         return
       elsif !attachment.can_see? current_user
         flash[:error] = 'You do not have permission to access this file'
@@ -282,9 +286,9 @@ class AttachmentsController < ApplicationController
         return attachment
       end
     rescue ActiveRecord::RecordNotFound
-        flash[:error] = 'No such attachment'
-        redirect_to request.env['HTTP_REFERER'] || url_for(:controller => 'ideas')
-        return
+      flash[:error] = 'No such attachment'
+      redirect_to request.env['HTTP_REFERER'] || url_for(:controller => 'ideas')
+      return
     end
   end
 end
