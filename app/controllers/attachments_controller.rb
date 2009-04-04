@@ -1,7 +1,7 @@
 class AttachmentsController < ApplicationController
   include ActionView::Helpers::NumberHelper
   before_filter :login_required, :except => [ :download, :html ]
-  access_control [:index, :edit, :update, :destroy] => 'prodmgr | sysadmin | mediator'
+  access_control [:index, :edit, :update, :destroy, :show] => 'prodmgr | sysadmin | mediator'
   cache_sweeper :attachments_sweeper, :only => [ :create, :update, :destroy, :search ]
   
   # GETs should be safe (see http://www.w3.org/2001/tag/doc/whenToUseGet.html)
@@ -274,7 +274,7 @@ class AttachmentsController < ApplicationController
         return
       elsif !attachment.can_see? current_user
         flash[:error] = 'You do not have permission to access this file'
-        redirect_to :controller => 'ideas'
+        redirect_to request.env['HTTP_REFERER'] || url_for(:controller => 'ideas')
         return
       else
         attachment.downloads += 1
@@ -283,7 +283,7 @@ class AttachmentsController < ApplicationController
       end
     rescue ActiveRecord::RecordNotFound
         flash[:error] = 'No such attachment'
-        redirect_to :controller => 'ideas'
+        redirect_to request.env['HTTP_REFERER'] || url_for(:controller => 'ideas')
         return
     end
   end
