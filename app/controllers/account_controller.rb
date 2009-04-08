@@ -4,7 +4,7 @@ class AccountController < ApplicationController
   include OpenIdAuthentication
   
   # If you want "remember me" functionality, add this before_filter to Application Controller
-  before_filter :login_from_cookie
+  before_filter :login_from_cookie, :except => [:login]
   before_filter :login_required, :only => [ :logout ]
   cache_sweeper :allocations_sweeper, :only => [ :login, :continue_openid ]
 
