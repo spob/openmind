@@ -28,24 +28,24 @@ class ScribeTask
         group = Group.find_by_name training_group.group_name
         if group.nil?
           # user group does not exist
-          training_group.result = "User group #{training_group.group_name} does not exist"
+          training_group.result = "User group #{training_group.group_name} does not exist (#{Time.zone.now})"
         else
           user = User.find_by_email(training_group.email)
           if user.nil?
             # user does not exist
-            training_group.result = "User #{training_group.group_name} does not exist"
+            training_group.result = "User #{training_group.email} does not exist (#{Time.zone.now})"
           else
             # user exists and group exists
             if user.groups.include? group
               # already a member
-              training_group.result = "User #{training_group.email} is already a member of the group #{training_group.group_name}"
+              training_group.result = "User #{training_group.email} is already a member of the group #{training_group.group_name} (#{Time.zone.now})"
             else
               # go ahead and add this user
-              training_group.result = "User #{training_group.email} added to the group #{training_group.group_name}"
+              training_group.result = "User #{training_group.email} added to the group #{training_group.group_name} (#{Time.zone.now})"
               user.groups << group
               user.save!
             end
-            training_group.processed_at = Time.zone.now
+	    training_group.processed_at = Time.zone.now
           end
         end
         training_group.save!
