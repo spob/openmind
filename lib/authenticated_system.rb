@@ -128,6 +128,7 @@ module AuthenticatedSystem
   # When called with before_filter :login_from_cookie will check for an :auth_token
   # cookie and log the user back in if apropriate
   def login_from_cookie
+    store_location
     return unless cookies[:auth_token] && !logged_in?
     user = User.find_by_remember_token(cookies[:auth_token])
     if user && user.remember_token?
