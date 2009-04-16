@@ -1,0 +1,3 @@
+[submodule "public/themes/scribe"]
+	path = public/themes/scribe
+	url = git://github.com/spob/scribe-theme.git
