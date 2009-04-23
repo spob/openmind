@@ -28,12 +28,12 @@ class ScribeTask
         group = Group.find_by_name training_group.group_name
         if group.nil?
           # user group does not exist
-          training_group.result = "User group #{training_group.group_name} does not exist (#{Time.zone.now})"
+	  set_training_group_result training_group, "User group #{training_group.group_name} does not exist"
         else
           user = User.find_by_email(training_group.email)
           if user.nil?
             # user does not exist
-            training_group.result = "User #{training_group.email} does not exist (#{Time.zone.now})"
+	    set_training_group_result training_group, "User #{training_group.email} does not exist"
           else
             # user exists and group exists
             if user.groups.include? group
@@ -46,10 +46,19 @@ class ScribeTask
               user.save!
             end
 	    training_group.processed_at = Time.zone.now
+            training_group.save!
           end
         end
-        training_group.save!
       end
+    end
+  end
+
+  private
+
+  def self.set_training_group_result training_group, result
+    if training_group.result != result
+      training_group.result =  result
+      training_group.save!
     end
   end
 end
