@@ -33,6 +33,9 @@ class EmailNotifier < ActionMailer::Base
       :action => 'activate',
       :id => user.activation_code,
       :only_path  => false
+    @body[:short_url]  = url_for :controller => 'account',
+      :action => 'activate',
+      :only_path  => false
   end
   
   def activation(user_id)
