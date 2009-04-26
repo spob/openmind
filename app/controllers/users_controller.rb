@@ -198,7 +198,8 @@ class UsersController < ApplicationController
     @user.watch_on_vote = params[:user][:watch_on_vote]
     if @user.save
       flash[:notice] = "User #{@user.login}'s profile was successfully updated."
-      redirect_back_or_default home_path
+#      redirect_back_or_default home_path
+      redirect_to :controller => 'ideas', :action => 'list'
       # may have changed # of rows to display...clear any impacted cached pages
       expire_fragment(%r{attachments/list_attachments.page=(\d)+&user_id=#{current_user.id}})
     else
