@@ -14,7 +14,7 @@
             html_options = {
             :onmouseover => "Tip('View details for this account request')"} 
       %>
-      <% if prodmgr? and user_request.status == UserRequest.pending %>
+      <% if sysadmin? and user_request.status == UserRequest.pending %>
           <%= link_to theme_image_tag("icons/16x16/editAction.png", :alt=>"edit", :title=> "edit"), 
                 edit_user_request_path(user_request),
                 html_options = {
