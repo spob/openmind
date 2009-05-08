@@ -75,7 +75,7 @@ require "stringio"
 # 
 class FasterCSV
   # The version of the installed library.
-  VERSION = "1.2.3".freeze
+  VERSION = "1.4.0".freeze
   
   # 
   # A FasterCSV::Row is part Array and part Hash.  It retains an order for the
@@ -363,6 +363,16 @@ class FasterCSV
       fields.to_csv(options)
     end
     alias_method :to_s, :to_csv
+    
+    # A summary of fields, by header.
+    def inspect
+      str = "#<#{self.class}"
+      each do |header, field|
+        str << " #{header.is_a?(Symbol) ? header.to_s : header.inspect}:" <<
+               field.inspect
+      end
+      str << ">"
+    end
   end
   
   # 
@@ -695,6 +705,10 @@ class FasterCSV
       end.join
     end
     alias_method :to_s, :to_csv
+    
+    def inspect
+      "#<#{self.class} mode:#{@mode} row_count:#{to_a.size}>"
+    end
   end
 
   # The error thrown when the parser encounters illegal CSV formatting.
@@ -999,7 +1013,7 @@ class FasterCSV
   # The +options+ parameter can be anything FasterCSV::new() understands.
   # 
   def self.foreach(path, options = Hash.new, &block)
-    open(path, options) do |csv|
+    open(path, "rb", options) do |csv|
       csv.each(&block)
     end
   end
@@ -1120,8 +1134,8 @@ class FasterCSV
   
   # 
   # :call-seq:
-  #   open( filename, mode="r", options = Hash.new ) { |faster_csv| ... }
-  #   open( filename, mode="r", options = Hash.new )
+  #   open( filename, mode="rb", options = Hash.new ) { |faster_csv| ... }
+  #   open( filename, mode="rb", options = Hash.new )
   # 
   # This method opens an IO object, and wraps that with FasterCSV.  This is
   # intended as the primary interface for writing a CSV file.
@@ -1166,6 +1180,8 @@ class FasterCSV
   def self.open(*args)
     # find the +options+ Hash
     options = if args.last.is_a? Hash then args.pop else Hash.new end
+    # default to a binary open mode
+    args << "rb" if args.size == 1
     # wrap a File opened with the remaining +args+
     csv     = new(File.open(*args), options)
     
@@ -1222,7 +1238,7 @@ class FasterCSV
   # file and any +options+ FasterCSV::new() understands.
   # 
   def self.read(path, options = Hash.new)
-    open(path, options) { |csv| csv.read }
+    open(path, "rb", options) { |csv| csv.read }
   end
   
   # Alias for FasterCSV::read().
@@ -1279,7 +1295,14 @@ class FasterCSV
   #                                       <tt>$INPUT_RECORD_SEPARATOR</tt>
   #                                       (<tt>$/</tt>) is used.  Obviously,
   #                                       discovery takes a little time.  Set
-  #                                       manually if speed is important.
+  #                                       manually if speed is important.  Also
+  #                                       note that IO objects should be opened
+  #                                       in binary mode on Windows if this
+  #                                       feature will be used as the
+  #                                       line-ending translation can cause
+  #                                       problems with resetting the document
+  #                                       position to where it was before the
+  #                                       read ahead.
   # <b><tt>:quote_char</tt></b>::         The character used to quote fields.
   #                                       This has to be a single character
   #                                       String.  This is useful for
@@ -1289,6 +1312,27 @@ class FasterCSV
   #                                       FasterCSV will always consider a
   #                                       double sequence this character to be
   #                                       an escaped quote.
+  # <b><tt>:encoding</tt></b>::           The encoding to use when parsing the
+  #                                       file. Defaults to your <tt>$KDOCE</tt>
+  #                                       setting. Valid values: <tt>`n’</tt> or
+  #                                       <tt>`N’</tt> for none, <tt>`e’</tt> or
+  #                                       <tt>`E’</tt> for EUC, <tt>`s’</tt> or
+  #                                       <tt>`S’</tt> for SJIS, and
+  #                                       <tt>`u’</tt> or <tt>`U’</tt> for UTF-8
+  #                                       (see Regexp.new()).
+  # <b><tt>:field_size_limit</tt></b>::   This is a maximum size FasterCSV will
+  #                                       read ahead looking for the closing
+  #                                       quote for a field.  (In truth, it
+  #                                       reads to the first line ending beyond
+  #                                       this size.)  If a quote cannot be
+  #                                       found within the limit FasterCSV will
+  #                                       raise a MalformedCSVError, assuming
+  #                                       the data is faulty.  You can use this
+  #                                       limit to prevent what are effectively
+  #                                       DoS attacks on the parser.  However,
+  #                                       this limit can cause a legitimate
+  #                                       parse to fail and thus is set to
+  #                                       +nil+, or off, by default.
   # <b><tt>:converters</tt></b>::         An Array of names from the Converters
   #                                       Hash and/or lambdas that handle custom
   #                                       conversion.  A single converter
@@ -1309,8 +1353,11 @@ class FasterCSV
   #                                       contents will be used as the headers.
   #                                       If set to a String, the String is run
   #                                       through a call of
-  #                                       FasterCSV::parse_line() to produce an
-  #                                       Array of headers.  This setting causes
+  #                                       FasterCSV::parse_line() with the same
+  #                                       <tt>:col_sep</tt>, <tt>:row_sep</tt>,
+  #                                       and <tt>:quote_char</tt> as this
+  #                                       instance to produce an Array of
+  #                                       headers.  This setting causes
   #                                       FasterCSV.shift() to return rows as
   #                                       FasterCSV::Row objects instead of
   #                                       Arrays and FasterCSV.read() to return
@@ -1322,6 +1369,9 @@ class FasterCSV
   #                                       object with identical headers and
   #                                       fields (save that the fields do not go
   #                                       through the converters).
+  # <b><tt>:write_headers</tt></b>::      When +true+ and <tt>:headers</tt> is
+  #                                       set, a header row will be added to the
+  #                                       output.
   # <b><tt>:header_converters</tt></b>::  Identical in functionality to
   #                                       <tt>:converters</tt> save that the
   #                                       conversions are only made to header
@@ -1390,12 +1440,18 @@ class FasterCSV
   # The data source must be open for writing.
   # 
   def <<(row)
+    # make sure headers have been assigned
+    if header_row? and [Array, String].include? @use_headers.class
+      parse_headers  # won't read data for Array or String
+      self << @headers if @write_headers
+    end
+    
     # Handle FasterCSV::Row objects and Hashes
     row = case row
-      when self.class::Row then row.fields
-      when Hash            then @headers.map { |header| row[header] }
-      else                      row
-    end
+          when self.class::Row then row.fields
+          when Hash            then @headers.map { |header| row[header] }
+          else                      row
+          end
 
     @headers =  row if header_row?
     @lineno  += 1
@@ -1513,7 +1569,7 @@ class FasterCSV
       # add another read to the line
       line  += @io.gets(@row_sep) rescue return nil
       # copy the line so we can chop it up in parsing
-      parse = line.dup
+      parse =  line.dup
       parse.sub!(@parsers[:line_end], "")
       
       # 
@@ -1590,12 +1646,42 @@ class FasterCSV
       # if we're not empty?() but at eof?(), a quoted field wasn't closed...
       if @io.eof?
         raise MalformedCSVError, "Unclosed quoted field on line #{lineno + 1}."
+      elsif parse =~ @parsers[:bad_field]
+        raise MalformedCSVError, "Illegal quoting on line #{lineno + 1}."
+      elsif @field_size_limit and parse.length >= @field_size_limit
+        raise MalformedCSVError, "Field size exceeded on line #{lineno + 1}."
       end
       # otherwise, we need to loop and pull some more data to complete the row
     end
   end
   alias_method :gets,     :shift
   alias_method :readline, :shift
+  
+  # Returns a simplified description of the key FasterCSV attributes.
+  def inspect
+    str = "<##{self.class} io_type:"
+    # show type of wrapped IO
+    if    @io == $stdout then str << "$stdout"
+    elsif @io == $stdin  then str << "$stdin"
+    elsif @io == $stderr then str << "$stderr"
+    else                      str << @io.class.to_s
+    end
+    # show IO.path(), if available
+    if @io.respond_to?(:path) and (p = @io.path)
+      str << " io_path:#{p.inspect}"
+    end
+    # show other attributes
+    %w[ lineno     col_sep     row_sep
+        quote_char skip_blanks encoding ].each do |attr_name|
+      if a = instance_variable_get("@#{attr_name}")
+        str << " #{attr_name}:#{a.inspect}"
+      end
+    end
+    if @use_headers
+      str << " headers:#{(@headers || true).inspect}"
+    end
+    str << ">"
+  end
   
   private
   
@@ -1690,27 +1776,42 @@ class FasterCSV
   # Pre-compiles parsers and stores them by name for access during reads.
   def init_parsers(options)
     # store the parser behaviors
-    @skip_blanks = options.delete(:skip_blanks)
-    
+    @skip_blanks      = options.delete(:skip_blanks)
+    @encoding         = options.delete(:encoding)  # nil will use $KCODE
+    @field_size_limit = options.delete(:field_size_limit)
+
     # prebuild Regexps for faster parsing
     esc_col_sep = Regexp.escape(@col_sep)
     esc_row_sep = Regexp.escape(@row_sep)
     esc_quote   = Regexp.escape(@quote_char)
     @parsers = {
-      :leading_fields =>
-        /\A(?:#{esc_col_sep})+/,                 # for empty leading fields
-      :csv_row        =>
-        ### The Primary Parser ###
-        / \G(?:^|#{esc_col_sep})                 # anchor the match
-          (?: #{esc_quote}( (?>[^#{esc_quote}]*) # find quoted fields
-                            (?> #{esc_quote*2}
-                                [^#{esc_quote}]* )* )#{esc_quote}
-              |                                  # ... or ...
-              ([^#{esc_quote}#{esc_col_sep}]*)   # unquoted fields
-              )/x,
-        ### End Primary Parser ###
-      :line_end       =>
-        /#{esc_row_sep}\z/                       # safer than chomp!()
+      # for empty leading fields
+      :leading_fields => Regexp.new("\\A(?:#{esc_col_sep})+", nil, @encoding),
+      # The Primary Parser
+      :csv_row        => Regexp.new(<<-END_PARSER, Regexp::EXTENDED, @encoding),
+      \\G(?:\\A|#{esc_col_sep})              # anchor the match
+      (?: #{esc_quote}( (?>[^#{esc_quote}]*) # find quoted fields
+                        (?> #{esc_quote*2}
+                            [^#{esc_quote}]* )* )#{esc_quote}
+          |                                  # ... or ...
+          ([^#{esc_quote}#{esc_col_sep}]*)   # unquoted fields
+          )
+      (?=#{esc_col_sep}|\\z)                 # ensure we are at field's end
+      END_PARSER
+      # a test for unescaped quotes
+      :bad_field      => Regexp.new(<<-END_BAD, Regexp::EXTENDED, @encoding),
+      \\A#{esc_col_sep}?                    # starts with an optional comma
+      (?: #{esc_quote} (?>[^#{esc_quote}]*) # an extra quote
+                       (?> #{esc_quote*2}
+                           [^#{esc_quote}]* )*
+                       #{esc_quote}[^#{esc_quote}]
+          |                                 # ... or ...
+          [^#{esc_quote}#{esc_col_sep}]+
+          #{esc_quote}                      # unescaped quote
+          )
+      END_BAD
+      # safer than chomp!()
+      :line_end       => Regexp.new("#{esc_row_sep}\\z", nil, @encoding)
     }
   end
   
@@ -1757,6 +1858,7 @@ class FasterCSV
   def init_headers(options)
     @use_headers    = options.delete(:headers)
     @return_headers = options.delete(:return_headers)
+    @write_headers  = options.delete(:write_headers)
 
     # headers must be delayed until shift(), in case they need a row of content
     @headers = nil
@@ -1827,10 +1929,17 @@ class FasterCSV
   def parse_headers(row = nil)
     if @headers.nil?                # header row
       @headers = case @use_headers  # save headers
-      when Array  then @use_headers                         # Array of headers
-      when String then self.class.parse_line(@use_headers)  # CSV header String
-      else             row                                  # first row headers
-      end
+                 # Array of headers
+                 when Array  then @use_headers
+                 # CSV header String
+                 when String
+                   self.class.parse_line( @use_headers,
+                                          :col_sep    => @col_sep,
+                                          :row_sep    => @row_sep,
+                                          :quote_char => @quote_char )
+                 # first row is headers
+                 else             row
+                 end
       
       # prepare converted and unconverted copies
       row      = @headers                       if row.nil?

@@ -1,13 +1,13 @@
 class UsersController < ApplicationController
   before_filter :login_required, :except => [:lost_password]
   access_control [:new, :edit, :create, :update, :destroy, :reset_password] => 'sysadmin',
-    [:index, :list, :show, :search, :next, :previous, :export, :export_import,
-    :import, :process_imported] => '(sysadmin | allocmgr)'
+  [:index, :list, :show, :search, :next, :previous, :export, :export_import,
+  :import, :process_imported] => '(sysadmin | allocmgr)'
   
   # GETs should be safe (see http://www.w3.org/2001/tag/doc/whenToUseGet.html)
   verify :method => :post, :only => [ :destroy, :create, :update, :update_profile, :reset_password, :process_imported, :import ],
-    :redirect_to => { :action => :list }
-
+  :redirect_to => { :action => :list }
+  
   def index
     list
     render :action => 'list'
@@ -23,7 +23,7 @@ class UsersController < ApplicationController
     end
     set_start_stop_tags
     @users = User.list params[:page], current_user.row_limit, session[:users_start_filter], 
-      session[:users_end_filter], nil
+    session[:users_end_filter], nil
   end
   
   def search
@@ -40,17 +40,17 @@ class UsersController < ApplicationController
       redirect_to :action => 'list'
     else
       @users = User.list params[:page], 999,
-        session[:users_start_filter],
-        session[:users_end_filter],
-        search_results
+      session[:users_start_filter],
+      session[:users_end_filter],
+      search_results
       render :action => 'list'
     end
   end
-
+  
   def show
     @user = User.find(params[:id])
   end
-
+  
   def next
     user = User.find(params[:id])
     users = User.next(user.email)
@@ -61,7 +61,7 @@ class UsersController < ApplicationController
     end
     render :action => 'show'
   end
-
+  
   def previous
     user = User.find(params[:id])
     users = User.previous(user.email)
@@ -97,7 +97,7 @@ class UsersController < ApplicationController
       render :action => 'show', :id => @user
     end
   end
-
+  
   def create 
     params[:user][:role_ids] ||= []
     params[:user][:group_ids] ||= []
@@ -122,9 +122,9 @@ class UsersController < ApplicationController
         return
       elsif qty > 0
         alloc = UserAllocation.new(
-          :quantity => qty, 
-          :comments => "",
-          :expiration_date => Allocation.calculate_expiration_date)
+                                   :quantity => qty, 
+                                   :comments => "",
+        :expiration_date => Allocation.calculate_expiration_date)
       end
     end
     if @user.save
@@ -157,14 +157,14 @@ class UsersController < ApplicationController
       end
     end
   end
-
+  
   def new
     @user = User.new(:initial_allocation => 0)
     # default timezone
     @user.time_zone = APP_CONFIG['default_user_timezone']
     setup_session_properties
   end
-
+  
   def update
     params[:user][:role_ids] ||= []
     params[:user][:group_ids] ||= []
@@ -186,7 +186,7 @@ class UsersController < ApplicationController
   def edit_profile
     @user = current_user
   end
-
+  
   def update_profile
     @user = User.find(params[:id])
     @user.first_name = params[:user][:first_name]
@@ -198,7 +198,7 @@ class UsersController < ApplicationController
     @user.watch_on_vote = params[:user][:watch_on_vote]
     if @user.save
       flash[:notice] = "User #{@user.login}'s profile was successfully updated."
-#      redirect_back_or_default home_path
+      #      redirect_back_or_default home_path
       redirect_to :controller => 'ideas', :action => 'list'
       # may have changed # of rows to display...clear any impacted cached pages
       expire_fragment(%r{attachments/list_attachments.page=(\d)+&user_id=#{current_user.id}})
@@ -206,7 +206,7 @@ class UsersController < ApplicationController
       render :action => 'edit_profile'
     end
   end
-
+  
   def destroy
     user = User.find(params[:id])
     email = user.email
@@ -214,7 +214,7 @@ class UsersController < ApplicationController
     flash[:notice] = "User #{email} was successfully deleted."
     redirect_to :action => 'list'
   end
-
+  
   def edit
     @user = User.find(params[:id])
     setup_session_properties
@@ -230,17 +230,18 @@ class UsersController < ApplicationController
   # Generate a csv file of users and enterprises
   def export
     
-    CsvUtils.setup_request_for_csv headers, request, "users"
+    response = ""
+    csv = FasterCSV.new(response, :row_sep => "\r\n")
     
-    stream_csv do |csv|
-      csv << ["email",
+    csv << ["email",
         "first name", 
         "last name", 
         "enterprise",
         "allocations mgr (Y|N)",
         "voter (Y|N)"
-      ]
-    end
+    ]
+    CsvUtils.setup_request_for_csv headers, request, "users.csv"
+    render :text => response
   end
   
   def import 
@@ -277,9 +278,9 @@ class UsersController < ApplicationController
       
       if 
         user = User.new(:email => email, :first_name => first_name,
-          :last_name => last_name, :enterprise => enterprise,
-          :password => "Dummy", :password_confirmation => "Dummy",
-          :activation_code => "SKIP")
+                        :last_name => last_name, :enterprise => enterprise,
+                        :password => "Dummy", :password_confirmation => "Dummy",
+        :activation_code => "SKIP")
         if yes? allocation_mgr
           user.roles << allocmgr_role
         end
@@ -344,12 +345,12 @@ class UsersController < ApplicationController
     options = { :action => 'toggle_pix'}, 
     html_options = {:class=> "button"} }"
   end
-
+  
   private
   
   def stream_csv
     filename = params[:action] + ".csv"    
-
+    
     #this is required if you want this to work with IE        
     if request.env['HTTP_USER_AGENT'] =~ /msie/i
       headers['Pragma'] = 'public'
@@ -361,7 +362,7 @@ class UsersController < ApplicationController
       headers["Content-Type"] ||= 'text/csv'
       headers["Content-Disposition"] = "attachment; filename=\"#{filename}\"" 
     end
-
+    
     render :text => Proc.new { |response, output|
       csv = FasterCSV.new(output, :row_sep => "\r\n") 
       yield csv
@@ -397,7 +398,7 @@ class UsersController < ApplicationController
     str = str + '/' unless str.blank? or str =~ /\/$/
     str
   end
-
+  
   def set_start_stop_tags
     count = User.count
     if count > 100

@@ -11,6 +11,8 @@
 require File.join(File.dirname(__FILE__), 'boot')
 
 Rails::Initializer.run do |config|
+  
+#  config.load_once_paths += %W{ #{RAILS_ROOT}/app/controllers/allocations_controller.rb }
   # Use spaces instead of commas for tags separator
   
   # required gems
@@ -23,6 +25,8 @@ Rails::Initializer.run do |config|
   
   # Require the latest version of mysql
   config.gem "mysql"
+  
+  config.gem "fastercsv"
   
   config.gem 'thoughtbot-shoulda', :lib => 'shoulda/rails', :source => "http://gems.github.com"
   

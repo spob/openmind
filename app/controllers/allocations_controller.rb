@@ -9,21 +9,21 @@ class AllocationsController < ApplicationController
   
   # GETs should be safe (see http://www.w3.org/2001/tag/doc/whenToUseGet.html)
   verify :method => :post, :only => [:create, :export, :import ],
-    :redirect_to => { :action => :index }
+  :redirect_to => { :action => :index }
   verify :method => :put, :only => [ :update ],
-    :redirect_to => { :action => :index }
+  :redirect_to => { :action => :index }
   verify :method => :delete, :only => [ :destroy ],
-    :redirect_to => { :action => :index }
+  :redirect_to => { :action => :index }
   
   @@types = [
-    ["User Allocation",  "UserAllocation"],
-    ["Enterprise Allocation",  "EnterpriseAllocation"]
+  ["User Allocation",  "UserAllocation"],
+  ["Enterprise Allocation",  "EnterpriseAllocation"]
   ]
   
   def self.types
     @@types
   end
-
+  
   def index
     if params[:form_based] == "yes"
       session[:active_allocations_only] = (params[:active_only].nil? ? "no" : "yes")
@@ -39,24 +39,24 @@ class AllocationsController < ApplicationController
     end
     
     @allocations = Allocation.list( 
-      (session[:allocations_filter_user] == "yes" ? current_user : nil),
-      (session[:allocations_filter_enterprise] == "yes" ? current_user.enterprise : nil),
-      !allocmgr?,
-      params[:page], current_user.row_limit,
-      (session[:active_allocations_only] == 'yes'))
+     (session[:allocations_filter_user] == "yes" ? current_user : nil),
+     (session[:allocations_filter_enterprise] == "yes" ? current_user.enterprise : nil),
+    !allocmgr?,
+    params[:page], current_user.row_limit,
+     (session[:active_allocations_only] == 'yes'))
   end
- 
+  
   def show
     @allocation = Allocation.find(params[:id])
   end
-
+  
   def new
     if @allocation.nil?
       @allocation = UserAllocation.new
       @allocation.expiration_date = Allocation.calculate_expiration_date
     end
   end
-
+  
   def create
     params[:allocation][:user_id] = nil unless params[:allocation][:allocation_type] == "UserAllocation"
     params[:allocation][:enterprise_id] = nil unless params[:allocation][:allocation_type] == "EnterpriseAllocation"
@@ -70,11 +70,11 @@ class AllocationsController < ApplicationController
       render :action => 'new'
     end
   end
-
+  
   def edit
     @allocation = Allocation.find(params[:id])
   end
-
+  
   def update
     @allocation = Allocation.find(params[:id])
     if @allocation.update_attributes(params[:allocation])
@@ -84,7 +84,7 @@ class AllocationsController < ApplicationController
       render :action => 'edit'
     end
   end
-
+  
   def destroy
     Allocation.find(params[:id]).destroy
     flash[:notice] = "Allocation was successfully deleted."
@@ -101,36 +101,38 @@ class AllocationsController < ApplicationController
   def export
     users = User.active.voters
     enterprises = Enterprise.find(:all, :order => "name ASC")
-    CsvUtils.setup_request_for_csv headers, request, "allocations"
-    stream_csv do |csv|
-      cols = ["type", "email","name","enterprise","enterprise type/user group(s)", "allocation qty","expire days","comments"]
-      cols << CustomField.users_custom_boolean1 unless CustomField.users_custom_boolean1.nil?
+    response = ""
+    csv = FasterCSV.new(response, :row_sep => "\r\n")
+    cols = ["type", "email","name","enterprise","enterprise type/user group(s)", "allocation qty","expire days","comments"]
+    cols << CustomField.users_custom_boolean1 unless CustomField.users_custom_boolean1.nil?
+    csv << cols
+    enterprises.each do |e|
+      cols = ["Enterprise", 
+          "",
+          "",
+      e.name,
+       (e.enterprise_type.short_name unless e.enterprise_type.nil?),
+      0,
+      APP_CONFIG['allocation_expiration_days'],
+          ""]
+      cols << "" unless CustomField.users_custom_boolean1.nil?
       csv << cols
-      enterprises.each do |e|
-        cols = ["Enterprise", 
-          "",
-          "",
-          e.name,
-          (e.enterprise_type.short_name unless e.enterprise_type.nil?),
-          0,
-          APP_CONFIG['allocation_expiration_days'],
-          ""]
-        cols << "" unless CustomField.users_custom_boolean1.nil?
-        csv << cols
-      end
-      users.each do |u|
-        cols =  ["User",
-          u.email,
-          u.full_name,
-          u.enterprise.name,
-          array_to_string(u.groups.collect(&:name)),
-          0,
-          APP_CONFIG['allocation_expiration_days'],
-          ""]
-        cols << u.custom_boolean1 unless CustomField.users_custom_boolean1.nil?
-        csv << cols
-      end
     end
+    users.each do |u|
+      cols =  ["User",
+      u.email,
+      u.full_name,
+      u.enterprise.name,
+      array_to_string(u.groups.collect(&:name)),
+      0,
+      APP_CONFIG['allocation_expiration_days'],
+          ""]
+      cols << u.custom_boolean1 unless CustomField.users_custom_boolean1.nil?
+      csv << cols
+    end
+    
+    CsvUtils.setup_request_for_csv headers, request, "allocations.csv"
+    render :text => response
   end
   
   def import 
@@ -176,7 +178,7 @@ class AllocationsController < ApplicationController
         next
       end
       expiration_date = 
-        Date.jd(DateUtils.today.jd + expire_days)
+      Date.jd(DateUtils.today.jd + expire_days)
       
       if type == "User"
         user = User.find_by_email(row[1])
@@ -185,7 +187,7 @@ class AllocationsController < ApplicationController
           next
         end
         @allocations << UserAllocation.new(:quantity => qty, :user_id => user.id,
-          :comments => comments, :expiration_date => expiration_date)
+                                           :comments => comments, :expiration_date => expiration_date)
       elsif type == "Enterprise"
         enterprise = Enterprise.find_by_name(row[3])
         if enterprise.nil?
@@ -193,9 +195,9 @@ class AllocationsController < ApplicationController
           next
         end
         @allocations << EnterpriseAllocation.new(:quantity => qty, 
-          :enterprise_id => enterprise.id,
-          :comments => comments, 
-          :expiration_date => expiration_date)
+                                                 :enterprise_id => enterprise.id,
+                                                 :comments => comments, 
+                                                 :expiration_date => expiration_date)
       else
         @errors << "Record #{n}: invalid type: '#{type}'"
       end
@@ -239,11 +241,11 @@ class AllocationsController < ApplicationController
   def toggle_image_button
     "&nbsp;&nbsp; #{link_to pix_button_text, toggle_pix_allocations_path, html_options = {:class=> "button"} }"
   end
-
+  
   private
   def stream_csv
     filename = params[:action] + ".csv"    
-
+    
     #this is required if you want this to work with IE        
     if request.env['HTTP_USER_AGENT'] =~ /msie/i
       headers['Pragma'] = 'public'
@@ -255,7 +257,7 @@ class AllocationsController < ApplicationController
       headers["Content-Type"] ||= 'text/csv'
       headers["Content-Disposition"] = "attachment; filename=\"#{filename}\"" 
     end
-
+    
     render :text => Proc.new { |response, output|
       csv = FasterCSV.new(output, :row_sep => "\r\n") 
       yield csv
