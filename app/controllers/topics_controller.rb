@@ -115,6 +115,12 @@ class TopicsController < ApplicationController
   
   def update
     @topic = Topic.find(params[:id])
+    unless params[:topic][:owner_id].empty?
+      # was owner updated? If so, make sure they are watching this topic
+      @user = User.find params[:topic][:owner_id]
+      # Add watcher unless owner is already watching or the owner did not change
+      @topic.watchers << @user unless @topic.watchers.include? @user or @topic.owner == @user
+    end
     
     unless @topic.forum.can_edit? current_user or prodmgr?
       flash[:error] = ForumsController.flash_for_forum_access_denied(current_user)
