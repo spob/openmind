@@ -13,6 +13,6 @@
       "Rerun",
       rerun_periodic_job_path(periodic_job_item),
       html_options = {:class=> "button", :method => :post,
-        :onmouseover => "Tip('Force this periodic job to run once')"} ) if periodic_job_item.next_run_at.nil? and periodic_job_item.last_run_result != 'Running' %>
+        :onmouseover => "Tip('Force this periodic job to run once')"} ) if periodic_job_item.next_run_at.nil? and periodic_job_item.last_run_result != 'Running' %>&nbsp;
   </td>
 </tr>
