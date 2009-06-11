@@ -245,19 +245,7 @@ function CleanWord( oNode, bIgnoreFont, bRemoveStyles )
 	html = html.replace(/<\/?\w+:[^>]*>/gi, '' ) ;
 
 	// Remove comments [SF BUG-1481861].
-    alert(html);
 	html = html.replace(/<\!--.*?-->/g, '' ) ;
-    alert(html);
-    html = html.replace( /<w:[^>]*>(.*?)<\/w:[^>]*>/gi, '' ) ;
-    alert(html);
-    html = html.replace( /<meta[^>]*>/gi, '' ) ;
-    alert(html);
-    html = html.replace( /<link[^>]*>/gi, '' ) ;
-    alert(html);
-    html = html.replace( /<style[^>]*>([\w|\W|\n]*?)<\/style>/gim, '' ) ;
-    alert(html);
-    html = html.replace( /<\!--([\w|\W|\n]*?)-->/gm, '' ) ;
-    alert(html);
 
 	html = html.replace( /<(U|I|STRIKE)>&nbsp;<\/\1>/g, '&nbsp;' ) ;
 
