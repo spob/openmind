@@ -2,9 +2,9 @@
 # Likewise, all the methods added will be available for all controllers.
 
 class ApplicationController < ActionController::Base
-  include HoptoadNotifier::Catcher
   include AuthenticatedSystem 
   include SimpleCaptcha::ControllerHelpers 
+
   helper_method :prodmgr?, :voter?, :allocmgr?, :sysadmin?, :mediator?, :can_edit_idea?,
     :can_delete_idea?, :flash_error_string, :flash_notice_string
   filter_parameter_logging :password, :password_confirmation# controllers/application.rb

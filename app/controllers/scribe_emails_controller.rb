@@ -14,7 +14,7 @@ class ScribeEmailsController < ApplicationController
   end
   
   def new
-    redirect_to :controller => 'account', :action => 'login' if logged_in?
+    redirect_to :controller => 'ideas', :action => 'index' if logged_in?
   end
 
   def show

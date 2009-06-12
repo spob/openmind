@@ -21,7 +21,7 @@ Rails::Initializer.run do |config|
   
   # Uncomment the following line if you are using RedCloth -- only required for implementations
   # that upgraded from a 1.x version of OpenMind
-config.gem "RedCloth", :lib => 'redcloth', :source => "http://code.whytheluckystiff.net/"
+  config.gem "RedCloth", :lib => 'redcloth', :source => "http://code.whytheluckystiff.net/"
   
   # Require the latest version of mysql
   config.gem "mysql"
@@ -46,6 +46,7 @@ config.gem "RedCloth", :lib => 'redcloth', :source => "http://code.whytheluckyst
   config.load_paths += Dir["#{RAILS_ROOT}/vendor/**"].map do |dir| 
     File.directory?(lib = "#{dir}/lib") ? lib : dir
   end
+
   
   # Only load the plugins named here, by default all plugins in vendor/plugins
   # are loaded config.plugins = %W( exception_notification ssl_requirement )
@@ -130,4 +131,4 @@ Mime::SET << Mime::CSV
   WhiteListHelper.tags.merge %w(u table tbody tr td iframe)
   WhiteListHelper.attributes.merge %w(id class style src target align frameborder marginheight marginwidth)
   
-  #TagList.delimiter = " "
+  #pTagList.delimiter = " "
