@@ -89,16 +89,34 @@ class IdeasController < ApplicationController
       }
       format.csv {
         @ideas = fetch_ideas filter_properties, false
-        stream_csv do |csv|
-          cols = ["Idea #", "Title","Status","Votes","Product","Release"]
+        
+        response = ""
+        csv = FasterCSV.new(response, :row_sep => "\r\n")
+        cols = ["Idea #", "Title","Status","Votes","Product","Release"]
+        csv << cols
+        
+        @ideas.each do |idea|
+          cols = [idea.id, idea.title, idea.display_status, idea.votes.size,
+          idea.product.name, idea.release.try(:name)]
           csv << cols
-          @ideas.each do |idea|
-            release = idea.release.version unless idea.release.nil?
-            cols = [idea.id, idea.title, idea.display_status, idea.votes.size,
-            idea.product.name, release]
-            csv << cols
-          end
-        end        
+        end
+        
+        CsvUtils.setup_request_for_csv headers, request, "ideas.csv"
+        render :text => response
+        
+        #        stream_csv do |csv|
+        #          cols = ["Idea #", "Title","Status","Votes","Product","Release"]
+        #          csv << cols
+        #          @ideas.each do |idea|
+        #            release = idea.release.version unless idea.release.nil?
+        #            cols = [idea.id, idea.title, idea.display_status, idea.votes.size,
+        #            idea.product.name, release]
+        #            csv << cols
+        #          end
+        #        end  
+        #    CsvUtils.setup_request_for_csv headers, request, "ideas.csv"
+        #    render :text => response      
+        #        }
       }
     end
   end
@@ -352,9 +370,19 @@ class IdeasController < ApplicationController
   end
   
   def stream_csv
-    filename = "ideas.csv"    
+    filename = "ideas.csv" 
     
-    CsvUtils.setup_request_for_csv headers, request, filename
+    #this is required if you want this to work with IE        
+    if request.env['HTTP_USER_AGENT'] =~ /msie/i
+      headers['Pragma'] = 'public'
+      headers["Content-type"] = "text/plain" 
+      headers['Cache-Control'] = 'private'
+      headers['Content-Disposition'] = "attachment; filename=\"#{filename}\"" 
+      headers['Expires'] = "0" 
+    else
+      headers["Content-Type"] ||= 'text/csv'
+      headers["Content-Disposition"] = "attachment; filename=\"#{filename}\"" 
+    end
     
     render :text => Proc.new { |response, output|
       csv = FasterCSV.new(output, :row_sep => "\r\n") 
