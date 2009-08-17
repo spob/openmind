@@ -52,3 +52,6 @@ minutes_to_send_vote_reminder: 60
 # not complete in this timeframe, OpenMind will assume it is dead and initiate
 # a recovery
 periodic_job_timeout: 30
+
+# URL of the corporate web site (which the banner will redirect to)
+main_site_url: http://www.scribesoft.com

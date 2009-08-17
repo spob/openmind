@@ -31,7 +31,7 @@
               <% end %>
             </ul>
           </div>
-          <div id="headerBrandingArea"><a href="/ideas"><img alt="branding logo" src="/themes/<%=APP_CONFIG['app_theme']%>/images/headers/headerBrandingLogo.jpg" /></a>
+          <div id="headerBrandingArea"><a href="<%= APP_CONFIG['main_site_url'] %>"><img alt="branding logo" src="/themes/<%=APP_CONFIG['app_theme']%>/images/headers/headerBrandingLogo.jpg" /></a>
             <!-- flash notices -->
             <% if flash[:notice]-%>
               <div id="flash_notice" class="flash flashNotice"><%= flash_notice_string flash[:notice] %></div>
