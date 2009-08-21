@@ -8,7 +8,6 @@ class AddVersionDependencies < ActiveRecord::Migration
       t.references :release, :null => false
       t.integer :depends_on_id, :null => false
       t.column :lock_version, :integer, :default => 0
-      t.integer :dependency_group_id, :null => false
       t.timestamps
     end
 
