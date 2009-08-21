@@ -29,6 +29,8 @@ class Release < ActiveRecord::Base
     :conditions => ["processed_at is null"],
     :class_name => "ReleaseChangeLog",
     :order => "id ASC"
+  has_many :release_dependencies, :dependent => :destroy
+  has_many :dependent_releases, :source => 'depends_on', :through => :release_dependencies, :order => "releases.product_id ASC"
   belongs_to :product
   belongs_to :release_status, :class_name => "LookupCode", 
     :foreign_key => "release_status_id"
@@ -38,6 +40,7 @@ class Release < ActiveRecord::Base
   validates_length_of :version, :maximum => 20
   
   xss_terminate :except => [:description]
+  
   
   def self.list(page, product_id, per_page)
     paginate :page => page, 
@@ -55,6 +58,14 @@ class Release < ActiveRecord::Base
   
   def can_delete?
     ideas.empty?
+  end
+  
+  def self.findall_with_product_names
+    list = Release.find(:all, :include => :product, :order => 'products.name, release_date')
+    for r in list
+      r.version = "#{r.product.name}: #{r.version}"
+    end
+    list
   end
 
   def self.send_change_notifications release_id

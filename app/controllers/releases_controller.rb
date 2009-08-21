@@ -94,13 +94,18 @@ class ReleasesController < ApplicationController
   
   def update
     @release = Release.find(params[:id])
-    @release.description = params[:release][:description]
-    @release.user_release_date = params[:release][:user_release_date]
-    @release.release_status_id = params[:release][:release_status_id]
-    @release.version = params[:release][:version]
-    @release.download_url = params[:release][:download_url]
-    @release.release_date = params[:release][:release_date]
     Release.transaction do
+      @release.release_dependencies.clear
+      for release_id in params[:release][:release_dependencies]
+        depends_upon = Release.find(release_id.to_i)
+        @release.release_dependencies.create!(:depends_on => depends_upon)
+      end
+      @release.description = params[:release][:description]
+      @release.user_release_date = params[:release][:user_release_date]
+      @release.release_status_id = params[:release][:release_status_id]
+      @release.version = params[:release][:version]
+      @release.download_url = params[:release][:download_url]
+      @release.release_date = params[:release][:release_date]
       calc_change_history @release
       run_change_log_job @release.id
       

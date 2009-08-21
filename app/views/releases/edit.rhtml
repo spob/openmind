@@ -1,58 +1,80 @@
 <%content_for :head do -%>
-  <%= javascript_include_tag :fckeditor %>
-<% end  %>
-
-<%= javascript_include_tag "wz_tooltip.js", :cache => "cache/tooltip" %> 
+<%= javascript_include_tag :fckeditor %>
+<% end %>
+<%= javascript_include_tag "wz_tooltip.js", :cache => "cache/tooltip" %>
 <%= calendar_date_select_includes "blue" %>
 <%content_for :bodyTag do -%>
-  <%= set_focus_to_id 'release_version' %>
-<%end%>
-
+<%= set_focus_to_id 'release_version' %>
+<%end %>
 <%= render :partial => "products/tab_menu" %>
 <div id="tabBody" style="position:relative; padding-top:15px;">
-  <%= error_messages_for 'release' %>
-
-  <% form_for :release,
+    <%= error_messages_for 'release' %>
+    <% form_for :release,
     :url => commit_release_path(@release),
     :html => {:method => :post, :id => "new-release" } do |form| %>
-    <div class="formTitle">Edit Release for Product <%= @release.product.name %></div>
-    <div class="cssform widerLabel">
-      <p>
-        <label for="release_version">Version:</label>
-        <%= form.text_field :version, { :size => 20, :maxlength => 20 } %>
-      </p>
-      <p>
-        <label for="release_version">Release Status:</label>
-        <%= form.collection_select :release_status_id, @release_statuses, :id, :description %>
-      </p>
-      <p>
-        <label for="release_date">Release Date:</label>
-        <%= calendar_date_select :release, :release_date, :popup => :force, :time => false %>
-      </p>
-      <p>
-        <label for="user_release_date">Label for Release Date:</label>
-        <%= form.text_field :user_release_date, { :size => 20, :maxlength => 20 } %>
-      </p>
-      <p>
-        <label for="description">Description:</label>
-        <% if @release.textiled %>
-          <%= form.text_area :description  %>
-          <br/>
-          <span style="padding-left:10px;font-size:0.83em;">(supports <a href="http://hobix.com/textile/" target="_blank" onmouseover="Tip('Click here for explanation of textile tags')">textile</a> tags)</span>
-        <% else %>
-          <%=  fckeditor_textarea :release, :description, :height => '250' %>
-        <% end %>
-      </p>
-      <p>
-        <label for="download_url">Download URL:</label>
-        <%= form.text_field :download_url, { :size => 80, :maxlength => 300 } %>
-      </p>
-      <p>
-        <label></label>
-        <%= submit_tag 'Save', html_options = {:class=> "button", :disable_with => "Please wait..."} %>
-        <%= link_to 'Cancel', release_path(@release),
-          html_options = { :class => "button", :onmouseover => "Tip('Do not save changes')" } %>
-      </p>
+    <div class="formTitle">
+        Edit Release for Product <%= @release.product.name %>
     </div>
-  <% end %>
+    <div class="cssform widerLabel">
+        <p>
+            <label for="release_version">
+                Version:
+            </label>
+            <%= form.text_field :version, { :size => 20, :maxlength => 20 } %>
+        </p>
+        <p>
+            <label for="release_version">
+                Release Status:
+            </label>
+            <%= form.collection_select :release_status_id, @release_statuses, :id, :description %>
+        </p>
+        <p>
+            <label for="release_date">
+                Release Date:
+            </label>
+            <%= calendar_date_select :release, :release_date, :popup => :force, :time => false %>
+        </p>
+        <p>
+            <label for="user_release_date">
+                Label for Release Date:
+            </label>
+            <%= form.text_field :user_release_date, { :size => 20, :maxlength => 20 } %>
+        </p>
+        <p>
+            <label for="description">
+                Description:
+            </label>
+            <% if @release.textiled %>
+            <%= form.text_area :description %>
+            <br/>
+            <span style="padding-left:10px;font-size:0.83em;">(supports <a href="http://hobix.com/textile/" target="_blank" onmouseover="Tip('Click here for explanation of textile tags')">textile</a> tags)</span>
+            <% else %>
+            <%= fckeditor_textarea :release, :description, :height => '250' %>
+            <% end %>
+        </p>
+        <p>
+            <label for="download_url">
+                Download URL:
+            </label>
+            <%= form.text_field :download_url, { :size => 80, :maxlength => 300 } %>
+        </p>
+        <p>
+            <label>
+                Depends upon:
+            </label>
+            <% for release in Release.findall_with_product_names %>
+            <span style="display:block;margin-left:10px;"><%= check_box_tag "release[release_dependencies][]", release.id, @release.dependent_releases.include?(release) %>
+                <%= h release.version %>
+            </span>
+            <% end %>
+        </p>
+        <p>
+            <label>
+            </label>
+            <%= submit_tag 'Save', html_options = {:class=> "button", :disable_with => "Please wait..."} %>
+            <%= link_to 'Cancel', release_path(@release),
+            html_options = { :class => "button", :onmouseover => "Tip('Do not save changes')" } %>
+        </p>
+    </div>
+    <% end %>
 </div>
