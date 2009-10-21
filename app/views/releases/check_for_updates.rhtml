@@ -1,0 +1,44 @@
+<table>
+    <tr>
+        <th>
+            Current Product
+        </th>
+        <th>
+            Current Version
+        </th>
+        <th>
+            Latest Version
+        </th>
+        <th>
+            Required Updates
+        </th>
+    </tr>
+    <% for release in @releases %>
+    <tr>
+        <td>
+            <%= link_to(h(release.product.name), product_path(release.product)) %>
+			<%= show_product_watch_button release.product %>
+        </td>
+        <td>
+            <%= link_to(h(release.version), release_path(release)) %>
+        </td>
+        <td>
+            <% if @latest_release[release] %>
+            <%= link_to(h(@latest_release[release].try(:version)), @latest_release[release]) %>
+			<%= download_icon(@latest_release[release])%>
+            <% else %>
+            You are using the latest version<% end %>
+        </td>
+        <td>
+            <% if @latest_release[release].nil? %>
+				&nbsp;
+            <% elsif @unsatisfied_dependencies[release].nil?  or @unsatisfied_dependencies[release].empty? %>
+            You can upgrade to this version<% else %>
+            <%= dependent_releases(@unsatisfied_dependencies[release]) %>
+            <% end %>
+        </td>
+    </tr>
+    <% end %>
+</table>
+If you choose to watch a product, you will receive email updates whenever the roadmap for that product is updated or a 
+new version of that product is released. You must be logged in to watch a product.

@@ -37,6 +37,7 @@ class Release < ActiveRecord::Base
 
   validates_presence_of :version
   validates_uniqueness_of :version, :scope => "product_id", :case_sensitive => false
+  validates_uniqueness_of :external_release_id, :allow_nil => true
   validates_length_of :version, :maximum => 20
   
   xss_terminate :except => [:description]
@@ -60,12 +61,49 @@ class Release < ActiveRecord::Base
     ideas.empty?
   end
   
+  def self.released_release_statuses
+    # strip surrounding ()
+    releases = APP_CONFIG['released_release_statuses'].gsub(/^\s*\(|\)\s*$/, "").split(/,/)
+    ReleaseStatus.find(:all, :conditions => { :short_name => releases})
+  end
+  
   def self.findall_with_product_names
     list = Release.find(:all, :include => :product, :order => 'products.name, release_date')
     for r in list
       r.version = "#{r.product.name}: #{r.version}"
     end
     list
+  end
+  
+  # Return a release if a release is available
+  # Return nil if no update is available
+  def update_available(releases)
+    unsatisfied_depedendencies = {}
+    puts "checking for release #{id} : #{version}"
+    latest_release = self.product.latest_release
+    return nil, nil if self == latest_release
+    puts "not using the latest release"
+    # Check if dependencies are satisfied
+    unless latest_release.release_dependencies.empty?
+      puts "dependencies not empty for latest release #{latest_release.id} #{latest_release.version}"
+      # for each product which we are dependent on
+      for product in Product.find(:all, 
+        :conditions => [ "id in (?)", latest_release.dependent_releases.collect(&:product_id)])
+        puts "found one or more dependencies on product #{product.id} #{product.name}"
+        # now find all dependent releases for that product
+        dependencies = product.releases.find(:all, :conditions => { :id => latest_release.dependent_releases})
+        dependencies.each do |d|
+          puts "dependent on #{d.id} #{d.version}"
+        end
+        releases.each do |d|
+          puts "releases include #{d.id} #{d.version}"
+        end
+        puts "intersection empty #{(releases & dependencies)}"
+        unsatisfied_depedendencies[product] = dependencies if (releases & dependencies).empty? # dependency not satisfied
+      end
+    end
+    puts "unsatisfied_depedendencies is empty #{unsatisfied_depedendencies.empty?}"
+    return latest_release, unsatisfied_depedendencies
   end
 
   def self.send_change_notifications release_id

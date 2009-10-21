@@ -19,18 +19,21 @@ class Product < ActiveRecord::Base
   validates_length_of :description, :maximum => 200
   
   has_many :releases,
-    :dependent => :destroy, :order => "release_date ASC"
+  :dependent => :destroy, :order => "release_date ASC"
+  has_one :latest_release, :class_name => "Release", 
+  :conditions => {:release_status_id => Release.released_release_statuses.collect(&:id)},
+  :order => "release_date DESC"
   has_many :ideas,
-    :dependent => :destroy, :order => "id ASC"
+  :dependent => :destroy, :order => "id ASC"
   has_and_belongs_to_many :watchers, :join_table => 'products_watches',
-    :class_name => 'User'
-
+  :class_name => 'User'
+  
   named_scope :by_name, :order => "name ASC"
   named_scope :active, :conditions => ["active = ?", true]
   
   def self.list(page, per_page)
     paginate :page => page, :order => 'name', 
-      :per_page => per_page
+    :per_page => per_page
   end
   
   def can_delete?
@@ -39,8 +42,8 @@ class Product < ActiveRecord::Base
   
   def current_release
     releases.find(:first,
-      :conditions => 'release_date <= now()',
-      :order => "release_date desc")
+                  :conditions => 'release_date <= now()',
+    :order => "release_date desc")
   end
   
   def current_release_version

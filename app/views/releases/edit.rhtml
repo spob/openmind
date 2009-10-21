@@ -70,6 +70,12 @@
         </p>
         <p>
             <label>
+                External Release ID:
+            </label>
+            <%= form.text_field :external_release_id %>
+        </p>
+        <p>
+            <label>
             </label>
             <%= submit_tag 'Save', html_options = {:class=> "button", :disable_with => "Please wait..."} %>
             <%= link_to 'Cancel', release_path(@release),

@@ -55,3 +55,7 @@ periodic_job_timeout: 30
 
 # URL of the corporate web site (which the banner will redirect to)
 main_site_url: http://www.scribesoft.com
+
+# A list of release status, separated by commas, within parens, that should be considered GA 
+# releases
+released_release_statuses: (Released)

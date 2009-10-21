@@ -33,7 +33,7 @@ ActionController::Routing::Routes.draw do |map|
     :collection => {:toggle_details => :get, :pie => :get, :display_comments => :get }
   map.resources :products
   map.resources :releases, :member => { :commit => :post },
-    :collection => { :preview => :get, :list => :get }
+    :collection => { :preview => :get, :list => :get, :check_for_updates => :get }
   map.resources :topics, :collection => { :preview => :get, :search => :get,
     :tag => :get }, :member => {:rate => :post, :toggle_status => :put}
   map.resources :user_logons

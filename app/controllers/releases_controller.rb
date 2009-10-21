@@ -1,5 +1,5 @@
 class ReleasesController < ApplicationController
-  before_filter :login_required, :except => [:index, :list, :show]
+  before_filter :login_required, :except => [:index, :list, :show, :check_for_updates]
   access_control [:new, :commit, :index, :edit, :create, :update, :destroy] => 'prodmgr'
   
   # GETs should be safe (see http://www.w3.org/2001/tag/doc/whenToUseGet.html)
@@ -84,6 +84,22 @@ class ReleasesController < ApplicationController
     @release ||= Release.find(params[:id])
   end
   
+  def  check_for_updates
+    release_ids = params[:releases].split(",") unless params[:releases].nil? or params[:releases].blank?
+    release_ids ||= []
+    @releases = []
+    release_ids.each do |id|
+      release = Release.find_by_id(id)
+      release = Release.find_by_external_release_id!(id) unless release
+      @releases << release
+    end
+    @latest_release = {}
+    @unsatisfied_dependencies = {}
+    @releases.each do |release|
+      @latest_release[release], @unsatisfied_dependencies[release] = release.update_available(@releases)
+    end
+  end
+  
   #
   # I needed to create a special method called commit that was a post because,
   # for some reason, the update (which is a put) wouldn't work with the preview
@@ -96,15 +112,18 @@ class ReleasesController < ApplicationController
     @release = Release.find(params[:id])
     Release.transaction do
       @release.release_dependencies.clear
-      for release_id in params[:release][:release_dependencies]
-        depends_upon = Release.find(release_id.to_i)
-        @release.release_dependencies.create!(:depends_on => depends_upon)
+      if params[:release][:release_dependencies]
+        for release_id in params[:release][:release_dependencies]
+          depends_upon = Release.find(release_id.to_i)
+          @release.release_dependencies.create!(:depends_on => depends_upon)
+        end
       end
       @release.description = params[:release][:description]
       @release.user_release_date = params[:release][:user_release_date]
       @release.release_status_id = params[:release][:release_status_id]
       @release.version = params[:release][:version]
       @release.download_url = params[:release][:download_url]
+      @release.external_release_id = params[:release][:external_release_id]
       @release.release_date = params[:release][:release_date]
       calc_change_history @release
       run_change_log_job @release.id
