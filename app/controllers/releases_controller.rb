@@ -98,6 +98,13 @@ class ReleasesController < ApplicationController
     @releases.each do |release|
       @latest_release[release], @unsatisfied_dependencies[release] = release.update_available(@releases)
     end
+    new_releases = @latest_release.values.delete_if {|x| x.nil?}
+    xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><releases type=\"array\"></releases>"
+    xml = new_releases.to_xml unless new_releases.empty?
+    respond_to do |wants|
+      wants.html
+      wants.xml { render :xml => xml }
+    end   
   end
   
   #
