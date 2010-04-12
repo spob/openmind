@@ -18,6 +18,7 @@
 # 
 
 class Release < ActiveRecord::Base
+  has_friendly_id :product_release_txt, :use_slug => true
   has_many :ideas,
     :dependent => :destroy,
     :order => "id ASC"
@@ -55,6 +56,10 @@ class Release < ActiveRecord::Base
       :conditions => ['release_status_id = ?', status_id],
       :order => "to_days(release_date) * if (release_date < now(),  -1, 1)", 
       :per_page => per_page
+  end
+  
+  def product_release_txt
+    "#{product.name}-#{self.version}"
   end
   
   def can_delete?

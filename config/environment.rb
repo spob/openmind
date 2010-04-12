@@ -28,6 +28,8 @@ Rails::Initializer.run do |config|
   
   config.gem "fastercsv"
   
+  config.gem "friendly_id"
+  
   config.gem 'thoughtbot-shoulda', :lib => 'shoulda/rails', :source => "http://gems.github.com"
   
   config.gem "ruby-yadis",  :lib => 'yadis',  :version => '0.3.4'

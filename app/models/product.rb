@@ -13,6 +13,7 @@
 #
 
 class Product < ActiveRecord::Base
+  has_friendly_id :name, :use_slug => true
   validates_presence_of :name, :description
   validates_uniqueness_of :name, :case_sensitive => false
   validates_length_of :name, :maximum => 30

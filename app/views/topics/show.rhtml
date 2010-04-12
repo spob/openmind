@@ -41,7 +41,7 @@
   :onmouseover => "Tip('Return to list forums')"}%>
 ->
 <%= link_to "Forum: #{truncate @topic.forum.name, :length => 40}",
-  forum_path(@topic.forum.id) , html_options = {
+  forum_path(@topic.forum) , html_options = {
   :onmouseover => "Tip('Return to list of topics for the #{@topic.forum.name} forum')"}%>
 ->
 Topic: <%= truncate @topic.title, :length => 40 %>
