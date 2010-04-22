@@ -85,16 +85,29 @@ class ReleasesController < ApplicationController
   end
   
   def  check_for_updates
-    release_ids = params[:releases].split(",") unless params[:releases].nil? or params[:releases].blank?
-    release_ids ||= []
+    release_ids = {}
+    @serial_number = params[:serial_number]
+    params[:releases].split(",").collect { |x| release_ids[x.split("|")[0]] = x.split("|")[1] } unless params[:releases].nil? or params[:releases].blank?
+    
     @releases = []
-    release_ids.each do |id|
+    @expired_maintenance = false
+    release_ids.keys.each do |id|
       release = Release.find_by_id(id)
       release = Release.find_by_external_release_id(id) unless release
       if release.nil?
         flash[:error] = "Couldn't find product with id '#{id}'" 
       else
-      @releases << release 
+        if release_ids[id] 
+          begin
+            release.maintenance_expires = Date.parse(release_ids[id]) 
+            
+            @expired_maintenance = true if release.maintenance_expires < Date.today
+          rescue ArgumentError
+            flash[:error] = "Invalid date format '#{release_ids[id]}'" 
+          end
+        end
+        
+        @releases << release 
       end
     end
     @latest_release = {}
@@ -104,100 +117,100 @@ class ReleasesController < ApplicationController
     end
     new_releases = @latest_release.values.delete_if {|x| x.nil?}
     xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><releases type=\"array\"></releases>"
-        xml = new_releases.to_xml unless new_releases.empty?
-        respond_to do |wants|
-          wants.html
-          wants.xml { render :xml => xml }
-        end   
-      end
-      
-      #
-      # I needed to create a special method called commit that was a post because,
-      # for some reason, the update (which is a put) wouldn't work with the preview
-      # textile stuff
-      def commit
-        update
-      end
-      
-      def update
-        @release = Release.find(params[:id])
-        Release.transaction do
-          @release.release_dependencies.clear
-          if params[:release][:release_dependencies]
-            for release_id in params[:release][:release_dependencies]
-              depends_upon = Release.find(release_id.to_i)
-              @release.release_dependencies.create!(:depends_on => depends_upon)
-            end
-          end
-          @release.description = params[:release][:description]
-          @release.user_release_date = params[:release][:user_release_date]
-          @release.release_status_id = params[:release][:release_status_id]
-          @release.version = params[:release][:version]
-          @release.download_url = params[:release][:download_url]
-          @release.external_release_id = params[:release][:external_release_id]
-          @release.release_date = params[:release][:release_date]
-          calc_change_history @release
-          run_change_log_job @release.id
-          
-          if @release.save
-            flash[:notice] = "Release #{@release.version} was successfully updated."
-            redirect_to release_path(@release)
-          else
-            edit
-            render :action => 'edit'
-          end
+    xml = new_releases.to_xml unless new_releases.empty?
+    respond_to do |wants|
+      wants.html
+      wants.xml { render :xml => xml }
+    end   
+  end
+  
+  #
+  # I needed to create a special method called commit that was a post because,
+  # for some reason, the update (which is a put) wouldn't work with the preview
+  # textile stuff
+  def commit
+    update
+  end
+  
+  def update
+    @release = Release.find(params[:id])
+    Release.transaction do
+      @release.release_dependencies.clear
+      if params[:release][:release_dependencies]
+        for release_id in params[:release][:release_dependencies]
+          depends_upon = Release.find(release_id.to_i)
+          @release.release_dependencies.create!(:depends_on => depends_upon)
         end
       end
+      @release.description = params[:release][:description]
+      @release.user_release_date = params[:release][:user_release_date]
+      @release.release_status_id = params[:release][:release_status_id]
+      @release.version = params[:release][:version]
+      @release.download_url = params[:release][:download_url]
+      @release.external_release_id = params[:release][:external_release_id]
+      @release.release_date = params[:release][:release_date]
+      calc_change_history @release
+      run_change_log_job @release.id
       
-      def destroy
-        release = Release.find(params[:id])
-        product = release.product
-        version = release.version
-        release.destroy
-        flash[:notice] = "Release #{version} for product #{product.name} was successfully deleted."
-        redirect_to releases_path(:product_id => product.id)
-      end
-      
-      private
-      
-      def run_change_log_job release_id
-        # run job in the feature to notify of changes (in case user makes several
-        # changes, we will only ping watchers once
-        RunOncePeriodicJob.create(
-                                  :job => "Release.send_change_notifications(#{release_id})",
-        :next_run_at => Time.zone.now + 10.minutes)
-      end
-      
-      def calc_change_history release    
-        add_change_history_from_message release, "Description updated" if release.description_changed?
-        add_change_history_old_new release, "Release Date",
-        @release.user_release_date_was,
-        @release.user_release_date if release.user_release_date_changed?
-        add_change_history_old_new release, "Release Status",
-        ReleaseStatus.find(@release.release_status_id_was).short_name,
-        @release.release_status.short_name if release.release_status_id_changed?
-        add_change_history_from_changes release, "Version Name",
-        release.changes['version'] if release.version_changed?
-        add_change_history_from_changes release, "Download URL",
-        release.changes['download_url'] if release.download_url_changed?
-      end
-      
-      def add_change_history_old_new release, label, old_value, new_value
-        if old_value.nil? or old_value.blank?
-          add_change_history_from_message release, "#{label} set to \"#{new_value}\""
-        elsif new_value.nil? or new_value.blank?
-          add_change_history_from_message release, "#{label} changed from \"#{old_value}\" to null"
-        else
-          add_change_history_from_message release, "#{label} changed from \"#{old_value}\" to \"#{new_value}\""
-        end
-      end
-      
-      def add_change_history_from_changes release, label, old_and_new_values
-        add_change_history_old_new release, label, old_and_new_values[0], old_and_new_values[1]
-      end
-      
-      def add_change_history_from_message release, message
-        release.change_logs <<  ReleaseChangeLog.new(:message => message,
-                                                     :user => current_user)
+      if @release.save
+        flash[:notice] = "Release #{@release.version} was successfully updated."
+        redirect_to release_path(@release)
+      else
+        edit
+        render :action => 'edit'
       end
     end
+  end
+  
+  def destroy
+    release = Release.find(params[:id])
+    product = release.product
+    version = release.version
+    release.destroy
+    flash[:notice] = "Release #{version} for product #{product.name} was successfully deleted."
+    redirect_to releases_path(:product_id => product.id)
+  end
+  
+  private
+  
+  def run_change_log_job release_id
+    # run job in the feature to notify of changes (in case user makes several
+    # changes, we will only ping watchers once
+    RunOncePeriodicJob.create(
+                              :job => "Release.send_change_notifications(#{release_id})",
+    :next_run_at => Time.zone.now + 10.minutes)
+  end
+  
+  def calc_change_history release    
+    add_change_history_from_message release, "Description updated" if release.description_changed?
+    add_change_history_old_new release, "Release Date",
+    @release.user_release_date_was,
+    @release.user_release_date if release.user_release_date_changed?
+    add_change_history_old_new release, "Release Status",
+    ReleaseStatus.find(@release.release_status_id_was).short_name,
+    @release.release_status.short_name if release.release_status_id_changed?
+    add_change_history_from_changes release, "Version Name",
+    release.changes['version'] if release.version_changed?
+    add_change_history_from_changes release, "Download URL",
+    release.changes['download_url'] if release.download_url_changed?
+  end
+  
+  def add_change_history_old_new release, label, old_value, new_value
+    if old_value.nil? or old_value.blank?
+      add_change_history_from_message release, "#{label} set to \"#{new_value}\""
+    elsif new_value.nil? or new_value.blank?
+      add_change_history_from_message release, "#{label} changed from \"#{old_value}\" to null"
+    else
+      add_change_history_from_message release, "#{label} changed from \"#{old_value}\" to \"#{new_value}\""
+    end
+  end
+  
+  def add_change_history_from_changes release, label, old_and_new_values
+    add_change_history_old_new release, label, old_and_new_values[0], old_and_new_values[1]
+  end
+  
+  def add_change_history_from_message release, message
+    release.change_logs <<  ReleaseChangeLog.new(:message => message,
+                                                 :user => current_user)
+  end
+end

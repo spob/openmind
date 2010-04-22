@@ -41,6 +41,8 @@ class Release < ActiveRecord::Base
   validates_uniqueness_of :external_release_id, :allow_nil => true
   validates_length_of :version, :maximum => 20
   
+  attr_accessor :maintenance_expires
+  
   xss_terminate :except => [:description]
   
   
