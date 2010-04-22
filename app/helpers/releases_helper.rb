@@ -32,4 +32,12 @@ module ReleasesHelper
       end
     end
   end
+  
+  def send_products_to_support_link(link_text, releases, serial_number)
+    product_list = releases.collect { |release| "#{release.id}|#{release.maintenance_expires}" }.join(",")
+    mail_to(APP_CONFIG['support_email'], 
+    link_text, 
+    :subject => "Product list for serial number #{serial_number}",
+    :body => check_for_updates_releases_url(:releases => product_list, :serial_number => serial_number))
+  end
 end

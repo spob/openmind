@@ -20,3 +20,4 @@ doc/api
 doc/app
 public/themes/scribe/cache/
 .tmp*
+development.yml
