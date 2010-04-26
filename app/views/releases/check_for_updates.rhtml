@@ -34,7 +34,7 @@
             <%= link_to(h(release.version), release_path(release)) %>
         </td>
 		<td>
-			<%= strike_text(l(release.maintenance_expires, :format => :long), release.maintenance_expires < Date.today) if release.maintenance_expires %>
+			<%= strike_text(l(release.maintenance_expires, :format => :long), release.maintenance_expires < Date.today) if release.maintenance_expires %>&nbsp;
 		</td>
         <td>
             <% if @latest_release[release] %>
