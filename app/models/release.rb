@@ -86,30 +86,30 @@ class Release < ActiveRecord::Base
   # Return nil if no update is available
   def update_available(releases)
     unsatisfied_depedendencies = {}
-    puts "checking for release #{id} : #{version}"
+    logger.debug "checking for release #{id} : #{version}"
     latest_release = self.product.latest_release
     return nil, nil if self == latest_release
-    puts "not using the latest release"
+    logger.debug "not using the latest release"
     # Check if dependencies are satisfied
     unless latest_release.release_dependencies.empty?
-      puts "dependencies not empty for latest release #{latest_release.id} #{latest_release.version}"
+      logger.debug "dependencies not empty for latest release #{latest_release.id} #{latest_release.version}"
       # for each product which we are dependent on
       for product in Product.find(:all, 
         :conditions => [ "id in (?)", latest_release.dependent_releases.collect(&:product_id)])
-        puts "found one or more dependencies on product #{product.id} #{product.name}"
+        logger.debug "found one or more dependencies on product #{product.id} #{product.name}"
         # now find all dependent releases for that product
         dependencies = product.releases.find(:all, :conditions => { :id => latest_release.dependent_releases})
         dependencies.each do |d|
-          puts "dependent on #{d.id} #{d.version}"
+          logger.debug "dependent on #{d.id} #{d.version}"
         end
         releases.each do |d|
-          puts "releases include #{d.id} #{d.version}"
+          logger.debug "releases include #{d.id} #{d.version}"
         end
-        puts "intersection empty #{(releases & dependencies)}"
+        logger.debug "intersection empty #{(releases & dependencies)}"
         unsatisfied_depedendencies[product] = dependencies if (releases & dependencies).empty? # dependency not satisfied
       end
     end
-    puts "unsatisfied_depedendencies is empty #{unsatisfied_depedendencies.empty?}"
+    logger.debug "unsatisfied_depedendencies is empty #{unsatisfied_depedendencies.empty?}"
     return latest_release, unsatisfied_depedendencies
   end
 
