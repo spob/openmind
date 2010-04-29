@@ -23,7 +23,7 @@
       <label for="description">Description:</label>
       <%= h @product.description %>
     </p>
-	<% if @product.svn_path %>
+   <% if prodmgr? and @product.svn_path %>
     <p>
       <label for="svn_path">SVN Path:</label>
       <%= h @product.svn_path %>
