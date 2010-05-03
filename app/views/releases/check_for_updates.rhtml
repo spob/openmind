@@ -3,7 +3,7 @@
 <% end %>
 
 <% if @expired_maintenance %>
-<h3>Notice: The maintenance for one or more of your products has expired. Do not apply any updates until you renew your maintenance. Your system will become unusable if you attempt to do so.</h3>
+<h4>Notice: The maintenance for one or more of your products has expired. Do not apply any updates until you renew your maintenance. Your system will become unusable if you attempt to do so. Contact <%= mail_to APP_CONFIG['sales_email'], 'Sales' %> to renew your maintenance.</h4>
 <% end %>
 
 <table>

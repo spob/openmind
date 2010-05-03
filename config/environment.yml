@@ -62,3 +62,6 @@ released_release_statuses: (Released)
 
 # The email address for support.
 support_email: enter@email.com
+
+# The email address for sales.
+sales_email: enter@email.com
