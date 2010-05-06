@@ -60,6 +60,12 @@
         </p>
         <p>
             <label>
+                External Release ID:
+            </label>
+            <%= form.text_field :external_release_id %>
+        </p>
+        <p>
+            <label>
                 Depends upon:
             </label>
             <% for release in Release.findall_with_product_names %>
@@ -67,12 +73,6 @@
                 <%= h release.version %>
             </span>
             <% end %>
-        </p>
-        <p>
-            <label>
-                External Release ID:
-            </label>
-            <%= form.text_field :external_release_id %>
         </p>
         <p>
             <label>
