@@ -24,6 +24,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :forums, :collection => { :search => :get, 
     :rss => :get, :tag => :get, :metrics => :get }, :member => { :mark_all_as_read => :post }
   map.resources :groups
+  map.resources :hotfixes
   map.resources :link_sets, :member => { :update_sort => :post }
   map.resources :lookup_codes
   map.resources :merge_ideas

@@ -1,0 +1,34 @@
+<% form_tag(hotfixes_path, :method => :post) do -%>
+<div class="formTitle"><%= theme_image_tag("icons/16x16/allocations.png",
+        options = {:alt=>"Hotfix"}) %>Generate Hotfix Script</div>
+<div class="cssform widerLabel">
+  <p>
+    <label for="product">Product:</label>
+    <%= select_tag :product_id,
+              options_from_collection_for_select(@products, :id, :name) %>
+  </p>
+  <p>
+    <label for="hotfix_number">HotFix Number:</label>
+    <%= text_field_tag 'hotfix_number', @hotfix_number %>
+  </p>
+  <p>
+    <label for="release_number">Release Version:</label>
+    <%= text_field_tag 'release_number' %>
+        <br />
+        The version being hotfixed corresponding exactly to the directory name beneath Tags/Releases.
+  </p>
+  <p>
+    <label for="insight_version">Insight Version:</label>
+    <%= text_field_tag 'insight_version' %>
+        <br />
+        The version of Insight to build against, as found at \\scribesrv3\Development\Archive\Insight\Insight. E.g., 6.5.2
+  </p>
+  <p>
+    <label for="defect">Defect:</label>
+    <%= text_field_tag 'defect' %>
+        <br />
+        e.g., D1234
+  </p>
+  <p><%= submit_tag 'Go', html_options = {:class=> "button", :disable_with => "Please wait..."} %></p>
+      </div>
+<% end %>

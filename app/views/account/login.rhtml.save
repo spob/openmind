@@ -10,6 +10,7 @@
 <div style="width:450px;">
   <div class="formTitle">Login</div>
   <% form_tag({}, {:class => "cssform"}) do -%>
+  <!-- <% form_tag('https://www2.scribesoft.com/l/954/2009-06-17/E4KAQ', {:class => "cssform"}) do -%> -->
     <p>
       <label for="login">Username:</label>
       <%= text_field_tag 'login', @login %>
@@ -53,10 +54,6 @@
                                                                                 <p style="font-weight: bold;">
                                                                                         To request an OpenMind account, click "Request Account"
 
-                                                                                </p>
-                                                                                <br/>
-                                                                                <p style="font-size: 1.5em;">
-                                                                                        Jump to the <a href="https://openmind.scribesoftware.com/forums">KnowlegeBase</a> (no login required)
                                                                                 </p>
 
 </td>

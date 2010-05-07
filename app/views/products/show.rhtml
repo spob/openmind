@@ -22,6 +22,12 @@
       <label for="description">Description:</label>
       <%= h @product.description %>
     </p>
+<% if prodmgr? and @product.svn_path %>
+ <p>
+   <label for="svn_path">SVN Path:</label>
+   <%= h @product.svn_path %>
+</p>
+<% end %>
     <p>
       <label for="description">Active:</label>
       <input type="checkbox" name="active" value="active" <%= "checked" if @product.active?  %> disabled />

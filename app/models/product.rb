@@ -27,6 +27,7 @@ class Product < ActiveRecord::Base
 
   named_scope :by_name, :order => "name ASC"
   named_scope :active, :conditions => ["active = ?", true]
+  named_scope :with_svn_path, :conditions => ["svn_path is not null"]
   
   def self.list(page, per_page)
     paginate :page => page, :order => 'name', 

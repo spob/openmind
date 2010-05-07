@@ -16,6 +16,14 @@
         <label for="product_name">Description:</label>
         <%= form.text_field :description, { :size => 50, :maxlength => 200 } %>
       </p>
+<% if prodmgr? %>
+<p>
+    <label for="svn_path">
+        SVN Path:
+    </label>
+    <%= form.text_field :svn_path %>
+</p>
+<% end %>
       <p>
         <label for="product_active">Active:</label><%= form.check_box :active %>
       </p>
