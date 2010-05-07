@@ -15,7 +15,12 @@
 #  touch_counter        :integer(4)      default(0), not null
 #
 
-class Topic < ActiveRecord::Base
+class Topic < ActiveRecord::Base  
+  has_friendly_id :title, :use_slug => true,
+    # remove accents and other diacritics from Western characters
+    :approximate_ascii => true,
+    # don't use slugs longer than 50 chars
+    :max_length => 50
   before_update :set_close_date
   acts_as_taggable
   acts_as_solr :fields => [:title, {:created_at => :date}]

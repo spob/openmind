@@ -1,0 +1,60 @@
+<% if @serial_number%>
+<h1>Installed products for serial number: <%= h(@serial_number) %></h1>
+<% end %>
+
+<% if @expired_maintenance %>
+<h4>Notice: The maintenance for one or more of your products has expired. Do not apply any updates until you renew your maintenance. Your system will become unusable if you attempt to do so. Contact <%= mail_to APP_CONFIG['sales_email'], 'Sales' %> to renew your maintenance.</h4>
+<% end %>
+
+<table>
+    <tr>
+        <th>
+            Current Product
+        </th>
+        <th>
+            Current Version
+        </th>
+        <th>
+            Maintenance Expires
+        </th>
+        <th>
+            Latest Version
+        </th>
+        <th>
+            Required Updates
+        </th>
+    </tr>
+    <% for release in @releases %>
+    <tr>
+        <td>
+            <%= link_to(h(release.product.name), product_path(release.product)) %>
+			<%= show_product_watch_button release.product %>
+        </td>
+        <td>
+            <%= link_to(h(release.version), release_path(release)) %>
+        </td>
+		<td>
+			<%= strike_text(l(release.maintenance_expires, :format => :long), release.maintenance_expires < Date.today) if release.maintenance_expires %>&nbsp;
+		</td>
+        <td>
+            <% if @latest_release[release] %>
+            <%= link_to(h(@latest_release[release].try(:version)), @latest_release[release]) %>
+			<%= download_icon(@latest_release[release])%>
+            <% else %>
+            You are using the latest version<% end %>
+        </td>
+        <td>
+            <% if @latest_release[release].nil? %>
+				&nbsp;
+            <% elsif @unsatisfied_dependencies[release].nil?  or @unsatisfied_dependencies[release].empty? %>
+            You can upgrade to this version<% else %>
+            <%= dependent_releases(@unsatisfied_dependencies[release]) %>
+            <% end %>
+        </td>
+    </tr>
+    <% end %>
+</table>
+<p>If you choose to watch a product, you will receive email updates whenever the roadmap for that product is updated or a 
+new version of that product is released. You must be logged in to watch a product.</p>
+
+<p>If directed by a support representative, <%= send_products_to_support_link "click here", @releases, @serial_number %> to send your product list to support.</p>

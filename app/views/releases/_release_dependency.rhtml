@@ -1,0 +1,12 @@
+<div class="dep">
+    <% fields_for "release[:dependency_attributes][]", release_dependency do |depend_form| %>
+    <p>
+        <label>
+            Release:
+        </label>
+        <%= depend_form.collection_select :release,
+        Release.findall_with_product_names, :id, :version %>
+        <%= link_to_function "remove", "this.up('.dep').remove()" %>
+    </p>
+    <% end %>
+</div>

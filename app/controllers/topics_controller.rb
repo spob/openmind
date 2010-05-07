@@ -115,7 +115,7 @@ class TopicsController < ApplicationController
   
   def update
     @topic = Topic.find(params[:id])
-    unless params[:topic][:owner_id].empty?
+    unless params[:topic][:owner_id].nil? or params[:topic][:owner_id].empty?
       # was owner updated? If so, make sure they are watching this topic
       @user = User.find params[:topic][:owner_id]
       # Add watcher unless owner is already watching or the owner did not change

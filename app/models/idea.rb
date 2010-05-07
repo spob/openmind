@@ -18,7 +18,8 @@
 #  textiled          :boolean(1)      not null
 # 
 
-class Idea < ActiveRecord::Base
+class Idea < ActiveRecord::Base  
+  has_friendly_id :friendly_identifier, :use_slug => true
   acts_as_taggable
   acts_as_solr :fields => [:title, :description], :include => [:comments]
   
@@ -66,6 +67,11 @@ class Idea < ActiveRecord::Base
     lambda{|id|{:conditions => ['id < ?', id],
       :order => 'id desc',
       :limit => 1}}
+  
+  
+  def friendly_identifier
+    "#{id}-#{title}"
+  end
   
   def self.list_watched_ideas(page, user, properties, do_paginate)
     list(page, user, properties, do_paginate, 

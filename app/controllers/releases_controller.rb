@@ -1,5 +1,5 @@
 class ReleasesController < ApplicationController
-  before_filter :login_required, :except => [:index, :list, :show]
+  before_filter :login_required, :except => [:index, :list, :show, :check_for_updates]
   access_control [:new, :commit, :index, :edit, :create, :update, :destroy] => 'prodmgr'
   
   # GETs should be safe (see http://www.w3.org/2001/tag/doc/whenToUseGet.html)
@@ -84,6 +84,46 @@ class ReleasesController < ApplicationController
     @release ||= Release.find(params[:id])
   end
   
+  def  check_for_updates
+    release_ids = {}
+    @serial_number = params[:serial_number]
+    params[:releases].split(",").collect { |x| release_ids[x.split("|")[0]] = x.split("|")[1] } unless params[:releases].nil? or params[:releases].blank?
+    
+    @releases = []
+    @expired_maintenance = false
+    release_ids.keys.each do |id|
+      release = Release.find_by_id(id)
+      release = Release.find_by_external_release_id(id) unless release
+      if release.nil?
+        flash[:error] = "Couldn't find product with id '#{id}'" 
+      else
+        if release_ids[id] 
+          begin
+            release.maintenance_expires = Date.parse(release_ids[id]) 
+            
+            @expired_maintenance = true if release.maintenance_expires < Date.today
+          rescue ArgumentError
+            flash[:error] = "Invalid date format '#{release_ids[id]}'" 
+          end
+        end
+        
+        @releases << release 
+      end
+    end
+    @latest_release = {}
+    @unsatisfied_dependencies = {}
+    @releases.each do |release|
+      @latest_release[release], @unsatisfied_dependencies[release] = release.update_available(@releases)
+    end
+    new_releases = @latest_release.values.delete_if {|x| x.nil?}
+    xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><releases type=\"array\"></releases>"
+    xml = new_releases.to_xml unless new_releases.empty?
+    respond_to do |wants|
+      wants.html
+      wants.xml { render :xml => xml }
+    end   
+  end
+  
   #
   # I needed to create a special method called commit that was a post because,
   # for some reason, the update (which is a put) wouldn't work with the preview
@@ -94,13 +134,21 @@ class ReleasesController < ApplicationController
   
   def update
     @release = Release.find(params[:id])
-    @release.description = params[:release][:description]
-    @release.user_release_date = params[:release][:user_release_date]
-    @release.release_status_id = params[:release][:release_status_id]
-    @release.version = params[:release][:version]
-    @release.download_url = params[:release][:download_url]
-    @release.release_date = params[:release][:release_date]
     Release.transaction do
+      @release.release_dependencies.clear
+      if params[:release][:release_dependencies]
+        for release_id in params[:release][:release_dependencies]
+          depends_upon = Release.find(release_id.to_i)
+          @release.release_dependencies.create!(:depends_on => depends_upon)
+        end
+      end
+      @release.description = params[:release][:description]
+      @release.user_release_date = params[:release][:user_release_date]
+      @release.release_status_id = params[:release][:release_status_id]
+      @release.version = params[:release][:version]
+      @release.download_url = params[:release][:download_url]
+      @release.external_release_id = params[:release][:external_release_id]
+      @release.release_date = params[:release][:release_date]
       calc_change_history @release
       run_change_log_job @release.id
       

@@ -7,6 +7,7 @@ class LookupCodesController < ApplicationController
       ["Enterprise Type",  "EnterpriseType"],
       ["Forum Group",  "ForumGroup"],
       ["Release Status",  "ReleaseStatus"],
+      ["Release Dependency Group",  "ReleaseDependencyGroup"],
       ["Custom Field",  "CustomField"]
     ]
     @lookup_codes = LookupCode.list params[:page], current_user.row_limit

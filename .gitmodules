@@ -1,6 +1,3 @@
 [submodule "public/themes/scribe"]
 	path = public/themes/scribe
 	url = git://github.com/spob/scribe-theme.git
-[submodule "public/themes/scribe-new"]
-	path = public/themes/scribe-new
-	url = git://github.com/spob/scribe-theme-new.git

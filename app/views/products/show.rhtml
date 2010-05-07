@@ -1,3 +1,4 @@
+<% title "Product: #{h @product.name}" %>
 <%= javascript_include_tag "wz_tooltip.js", :cache => "cache/tooltip" %>
 <%= render :partial => "tab_menu" %>
 <div id="tabBody" style="position:relative; padding-top:15px;">
@@ -22,12 +23,21 @@
       <label for="description">Description:</label>
       <%= h @product.description %>
     </p>
+<<<<<<< HEAD:app/views/products/show.rhtml
 <% if prodmgr? and @product.svn_path %>
  <p>
    <label for="svn_path">SVN Path:</label>
    <%= h @product.svn_path %>
 </p>
 <% end %>
+=======
+   <% if prodmgr? and @product.svn_path %>
+    <p>
+      <label for="svn_path">SVN Path:</label>
+      <%= h @product.svn_path %>
+    </p>
+	<% end %>
+>>>>>>> master:app/views/products/show.rhtml
     <p>
       <label for="description">Active:</label>
       <input type="checkbox" name="active" value="active" <%= "checked" if @product.active?  %> disabled />

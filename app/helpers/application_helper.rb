@@ -1,5 +1,7 @@
 # Methods added to this helper will be available to all templates in the
 # application.
+require 'redcloth'
+
 module ApplicationHelper
   include TagsHelper  
     
@@ -75,6 +77,9 @@ module ApplicationHelper
     stylesheet_link_tag(sheets, :cache => "..#{@@theme_path}/cache/#{stylesheets.first}")
   end  
   
+  def title(page_title)  
+    content_for(:title) { page_title }  
+  end  
   
   
   def set_focus_to_id_in_list_form(id)
