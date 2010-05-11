@@ -2,7 +2,7 @@ module ReleasesHelper
   def dependent_releases dependencies
     buffer = ""
     dependencies.keys.each do |product|
-      buffer += "You must first upgrade to one of the following versions of #{link_to product.name, product_path(product)}:"
+      buffer += "Before upgrading to the latest version of this product, you must first upgrade to one of the following versions of #{link_to product.name, product_path(product)}:"
       buffer += "<ul>"
       dependencies[product].each do |release|
         download_url = "xxx"
