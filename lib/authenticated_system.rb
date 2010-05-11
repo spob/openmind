@@ -123,7 +123,7 @@ module AuthenticatedSystem
   # to the passed default.
   def redirect_back_or_default(default)
     session[:return_to] ? redirect_to(session[:return_to]) : redirect_to(default)
-    session[:return_to] = nil
+    clear_location
   end
   
   # Inclusion hook to make #current_user and #logged_in?

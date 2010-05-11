@@ -47,7 +47,8 @@ ActionController::Routing::Routes.draw do |map|
   # the controller level instead
   map.resources :watches, :member => { :create_topic_watch => [:post, :get],
     :destroy_topic_watch => :delete, :create_forum_watch => :post,  
-    :create_product_watch => :post, :destroy_forum_watch => :delete,
+    :create_product_watch => :post, 
+    :create_product_watch_from_check_for_update => :post, :destroy_forum_watch => :delete,
     :destroy_product_watch => :delete},
     :collection => {:create_from_show => :post }
 
