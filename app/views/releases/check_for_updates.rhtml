@@ -28,11 +28,7 @@
     <tr>
         <td>
             <%= link_to(h(release.product.name), product_path(release.product)) %>
-<<<<<<< HEAD:app/views/releases/check_for_updates.rhtml
-			<%= show_product_watch_button release.product %>
-=======
 			<%= show_product_watch_button release.product, @releases, @serial_number  %>
->>>>>>> master:app/views/releases/check_for_updates.rhtml
         </td>
         <td>
             <%= link_to(h(release.version), release_path(release)) %>
@@ -59,11 +55,6 @@
     <% end %>
 </table>
 <p>If you choose to watch a product, you will receive email updates whenever the roadmap for that product is updated or a 
-<<<<<<< HEAD:app/views/releases/check_for_updates.rhtml
-new version of that product is released. You must be logged in to watch a product.</p>
-
-=======
 new version of that product is released.</p>
 <br />
->>>>>>> master:app/views/releases/check_for_updates.rhtml
 <p>If directed by a support representative, <%= send_products_to_support_link "click here", @releases, @serial_number %> to send your product list to support.</p>

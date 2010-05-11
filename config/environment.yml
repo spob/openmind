@@ -61,14 +61,7 @@ main_site_url: http://www.scribesoft.com
 released_release_statuses: (Released)
 
 # The email address for support.
-<<<<<<< HEAD:config/environment.yml
 support_email: support@scribesoft.com
 
 # The email address for sales.
 sales_email: sales@scribesoft.com
-=======
-support_email: enter@email.com
-
-# The email address for sales.
-sales_email: enter@email.com
->>>>>>> master:config/environment.yml
