@@ -31,14 +31,24 @@ module ReleasesHelper
     end
   end
   
+  def send_products_to_sales_link(link_text, releases, serial_number)
+    generate_email_link(APP_CONFIG['sales_email'], 
+      link_text, "Regarding maintenance for serial number #{serial_number}", releases, serial_number)
+  end
+  
   def send_products_to_support_link(link_text, releases, serial_number)
-    mail_to(APP_CONFIG['support_email'], 
-    link_text, 
-    :subject => "Product list for serial number #{serial_number}",
-    :body => check_for_update_url(releases, serial_number, true))
+    generate_email_link(APP_CONFIG['support_email'], 
+      link_text, "Product list for serial number #{serial_number}", releases, serial_number)
   end
   
   private
+  
+  def generate_email_link email_address, link_text, subject, releases, serial_number
+    mail_to(email_address, 
+    link_text, 
+    :subject => subject,
+    :body => "My installed products can be viewed at: #{check_for_update_url(releases, serial_number, true)}")
+  end
   
   def check_for_update_url releases, serial_number, absolute=true
     product_list = releases.collect { |release| "#{release.id}|#{release.maintenance_expires}" }.join(",")
