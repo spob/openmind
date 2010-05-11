@@ -77,7 +77,7 @@
                 Compatible With:
             </label>
             <% for product in Product.find(:all, :conditions => [ "id in (?)", @release.dependent_releases.collect(&:product_id)]) %>
-            <%= product.name %>(<% first = true %>
+            <%= product.name %> (<% first = true %>
             <% for version in @release.dependent_releases.find_all_by_product_id(product.id, :order => 'releases.release_date') %>
             <%= ", " unless first %>
             <% first = false %>
