@@ -87,23 +87,24 @@ class ReleasesController < ApplicationController
   def  check_for_updates
     release_ids = {}
     @serial_number = params[:serial_number]
-    params[:releases].split(",").collect { |x| release_ids[x.split("|")[0]] = x.split("|")[1] } unless params[:releases].nil? or params[:releases].blank?
+    # release_id's is a hash. The keys to the hash are the release ids. The values are an array. The first element of the array is the expiration date, the second is the order in which is was found
+    params[:releases].split(",").enum_with_index.collect { |x, i| release_ids[x.split("|")[0]] = [x.split("|")[1], i] } unless params[:releases].nil? or params[:releases].blank?
     
     @releases = []
     @expired_maintenance = false
-    release_ids.keys.each do |id|
+    release_ids.keys.sort{|x,y| release_ids[x][1] <=> release_ids[y][1].to_i}.each do |id|
       release = Release.find_by_id(id)
       release = Release.find_by_external_release_id(id) unless release
       if release.nil?
         flash[:error] = "Couldn't find product with id '#{id}'" 
       else
-        if release_ids[id] 
+        if release_ids[id][0] 
           begin
-            release.maintenance_expires = Date.parse(release_ids[id]) 
+            release.maintenance_expires = Date.parse(release_ids[id][0]) 
             
             @expired_maintenance = true if release.maintenance_expires < Date.today
           rescue ArgumentError
-            flash[:error] = "Invalid date format '#{release_ids[id]}'" 
+            flash[:error] = "Invalid date format '#{release_ids[id][0]}'" 
           end
         end
         
