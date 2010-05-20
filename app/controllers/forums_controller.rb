@@ -1,4 +1,6 @@
 class ForumsController < ApplicationController
+  before_filter :fetch_forum, :only => [:show]
+  before_filter :login_required, :only => [:show], :if => :must_login 
   before_filter :login_required, :except => [:index, :show, :rss, :search, :tag]
   access_control [:new, :destroy ] => 'sysadmin',
     [:edit, :create, :update, :metrics ] => 'sysadmin|mediator'
@@ -20,7 +22,6 @@ class ForumsController < ApplicationController
   end
   
   def show
-    @forum = Forum.find(params[:id])
     if @forum.tracked and @forum.can_edit?(current_user)
       if params[:form_based] == "yes"
         session[:topics_show_open] = (params[:show_open].nil? ? "no" : "yes")
@@ -235,5 +236,15 @@ class ForumsController < ApplicationController
         page.visual_effect :blind_down, :forum_details, :duration => 1
       end
     end
+  end
+  
+  private
+  
+  def fetch_forum
+    @forum = Forum.find(params[:id])
+  end
+  
+  def must_login
+    (!@forum.public? and current_user == :false)
   end
 end
