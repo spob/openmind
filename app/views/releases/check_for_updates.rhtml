@@ -1,11 +1,10 @@
-<% if @serial_number%>
+require "date"
+<% if @serial_number %>
 <h1>Installed products for serial number: <%= h(@serial_number) %></h1>
 <% end %>
-
 <% if @expired_maintenance %>
 <h4>Notice: The maintenance for one or more of your products has expired. Do not apply any updates until you renew your maintenance. Your system will become unusable if you attempt to do so. Contact <%= send_products_to_sales_link "Sales", @releases, @serial_number %> to renew your maintenance.</h4>
 <% end %>
-
 <table>
     <tr>
         <th>
@@ -28,25 +27,24 @@
     <tr>
         <td>
             <%= link_to(h(release.product.name), product_path(release.product)) %>
-			<%= show_product_watch_button release.product, @releases, @serial_number  %>
+            <%= show_product_watch_button release.product, @releases, @serial_number %>
         </td>
         <td>
             <%= link_to(h(release.version), release_path(release)) %>
         </td>
-		<td>
-			<%= strike_text(l(release.maintenance_expires, :format => :long), release.maintenance_expires < Date.today) if release.maintenance_expires %>&nbsp;
-		</td>
+        <td>
+            <%= strike_text(l(release.maintenance_expires, :format => :long), release.maintenance_expires < Date.today) if release.maintenance_expires %>&nbsp;
+        </td>
         <td>
             <% if @latest_release[release] %>
             <%= link_to(h(@latest_release[release].try(:version)), @latest_release[release]) %>
-			<%= download_icon(@latest_release[release])%>
+            <%= download_icon(@latest_release[release]) %>
             <% else %>
             You are using the latest version<% end %>
         </td>
         <td>
             <% if @latest_release[release].nil? %>
-				&nbsp;
-            <% elsif @unsatisfied_dependencies[release].nil?  or @unsatisfied_dependencies[release].empty? %>
+            &nbsp;<% elsif @unsatisfied_dependencies[release].nil?  or @unsatisfied_dependencies[release].empty? %>
             You can upgrade to this version<% else %>
             <%= dependent_releases(@unsatisfied_dependencies[release]) %>
             <% end %>
@@ -54,7 +52,89 @@
     </tr>
     <% end %>
 </table>
-<p>If you choose to watch a product, you will receive email updates whenever the roadmap for that product is updated or a 
-new version of that product is released.</p>
-<br />
-<p>If directed by a support representative, <%= send_products_to_support_link "click here", @releases, @serial_number %> to send your product list to support.</p>
+<% if @tickets.present? %>
+<h1>Support Tickets</h1>
+<table>
+    <tr>
+        <th>
+            Ticket<br />Number
+        </th>
+        <th>
+            Priority
+        </th>
+        <th>
+            Status
+        </th>
+        <th>
+            Summary
+        </th>
+        <th>
+            Opened At
+        </th>
+        <th>
+            Closed At
+        </th>
+        <th>
+            Days Open
+        </th>
+        <th>
+            Contact
+        </th>
+        <th>
+            Company
+        </th>
+        <th>
+            Paid By
+        </th>
+    </tr>
+    <% @tickets.each do |ticket| %>
+    <tr>
+        <td>
+            <%= h ticket.ticket_number %>
+        </td>
+        <td>
+            <%= h ticket.priority %>
+        </td>
+        <td>
+            <%= h ticket.status %>
+        </td>
+        <td>
+            <%= h ticket.summary %>
+        </td>
+        <td>
+            <%= om_date_time ticket.opened_at %>
+        </td>
+        <td>
+            <% if ticket.closed_at %>
+            <%= om_date_time ticket.closed_at %>
+            <% else %>
+            &nbsp;
+			<% end %>
+        </td>
+        <td>
+            <%= ticket.days_open %>
+        </td>
+        <td>
+            <%= h ticket.contact_person %>
+        </td>
+        <td>
+            <%= h ticket.customer_name %>
+			<% if ticket.customer_type %>
+			  (<%= h ticket.customer_type %>)
+			<% end %>
+        </td>
+        <td>
+            <%= h ticket.payment_type %>
+        </td>
+    </tr>
+    <% end %>
+</table>
+<% end %>
+<p>
+    If you choose to watch a product, you will receive email updates whenever the roadmap for that product is updated or a 
+    new version of that product is released.
+</p>
+<br/>
+<p>
+    If directed by a support representative, <%= send_products_to_support_link "click here", @releases, @serial_number %>to send your product list to support.
+</p>

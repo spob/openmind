@@ -87,6 +87,7 @@ class ReleasesController < ApplicationController
   def  check_for_updates
     release_ids = {}
     @serial_number = params[:serial_number]
+    @tickets = SupportTicket.by_serial_number(@serial_number)
     # release_id's is a hash. The keys to the hash are the release ids. The values are an array. The first element of the array is the expiration date, the second is the order in which is was found
     params[:releases].split(",").enum_with_index.collect { |x, i| release_ids[x.split("|")[0]] = [x.split("|")[1], i] } unless params[:releases].nil? or params[:releases].blank?
     
