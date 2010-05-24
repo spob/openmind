@@ -112,7 +112,7 @@ require "date"
 			<% end %>
         </td>
         <td>
-            <%= ticket.days_open %>
+            <%= "%.1f" % ticket.days_open %>
         </td>
         <td>
             <%= h ticket.contact_person %>
