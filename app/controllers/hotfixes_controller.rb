@@ -10,13 +10,14 @@ class HotfixesController < ApplicationController
   end
 
   def create
-    redirect_to hotfix_path(:id => params[:hotfix_number], :insight_version => params[:insight_version], :release_number => params[:release_number], :product_id => params[:product_id], :defect => params[:defect])
+    redirect_to hotfix_path(:id => params[:hotfix_number], :insight_version => params[:insight_version], :release_number => params[:release_number], :product_id => params[:product_id], :defect => params[:defect], :source_tag => params[:source_tag])
   end
 
   def show
     @hotfix_number = params[:id]
     @defect = params[:defect]
     @release_number = params[:release_number]
+    @source_tag = params[:source_tag]
     @product = Product.find(params[:product_id])
     @insight_version = params[:insight_version]
   end

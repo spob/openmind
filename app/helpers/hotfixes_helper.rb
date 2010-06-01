@@ -5,7 +5,7 @@ module HotfixesHelper
   end
 
   def release
-    "#{releases_path}/#{h @release_number}"
+    "#{releases_path}/#{h @source_tag}"
   end
 
   def hf_tag
