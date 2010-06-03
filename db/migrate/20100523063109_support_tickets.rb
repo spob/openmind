@@ -13,6 +13,7 @@ class SupportTickets < ActiveRecord::Migration
       t.string :contact_person
       t.string :customer_name 
       t.string :customer_type
+      t.timestamps
     end
     add_index :support_tickets, [:serial_number, :ticket_number], :unique => true
   end
