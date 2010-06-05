@@ -1,4 +1,6 @@
 class TopicsController < ApplicationController
+  before_filter :fetch_topic, :only => [:show]
+  before_filter :login_required, :only => [:show], :if => :must_login 
   before_filter :login_required, :except => [:index, :show, :search]
   cache_sweeper :topics_sweeper, :only => [ :create, :update, :destroy, :toggle_status ]
   
@@ -78,7 +80,6 @@ class TopicsController < ApplicationController
   def show
     session[:forums_search] = nil
     Topic.transaction do
-      @topic = Topic.find(params[:id])
       unless @topic.forum.can_see? current_user or prodmgr?
         flash[:error] = ForumsController.flash_for_forum_access_denied(current_user)
         redirect_to redirect_path_on_access_denied(current_user)
@@ -214,6 +215,14 @@ class TopicsController < ApplicationController
   
   
   private
+  
+  def fetch_topic    
+    @topic = Topic.find(params[:id])
+  end
+  
+  def must_login
+    (!@topic.forum.public? and current_user == :false)
+  end
   
   def redirect_path_on_access_denied user
     return forums_path unless user == :false
