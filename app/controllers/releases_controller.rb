@@ -93,12 +93,14 @@ class ReleasesController < ApplicationController
     
     @releases = []
     @expired_maintenance = false
+    @unwatched = false
     release_ids.keys.sort{|x,y| release_ids[x][1] <=> release_ids[y][1].to_i}.each do |id|
       release = Release.find_by_id(id)
       release = Release.find_by_external_release_id(id) unless release
       if release.nil?
         flash[:error] = "Couldn't find product with id '#{id}'" 
       else
+        @unwatched = true unless release.product.watchers.include? current_user
         if release_ids[id][0] 
           begin
             release.maintenance_expires = Date.parse(release_ids[id][0]) 

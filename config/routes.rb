@@ -50,7 +50,8 @@ ActionController::Routing::Routes.draw do |map|
     :create_product_watch => :post, 
     :create_product_watch_from_check_for_update => :post, :destroy_forum_watch => :delete,
     :destroy_product_watch => :delete},
-    :collection => {:create_from_show => :post }
+    :collection => {:create_from_show => :post,
+    :create_product_watches => :get }
 
   # Allow downloading Web Service WSDL as a file with an extension instead of a
   # file named 'wsdl'
