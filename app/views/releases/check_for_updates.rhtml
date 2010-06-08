@@ -1,3 +1,4 @@
+<%= javascript_include_tag "wz_tooltip.js", :cache => "cache/tooltip" %> 
 <% if @serial_number %>
 <h1>Installed products for serial number: <%= h(@serial_number) %></h1>
 <% end %>
@@ -15,6 +16,9 @@
         <th>
             Maintenance Expires
         </th>
+		<th>
+            Watched
+        </th>
         <th>
             Latest Version
         </th>
@@ -26,7 +30,6 @@
     <tr>
         <td>
             <%= link_to(h(release.product.name), product_path(release.product)) %>
-            <%= show_product_watch_button release.product, @releases, @serial_number %>
         </td>
         <td>
             <%= link_to(h(release.version), release_path(release)) %>
@@ -34,6 +37,9 @@
         <td>
             <%= strike_text(l(release.maintenance_expires, :format => :long), release.maintenance_expires < Date.today) if release.maintenance_expires %>&nbsp;
         </td>
+		<td align="center">
+			<%= show_watch_icon(release) %>
+		</td>
         <td>
             <% if @latest_release[release] %>
             <%= link_to(h(@latest_release[release].try(:version)), @latest_release[release]) %>
@@ -56,7 +62,9 @@
 <table>
     <tr>
         <th>
-            Ticket<br />Number
+            Ticket
+            <br/>
+            Number
         </th>
         <th>
             Priority
@@ -107,8 +115,7 @@
             <% if ticket.closed_at %>
             <%= om_date_time ticket.closed_at %>
             <% else %>
-            &nbsp;
-			<% end %>
+            &nbsp;<% end %>
         </td>
         <td>
             <%= "%.1f" % ticket.days_open %>
@@ -118,9 +125,8 @@
         </td>
         <td>
             <%= h ticket.customer_name %>
-			<% if ticket.customer_type %>
-			  (<%= h ticket.customer_type %>)
-			<% end %>
+            <% if ticket.customer_type %>
+            (<%= h ticket.customer_type %>)<% end %>
         </td>
         <td>
             <%= h ticket.payment_type %>
@@ -129,10 +135,14 @@
     <% end %>
 </table>
 <% end %>
+<% if @unwatched %>
 <p>
-    If you choose to watch a product, you will receive email updates whenever the roadmap for that product is updated or a 
+    <%= theme_image_tag("icons/16x16/16-check.png", options = {:alt=>"suggestion"}) %>
+    Put a watch on your products to receive email updates whenever the roadmap for that product is updated or a 
     new version of that product is released.
+    <%= show_watch_products_button @releases, @serial_number %>
 </p>
+<% end %>
 <br/>
 <p>
     If directed by a support representative, <%= send_products_to_support_link "click here", @releases, @serial_number %> to send your product list to support.

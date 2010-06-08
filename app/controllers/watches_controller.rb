@@ -30,6 +30,32 @@ class WatchesController < ApplicationController
     end
   end
   
+  def create_product_watches
+    release_ids = params[:releases]
+    if release_ids
+      added = false
+      release_ids.split(",").collect{|r| r.split("|").first}.each do |release_id|
+        release = Release.find_by_id(release_id)
+        if release
+          unless release.product.watchers.include? current_user
+            release.product.watchers << current_user
+            added = true
+          end
+        else
+          flash[:error] = "Unknown release id #{release_id}."
+        end
+      end
+      if flash[:error].nil?
+        if added
+          flash[:notice] = "All of your products are now being watched."
+        else
+          flash[:error] = "No watches added...all of your products are already being watched."
+        end
+      end
+    end
+    redirect_to check_for_updates_releases_path(:releases => params[:releases], :serial_number => params[:serial_number])
+  end
+  
   def create_product_watch
     begin
       @product = Product.find(params[:id])

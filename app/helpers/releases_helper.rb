@@ -21,6 +21,23 @@ module ReleasesHelper
     end    
   end
   
+  def show_watch_icon release
+    if logged_in?
+      if release.product.watchers.include? current_user
+        theme_image_tag("icons/16x16/16-check.png", :alt=>"watched", :onmouseover => "Tip('You are watching this product')")
+      end
+    else
+      theme_image_tag("icons/16x16/question.png", :alt=>"not logged in", :onmouseover => "Tip('Log in to determine whether you are already watching this product')")
+    end
+  end
+  
+  def show_watch_products_button releases, serial_number
+    link_to("Watch Products",
+    create_product_watches_watches_path(check_for_updates_params(releases, serial_number)),
+    { :class => "button",
+      :onmouseover => "Tip('Watch your products to be informed via email of any updates')" })
+  end
+  
   def show_product_watch_button product, releases, serial_number
     unless product.watchers.include? current_user
       "&nbsp;&nbsp;" + link_to("Watch",
@@ -33,30 +50,34 @@ module ReleasesHelper
   
   def send_products_to_sales_link(link_text, releases, serial_number)
     generate_email_link(APP_CONFIG['sales_email'], 
-      link_text, "Regarding maintenance for serial number #{serial_number}", releases, serial_number)
+    link_text, "Regarding maintenance for serial number #{serial_number}", releases, serial_number)
   end
   
   def send_products_to_support_link(link_text, releases, serial_number)
     generate_email_link(APP_CONFIG['support_email'], 
-      link_text, "Product list for serial number #{serial_number}", releases, serial_number)
+    link_text, "Product list for serial number #{serial_number}", releases, serial_number)
   end
   
   private
   
   def generate_email_link email_address, link_text, subject, releases, serial_number
     mail_to(email_address, 
-    link_text, 
-    :subject => subject,
-    :body => "My installed products can be viewed at: #{check_for_update_url(releases, serial_number, true)}")
+            link_text, 
+            :subject => subject,
+            :body => "My installed products can be viewed at: #{check_for_update_url(releases, serial_number, true)}")
   end
   
   def check_for_update_url releases, serial_number, absolute=true
-    product_list = releases.collect { |release| "#{release.id}|#{release.maintenance_expires}" }.join(",")
-    params = { :releases => product_list, :serial_number => serial_number }
+    
     if absolute
-      check_for_updates_releases_url(params)
+      check_for_updates_releases_url(check_for_updates_params(releases, serial_number))
     else
-      check_for_updates_releases_path(params)
+      check_for_updates_releases_path(check_for_updates_params(releases, serial_number))
     end
+  end
+  
+  def check_for_updates_params(releases, serial_number)
+    product_list = releases.collect { |release| "#{release.id}|#{release.maintenance_expires}" }.join(",")
+    { :releases => product_list, :serial_number => serial_number }
   end
 end

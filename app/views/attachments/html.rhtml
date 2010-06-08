@@ -1,3 +1,4 @@
+<% title "#{h @attachment.description}" %>
 <% if prodmgr? or sysadmin? or mediator? %>
   <div id="actionButtons">
     <%= link_to 'Edit', edit_attachment_path(@attachment), html_options = {:class=> "button",
