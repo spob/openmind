@@ -18,7 +18,7 @@ a:link, a:visited, a:active {
 }
 
 a:hover {
-    list-style-image: url(../images/li_hover.gif);
+    list-style-image: url(../images/general/li_hover.gif);
     text-decoration: underline;
     color: #312F30;
     background-color: Transparent;

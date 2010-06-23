@@ -97,7 +97,7 @@ class IdeasController < ApplicationController
         
         @ideas.each do |idea|
           cols = [idea.id, idea.title, idea.display_status, idea.votes.size,
-          idea.product.name, idea.release.try(:name)]
+          idea.product.name, idea.release.try(:version)]
           csv << cols
         end
         
