@@ -1,28 +1,47 @@
 <tr>
-  <td>
-    <%= link_to h(release_item.product.name), product_path(release_item.product) %>
-  </td>
-  <td>
-    <%= link_to h(release_item.version), release_path(release_item) %>
-  </td>
-  <td><%=h nvl(release_item.user_release_date, '-') %></td>
-  <td class="release_description">
-    <% if !release_item.description.nil? and !release_item.description.blank? %>
-      <b>Description:</b><br/>
-      <%= textilize(white_list(release_item.description)).gsub(/<[pP]>/,'<p class="releases">').gsub(/<[uU][lL]>/,'<ul class="releases_desc">') if release_item.textiled %>
-      <%= white_list(release_item.description) unless release_item.textiled %>
-    <% end %>
-    &nbsp;
-    <% if !release_item.ideas.empty? %>
-      <b>Scheduled Ideas:</b><br/>
-      <ul class="releases">
-        <% for idea in release_item.ideas %>
-          <li><%= link_to h(idea.user_friendly_idea_name),
-              :controller => 'ideas',
-              :action => 'show',
-              :id => idea %> </li>
-          <% end %>
-      </ul>
-    <% end %>
-  </td>
+    <td>
+        <%= link_to h(release_item.product.name), product_path(release_item.product) %>
+    </td>
+    <td>
+        <%= link_to h(release_item.version), release_path(release_item) %>
+    </td>
+    <td>
+        <%=h nvl(release_item.user_release_date, '-') %>
+    </td>
+    <td class="release_description">
+        <% if !release_item.description.nil? and !release_item.description.blank? %>
+        <b>Description:</b>
+        <br/>
+        <%= textilize(white_list(release_item.description)).gsub(/<[pP]>/,'<p class="releases">').gsub(/<[uU][lL]>/,'<ul class="releases_desc">') if release_item.textiled %>
+        <%= white_list(release_item.description) unless release_item.textiled %>
+        <% end %>
+        <% unless release_item.release_dependencies.empty? %>
+        &nbsp;
+            <b>Compatible With:</b>
+            <% for product in Product.find(:all, :conditions => [ "id in (?)", release_item.dependent_releases.collect(&:product_id)]) %>
+            <%= product.name %> (<% first = true %>
+            <% for version in release_item.dependent_releases.find_all_by_product_id(product.id, :order => 'releases.release_date') %>
+            <%= ", " unless first %>
+            <% first = false %>
+            <%= version.version %>
+            <% end %>
+            )
+            <br/>
+            <% end %>
+		<% end %>
+        &nbsp;<% if !release_item.ideas.empty? %>
+        <b>Scheduled Ideas:</b>
+        <br/>
+        <ul class="releases">
+            <% for idea in release_item.ideas %>
+            <li>
+                <%= link_to h(idea.user_friendly_idea_name),
+                :controller => 'ideas',
+                :action => 'show',
+                :id => idea %>
+            </li>
+            <% end %>
+        </ul>
+        <% end %>
+    </td>
 </tr>
