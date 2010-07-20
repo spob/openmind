@@ -30,10 +30,17 @@ class UsersController < ApplicationController
     session[:users_start_filter] = "All" 
     session[:users_end_filter] = "All"
     session[:users_search] = params[:search]
-    params[:search] = StringUtils.sanitize_search_terms params[:search]
+#    params[:search] = StringUtils.sanitize_search_terms params[:search]
+    if params[:search].empty?
+      list
+      render :list
+      return
+    end
+    
     set_start_stop_tags
     begin
-      search_results = User.find_by_solr(params[:search], :lazy => true).docs.collect(&:id)
+      search_results = User.search_for_ids params[:search], :order => :email
+#      search_results = User.find_by_solr(params[:search], :lazy => true).docs.collect(&:id)
     rescue RuntimeError => e
       flash[:error] = "An error occurred while executing your search. Perhaps there is a problem with the syntax of your search string."
       logger.error(e)

@@ -34,8 +34,17 @@ class User < ActiveRecord::Base
   extend ActiveSupport::Memoizable
   
   ajaxful_rater
-  acts_as_solr :fields => [:email, :first_name, :last_name], 
-    :include => [:enterprise]
+#  acts_as_solr :fields => [:email, :first_name, :last_name], 
+#    :include => [:enterprise]
+    
+  define_index do
+    indexes email, :sortable => true
+    indexes first_name, :sortable => true
+    indexes last_name, :sortable => true
+    indexes enterprise(:name), :as => :enterprise, :sortable => true
+    
+    has created_at, updated_at
+  end
 
   
   # Virtual attribute for the unencrypted password

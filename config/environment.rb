@@ -35,6 +35,11 @@ Rails::Initializer.run do |config|
   config.gem "ruby-yadis",  :lib => 'yadis',  :version => '0.3.4'
   
   config.gem "ruby-openid", :lib => 'openid', :version => '1.1.4'
+ 
+  config.gem(
+  'thinking-sphinx',
+  :lib     => 'thinking_sphinx',
+  :version => '1.3.11')
   
   # Default timezone...Set this to the timezone where the server resides
   config.time_zone = 'Eastern Time (US & Canada)'
