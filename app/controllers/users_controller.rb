@@ -184,7 +184,8 @@ class UsersController < ApplicationController
     if @user.update_attributes(params[:user])
       flash[:notice] = "User #{@user.login} was successfully updated."
       redirect_to :action => 'show', :id => @user
-    else
+  else
+      @user.errors.each{|attr,msg| puts ">>>>>>>#{attr} - #{msg}" }
       setup_session_properties
       render :action => 'edit'
     end
