@@ -3,20 +3,20 @@ class ForumsController < ApplicationController
   before_filter :login_required, :only => [:show], :if => :must_login 
   before_filter :login_required, :except => [:index, :show, :rss, :search, :tag]
   access_control [:new, :destroy ] => 'sysadmin',
-    [:edit, :create, :update, :metrics ] => 'sysadmin|mediator'
+  [:edit, :create, :update, :metrics ] => 'sysadmin|mediator'
   helper :topics
   cache_sweeper :forums_sweeper, :only => [ :create, :update, :destroy,
-    :mark_all_as_read]
-
+  :mark_all_as_read]
+  
   # GETs should be safe (see http://www.w3.org/2001/tag/doc/whenToUseGet.html)
   verify :method => :post, :only => [:create, :mark_all_as_read ],
-    :redirect_to => { :action => :index }
+  :redirect_to => { :action => :index }
   verify :method => :put, :only => [ :update ],
-    :redirect_to => { :action => :index }
+  :redirect_to => { :action => :index }
   verify :method => :delete, :only => [ :destroy ],
-    :redirect_to => { :action => :index }
-
-
+  :redirect_to => { :action => :index }
+  
+  
   def new
     @forum = Forum.new
   end
@@ -40,12 +40,12 @@ class ForumsController < ApplicationController
       end
     end
     @topics = Topic.list(params[:page],
-      current_user == :false ? 10 : current_user.row_limit, 
-      @forum,
-      (@forum.mediators.include? current_user),
-      ((@forum.tracked and @forum.can_edit?(current_user)) ? session[:topics_show_open] == 'yes' : true),
-      ((@forum.tracked and @forum.can_edit?(current_user)) ? session[:topics_show_closed] == 'yes' : true),
-      ((@forum.tracked and @forum.can_edit?(current_user)) ? session[:topics_owner_filter].to_i : -1))
+                         current_user == :false ? 10 : current_user.row_limit, 
+                         @forum,
+     (@forum.mediators.include? current_user),
+     ((@forum.tracked and @forum.can_edit?(current_user)) ? session[:topics_show_open] == 'yes' : true),
+     ((@forum.tracked and @forum.can_edit?(current_user)) ? session[:topics_show_closed] == 'yes' : true),
+     ((@forum.tracked and @forum.can_edit?(current_user)) ? session[:topics_owner_filter].to_i : -1))
     unless @forum.can_see? current_user or prodmgr?
       flash[:error] = ForumsController.flash_for_forum_access_denied(current_user)
       redirect_to redirect_path_on_access_denied(current_user)
@@ -58,21 +58,21 @@ class ForumsController < ApplicationController
       @forum_groups = ForumGroup.list_all current_user
     end
   end
-
+  
   def self.week_size
     8
   end
-
+  
   def metrics
     @weeks = []
     @weeks[1] = Date.today - Date.today.cwday.days
     @weeks[0] = @weeks[1] + 7.days
-    (2..ForumsController.week_size + 1).each do |i|
+     (2..ForumsController.week_size + 1).each do |i|
       @weeks[i] = @weeks[i - 1] - 7.days
     end
     @forums = Forum.active.tracked.order_by_name.find_all{|f| f.can_edit? current_user}
   end
-
+  
   def create
     params[:forum][:mediator_ids] ||= []
     params[:forum][:group_ids] ||= []
@@ -85,7 +85,7 @@ class ForumsController < ApplicationController
       render :action => :new
     end
   end
-
+  
   def edit
     @forum = Forum.find(params[:id])
     unless @forum.can_edit? current_user
@@ -93,7 +93,7 @@ class ForumsController < ApplicationController
       redirect_to forums_path
     end
   end
-
+  
   def update
     params[:forum][:mediator_ids] ||= []
     params[:forum][:group_ids] ||= []
@@ -110,7 +110,7 @@ class ForumsController < ApplicationController
       render :action => :edit
     end
   end
-
+  
   def mark_all_as_read
     @forum = Forum.find(params[:id])
     @forum.mark_all_topics_as_read current_user
@@ -122,10 +122,11 @@ class ForumsController < ApplicationController
     @hits = {}
     session[:forums_search] = params[:search]
     # solr barfs if search string starts with a wild card...so strip it out
-    params[:search] = StringUtils.sanitize_search_terms params[:search]
+    #    params[:search] = StringUtils.sanitize_search_terms params[:search]
     
     begin
-      search_results = Topic.find_by_solr(params[:search], :scores => true)
+      #      search_results = Topic.find_by_solr(params[:search], :scores => true)
+      search_results = params[:search].blank? ? [] : Topic.search(params[:search], :retry_stale => true)
     rescue RuntimeError => e
       flash[:error] = "An error occurred while executing your search. Perhaps there is a problem with the syntax of your search string."
       logger.error(e)
@@ -137,28 +138,28 @@ class ForumsController < ApplicationController
         redirect_to forums_path
         return
       end
-      search_results.docs.each do |topic|
-        @hits[topic.id] = TopicHit.new(topic, true, topic.solr_score) if topic.forum.can_see?(current_user) or prodmgr?
+      search_results.each do |topic|
+        @hits[topic.id] = TopicHit.new(topic, true, 1) if topic.forum.can_see?(current_user) or prodmgr?
       end
-      TopicComment.find_by_solr(params[:search], :scores => true).docs.each do |comment|
+      (params[:search].blank? ? [] : TopicComment.search(params[:search], :retry_stale => true)).each do |comment|
         if (comment.topic.forum.can_see?(current_user) or prodmgr?) and
-            (!comment.private or comment.topic.forum.mediators.include? current_user)
+         (!comment.private or comment.topic.forum.mediators.include? current_user)
           # first see if topic hit already exists
           topic_hit = @hits[comment.topic.id]
           if topic_hit.nil?
-            hit = TopicHit.new(comment.topic, false, comment.solr_score)
+            hit = TopicHit.new(comment.topic, false, 1)
             hit.comments << comment
             @hits[comment.topic.id] = hit
           else
             topic_hit.comments << comment
-            topic_hit.score = comment.solr_score if topic_hit.score < comment.solr_score
+            topic_hit.score = comment.solr_score if topic_hit.score < 1
           end
         end
       end
     end
     TopicHit.normalize_scores(@hits.values)
   end
-
+  
   def destroy
     forum = Forum.find(params[:id])
     name = forum.name
@@ -182,7 +183,7 @@ class ForumsController < ApplicationController
       format.js  { do_rjs_toggle_forum_details_box }
     end
   end
-
+  
   # Build an rss feed to be notified of new forum postings
   def rss
     forum = Forum.find(params[:id])
@@ -205,14 +206,14 @@ class ForumsController < ApplicationController
     return "You must be logged on to access this forum" if user == :false
     return "You have insuffient permissions to access this forum" unless user == :false    
   end
-
+  
   def tag
     @hits = {}
     @tags = params[:id]
     @forum = Forum.find(params[:forum]) unless params[:forum].nil?
     Topic.find_tagged_with(@tags).each do |topic|
       if (topic.forum.can_see?(current_user) or prodmgr?) and
-          (@forum.nil? or @forum.id == topic.forum.id)
+       (@forum.nil? or @forum.id == topic.forum.id)
         @hits[topic.id] = TopicHit.new(topic, true, 100)
       end
     end
@@ -229,7 +230,7 @@ class ForumsController < ApplicationController
   def do_rjs_toggle_forum_details_box 
     render :update do |page|
       page.replace "forum_details_area", 
-        :partial => "show_hide_forum_details"
+      :partial => "show_hide_forum_details"
       if session[:forum_details_box_display] == "HIDE"
         page.visual_effect :blind_up, :forum_details, :duration => 0.5
       else
@@ -245,6 +246,6 @@ class ForumsController < ApplicationController
   end
   
   def must_login
-    (!@forum.public? and current_user == :false)
+   (!@forum.public? and current_user == :false)
   end
 end
