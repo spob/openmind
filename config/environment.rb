@@ -39,7 +39,7 @@ Rails::Initializer.run do |config|
   config.gem(
   'thinking-sphinx',
   :lib     => 'thinking_sphinx',
-  :version => '1.3.11')
+  :version => '1.3.18')
   
   # Default timezone...Set this to the timezone where the server resides
   config.time_zone = 'Eastern Time (US & Canada)'
