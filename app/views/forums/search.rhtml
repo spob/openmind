@@ -39,7 +39,7 @@
   <h3><%= link_to highlight(topic_hit.topic.title,
       StringUtils.strip_wildcards(session[:forums_search]).split.delete_if { |x| x == "OR" or x == "AND" or x == "NOT" },
       '<span class="highlight">\1</span>'),
-      topic_path(topic_hit.topic.id) %> (forum "<%= topic_hit.topic.forum.name %>")
+      topic_path(topic_hit.topic) %> (forum "<%= topic_hit.topic.forum.name %>")
     <!-- <i><small><small>Score %= '%.1f' % (topic_hit.score) </small></small></i> -->
   <%= ratings_for topic_hit.topic, :static, :wrap => true %> </h3>
   <%=render(:partial => "comments/comment_item", :collection => topic_hit.comments)%>
