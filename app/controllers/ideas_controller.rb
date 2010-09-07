@@ -129,7 +129,13 @@ class IdeasController < ApplicationController
   end
   
   def jump_to
-    redirect_to :action => :show, :id => params[:goto_id]
+    idea = Idea.find_by_id(params[:goto_id])
+    if idea      
+      redirect_to :action => :show, :id => idea
+    else
+      flash[:error] = "No such idea #{params[:goto_id]}."
+      redirect_to :action => 'index'
+    end
   end
   
   def show
