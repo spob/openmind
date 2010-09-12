@@ -21,3 +21,6 @@ doc/app
 public/themes/scribe/cache/
 .tmp*
 development.yml
+db/sphinx/development
+log/searchd.production.pid
+db/sphinx

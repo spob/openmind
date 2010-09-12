@@ -25,6 +25,8 @@ module ReleasesHelper
     if logged_in?
       if release.product.watchers.include? current_user
         theme_image_tag("icons/16x16/16-check.png", :alt=>"watched", :onmouseover => "Tip('You are watching this product')")
+      else
+        "&nbsp;"
       end
     else
       theme_image_tag("icons/16x16/question.png", :alt=>"not logged in", :onmouseover => "Tip('Log in to determine whether you are already watching this product')")

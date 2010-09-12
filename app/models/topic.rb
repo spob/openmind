@@ -23,7 +23,13 @@ class Topic < ActiveRecord::Base
     :max_length => 50
   before_update :set_close_date
   acts_as_taggable
-  acts_as_solr :fields => [:title, {:created_at => :date}]
+#  acts_as_solr :fields => [:title, {:created_at => :date}]
+  
+  define_index do
+    indexes title
+    has created_at, updated_at
+    set_property :delta => true
+  end
   
   ajaxful_rateable :stars => 5, 
   :allow_update => true,

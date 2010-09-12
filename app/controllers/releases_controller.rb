@@ -114,12 +114,38 @@ class ReleasesController < ApplicationController
         @releases << release 
       end
     end
+    
+    # Persist serial number and releases
+    if !@serial_number.nil? and @serial_number.length == 19
+      @sn = SerialNumber.find_by_serial_number(@serial_number) || SerialNumber.create!(:serial_number => @serial_number) 
+       (@releases - @sn.active_releases).each do |r|
+        # these are releases which have been added
+        ir = @sn.inactive_releases
+        if @sn.inactive_releases.include? r
+          map = @sn.serial_number_release_maps.find_by_release_id(r)
+          # if map is null something is very wrong
+          map.update_attributes!(:disabled_at => nil)
+        else
+          SerialNumberReleaseMap.create!(:serial_number => @sn, :release => r)
+        end
+      end
+      
+       (@sn.active_releases - @releases).each do |r|
+        # these are releases which have been removed
+        map = @sn.serial_number_release_maps.find_by_release_id(r)
+        # if map is null something is very wrong
+        map.update_attributes!(:disabled_at => Time.now)
+      end
+    end
+    
     @latest_release = {}
     @unsatisfied_dependencies = {}
     @releases.each do |release|
       @latest_release[release], @unsatisfied_dependencies[release] = release.update_available(@releases)
     end
-    new_releases = @latest_release.values.delete_if {|x| x.nil?}
+    new_releases = @latest_release.values.delete_if {|x| x.nil?}.collect do |x|
+      {:product => x.product.name, :version => x.version, :external_release_id => x.external_release_id }
+    end
     xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><releases type=\"array\"></releases>"
     xml = new_releases.to_xml unless new_releases.empty?
     respond_to do |wants|

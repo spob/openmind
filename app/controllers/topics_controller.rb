@@ -140,10 +140,12 @@ class TopicsController < ApplicationController
     hits = {}
     @hits = []
     session[:forums_search] = params[:search]
+    
     # solr barfs if search string starts with a wild card...so strip it out
-    params[:search] = StringUtils.sanitize_search_terms params[:search]
+#    params[:search] = StringUtils.sanitize_search_terms params[:search]
     begin
-      search_results = Topic.find_by_solr(params[:search], :scores => true)
+#      search_results = Topic.find_by_solr(params[:search], :scores => true)
+      search_results = params[:search].blank? ? [] : Topic.search(params[:search], :retry_stale => true)
     rescue RuntimeError => e
       flash[:error] = "An error occurred while executing your search. Perhaps there is a problem with the syntax of your search string."
       logger.error(e)
@@ -156,21 +158,22 @@ class TopicsController < ApplicationController
         redirect_to forum_path(@forum)
         return
       end
-      search_results.docs.each do |topic|
-        hits[topic.id] = TopicHit.new(topic, true, topic.solr_score) if topic.forum.can_see?(current_user) or prodmgr?
+      search_results.each do |topic|
+        hits[topic.id] = TopicHit.new(topic, true, 1) if topic.forum.can_see?(current_user) or prodmgr?
       end
-      TopicComment.find_by_solr(params[:search], :scores => true).docs.each do |comment|
+#      TopicComment.find_by_solr(params[:search], :scores => true).docs.each do |comment|
+      (params[:search].blank? ? [] : TopicComment.search(params[:search], :retry_stale => true)).each do |comment|
         if (comment.topic.forum.can_see?(current_user) or prodmgr?) and
          (!comment.private or comment.topic.forum.mediators.include? current_user)
           # first see if topic hit already exists
           topic_hit = hits[comment.topic.id]
           if topic_hit.nil?
-            hit = TopicHit.new(comment.topic, false, comment.solr_score)
+            hit = TopicHit.new(comment.topic, false, 1)
             hit.comments << comment
             hits[comment.topic.id] = hit
           else
             topic_hit.comments << comment
-            topic_hit.score = comment.solr_score if topic_hit.score < comment.solr_score
+            topic_hit.score = comment.solr_score if topic_hit.score < 1
           end
         end
       end

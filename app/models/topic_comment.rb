@@ -16,7 +16,14 @@
 #
 
 class TopicComment < Comment
-  acts_as_solr :fields => [:body, {:created_at => :date}]
+#  acts_as_solr :fields => [:body, {:created_at => :date}]
+  
+  define_index do
+    indexes body
+    has created_at, updated_at
+    set_property :delta => true
+  end
+  
   belongs_to :topic, :counter_cache => true
   belongs_to :endorser, :class_name => 'User'
   before_create :update_topic_commented_at_on_create

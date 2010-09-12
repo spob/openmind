@@ -13,7 +13,13 @@
 #
 
 class Enterprise < ActiveRecord::Base
-  acts_as_solr :fields => [:name]
+#  acts_as_solr :fields => [:name]
+  define_index do
+    indexes name, :sortable => true
+    
+    has created_at, updated_at
+    set_property :delta => true
+  end
   
   validates_presence_of :name #, :active
   validates_uniqueness_of :name, :case_sensitive => false
