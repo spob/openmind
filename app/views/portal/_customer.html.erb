@@ -1,0 +1,38 @@
+<tr>
+    <td>
+        <%= strike_text(h(customer.portal_org.try(:org_name)), nvl(nvl(customer.maintenance_expires_at, 1.days.since), 1.days.since) < Time.now) %>
+    </td>
+    <td>
+        <%= strike_text(h(customer.location), nvl(customer.maintenance_expires_at, 1.days.since) < Time.now) %>
+    </td>
+    <td>
+        <%= strike_text(h(customer.serial_number), nvl(customer.maintenance_expires_at, 1.days.since) < Time.now) %>
+    </td>
+    <td>
+        <%= strike_text(h(customer.product), nvl(customer.maintenance_expires_at, 1.days.since) < Time.now) %>
+    </td>
+    <td>
+        <% if !customer.available %>
+        <%= theme_image_tag("icons/16x16/16-check.png", options = {:alt=>"available"}) %>
+        <% else %>
+        &nbsp;
+		<% end %>
+    </td>
+    <td>
+        <%= strike_text(om_date(customer.registered_at), nvl(customer.maintenance_expires_at, 1.days.since) < Time.now) %>
+    </td>
+    <td>
+        <%= nvl(strike_text(om_date(customer.maintenance_expires_at), nvl(customer.maintenance_expires_at, 1.days.since) < Time.now), "&nbsp;") %>
+    </td>
+    <td>
+        <%= strike_text(h(customer.registered_version), nvl(customer.maintenance_expires_at, 1.days.since) < Time.now) %>
+    </td>
+    <td width="25%">
+        <% serial_number = SerialNumber.find_by_serial_number(customer.serial_number) %>
+        <% if serial_number.nil? || serial_number.active_releases.empty? %>
+        &nbsp;
+		<% else %>
+        <%= serial_number.active_releases.collect{ |r| link_to("#{h(r.product.name)} #{h(r.version) }", release_path(r)) }.join(", ") %>
+        <% end %>
+    </td>
+</tr>

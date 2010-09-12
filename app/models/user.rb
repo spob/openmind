@@ -101,6 +101,7 @@ class User < ActiveRecord::Base
   has_many :user_idea_reads,:dependent => :destroy
   has_many :rates
   has_many :owned_topics, :class_name => 'Topic', :foreign_key => "owner_id"
+  has_many :portal_orgs, :class_name => 'PortalUserOrgMap', :foreign_key => 'email', :primary_key => 'email'
   
   before_create :make_activation_code
 
@@ -323,6 +324,14 @@ class User < ActiveRecord::Base
   def watch_topic(topic)
     topic_watches.create(:topic => topic)
   end
+  
+  def can_view_portal?
+    portal_enterprise_types.include? self.enterprise.enterprise_type
+  end
+  
+  def can_specify_email_in_portal?
+    portal_specify_email_enterprise_types.include? self.enterprise.enterprise_type
+  end
 
   protected
   # before filter
@@ -350,4 +359,18 @@ class User < ActiveRecord::Base
   end
 
   memoize :mediator?, :prodmgr?, :sysadmin?
+  
+  private
+  
+  def portal_enterprise_types
+    # strip surrounding ()
+    types = (APP_CONFIG['show_portal_for_enterprise_types'] || "").gsub(/^\s*\(|\)\s*$/, "").split(/,/) || [""]
+    LookupCode.find(:all, :conditions => { :short_name => types, :code_type => 'EnterpriseType'})
+  end
+  
+  def portal_specify_email_enterprise_types
+    # strip surrounding ()
+    types = (APP_CONFIG['allow_email_override_for_enterprise_types'] || "").gsub(/^\s*\(|\)\s*$/, "").split(/,/) || [""]
+    LookupCode.find(:all, :conditions => { :short_name => types, :code_type => 'EnterpriseType'})
+  end
 end

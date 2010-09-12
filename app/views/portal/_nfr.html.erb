@@ -1,0 +1,22 @@
+<tr>
+    <td>
+        <%= strike_text(h(nfr.product), nfr.expires_at < Time.now) %>
+    </td>
+    <td>
+        <%= strike_text(h(nfr.serial_number), nfr.expires_at < Time.now) %>
+    </td>
+    <td>
+        <%= strike_text(om_date(nfr.expires_at), nfr.expires_at < Time.now) %>
+    </td>
+    <td>
+        <%= strike_text(h(nfr.registered_to), nfr.expires_at < Time.now) %>
+    </td>
+    <td width="25%">
+        <% serial_number = SerialNumber.find_by_serial_number(nfr.serial_number) %>
+        <% if serial_number.nil? || serial_number.active_releases.empty? %>
+        &nbsp;
+		<% else %>
+        <%= serial_number.active_releases.collect{ |r| link_to("#{h(r.product.name)} #{h(r.version) }", release_path(r)) }.join(", ") %>
+        <% end %>
+    </td>
+</tr>

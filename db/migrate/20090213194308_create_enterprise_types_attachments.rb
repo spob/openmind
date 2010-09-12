@@ -1,4 +1,3 @@
-
 require "migration_helpers"
 
 class CreateEnterpriseTypesAttachments < ActiveRecord::Migration
