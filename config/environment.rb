@@ -136,5 +136,4 @@ Mime::SET << Mime::CSV
 
   WhiteListHelper.tags.merge %w(u table tbody tr td iframe)
   WhiteListHelper.attributes.merge %w(id class style src target align frameborder marginheight marginwidth)
-  
-  #TagList.delimiter = " "
+ 
