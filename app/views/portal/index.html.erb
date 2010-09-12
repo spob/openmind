@@ -1,0 +1,139 @@
+<h1>Partner Portal</h1>
+<% if current_user && current_user.can_specify_email_in_portal? %>
+<% form_tag(portal_index_path, :class => 'cssform searchform', :name => 'search' ) do -%>
+<p>
+    <label for="search">
+        View for User Email:
+    </label>
+    <%= text_field_tag 'email',
+    session[:portal_email],
+    options = { :id => "forum_search", :size => "40" } %>
+    <br/>
+    <br/>
+    <%= submit_tag 'View', html_options = {:name => nil, :class=> "button"} %>
+    <%= link_to 'Reset',
+    portal_index_path(:reset => "Y"),
+    {:class=> "button"} -%>
+</p>
+<% end %>
+<% end %>
+<h3>Customers</h3>
+<table>
+    <tr>
+        <th>
+            Customer Name
+        </th>
+        <th>
+            Location
+        </th>
+        <th>
+            Serial Number
+        </th>
+        <th>
+            Product
+        </th>
+        <th>
+            In Use
+        </th>
+        <th>
+            Registered At
+        </th>
+        <th>
+            Expires At
+        </th>
+        <th>
+            Registered Version
+        </th>
+        <th>
+            Versions Installed
+        </th>
+    </tr>
+    <%= render :partial => 'customer', :collection => @customers %>
+</table>
+<h3>Certified Consultants (Technical)</h3>
+<table>
+    <tr>
+        <th>
+            Consultant Name
+        </th>
+        <th>
+            Email Address
+        </th>
+        <th>
+            Certification
+        </th>
+        <th>
+            Certified At
+        </th>
+        <th>
+            Active
+        </th>
+        <th>
+            Purchased Training?
+        </th>
+    </tr>
+    <%= render :partial => 'consultant', :collection => @technical_consultants, :locals => { :type => "T" } %>
+</table>
+<h3>Certified Consultants (Sales)</h3>
+<table>
+    <tr>
+        <th>
+            Consultant Name
+        </th>
+        <th>
+            Email Address
+        </th>
+        <th>
+            Certified At
+        </th>
+        <th>
+            Active
+        </th>
+    </tr>
+    <%= render :partial => 'consultant', :collection => @sales_consultants, :locals => { :type => "S" } %>
+</table>
+<h3>NFRs</h3>
+<table>
+    <tr>
+        <th>
+            Product
+        </th>
+        <th>
+            Serial Number
+        </th>
+        <th>
+            Expires At
+        </th>
+        <th>
+            Registered To
+        </th>
+        <th>
+            Versions Installed
+        </th>
+    </tr>
+    <%= render :partial => 'nfr', :collection => @nfrs %>
+</table>
+<h3>Support Incidents</h3>
+<table>
+    <tr>
+        <th>
+            Case Number
+        </th>
+        <th>
+            Opened At
+        </th>
+        <th>
+            Closed At
+        </th>
+        <th>
+            Serial Number
+        </th>
+        <th>
+            Opened By
+        </th>
+        <th>
+            Customer
+        </th>
+    </tr>
+    <%= render :partial => 'ticket', :collection => @tickets %>
+</table>

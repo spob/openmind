@@ -24,6 +24,7 @@ module ApplicationHelper
       ["Announcements",   announcements_path ,  ["sysadmin", "prodmgr"]  ],
       ["Attachments",     attachments_path,     ["sysadmin", "prodmgr", "mediator"]  ],
       ["Polls",           polls_path,           ],
+      ["Partner Portal",  portal_index_path,          ],
       ["Admin",           periodic_jobs_path,    ["sysadmin"],  ["lookup_codes", "link_sets"] ],
     ]
     
@@ -46,6 +47,9 @@ module ApplicationHelper
           end
         end
       end
+      
+      # Special case for partner portal
+      accessible = false if accessible && menu[0] == "Partner Portal" && (!logged_in? || !current_user.try(:can_view_portal?))
       
       if accessible then          # should the user see the menu?
         clazz = nil
@@ -157,6 +161,11 @@ module ApplicationHelper
   # Format a date and adjust the timezone for the user's timezone
   def om_date_time(the_date)
     h format_date_time(the_date) unless the_date.nil?
+  end
+  
+  # Format a date 
+  def om_date(the_date)
+    h format_date(the_date) unless the_date.nil?
   end
   
   # If value is null, return null_value, else return null

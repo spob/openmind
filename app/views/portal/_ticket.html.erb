@@ -1,0 +1,20 @@
+<tr>
+    <td>
+        <%= h(ticket.case_number) %>
+    </td>
+    <td>
+        <%= om_date(ticket.opened_at) %>
+    </td>
+    <td>
+        <%= om_date(ticket.closed_at) %>
+    </td>
+    <td>
+        <%= h(ticket.serial_number) %>
+    </td>
+    <td>
+        <%= h(ticket.opened_by) %>
+    </td>
+    <td>
+        <%= h(ticket.customer) %>
+    </td>
+</tr>

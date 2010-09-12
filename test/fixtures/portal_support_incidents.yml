@@ -1,0 +1,21 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  email: MyString
+  case_number: 1
+  opened_at: 2010-09-10 15:38:38
+  closed_at: 2010-09-10 15:38:38
+  serial_number: MyString
+  summary: MyString
+  opened_by: MyString
+  customer: MyString
+
+two:
+  email: MyString
+  case_number: 1
+  opened_at: 2010-09-10 15:38:38
+  closed_at: 2010-09-10 15:38:38
+  serial_number: MyString
+  summary: MyString
+  opened_by: MyString
+  customer: MyString
