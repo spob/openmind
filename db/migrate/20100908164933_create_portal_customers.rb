@@ -16,7 +16,7 @@ class CreatePortalCustomers < ActiveRecord::Migration
       t.timestamps
     end
     add_foreign_key(:portal_customers, :portal_org_id, :portal_orgs)
-    add_index :portal_certified_consultants, [:portal_org_id, :serial_number], :unique => true
+    add_index :portal_customers, [:portal_org_id, :serial_number], :unique => true
   end
 
   def self.down

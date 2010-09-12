@@ -364,13 +364,13 @@ class User < ActiveRecord::Base
   
   def portal_enterprise_types
     # strip surrounding ()
-    types = APP_CONFIG['show_portal_for_enterprise_types'].gsub(/^\s*\(|\)\s*$/, "").split(/,/) || [""]
+    types = (APP_CONFIG['show_portal_for_enterprise_types'] || "").gsub(/^\s*\(|\)\s*$/, "").split(/,/) || [""]
     LookupCode.find(:all, :conditions => { :short_name => types, :code_type => 'EnterpriseType'})
   end
   
   def portal_specify_email_enterprise_types
     # strip surrounding ()
-    types = APP_CONFIG['allow_email_override_for_enterprise_types'].gsub(/^\s*\(|\)\s*$/, "").split(/,/) || [""]
+    types = (APP_CONFIG['allow_email_override_for_enterprise_types'] || "").gsub(/^\s*\(|\)\s*$/, "").split(/,/) || [""]
     LookupCode.find(:all, :conditions => { :short_name => types, :code_type => 'EnterpriseType'})
   end
 end
