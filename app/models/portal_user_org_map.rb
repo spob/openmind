@@ -1,5 +1,7 @@
 class PortalUserOrgMap < ActiveRecord::Base
   belongs_to :portal_org
+  named_scope :portal_end_customer_orgs, :conditions => { :org_type => 'E'}
+  named_scope :portal_reseller_orgs, :conditions => { :org_type => 'R'}
   named_scope :by_org_id, lambda{|org_id|{:conditions => { :external_org_id => org_id }}}
   named_scope :by_email, lambda{|email|{:conditions => { :email => email }, :order => 'org_name'}}
   

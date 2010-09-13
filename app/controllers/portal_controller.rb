@@ -9,11 +9,11 @@ class PortalController < ApplicationController
         session[:portal_email] = nil if params[:reset]
       end
       session[:portal_email] ||= current_user.email
-      @orgs = current_user.portal_orgs.collect(&:external_org_id)
-      @customers = PortalUserOrgMap.by_email(session[:portal_email]).collect{ |uo| uo.portal_org.portal_customers }.flatten
-      @technical_consultants = PortalUserOrgMap.by_email(session[:portal_email]).collect{ |uo| uo.portal_org.portal_certified_consultants.technical }.flatten
-      @sales_consultants = PortalUserOrgMap.by_email(session[:portal_email]).collect{ |uo| uo.portal_org.portal_certified_consultants.sales }.flatten
-      @nfrs = PortalUserOrgMap.by_email(session[:portal_email]).collect{ |uo| uo.portal_org.portal_nfrs }.flatten
+#      @orgs = current_user.portal_orgs.collect(&:external_org_id)
+      @customers = PortalUserOrgMap.portal_end_customer_orgs.by_email(session[:portal_email]).collect{ |uo| uo.portal_org.portal_customers }.flatten
+      @technical_consultants = PortalUserOrgMap.portal_reseller_orgs.by_email(session[:portal_email]).collect{ |uo| uo.portal_org.portal_certified_consultants.technical }.flatten
+      @sales_consultants = PortalUserOrgMap.portal_reseller_orgs.by_email(session[:portal_email]).collect{ |uo| uo.portal_org.portal_certified_consultants.sales }.flatten
+      @nfrs = PortalUserOrgMap.portal_reseller_orgs.by_email(session[:portal_email]).collect{ |uo| uo.portal_org.portal_nfrs }.flatten
       @tickets = PortalUserOrgMap.by_email(session[:portal_email]).collect{ |uo| uo.portal_org.portal_support_incidents }.flatten
     end
   end
