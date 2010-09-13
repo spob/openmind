@@ -6,15 +6,15 @@
         <%= om_date(ticket.opened_at) %>
     </td>
     <td>
-        <%= om_date(ticket.closed_at) %>
+        <%= nvl(om_date(ticket.closed_at), "&nbsp;") %>
     </td>
     <td>
-        <%= h(ticket.serial_number) %>
+        <%= nvl(h(ticket.serial_number), "&nbsp;") %>
     </td>
     <td>
-        <%= h(ticket.opened_by) %>
+        <%= nvl(h(ticket.opened_by), "&nbsp;") %>
     </td>
     <td>
-        <%= h(ticket.customer) %>
+        <%= nvl(h(ticket.customer), "&nbsp;") %>
     </td>
 </tr>

@@ -9,6 +9,7 @@ class CreatePortalUserOrgMaps < ActiveRecord::Migration
       t.string :org_name, :null => false
       t.string :external_org_id, :null => false
       t.references :portal_org, :null => false
+      t.string :org_type, :null => false
       t.timestamps
     end
     add_foreign_key(:portal_user_org_maps, :portal_org_id, :portal_orgs)

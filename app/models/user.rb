@@ -102,6 +102,8 @@ class User < ActiveRecord::Base
   has_many :rates
   has_many :owned_topics, :class_name => 'Topic', :foreign_key => "owner_id"
   has_many :portal_orgs, :class_name => 'PortalUserOrgMap', :foreign_key => 'email', :primary_key => 'email'
+  has_many :portal_reseller_orgs, :class_name => 'PortalUserOrgMap', :conditions => "org_type = 'R'", :foreign_key => 'email', :primary_key => 'email'
+  has_many :portal_end_customer_orgs, :class_name => 'PortalUserOrgMap', :conditions => "org_type = 'E'", :foreign_key => 'email', :primary_key => 'email'
   
   before_create :make_activation_code
 
