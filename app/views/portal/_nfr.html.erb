@@ -9,7 +9,7 @@
         <%= strike_text(om_date(nfr.expires_at), nfr.expires_at < Time.now) %>
     </td>
     <td>
-        <%= strike_text(h(nfr.registered_to), nfr.expires_at < Time.now) %>
+        <%= strike_text(nvl(h(nfr.registered_to), "&nbsp;"), nfr.expires_at < Time.now) %>
     </td>
     <td width="25%">
         <% serial_number = SerialNumber.find_by_serial_number(nfr.serial_number) %>

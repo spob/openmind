@@ -19,13 +19,13 @@
 		<% end %>
     </td>
     <td>
-        <%= strike_text(om_date(customer.registered_at), nvl(customer.maintenance_expires_at, 1.days.since) < Time.now) %>
+        <%= strike_text(nvl(om_date(customer.registered_at), "&nbsp;"), nvl(customer.maintenance_expires_at, 1.days.since) < Time.now) %>
     </td>
     <td>
         <%= nvl(strike_text(om_date(customer.maintenance_expires_at), nvl(customer.maintenance_expires_at, 1.days.since) < Time.now), "&nbsp;") %>
     </td>
     <td>
-        <%= strike_text(h(customer.registered_version), nvl(customer.maintenance_expires_at, 1.days.since) < Time.now) %>
+        <%= strike_text(nvl(h(customer.registered_version), "&nbsp;"), nvl(customer.maintenance_expires_at, 1.days.since) < Time.now) %>
     </td>
     <td width="25%">
         <% serial_number = SerialNumber.find_by_serial_number(customer.serial_number) %>
