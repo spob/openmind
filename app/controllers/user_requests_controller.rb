@@ -1,28 +1,29 @@
 class UserRequestsController < ApplicationController
-  before_filter :login_required, :except => [:new, :create, :acknowledge]
+  
+  before_filter :login_required, :except => [:new, :create, :acknowledge, :enterprise_names ]
   access_control [:edit, :update, :destroy, :show, :index] => 'sysadmin'
   
   # GETs should be safe (see http://www.w3.org/2001/tag/doc/whenToUseGet.html)
   verify :method => :post, :only => [:create, :approve, :reject ],
-    :redirect_to => { :action => :index }
+  :redirect_to => { :action => :index }
   verify :method => :put, :only => [ :update ],
-    :redirect_to => { :action => :index }
+  :redirect_to => { :action => :index }
   verify :method => :delete, :only => [ :destroy ],
-    :redirect_to => { :action => :index }
+  :redirect_to => { :action => :index }
   
   def new
     @user_request = UserRequest.new
     
     @user_request.time_zone = APP_CONFIG['default_user_timezone']
   end
-
+  
   def create
     @user_request = UserRequest.new(params[:user_request])
     @user_request.status = UserRequest.pending
     @user_request.roles << Role.find_default_roles
     @user_request.enterprise = Enterprise.find_by_active(true, 
-      :conditions => ["name like ?", "%#{@user_request.enterprise_name}%"], 
-      :order => "name ASC")
+                                                         :conditions => ["name like ?", "%#{@user_request.enterprise_name}%"], 
+    :order => "name ASC")
     
     if simple_captcha_valid? 
       if !User.find_by_email(@user_request.email).nil?
@@ -40,11 +41,16 @@ class UserRequestsController < ApplicationController
     end  
   end
   
+  def enterprise_names
+    @enterprises = Enterprise.find(:all, :conditions => ['name LIKE ?', "%#{params[:search]}%"],
+    :limit => 10)
+  end
+  
   def acknowledge
     @user_request = UserRequest.find(params[:id])
     
     RunOncePeriodicJob.create(
-      :job => "UserRequest.send_confirmation_email(#{@user_request.id})")
+                              :job => "UserRequest.send_confirmation_email(#{@user_request.id})")
   end
   
   def index
@@ -66,22 +72,22 @@ class UserRequestsController < ApplicationController
     statuses << UserRequest.rejected if session[:user_requests_rejected] == "yes"
     @user_requests = UserRequest.list params[:page], current_user.row_limit, statuses
   end
-
+  
   def destroy
     UserRequest.find(params[:id]).destroy
     flash[:notice] = "User request was successfully deleted."
     redirect_to user_requests_path
   end
-
+  
   def show
     @user_request = UserRequest.find(params[:id])
   end
-
+  
   def edit
     @user_request = UserRequest.find(params[:id])
     setup_values
   end
-
+  
   def update
     params[:user_request][:group_ids] ||= []
     params[:user_request][:role_ids] ||= []
@@ -114,40 +120,40 @@ class UserRequestsController < ApplicationController
     end
     
     UserRequest.transaction do
-    
+      
       if @user_request.enterprise.nil?
         # is there an exact match?
         enterprise = Enterprise.find_by_name(@user_request.enterprise_name)
         if enterprise.nil?
           Enterprise.new(:name => @user_request.enterprise_name,
-          :enterprise_type => @user_request.enterprise_type).save! 
+                         :enterprise_type => @user_request.enterprise_type).save! 
           enterprise = Enterprise.find_by_name(@user_request.enterprise_name)
         end
       else
         enterprise = @user_request.enterprise
       end
-    
+      
       if @user_request.initial_enterprise_allocation > 0
         EnterpriseAllocation.new(:quantity => @user_request.initial_enterprise_allocation,
-          :comments => "",
-          :enterprise => enterprise,
-          :expiration_date => Allocation.calculate_expiration_date).save!
+                                 :comments => "",
+        :enterprise => enterprise,
+        :expiration_date => Allocation.calculate_expiration_date).save!
       end
-    
+      
       user = User.new(:email => @user_request.email, :first_name => @user_request.first_name,
-        :last_name => @user_request.last_name, :enterprise => enterprise)
+                      :last_name => @user_request.last_name, :enterprise => enterprise)
       user.new_random_password
       user.groups << @user_request.groups
       user.roles << @user_request.roles
       user.save!
-    
+      
       if @user_request.initial_user_allocation > 0
         UserAllocation.new(:quantity => @user_request.initial_user_allocation,
-          :comments => "",
-          :user => User.find_by_email(@user_request.email),
-          :expiration_date => Allocation.calculate_expiration_date).save!
+                           :comments => "",
+        :user => User.find_by_email(@user_request.email),
+        :expiration_date => Allocation.calculate_expiration_date).save!
       end
-    
+      
       @user_request.status = UserRequest.approved
       if @user_request.save!
         flash[:notice] = "Account request '#{@user_request.email}' approved"
@@ -155,7 +161,7 @@ class UserRequestsController < ApplicationController
       end
     end
   end
-
+  
   def next
     user_requests = UserRequest.next(params[:id])
     if user_requests.empty?
@@ -165,7 +171,7 @@ class UserRequestsController < ApplicationController
     end
     render :action => 'show'
   end
-
+  
   def previous
     user_requests = UserRequest.previous(params[:id])
     if user_requests.empty?

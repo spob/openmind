@@ -40,7 +40,8 @@ ActionController::Routing::Routes.draw do |map|
     :tag => :get }, :member => {:rate => :post, :toggle_status => :put}
   map.resources :user_logons
   map.resources :user_requests, :member => { :approve => :post, :reject => :post,
-    :acknowledge => :get, :next => :get, :previous => :get }
+    :acknowledge => :get, :next => :get, :previous => :get },
+  :collection => {:enterprise_names => :get }
   map.resources :votes, :collection => { :create_from_show => :post }
   # NOTE: create_topic_watch really should just support a post. That said,
   # googlebot hits that page and tries to do a create_topic_watch with a git,

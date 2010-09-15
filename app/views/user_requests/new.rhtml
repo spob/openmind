@@ -22,7 +22,9 @@
     </p>
     <p>
       <label for="enterprise_id">Company:</label>
-      <%= form.text_field :enterprise_name, { :maxlength => 50}  %>
+	  <%= text_field_with_auto_complete :enterprise, :enterprise_name, { }, 
+		{:method => :get, :url => enterprise_names_user_requests_path(:js),
+          :with => "'search=' + element.value" } %>
     </p>
     <p>
       <label for="time_zone">User Time Zone:</label>
