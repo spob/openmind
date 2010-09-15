@@ -1,12 +1,12 @@
 ActionController::Routing::Routes.draw do |map|
-
+  
   # The priority is based upon order of creation: first created -> highest
   # priority.
   
   # Sample of regular route: map.connect 'products/:id', :controller =>
   # 'catalog', :action => 'view' Keep in mind you can assign values other than
   # :controller and :action
-
+  
   # Sample of named route: map.purchase 'products/:id/purchase', :controller =>
   # 'catalog', :action => 'purchase' This route can be invoked with
   # purchase_url(:id => product.id)
@@ -15,12 +15,12 @@ ActionController::Routing::Routes.draw do |map|
     :export => :post, :import => :post, :toggle_pix => :get }
   map.resources :announcements, :collection => { :preview => :get, :rss => :get }
   map.resources :attachments, :member => { :download => :get, :html => :get },
-    :collection => { :search => :get }
+  :collection => { :search => :get }
   map.resources :comments, :collection => { :preview => :get },
-    :member => { :endorse => :post, :unendorse => :post, :attach => :get,
+  :member => { :endorse => :post, :unendorse => :post, :attach => :get,
     :privatize => :post, :publicize => :post, :promote_power_user => :post }
   map.resources :enterprises, :member => { :next => :get, :previous => :get },
-    :collection => { :search => :get }
+  :collection => { :search => :get }
   map.resources :forums, :collection => { :search => :get, 
     :rss => :get, :tag => :get, :metrics => :get }, :member => { :mark_all_as_read => :post }
   map.resources :groups
@@ -30,11 +30,12 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :periodic_jobs, :member => { :rerun => :post }
   map.resources :polls, :member => { :publish => :post, :unpublish => :post,
     :present_survey => :get, :take_survey => :post}, 
-    :collection => {:toggle_details => :get, :pie => :get, :display_comments => :get }
-  map.resources :portal, :only => :index
+  :collection => {:toggle_details => :get, :pie => :get, :display_comments => :get }
+  map.resources :portal, :only => :index,
+  :collection => {:auto_complete_for_user_email => :get }
   map.resources :products
   map.resources :releases, :member => { :commit => :post },
-    :collection => { :preview => :get, :list => :get, :check_for_updates => :get }
+  :collection => { :preview => :get, :list => :get, :check_for_updates => :get }
   map.resources :topics, :collection => { :preview => :get, :search => :get,
     :tag => :get }, :member => {:rate => :post, :toggle_status => :put}
   map.resources :user_logons
@@ -50,13 +51,13 @@ ActionController::Routing::Routes.draw do |map|
     :create_product_watch => :post, 
     :create_product_watch_from_check_for_update => :post, :destroy_forum_watch => :delete,
     :destroy_product_watch => :delete},
-    :collection => {:create_from_show => :post,
+  :collection => {:create_from_show => :post,
     :create_product_watches => :get }
-
+  
   # Allow downloading Web Service WSDL as a file with an extension instead of a
   # file named 'wsdl'
   map.connect ':controller/service.wsdl', :action => 'wsdl'
-
+  
   # Default home page #map.connect '', :controller => 'ideas', :action =>
   # 'index'
   map.home '', :controller => 'ideas', :action => 'index'
@@ -70,6 +71,6 @@ ActionController::Routing::Routes.draw do |map|
   
   map.simple_captcha '/simple_captcha/:action', :controller => 'simple_captcha'
   #  map.connect ':id', :controller => 'ideas', :action => 'show'
-
+  
   map.connect ':path', :controller => 'static'
 end

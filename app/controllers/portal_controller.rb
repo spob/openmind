@@ -1,4 +1,6 @@
 class PortalController < ApplicationController
+  auto_complete_for :user, :email
+  
   def index
     if !logged_in? || !current_user.try(:can_view_portal?)
       flash[:error] = "You don't have access to the partner portal"
