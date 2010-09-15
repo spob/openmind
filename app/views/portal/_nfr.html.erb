@@ -1,15 +1,15 @@
 <tr>
     <td>
-        <%= strike_text(h(nfr.product), nfr.expires_at < Time.now) %>
+        <%= strike_text(h(nfr.product), nvl(nfr.expires_at, 1.days.since) < Time.now) %>
     </td>
     <td>
-        <%= strike_text(h(nfr.serial_number), nfr.expires_at < Time.now) %>
+        <%= strike_text(h(nfr.serial_number), nvl(nfr.expires_at, 1.days.since) < Time.now) %>
     </td>
     <td>
-        <%= strike_text(om_date(nfr.expires_at), nfr.expires_at < Time.now) %>
+        <%= strike_text(om_date(nfr.expires_at), nvl(nfr.expires_at, 1.days.since) < Time.now) %>
     </td>
     <td>
-        <%= strike_text(nvl(h(nfr.registered_to), "&nbsp;"), nfr.expires_at < Time.now) %>
+        <%= strike_text(nvl(h(nfr.registered_to), "&nbsp;"), nvl(nfr.expires_at, 1.days.since) < Time.now) %>
     </td>
     <td width="25%">
         <% serial_number = SerialNumber.find_by_serial_number(nfr.serial_number) %>
