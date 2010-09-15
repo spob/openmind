@@ -17,4 +17,16 @@
     <td>
         <%= nvl(h(ticket.customer), "&nbsp;") %>
     </td>
+    <td>
+        <% if ticket.within_sla %>
+        <%= theme_image_tag("icons/16x16/16-check.png", options = {:alt=>"active"}) %>
+        <% else %>
+        &nbsp;<% end %>
+    </td>
+    <td>
+        <% if ticket.is_billable %>
+        <%= theme_image_tag("icons/16x16/16-check.png", options = {:alt=>"active"}) %>
+        <% else %>
+        &nbsp;<% end %>
+    </td>
 </tr>

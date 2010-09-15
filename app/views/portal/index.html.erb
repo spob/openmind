@@ -157,6 +157,12 @@
         <th>
             Customer
         </th>
+        <th>
+            Within SLA
+        </th>
+        <th>
+            Billable
+        </th>
     </tr>
     <% if @tickets.present? %>
     <%= render :partial => 'ticket', :collection => @tickets %>
