@@ -6,7 +6,7 @@
         <%= strike_text(h(nfr.serial_number), nvl(nfr.expires_at, 1.days.since) < Time.now) %>
     </td>
     <td>
-        <%= strike_text(om_date(nfr.expires_at), nvl(nfr.expires_at, 1.days.since) < Time.now) %>
+        <%= strike_text(nvl(om_date(nfr.expires_at), "&nbsp;"), nvl(nfr.expires_at, 1.days.since) < Time.now) %>
     </td>
     <td>
         <%= strike_text(nvl(h(nfr.registered_to), "&nbsp;"), nvl(nfr.expires_at, 1.days.since) < Time.now) %>
