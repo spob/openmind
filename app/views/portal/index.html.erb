@@ -8,14 +8,11 @@
     <%= text_field_with_auto_complete :user, :email, {}, {:method => :get} %>
 </p>
 <p>
-	<div style="padding-left:150px;z-index:1;">
-    <label>
-    </label>
+	<label></label>
     <%= submit_tag 'View', html_options = {:name => nil, :class=> "button"} %>
     <%= link_to 'Reset',
     portal_index_path(:reset => "Y"),
     {:class=> "button"} -%>
-	</div>
 </p>
 <% end %>
 <% end %>
