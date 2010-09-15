@@ -1,13 +1,11 @@
 <h1>Partner Portal</h1>
 <% if current_user && current_user.can_specify_email_in_portal? %>
-<% form_tag(portal_index_path, :class => 'cssform searchform', :name => 'search' ) do -%>
+<% form_for :user, :url => portal_index_path, :html => { :class => 'cssform searchform' } do |f| %>
 <p>
     <label for="search">
         View for User Email:
     </label>
-    <%= text_field_tag 'email',
-    session[:portal_email],
-    options = { :id => "forum_search", :size => "40" } %>
+    <%= f.text_field 'email' %>
     <br/>
     <br/>
     <%= submit_tag 'View', html_options = {:name => nil, :class=> "button"} %>

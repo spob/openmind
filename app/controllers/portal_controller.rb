@@ -5,7 +5,7 @@ class PortalController < ApplicationController
       redirect_to home_path
     else
       if current_user.can_specify_email_in_portal?
-        session[:portal_email] = params[:email] if params[:email]
+        session[:portal_email] = params[:user][:email] if params[:user] && params[:user][:email]
         session[:portal_email] = nil if params[:reset]
       end
       session[:portal_email] ||= current_user.email
@@ -15,6 +15,7 @@ class PortalController < ApplicationController
       @sales_consultants = PortalUserOrgMap.portal_reseller_orgs.by_email(session[:portal_email]).collect{ |uo| uo.portal_org.portal_certified_consultants.sales }.flatten
       @nfrs = PortalUserOrgMap.portal_reseller_orgs.by_email(session[:portal_email]).collect{ |uo| uo.portal_org.portal_nfrs }.flatten
       @tickets = PortalUserOrgMap.by_email(session[:portal_email]).collect{ |uo| uo.portal_org.portal_support_incidents }.flatten
+      @user = User.new(:email => session[:portal_email])
     end
   end
 end
