@@ -64,6 +64,21 @@ class Topic < ActiveRecord::Base
   named_scope :open_or_recently_closed,
   lambda{|end_date| {:conditions => 
       ['open_status = 1 or (open_status = 0 and closed_at >= ?)', end_date]} }
+  sql = 
+<<-eos
+topics.owner_id is not null
+and
+  Not Exists(Select
+    Null
+  From
+    topic_watches
+  Where
+    topic_watches.user_id = topics.owner_id And
+    topic_watches.topic_id = topics.id)
+eos
+  
+  named_scope :owners_who_are_not_watchers, :conditions =>
+  [ sql ]
   
   attr_accessor :comment_body
   
@@ -93,6 +108,12 @@ class Topic < ActiveRecord::Base
     mediator],
     :order => "pinned DESC, last_commented_at DESC",
     :per_page => per_page
+  end
+  
+  def self.set_owners_to_watchers
+    Topic.owners_who_are_not_watchers.each do |t|
+      TopicWatch.create!(:watcher => t.owner, :topic => t)
+    end
   end
   
   def last_comment? comment
