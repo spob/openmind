@@ -117,16 +117,16 @@ class ReleasesController < ApplicationController
     
     # Persist serial number and releases
     if !@serial_number.nil? and @serial_number.length == 19
-      @sn = SerialNumber.find_by_serial_number(@serial_number) || SerialNumber.create!(:serial_number => @serial_number) 
+      @sn = SerialNumber.find_or_create_by_serial_number(@serial_number)
        (@releases - @sn.active_releases).each do |r|
         # these are releases which have been added
-        ir = @sn.inactive_releases
+#        ir = @sn.inactive_releases
         if @sn.inactive_releases.include? r
           map = @sn.serial_number_release_maps.find_by_release_id(r)
           # if map is null something is very wrong
-          map.update_attributes!(:disabled_at => nil)
+          map.update_attributes!(:disabled_at => nil, :expires_at => r.maintenance_expires)
         else
-          SerialNumberReleaseMap.create!(:serial_number => @sn, :release => r)
+          SerialNumberReleaseMap.create!(:serial_number => @sn, :release => r, :expires_at => r.maintenance_expires)
         end
       end
       
@@ -134,7 +134,7 @@ class ReleasesController < ApplicationController
         # these are releases which have been removed
         map = @sn.serial_number_release_maps.find_by_release_id(r)
         # if map is null something is very wrong
-        map.update_attributes!(:disabled_at => Time.now)
+        map.update_attributes!(:disabled_at => Time.now, :expires_at => r.maintenance_expires)
       end
     end
     
