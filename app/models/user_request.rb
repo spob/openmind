@@ -46,6 +46,14 @@ class UserRequest < ActiveRecord::Base
   
   attr_accessor :enterprise_action
   
+  def name=(the_name)
+    self.enterprise_name = the_name
+  end
+  
+  def name
+    enterprise_name
+  end
+  
   def self.pending
     "Pending"
   end
