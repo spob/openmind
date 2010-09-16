@@ -1,6 +1,6 @@
 class UserRequestsController < ApplicationController
   
-  before_filter :login_required, :except => [:new, :create, :acknowledge, :enterprise_names ]
+  before_filter :login_required, :except => [:new, :create, :acknowledge, :auto_complete_for_user_request_enterprise_name ]
   access_control [:edit, :update, :destroy, :show, :index] => 'sysadmin'
   
   # GETs should be safe (see http://www.w3.org/2001/tag/doc/whenToUseGet.html)
@@ -41,9 +41,10 @@ class UserRequestsController < ApplicationController
     end  
   end
   
-  def enterprise_names
-    @enterprises = Enterprise.find(:all, :conditions => ['name LIKE ?', "%#{params[:search]}%"],
-    :limit => 10)
+  def auto_complete_for_user_request_enterprise_name
+    @enterprises = Enterprise.find(:all, :conditions => ['name LIKE ?', "%#{params[:user_request][:enterprise_name]}%"],
+    :order => 'name ASC', :limit => 10) 
+    render :inline => "<%= auto_complete_result(@enterprises, 'name') %>"
   end
   
   def acknowledge

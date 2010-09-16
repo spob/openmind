@@ -22,9 +22,7 @@
     </p>
     <p>
       <label for="enterprise_id">Company:</label>
-	  <%= text_field_with_auto_complete :enterprise, :enterprise_name, { }, 
-		{:method => :get, :url => enterprise_names_user_requests_path(:js),
-          :with => "'search=' + element.value" } %>
+	  <%= text_field_with_auto_complete :user_request, :enterprise_name, {}, :frequency => 0.1 %>
     </p>
     <p>
       <label for="time_zone">User Time Zone:</label>
