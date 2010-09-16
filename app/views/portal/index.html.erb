@@ -1,15 +1,14 @@
 <h1>Partner Portal</h1>
 <% if current_user && current_user.can_specify_email_in_portal? %>
-<% form_tag(portal_index_path, :class => 'cssform searchform', :name => 'search' ) do -%>
+<% form_for :user, :url => portal_index_path, :html => { :class => 'cssform searchform' } do |f| %>
 <p>
     <label for="search">
         View for User Email:
     </label>
-    <%= text_field_tag 'email',
-    session[:portal_email],
-    options = { :id => "forum_search", :size => "40" } %>
-    <br/>
-    <br/>
+    <%= text_field_with_auto_complete :user, :email, {}, {:method => :get} %>
+</p>
+<p>
+	<label></label>
     <%= submit_tag 'View', html_options = {:name => nil, :class=> "button"} %>
     <%= link_to 'Reset',
     portal_index_path(:reset => "Y"),
@@ -51,8 +50,10 @@
     <% if @customers.present? %>
     <%= render :partial => 'customer', :collection => @customers %>
     <% else %>
-    <td colspan="9">No records found</td>
-	<% end %>
+    <td colspan="9">
+        No records found
+    </td>
+    <% end %>
 </table>
 <h3>Certified Consultants (Technical)</h3>
 <table>
@@ -79,8 +80,10 @@
     <% if @technical_consultants.present? %>
     <%= render :partial => 'consultant', :collection => @technical_consultants, :locals => { :type => "T" } %>
     <% else %>
-    <td colspan="6">No records found</td>
-	<% end %>
+    <td colspan="6">
+        No records found
+    </td>
+    <% end %>
 </table>
 <h3>Certified Consultants (Sales)</h3>
 <table>
@@ -101,8 +104,10 @@
     <% if @sales_consultants.present? %>
     <%= render :partial => 'consultant', :collection => @sales_consultants, :locals => { :type => "S" } %>
     <% else %>
-    <td colspan="4">No records found</td>
-	<% end %>
+    <td colspan="4">
+        No records found
+    </td>
+    <% end %>
 </table>
 <h3>NFRs</h3>
 <table>
@@ -126,8 +131,10 @@
     <% if @nfrs.present? %>
     <%= render :partial => 'nfr', :collection => @nfrs %>
     <% else %>
-    <td colspan="5">No records found</td>
-	<% end %>
+    <td colspan="5">
+        No records found
+    </td>
+    <% end %>
 </table>
 <h3>Support Incidents</h3>
 <table>
@@ -150,10 +157,18 @@
         <th>
             Customer
         </th>
+        <th>
+            Within SLA
+        </th>
+        <th>
+            Billable
+        </th>
     </tr>
     <% if @tickets.present? %>
     <%= render :partial => 'ticket', :collection => @tickets %>
     <% else %>
-    <td colspan="6">No records found</td>
-	<% end %>
+    <td colspan="6">
+        No records found
+    </td>
+    <% end %>
 </table>

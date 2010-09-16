@@ -13,6 +13,8 @@ class CreatePortalSupportIncidents < ActiveRecord::Migration
       t.string :summary
       t.string :opened_by
       t.string :customer
+      t.boolean :is_billable
+      t.boolean :within_sla
       t.timestamps
     end
     add_foreign_key(:portal_support_incidents, :portal_org_id, :portal_orgs)

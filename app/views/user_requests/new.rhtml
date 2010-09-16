@@ -22,7 +22,7 @@
     </p>
     <p>
       <label for="enterprise_id">Company:</label>
-      <%= form.text_field :enterprise_name, { :maxlength => 50}  %>
+	  <%= text_field_with_auto_complete :user_request, :enterprise_name %>
     </p>
     <p>
       <label for="time_zone">User Time Zone:</label>
