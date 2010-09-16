@@ -117,7 +117,7 @@ class ReleasesController < ApplicationController
     
     # Persist serial number and releases
     if !@serial_number.nil? and @serial_number.length == 19
-      @sn = SerialNumber.find_by_serial_number(@serial_number) || SerialNumber.create!(:serial_number => @serial_number) 
+      @sn = SerialNumber.find_or_create_by_serial_number(@serial_number)
        (@releases - @sn.active_releases).each do |r|
         # these are releases which have been added
         ir = @sn.inactive_releases
