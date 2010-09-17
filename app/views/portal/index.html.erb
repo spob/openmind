@@ -1,4 +1,4 @@
-<h1>Partner Portal</h1>
+<h1>Scribe Portal</h1>
 <% if current_user && current_user.can_specify_email_in_portal? %>
 <% form_for :user, :url => portal_index_path, :html => { :class => 'cssform searchform' } do |f| %>
 <p>
@@ -16,7 +16,7 @@
 </p>
 <% end %>
 <% end %>
-<h3>Customers</h3>
+<h3>Customer Products</h3>
 <table>
     <tr>
         <th>
@@ -172,3 +172,22 @@
     </td>
     <% end %>
 </table>
+<h3>OpenMind Users for <%= h current_user.enterprise.name %></h3>
+<table>
+    <tr>
+        <th>
+            Name
+        </th>
+        <th>
+            Email
+        </th>
+        <th>
+            User Since
+        </th>
+        <th>
+            Active
+        </th>
+    </tr>
+    <%= render :partial => 'user', :collection => current_user.enterprise.users %>
+</table>
+
