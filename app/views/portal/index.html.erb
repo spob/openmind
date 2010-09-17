@@ -8,7 +8,8 @@
     <%= text_field_with_auto_complete :user, :email, {}, {:method => :get} %>
 </p>
 <p>
-	<label></label>
+    <label>
+    </label>
     <%= submit_tag 'View', html_options = {:name => nil, :class=> "button"} %>
     <%= link_to 'Reset',
     portal_index_path(:reset => "Y"),
@@ -143,6 +144,9 @@
             Case Number
         </th>
         <th>
+            Summary
+        </th>
+        <th>
             Opened At
         </th>
         <th>
@@ -190,4 +194,3 @@
     </tr>
     <%= render :partial => 'user', :collection => current_user.enterprise.users %>
 </table>
-
