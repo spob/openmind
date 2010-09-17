@@ -1,0 +1,17 @@
+<tr>
+    <td>
+        <%= strike_text(h(user.full_name), !user.active) %>
+    </td>
+    <td>
+        <%= strike_text(h(user.email), !user.active) %>
+    </td>
+    <td>
+        <%= strike_text(om_date(user.created_at), !user.active) %>
+    </td>
+    <td>
+        <% if user.active %>
+        <%= theme_image_tag("icons/16x16/16-check.png", options = {:alt=>"active"}) %>
+        <% else %>
+        &nbsp;<% end %>
+    </td>
+</tr>
