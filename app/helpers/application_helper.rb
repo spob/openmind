@@ -24,7 +24,7 @@ module ApplicationHelper
       ["Announcements",   announcements_path ,  ["sysadmin", "prodmgr"]  ],
       ["Attachments",     attachments_path,     ["sysadmin", "prodmgr", "mediator"]  ],
       ["Polls",           polls_path,           ],
-      ["Partner Portal",  portal_index_path,          ],
+      ["Portal",          portal_index_path,          ],
       ["Admin",           periodic_jobs_path,    ["sysadmin"],  ["lookup_codes", "link_sets"] ],
     ]
     
@@ -49,7 +49,7 @@ module ApplicationHelper
       end
       
       # Special case for partner portal
-      accessible = false if accessible && menu[0] == "Partner Portal" && (!logged_in? || !current_user.try(:can_view_portal?))
+      accessible = false if accessible && menu[0] == "Portal" && (!logged_in? || !current_user.try(:can_view_portal?))
       
       if accessible then          # should the user see the menu?
         clazz = nil
