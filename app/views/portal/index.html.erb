@@ -176,7 +176,7 @@
     </td>
     <% end %>
 </table>
-<h3>OpenMind Users for <%= h @user.enterprise.name %></h3>
+<h3>OpenMind Users for <%= @user ? h (@user.enterprise.name) : "&mdash;Unknown Enterprise&mdash;" %></h3>
 <table>
     <tr>
         <th>
