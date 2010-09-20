@@ -165,11 +165,11 @@ class ReleasesController < ApplicationController
   def update
     @release = Release.find(params[:id])
     Release.transaction do
-      @release.release_dependencies.clear
-      if params[:release][:release_dependencies]
-        for release_id in params[:release][:release_dependencies]
-          depends_upon = Release.find(release_id.to_i)
-          @release.release_dependencies.create!(:depends_on => depends_upon)
+      @release.releases_dependant_on_this_release_dependencies.clear
+      if params[:release][:releases_dependant_on_this_release]
+        for release_id in params[:release][:releases_dependant_on_this_release]
+          dependent_release = Release.find(release_id.to_i)
+          @release.releases_dependant_on_this_release_dependencies.create!(:release => dependent_release)
         end
       end
       @release.description = params[:release][:description]

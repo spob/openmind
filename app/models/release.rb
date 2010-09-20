@@ -30,6 +30,11 @@ class Release < ActiveRecord::Base
   :conditions => ["processed_at is null"],
   :class_name => "ReleaseChangeLog",
   :order => "id ASC"
+  has_many :releases_dependant_on_this_release_dependencies, 
+  :foreign_key => 'depends_on_id',
+  :class_name => "ReleaseDependency", :dependent => :destroy
+  has_many :releases_dependant_on_this_release, :class_name => "Release",
+  :finder_sql => 'select r.* from releases r inner join release_dependencies rd on r.id = rd.release_id where rd.depends_on_id = #{id}'
   has_many :release_dependencies, :dependent => :destroy
   has_many :dependent_releases, :source => 'depends_on', :through => :release_dependencies, :order => "releases.product_id ASC"
   belongs_to :product
