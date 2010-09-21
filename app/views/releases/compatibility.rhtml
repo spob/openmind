@@ -3,7 +3,7 @@
 <%= render :partial => "compatibility_tab_menu" %>
 <div id="tabBody" style="position:relative; padding-top:15px;">
     <h1><%= theme_image_tag("icons/32x32/productReleases.png", options = {:alt=>"Roadmap"}) %>Compatibility to <%= h(@root_product.name) %></h1>
-    <% @root_product.releases.reverse.find_all{|r| r.releases_dependant_on_this_release_dependencies.present? && Release.released_release_statuses.include? r.release_status}.each do |r| %>
+    <% @root_product.releases.reverse.find_all{|r| r.releases_dependant_on_this_release_dependencies.present? && Release.released_release_statuses.include?(r.release_status)}.each do |r| %>
     <h4><%= h(@root_product.name) %> <%= link_to h(r.version), release_path(r) %></h4>
     <table>
         <tr>
