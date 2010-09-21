@@ -51,6 +51,8 @@ class Release < ActiveRecord::Base
   xss_terminate :except => [:description]
   
   before_validation :handle_blank_external_release_id
+    
+  named_scope :by_reverse_date, :order => "release_date DESC"
   
   
   def self.list(page, product_id, per_page)

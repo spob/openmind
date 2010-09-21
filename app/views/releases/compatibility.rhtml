@@ -1,0 +1,30 @@
+<% title "Compatibility" %>
+<%= error_messages_for 'release' %>
+<%= render :partial => "compatibility_tab_menu" %>
+<div id="tabBody" style="position:relative; padding-top:15px;">
+    <h1><%= theme_image_tag("icons/32x32/productReleases.png", options = {:alt=>"Roadmap"}) %>Compatibility to <%= h(@root_product.name) %></h1>
+    <% @root_product.releases.reverse.find_all{|r| r.releases_dependant_on_this_release_dependencies.present? }.each do |r| %>
+    <h4><%= h(@root_product.name) %> <%= link_to h(r.version), release_path(r) %> <%= r.id %></h4>
+    <table>
+        <tr>
+            <th>
+                Product
+            </th>
+			<th>
+				Compatible Version(s)
+			</th>
+        </tr>
+        <% Product.find(:all, :conditions => ['id in (?)', r.releases_dependant_on_this_release.collect(&:product)], :order => 'name ASC').each do |p| %>
+		<tr>
+			<td>
+				<%= link_to h(p.name), product_path(p) %> <%= p.id %>
+			</td>
+			<td>
+				<%= r.releases_dependant_on_this_release.find_all{|x| x.product_id == p.id}.sort_by{|x| x.release_date}.map{|x| link_to(h(x.version), release_path(x))}.join(", ") %>
+			</td>
+		</tr>
+        <% end %>
+    </table>
+	<br />
+    <% end %>
+</div>

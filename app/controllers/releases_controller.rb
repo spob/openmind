@@ -75,6 +75,10 @@ class ReleasesController < ApplicationController
     end
   end
   
+  def compatibility
+    @root_product = Product.find_by_name(APP_CONFIG['root_compatibility_product'])
+  end
+  
   def preview
     render :layout => false
   end

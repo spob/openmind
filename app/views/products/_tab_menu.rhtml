@@ -1,12 +1,24 @@
 <div id="tabs">
-  <ul class="tabs">
-    <li><%= link_to "Roadmap", list_releases_path,
-        html_options = {
-        :onmouseover => "Tip('View roadmap')",
-        :method => :get } %></li>
-    <li class="selected"><%= link_to "Products", products_path,
-        html_options = {
-        :onmouseover => "Tip('View products')" } %></li>
-  </ul>
+    <ul class="tabs">
+        <li>
+            <%= link_to "Roadmap", list_releases_path,
+            html_options = {
+            :onmouseover => "Tip('View roadmap')",
+            :method => :get } %>
+        </li>
+        <li class="selected">
+            <%= link_to "Products", products_path,
+            html_options = {
+            :onmouseover => "Tip('View products')" } %>
+        </li>
+        <% if APP_CONFIG['root_compatibility_product'] %>
+        <li>
+            <%= link_to "Compatibility", compatibility_releases_path,
+            html_options = {
+            :onmouseover => "Tip('View release compatibility')" } %>
+        </li>
+        <% end %>
+    </ul>
 </div>
-<div id="menuline"></div>
+<div id="menuline">
+</div>

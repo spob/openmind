@@ -35,7 +35,8 @@ ActionController::Routing::Routes.draw do |map|
   :collection => {:auto_complete_for_user_email => :get }
   map.resources :products
   map.resources :releases, :member => { :commit => :post },
-  :collection => { :preview => :get, :list => :get, :check_for_updates => :get }
+  :collection => { :preview => :get, :list => :get, :check_for_updates => :get, 
+  :compatibility => :get }
   map.resources :topics, :collection => { :preview => :get, :search => :get,
     :tag => :get }, :member => {:rate => :post, :toggle_status => :put}
   map.resources :user_logons
