@@ -73,3 +73,5 @@ show_portal_for_enterprise_types: (Scribe,Demo)
 # A list of enterprise type lookup codes, separated by commas, within parens, that should be considered GA
 allow_email_override_for_enterprise_types: (Scribe)
 
+# in relationship to this product
+root_compatibility_product: Insight
