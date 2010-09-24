@@ -20,20 +20,14 @@
 		<br />
 		<% end %>
         <% unless release_item.release_dependencies.empty? %>
-        &nbsp;
             <b>Compatible With:</b>
             <% for product in Product.find(:all, :conditions => [ "id in (?)", release_item.dependent_releases.collect(&:product_id)]) %>
-            <%= product.name %> (<% first = true %>
-            <% for version in release_item.dependent_releases.find_all_by_product_id(product.id, :order => 'releases.release_date') %>
-            <%= ", " unless first %>
-            <% first = false %>
-            <%= version.version %>
-            <% end %>
-            )
+            <%= h product.name %>
+			(<%= release_item.dependent_releases.find_all_by_product_id(product.id, :order => 'releases.release_date').map{|r| link_to(h(r.version), release_path(r))}.join(", ") %>)
             <br/>
             <% end %>
 		<% end %>
-        &nbsp;<% if !release_item.ideas.empty? %>
+        <% if !release_item.ideas.empty? %>
         <b>Scheduled Ideas:</b>
         <br/>
         <ul class="releases">
