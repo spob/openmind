@@ -32,7 +32,7 @@ class IdeasController < ApplicationController
         :title => :title,
         :description => :formatted_description,
         :link => Proc.new{|idea| url_for(:controller => 'ideas',
-          :action => 'show', :id => idea.id)}
+          :action => 'show', :id => idea)}
       }
     }
   end
@@ -258,7 +258,7 @@ class IdeasController < ApplicationController
       generate_change_log(original_idea, @idea)
       
       flash[:notice] = "Idea number #{@idea.id} was successfully updated."      
-      redirect_to :action => 'show', :id => @idea.id
+      redirect_to :action => 'show', :id => @idea
     else
       render :action => 'edit'
     end
@@ -429,7 +429,7 @@ class IdeasController < ApplicationController
   def authorize_edit idea
     if !can_edit_idea? idea
       flash[:notice] = "You are not authorized to edit idea number #{idea.id}"      
-      redirect_to :action => 'show', :id => idea.id
+      redirect_to :action => 'show', :id => idea
     end
   end
   
