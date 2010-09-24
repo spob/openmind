@@ -55,6 +55,14 @@
             <%= link_to @release.download_url, @release.download_url, :popup => true %>
         </p>
         <% end %>
+        <% unless @release.release_notes.blank? %>
+        <p>
+            <label for="release_notes">
+                Release Notes URL:
+            </label>
+            <%= link_to @release.release_notes, @release.release_notes, :popup => true %>
+        </p>
+        <% end %>
         <p>
             <label for="ideas">
                 Scheduled Ideas:

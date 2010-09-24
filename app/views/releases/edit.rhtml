@@ -59,6 +59,12 @@
             <%= form.text_field :download_url, { :size => 80, :maxlength => 300 } %>
         </p>
         <p>
+            <label for="release_notes">
+                Release Notes URL:
+            </label>
+            <%= form.text_field :release_notes, { :size => 80, :maxlength => 255 } %>
+        </p>
+        <p>
             <label>
                 External Release ID:
             </label>
