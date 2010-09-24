@@ -16,7 +16,7 @@ class PortalController < ApplicationController
       @technical_consultants = PortalUserOrgMap.portal_reseller_orgs.by_email(session[:portal_email]).collect{ |uo| uo.portal_org.portal_certified_consultants.technical }.flatten
       @sales_consultants = PortalUserOrgMap.portal_reseller_orgs.by_email(session[:portal_email]).collect{ |uo| uo.portal_org.portal_certified_consultants.sales }.flatten
       @nfrs = PortalUserOrgMap.portal_reseller_orgs.by_email(session[:portal_email]).collect{ |uo| uo.portal_org.portal_nfrs }.flatten
-      @tickets = PortalUserOrgMap.by_email(session[:portal_email]).collect{ |uo| uo.portal_org.portal_support_incidents }.flatten
+      @tickets = PortalUserOrgMap.by_email(session[:portal_email]).collect{ |uo| uo.portal_org.portal_support_incidents }.flatten.sort{|x,y| y.opened_at <=> x.opened_at }
       @user = User.find_by_email(session[:portal_email])
       @users = @user.enterprise.users if @user
       @users ||= []
