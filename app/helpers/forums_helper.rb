@@ -55,7 +55,7 @@ module ForumsHelper
     author = user_display_name topic.last_comment.user
     author = boldify(author) if topic.unread_comment?(current_user)
     "#{author} wrote \"#{link_to truncate(StringUtils.strip_html(comment), :length => 40),
-    topic_path(topic.id, :anchor => topic.last_comment.id)}\"<br/>#{om_date_time topic.last_comment.created_at}"
+    topic_path(topic, :anchor => topic.last_comment.id)}\"<br/>#{om_date_time topic.last_comment.created_at}"
   end
   
 

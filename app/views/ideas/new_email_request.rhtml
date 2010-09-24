@@ -38,7 +38,7 @@
       <%= submit_tag 'Send', options = {:class=> "button", 
         :disable_with => "Please wait...",
         :onmouseover => "Tip('Forward idea #{@idea_email_request.idea.id}' as an email)" } %>
-      <%= link_to 'Cancel', options = {:action => 'show', :id => @idea_email_request.idea.id}, 
+      <%= link_to 'Cancel', options = {:action => 'show', :id => @idea_email_request.idea}, 
         html_options = { :class=> "button", 
         :onmouseover => "Tip('Do not send this email')"    } %>
     </p>
