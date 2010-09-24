@@ -44,6 +44,7 @@
             <% if @latest_release[release] %>
             <%= link_to(h(@latest_release[release].try(:version)), @latest_release[release]) %>
             <%= download_icon(@latest_release[release]) %>
+            <%= release_notes_icon(@latest_release[release]) %>
             <% else %>
             You are using the latest version<% end %>
         </td>

@@ -21,6 +21,14 @@ module ReleasesHelper
     end    
   end
   
+  def release_notes_icon(release)
+    unless release.release_notes.nil? or release.release_notes.strip.empty? 
+      link_to theme_image_tag("icons/16x16/book.png", :alt=>"view release notes", :title=> "view release notes"),
+      release.release_notes,
+      { :onmouseover => "Tip('View release notes for  #{release.version}')"}
+    end    
+  end
+  
   def show_watch_icon release
     if logged_in?
       if release.product.watchers.include? current_user
