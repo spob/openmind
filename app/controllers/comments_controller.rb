@@ -50,7 +50,7 @@ class CommentsController < ApplicationController
     unless @comment.can_edit?(current_user, prodmgr?)
       flash[:error] = "You do not have priveleges to edit this comment"
       if @comment.class.to_s == 'TopicComment'
-        redirect_to topic_path(@topic.id)
+        redirect_to topic_path(@topic)
       else
         redirect_to :controller => 'ideas', :action => 'show', :id => @idea, 
         :selected_tab => "COMMENTS"
@@ -70,26 +70,26 @@ class CommentsController < ApplicationController
     @comment = TopicComment.find(params[:id])
     unless @comment.can_endorse? current_user
       flash[:error] = "Cannot endorse this comment"
-      redirect_to topic_path(@comment.topic.id)
+      redirect_to topic_path(@comment.topic)
       return
     end
     @comment.endorser = current_user
     @comment.save!
     flash[:notice] = "Comment has been endorsed"
-    redirect_to topic_path(@comment.topic.id, :anchor => @comment.id)
+    redirect_to topic_path(@comment.topic, :anchor => @comment.id)
   end
   
   def unendorse
     @comment = TopicComment.find(params[:id])
     unless @comment.can_unendorse? current_user
       flash[:error] = "Cannot unendorse this comment"
-      redirect_to topic_path(@comment.topic.id, :anchor => @comment.id)
+      redirect_to topic_path(@comment.topic, :anchor => @comment.id)
       return
     end
     @comment.endorser = nil
     @comment.save!
     flash[:notice] = "Comment endorsement has been removed"
-    redirect_to topic_path(@comment.topic.id, :anchor => @comment.id)
+    redirect_to topic_path(@comment.topic, :anchor => @comment.id)
   end
   
   def privatize
@@ -115,9 +115,9 @@ class CommentsController < ApplicationController
     if @comment.update_attributes(params[:comment])
       flash[:notice] = 'Comment was successfully updated.'
       if @comment.class.to_s == "IdeaComment"
-        redirect_to :controller => :ideas, :action => :show, :id => @comment.idea.id
+        redirect_to :controller => :ideas, :action => :show, :id => @comment.idea
       else
-        redirect_to topic_path(@comment.topic.id)
+        redirect_to topic_path(@comment.topic)
       end
     else
       render :action => 'edit'
@@ -140,7 +140,7 @@ class CommentsController < ApplicationController
       comment.topic.forum.power_user_group.save
       flash[:notice] = "User has been promoted to a power user for this forum"
     end
-    redirect_to topic_path(comment.topic.id, :anchor => comment.id)
+    redirect_to topic_path(comment.topic, :anchor => comment.id)
   end
   
   private
@@ -198,7 +198,7 @@ class CommentsController < ApplicationController
       if params[:attach] == 'yes'
         redirect_to attach_comment_path(@comment)
       else
-        redirect_to topic_path(@topic.id)
+        redirect_to topic_path(@topic)
       end
     else
       new
@@ -210,12 +210,12 @@ class CommentsController < ApplicationController
     @comment = TopicComment.find(id)
     unless @comment.topic.forum.mediators.include? current_user
       flash[:error] = "Cannot make this comment #{private ? "private" : "public"}"
-      redirect_to topic_path(@comment.topic.id)
+      redirect_to topic_path(@comment.topic)
       return
     end
     @comment.private = private
     @comment.save!
     flash[:notice] = "Comment has been made #{private ? "private" : "public"}"
-    redirect_to topic_path(@comment.topic.id, :anchor => @comment.id)
+    redirect_to topic_path(@comment.topic, :anchor => @comment.id)
   end
 end
