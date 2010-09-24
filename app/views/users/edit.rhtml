@@ -5,6 +5,7 @@
 
 <%= render :partial => "tab_menu"%>
 <div id="tabBody" style="position:relative; padding-top:15px;">
+<%= error_messages_for 'user' %>
 <% form_for :user, :url => { :action => "update", :id => @user } do |form| %>
   <div class="formTitle"><%=theme_image_tag("icons/16x16/userEdit.png", :alt=>"Edit User")%>Edit User</div>
   <div class="cssform widerLabel" style="margin-top:0;">
