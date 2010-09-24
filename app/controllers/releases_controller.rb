@@ -181,6 +181,7 @@ class ReleasesController < ApplicationController
       @release.release_status_id = params[:release][:release_status_id]
       @release.version = params[:release][:version]
       @release.download_url = params[:release][:download_url]
+      @release.release_notes = params[:release][:release_notes]
       @release.external_release_id = params[:release][:external_release_id]
       @release.release_date = params[:release][:release_date]
       calc_change_history @release
@@ -227,6 +228,8 @@ class ReleasesController < ApplicationController
     release.changes['version'] if release.version_changed?
     add_change_history_from_changes release, "Download URL",
     release.changes['download_url'] if release.download_url_changed?
+    add_change_history_from_changes release, "Release Notes URL",
+    release.changes['release_notes'] if release.release_notes_changed?
   end
   
   def add_change_history_old_new release, label, old_value, new_value
