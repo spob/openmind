@@ -1,0 +1,26 @@
+<div id="sidebar1" class="sidebar">
+  <% cache(:controller => "announcements", :action => "top_five",
+    :user_id => (logged_in? ? current_user.id : -1)) do %>
+    <div class="sideBarTitle">Announcements</div>
+    <div class="sideBarItem">
+      <div class="unorderListNavContainer">
+        <ul class="navlist2">
+          <% for announcement in Announcement.list(1, 5, 5) %>
+            <li>
+              <%= announcement_link announcement %>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+  <% end %>
+
+  <%=render(:partial => "link_sets/link_sidebar", :locals => {:link_set => LinkSet.portal_link_set(current_user)})%>
+
+  <% unless @forum.nil? or !@forum.public? %>
+    <% tiptxt= "Subscribe to be notified of postings in this forum" %>
+    <a href="<%= url_for(:action => 'rss', :id => @forum, :only_path => false) %>" onmouseover="Tip('<%= tiptxt %>')"><%= theme_image_tag("icons/14x14/feed-icon-14x14.png", :border=>0) %></a>
+    <span style="font-size:0.75em;" onmouseover="Tip('<%= tiptxt %>')">Subscribe via RSS</span>
+  <% end %>
+  <div style="clear: left"></div>
+</div>

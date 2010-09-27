@@ -1,4 +1,15 @@
+<%content_for :head do -%>     
+  <%= theme_stylesheet_link_tag 'sideBarRight' %>
+  <%= javascript_include_tag "tablecloth" %>
+<%end%>
+<%content_for :bodyTag do -%>
+  <%= set_focus_to_id 'user_email' -%>
+<%end%>
 <h1>Scribe Portal</h1>
+
+<%content_for :sidebar1 do -%>
+  <%=render(:partial => "sidebar1", :object => @current_user)%>
+<%end%>  
 <% if current_user && current_user.can_specify_email_in_portal? %>
 <% form_for :user, :url => portal_index_path, :html => { :class => 'cssform searchform' } do |f| %>
 <p>
