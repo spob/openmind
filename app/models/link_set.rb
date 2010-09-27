@@ -38,6 +38,12 @@ class LinkSet < ActiveRecord::Base
     end
   end
   
+  def self.portal_link_set user
+    link_set = LinkSet.find_by_name("Portal_#{user.enterprise.enterprise_type.short_name}")
+    link_set = LinkSet.find_by_name("Portal_Default") unless link_set
+    link_set
+  end
+  
   def unset_default_link_sets
     # if this link set is set to true, then unset the previous default link sets
     if self.default_link_set
