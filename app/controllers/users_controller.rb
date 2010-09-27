@@ -29,9 +29,10 @@ class UsersController < ApplicationController
   def search
     session[:users_start_filter] = "All" 
     session[:users_end_filter] = "All"
-    session[:users_search] = params[:search]
+    session[:users_search] = (params[:user] ? params[:user][:email] : "")
+    @user = User.new(:email => session[:users_search])
 #    params[:search] = StringUtils.sanitize_search_terms params[:search]
-    if params[:search].empty?
+    if @user.email.blank?
       list
       render :list
       return
@@ -39,7 +40,7 @@ class UsersController < ApplicationController
     
     set_start_stop_tags
     begin
-      search_results = User.search_for_ids params[:search], :order => :email
+      search_results = User.search_for_ids @user.email, :order => :email
 #      search_results = User.find_by_solr(params[:search], :lazy => true).docs.collect(&:id)
     rescue RuntimeError => e
       flash[:error] = "An error occurred while executing your search. Perhaps there is a problem with the syntax of your search string."
@@ -163,6 +164,14 @@ class UsersController < ApplicationController
         redirect_back_or_default home_path
       end
     end
+  end
+  
+  def auto_complete_for_user_email
+    search_txt = "%#{params[:user][:email]}%"
+    @users = User.find(:all, :conditions => ['email LIKE ? or first_name like ? or last_name like ?', 
+    search_txt, search_txt, search_txt],
+    :order => 'email ASC', :limit => 10) 
+    render :inline => "<%= auto_complete_result(@users, 'email') %>"
   end
   
   def new
