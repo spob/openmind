@@ -16,7 +16,7 @@ module MigrationHelpers
   private
   
   def constraint_name from_table, from_column
-    "fk_#{from_table}_#{from_column}"
+    "fk_#{from_table}_#{from_column}"[0..63]
   end
   
 end
