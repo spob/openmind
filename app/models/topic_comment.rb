@@ -30,6 +30,9 @@ class TopicComment < Comment
   before_update :update_topic_commented_at_on_update
   
   validates_presence_of :topic_id
+  
+  named_scope :by_moderator, :joins => {:topic => { :forum => :mediators }},
+    :conditions => [ "comments.user_id = forum_mediators.user_id" ]
 
   def update_topic_commented_at_on_create
     unless private
