@@ -93,7 +93,14 @@ eos
   end
   
   def days_comment_pending
-    comment = earliest_pending_comment || comments.first
+    comment = earliest_pending_comment 
+    if comment.nil? 
+      if comments.by_mediator.empty?
+        comment = comments.first
+      else
+        return 0
+      end
+    end
      (Time.zone.now - comment.created_at)/(60.0*60.0*24.0)
   end
   
