@@ -17,13 +17,13 @@
 
 class Topic < ActiveRecord::Base  
   has_friendly_id :title, :use_slug => true,
-    # remove accents and other diacritics from Western characters
-    :approximate_ascii => true,
-    # don't use slugs longer than 50 chars
-    :max_length => 50
+  # remove accents and other diacritics from Western characters
+  :approximate_ascii => true,
+  # don't use slugs longer than 50 chars
+  :max_length => 50
   before_update :set_close_date
   acts_as_taggable
-#  acts_as_solr :fields => [:title, {:created_at => :date}]
+  #  acts_as_solr :fields => [:title, {:created_at => :date}]
   
   define_index do
     indexes title
@@ -93,12 +93,8 @@ eos
   end
   
   def days_comment_pending
-    comment = earliest_pending_comment
-    if comment.nil? 
-      0
-    else
-      (Time.zone.now - comment.created_at)/(60.0*60.0*24.0)
-    end
+    comment = earliest_pending_comment || comments.first
+     (Time.zone.now - comment.created_at)/(60.0*60.0*24.0)
   end
   
   def set_close_date
