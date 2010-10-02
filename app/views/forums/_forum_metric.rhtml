@@ -11,12 +11,15 @@
     <tr>
       <th rowspan="2">Moderator</th>
       <th colspan="3">Open Topics</th>
+      <th colspan="2">Pending Response Days</th>
       <th colspan="8">Closed Topics in Week Beginning</th>
     </tr>
     <tr>
       <th>Count</th>
       <th>Average Days Open</th>
       <th>Oldest Days Open</th>
+      <th>Average</th>
+      <th>Oldest</th>
       <% (1..ForumsController.week_size).each do |i| %>
         <th><%= @weeks[i].strftime("%b %d") %> </th>
       <% end %>

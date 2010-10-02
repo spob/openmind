@@ -82,6 +82,25 @@ eos
   
   attr_accessor :comment_body
   
+  # the earliest comment that is pending a response from a moderator
+  def earliest_pending_comment
+    last_moderated_comment = self.comments.by_moderator.sort_by{|c| c.id}.last
+    if last_moderated_comment.nil?
+      nil
+    else
+      self.comments.find_all{|c| c.id > last_moderated_comment.id}.sort_by{|c| c.id}.first
+    end
+  end
+  
+  def days_comment_pending
+    comment = earliest_pending_comment
+    if comment.nil? 
+      0
+    else
+      (Time.zone.now - comment.created_at)/(60.0*60.0*24.0)
+    end
+  end
+  
   def set_close_date
     if !open_status and closed_at.nil?
       self.update_attribute(:closed_at, Time.zone.now)
