@@ -95,7 +95,7 @@ eos
   def days_comment_pending
     comment = earliest_pending_comment 
     if comment.nil? 
-      if comments.by_mediator.empty?
+      if comments.by_moderator.empty?
         comment = comments.first
       else
         return 0
