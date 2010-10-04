@@ -43,4 +43,10 @@
       <br />
     <% end %>
   </p>
+  <% unless APP_CONFIG['show_portal_for_enterprise_types'].blank? %>
+  <p>
+    <label>Can View Portal?:</label>
+    <%= @enterprise.view_portal ? "Yes" : "No" %>
+  </p>
+  <% end %>
 </div>

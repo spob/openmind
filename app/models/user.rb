@@ -328,7 +328,7 @@ class User < ActiveRecord::Base
   end
   
   def can_view_portal?
-    portal_enterprise_types.include? self.enterprise.enterprise_type
+    portal_enterprise_types.include?(self.enterprise.enterprise_type) && self.enterprise.view_portal
   end
   
   def can_specify_email_in_portal?
