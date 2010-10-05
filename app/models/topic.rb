@@ -52,6 +52,8 @@ class Topic < ActiveRecord::Base
   
   named_scope :by_forum,
   lambda{|forum_id| {:conditions => ['forum_id = ? or ? is null', forum_id, forum_id]} }
+  named_scope :by_enterprise,
+  lambda{|enterprise_id| {:joins => { :owner => :enterprise}, :conditions => { :enterprises => {:id => enterprise_id}}} }
   
   named_scope :tracked, :joins => [:forum], :conditions => {:forums => { :tracked => 1 }}
   named_scope :closed_after,

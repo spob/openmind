@@ -1,12 +1,21 @@
 <tr>
     <td>
+        <% if forum.nil? %>
+        <%= h mediator_forum_metric.name %>
+        <% else %>
         <%= user_display_name(mediator_forum_metric) %>
+        <% end %>
     </td>
-	<% fetch_metric_topics forum, mediator_forum_metric %>
+    <% fetch_metric_topics forum, mediator_forum_metric %>
     <td>
-        <%= link_to @owned_open_topics.size, forum_path(forum, :show_open=>'yes',
-        :show_closed=>'no', :owner_filter=>(mediator_forum_metric.id.nil? ? 0 : mediator_forum_metric.id)) unless forum.id.nil? %>
-        <%= @owned_open_topics.size if forum.id.nil? %>
+        <% if forum.nil? || forum.id.nil? %>
+        <%= @owned_open_topics.size %>
+        <% else %>
+        <% if !mediator_forum_metric.nil? %>
+        <%= link_to @owned_open_topics.size, forum_path(forum, :show_open=>'yes', :show_closed=>'no', :owner_filter=> mediator_forum_metric.id) %>
+        <% else %>
+        0<% end %>
+        <% end %>
     </td>
     <td>
         <%= format("%.1f",
@@ -31,10 +40,13 @@
     <% (1..ForumsController.week_size).each do |i| %>
     <td>
         <% count = @owned_closed_topics.find_all{|t| t.closed_at <= @weeks[i-1] and t.closed_at > @weeks[i]}.size %>
+        <% if forum && forum.id && mediator_forum_metric && mediator_forum_metric.id %>
         <%= link_to count,
         forum_path(forum, :show_open=>'no',
-        :show_closed=>'yes', :owner_filter=>(mediator_forum_metric.id.nil? ? 0 : mediator_forum_metric.id)) unless forum.id.nil? %>
-        <%= count if forum.id.nil? %>
+        :show_closed=>'yes', :owner_filter=> mediator_forum_metric.id) %>
+        <% else %>
+        <%= count %>
+        <% end %>
     </td>
     <% end %>
 </tr>

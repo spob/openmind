@@ -3,10 +3,16 @@ module ForumsHelper
     sysadmin? or forum.can_edit? current_user unless current_user == :false
   end  
   
-  def fetch_metric_topics forum, user   
-    if user
-      @owned_open_topics = user.owned_topics.by_forum(forum.id).tracked.open.sort_by{|t| t.days_open * -1}
-      @owned_closed_topics = user.owned_topics.by_forum(forum.id).tracked.closed.closed_after(@weeks[8])
+  def fetch_metric_topics forum, user_or_enterprise
+    if user_or_enterprise 
+      if user_or_enterprise.instance_of? Enterprise
+        @owned_open_topics = Topic.owned.by_enterprise(user_or_enterprise.id).tracked.open.sort_by{|t| t.days_open * -1} 
+        @owned_closed_topics = Topic.owned.by_enterprise(user_or_enterprise.id).tracked.closed.closed_after(@weeks[8])
+      else
+        # it's based on user
+        @owned_open_topics = user_or_enterprise.owned_topics.by_forum(forum.id).tracked.open.sort_by{|t| t.days_open * -1}
+        @owned_closed_topics = user_or_enterprise.owned_topics.by_forum(forum.id).tracked.closed.closed_after(@weeks[8])
+      end
     else
       @owned_open_topics = Topic.unowned.by_forum(forum.id).tracked.open.sort_by{|t| t.days_open * -1} 
       @owned_closed_topics = Topic.unowned.by_forum(forum.id).tracked.closed.closed_after(@weeks[8])
@@ -34,7 +40,7 @@ module ForumsHelper
   end
   
   def dummy_all_forum
-    forum = Forum.new(:name => "All Forums")
+    forum = Forum.new(:name => "All Topics By Moderator")
     forum.mediators = User.mediators
     forum
   end
