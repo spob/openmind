@@ -73,5 +73,9 @@ show_portal_for_enterprise_types: (Scribe,Demo)
 # A list of enterprise type lookup codes, separated by commas, within parens, that should be considered GA
 allow_email_override_for_enterprise_types: (Scribe)
 
+
+# Can new enterprises view the portal by default? Valid values are "Y" or "N" (without quotes)
+new_enterprises_view_portal_default: Y
+
 # in relationship to this product
 root_compatibility_product: Insight
