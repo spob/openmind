@@ -2,7 +2,23 @@ module ForumsHelper
   def can_edit? forum
     sysadmin? or forum.can_edit? current_user unless current_user == :false
   end  
-    
+  
+  def fetch_metric_topics forum, user_or_enterprise
+    if user_or_enterprise 
+      if user_or_enterprise.instance_of? Enterprise
+        @owned_open_topics = Topic.owned.by_enterprise(user_or_enterprise.id).tracked.open.sort_by{|t| t.days_open * -1} 
+        @owned_closed_topics = Topic.owned.by_enterprise(user_or_enterprise.id).tracked.closed.closed_after(@weeks[8])
+      else
+        # it's based on user
+        @owned_open_topics = user_or_enterprise.owned_topics.by_forum(forum.id).tracked.open.sort_by{|t| t.days_open * -1}
+        @owned_closed_topics = user_or_enterprise.owned_topics.by_forum(forum.id).tracked.closed.closed_after(@weeks[8])
+      end
+    else
+      @owned_open_topics = Topic.unowned.by_forum(forum.id).tracked.open.sort_by{|t| t.days_open * -1} 
+      @owned_closed_topics = Topic.unowned.by_forum(forum.id).tracked.closed.closed_after(@weeks[8])
+    end
+  end
+  
   def last_forum_post forum
     last_comment = forum.comments.public.most_recent.first unless forum.mediators.include? current_user
     last_comment = forum.comments.most_recent.first if forum.mediators.include? current_user
@@ -10,8 +26,8 @@ module ForumsHelper
     subject = ""
     subject += "RE: " if forum.comments.size > 1
     subject += link_to(last_comment.topic.title, 
-      topic_path(last_comment.topic, :anchor => last_comment.id),
-      html_options = {:onmouseover => "Tip('Jump to this post')"})
+                       topic_path(last_comment.topic, :anchor => last_comment.id),
+    {:onmouseover => "Tip('Jump to this post')"})
     subject = boldify(subject) if last_comment.topic.unread_comment?(current_user)
     
     comment = last_comment.body
@@ -22,18 +38,18 @@ module ForumsHelper
     "#{subject}<br/>#{author} wrote \"#{truncate StringUtils.strip_html(comment), 
     :length => 40}\"<br/>#{om_date_time last_comment.created_at}"
   end
-
+  
   def dummy_all_forum
-    forum = Forum.new(:name => "All Forums")
+    forum = Forum.new(:name => "All Topics By Moderator")
     forum.mediators = User.mediators
     forum
   end
-
+  
   def dummy_unassigned_mediator
     user = User.new(:last_name => "Un-owned")
     user
   end
-
+  
   def mediator_owner_filter_list
     names = []
     names << ["All", -1]
@@ -46,7 +62,7 @@ module ForumsHelper
     names.sort!{|x,y| x[0].upcase <=> y[0].upcase }
     names
   end
-    
+  
   def last_topic_post topic
     return if topic.last_comment.nil?
     comment = topic.last_comment.body
@@ -58,79 +74,79 @@ module ForumsHelper
     topic_path(topic, :anchor => topic.last_comment.id)}\"<br/>#{om_date_time topic.last_comment.created_at}"
   end
   
-
+  
   def show_topic_watch_icon topic
     if current_user == :false
       link_to theme_image_tag("icons/24x24/watchAdd.png", 
-        :alt=>"Add watch", :title=> "add watch",
-        :onmouseover => "Tip('Watch this topic (requires login)')"), 
-        :url =>  create_topic_watch_watch_path(:id => topic),
-        :html => { }, 
-        :method => :post
+      :alt=>"Add watch", :title=> "add watch",
+      :onmouseover => "Tip('Watch this topic (requires login)')"), 
+      :url =>  create_topic_watch_watch_path(:id => topic),
+      :html => { }, 
+      :method => :post
     elsif topic.watchers.include? current_user
       link_to_remote theme_image_tag("icons/24x24/watchRemove.png", 
-        :alt=>"Remove watch", :title=> "remove watch",
-        :onmouseover => "Tip('Stop watching this topic')"), 
-        :url =>  destroy_topic_watch_watch_path(:id => topic), 
-        :html => {  }, 
-        :method => :delete
+      :alt=>"Remove watch", :title=> "remove watch",
+      :onmouseover => "Tip('Stop watching this topic')"), 
+      :url =>  destroy_topic_watch_watch_path(:id => topic), 
+      :html => {  }, 
+      :method => :delete
     else
       link_to_remote theme_image_tag("icons/24x24/watchAdd.png", 
-        :alt=>"Add watch", :title=> "add watch",
-        :onmouseover => "Tip('Watch this topic')"), 
-        :url =>  create_topic_watch_watch_path(:id => topic),
-        :html => {  }, 
-        :method => :post
+      :alt=>"Add watch", :title=> "add watch",
+      :onmouseover => "Tip('Watch this topic')"), 
+      :url =>  create_topic_watch_watch_path(:id => topic),
+      :html => {  }, 
+      :method => :post
     end
   end
-
+  
   def types
     [
-      ["Forum (Any user can create new topics and add comments to existing topics)",  "forum"],
-      ["Blog (Only moderators can create new topics, all users can add comments to existing topics)",  "blog"],
-      ["Announcement (Only moderators can create new topics and add comments to existing topics)",  "announcement"]
+    ["Forum (Any user can create new topics and add comments to existing topics)",  "forum"],
+    ["Blog (Only moderators can create new topics, all users can add comments to existing topics)",  "blog"],
+    ["Announcement (Only moderators can create new topics and add comments to existing topics)",  "announcement"]
     ]
   end
   
-
+  
   def show_forum_watch_icon forum
     if current_user == :false
       link_to theme_image_tag("icons/24x24/watchAdd.png", 
-        :alt=>"Watch this forum and all topics within this forum (requires login)", :title=> "Watch this forum and all topics within this forum (requires login)",
-        :onmouseover => "Tip('Watch this forum and all topics within this forum (requires login)')"), 
-        create_forum_watch_watch_path(:id => forum),
-        :html => {  }, 
-        :method => :post
+      :alt=>"Watch this forum and all topics within this forum (requires login)", :title=> "Watch this forum and all topics within this forum (requires login)",
+      :onmouseover => "Tip('Watch this forum and all topics within this forum (requires login)')"), 
+      create_forum_watch_watch_path(:id => forum),
+      :html => {  }, 
+      :method => :post
     elsif forum.watchers.include? current_user
       link_to_remote theme_image_tag("icons/24x24/watchRemove.png", 
-        :alt=>"Don't automatically watch new topics in this forum", :title=> "Don't automatically watch new topics in this forum",
-        :onmouseover => "Tip('Don't automatically watch new topics in this forum')"), 
-        :url =>  destroy_forum_watch_watch_path(:id => forum), 
-        :html => {  }, 
-        :method => :delete
+      :alt=>"Don't automatically watch new topics in this forum", :title=> "Don't automatically watch new topics in this forum",
+      :onmouseover => "Tip('Don't automatically watch new topics in this forum')"), 
+      :url =>  destroy_forum_watch_watch_path(:id => forum), 
+      :html => {  }, 
+      :method => :delete
     else
       link_to_remote theme_image_tag("icons/24x24/watchAdd.png", 
-        :alt=>"Watch this forum and all topics within this forum", :title=> "Watch this forum and all topics within this forum",
-        :onmouseover => "Tip('Watch this forum and all topics within this forum')"), 
-        :url =>  create_forum_watch_watch_path(:id => forum),
-        :html => {  }, 
-        :method => :post
+      :alt=>"Watch this forum and all topics within this forum", :title=> "Watch this forum and all topics within this forum",
+      :onmouseover => "Tip('Watch this forum and all topics within this forum')"), 
+      :url =>  create_forum_watch_watch_path(:id => forum),
+      :html => {  }, 
+      :method => :post
     end
   end
-
-
+  
+  
   def show_forum_watch_button forum
     unless current_user == :false
       if forum.watchers.include? current_user
         link_to "Remove Forum Watch", 
-          destroy_forum_watch_watch_path(:id => forum), 
-          { :class => "button",
+        destroy_forum_watch_watch_path(:id => forum), 
+        { :class => "button",
           :onmouseover => "Tip('Don't automatically watch new topics in this forum')",
           :method => :delete                }
       else
         link_to "Add Forum Watch", 
-          create_forum_watch_watch_path(forum), 
-          { :class => "button",
+        create_forum_watch_watch_path(forum), 
+        { :class => "button",
           :onmouseover => "Tip('Watch this forum and all topics within this forum')",
           :method => :post                   }
       end
@@ -151,12 +167,12 @@ module ForumsHelper
     return "display:block;" if session[:forum_details_box_display] == "SHOW"
     return "display:none;"
   end
-
+  
   def get_tags forum
     if forum.nil?
       # Restrict tags for forums that the user has access to
       Topic.tag_counts(:limit => 100, :conditions => ["topics.id in (?)",
-          Forum.find(:all).find_all{|f| f.can_see? current_user}.collect(&:topics).flatten.collect(&:id)])
+      Forum.find(:all).find_all{|f| f.can_see? current_user}.collect(&:topics).flatten.collect(&:id)])
     else
       forum.topics.tag_counts(:limit => 100)
     end
