@@ -12,11 +12,11 @@ class PortalController < ApplicationController
       end
       session[:portal_email] ||= current_user.email
 #      @orgs = current_user.portal_orgs.collect(&:external_org_id)
-      @customers = PortalUserOrgMap.portal_end_customer_orgs.by_email(session[:portal_email]).collect{ |uo| uo.portal_org.portal_customers }.flatten
-      @technical_consultants = PortalUserOrgMap.portal_reseller_orgs.by_email(session[:portal_email]).collect{ |uo| uo.portal_org.portal_certified_consultants.technical }.flatten
-      @sales_consultants = PortalUserOrgMap.portal_reseller_orgs.by_email(session[:portal_email]).collect{ |uo| uo.portal_org.portal_certified_consultants.sales }.flatten
-      @nfrs = PortalUserOrgMap.portal_reseller_orgs.by_email(session[:portal_email]).collect{ |uo| uo.portal_org.portal_nfrs }.flatten
-      @tickets = PortalUserOrgMap.by_email(session[:portal_email]).collect{ |uo| uo.portal_org.portal_support_incidents }.flatten.sort{|x,y| y.opened_at <=> x.opened_at }
+      @customers = PortalUserOrgMap.active.portal_end_customer_orgs.by_email(session[:portal_email]).collect{ |uo| uo.portal_org.portal_customers }.flatten
+      @technical_consultants = PortalUserOrgMap.active.portal_reseller_orgs.by_email(session[:portal_email]).collect{ |uo| uo.portal_org.portal_certified_consultants.technical }.flatten
+      @sales_consultants = PortalUserOrgMap.active.portal_reseller_orgs.by_email(session[:portal_email]).collect{ |uo| uo.portal_org.portal_certified_consultants.sales }.flatten
+      @nfrs = PortalUserOrgMap.active.portal_reseller_orgs.by_email(session[:portal_email]).collect{ |uo| uo.portal_org.portal_nfrs }.flatten
+      @tickets = PortalUserOrgMap.active.by_email(session[:portal_email]).collect{ |uo| uo.portal_org.portal_support_incidents }.flatten.sort{|x,y| y.opened_at <=> x.opened_at }
       @user = User.find_by_email(session[:portal_email])
       @users = @user.enterprise.users if @user
       @users ||= []

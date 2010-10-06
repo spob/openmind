@@ -1,5 +1,6 @@
 class PortalUserOrgMap < ActiveRecord::Base
   belongs_to :portal_org
+  named_scope :active, :conditions => ["user_disabled_at IS NULL or user_disabled_at > ?", Time.now]
   named_scope :portal_end_customer_orgs, :conditions => { :org_type => 'E'}
   named_scope :portal_reseller_orgs, :conditions => { :org_type => 'R'}
   named_scope :by_org_id, lambda{|org_id|{:conditions => { :external_org_id => org_id }}}
@@ -21,5 +22,24 @@ where uo.portal_org_id is null
 eos
     
     ActiveRecord::Base.connection.execute(sql) 
+  end
+  
+  def self.disable_users
+    
+    sql = 
+<<-eos
+      select users.*
+from users
+where users.active = 1
+and exists
+( select null
+  from portal_user_org_maps as puo
+  where puo.email = users.email
+    and puo.user_disabled_at < now());
+eos
+    
+    User.find_by_sql(sql).each do |u|
+      u.update_attributes!(:active => false)
+    end
   end
 end
