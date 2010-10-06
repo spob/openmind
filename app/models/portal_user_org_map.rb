@@ -23,4 +23,23 @@ eos
     
     ActiveRecord::Base.connection.execute(sql) 
   end
+  
+  def self.disable_users
+    
+    sql = 
+<<-eos
+      select users.*
+from users
+where users.active = 1
+and exists
+( select null
+  from portal_user_org_maps as puo
+  where puo.email = users.email
+    and puo.user_disabled_at < now());
+eos
+    
+    User.find_by_sql(sql).each do |u|
+      u.update_attributes!(:active => false)
+    end
+  end
 end
