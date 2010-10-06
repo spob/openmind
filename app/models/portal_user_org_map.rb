@@ -1,5 +1,6 @@
 class PortalUserOrgMap < ActiveRecord::Base
   belongs_to :portal_org
+  named_scope :active, :conditions => ["user_disabled_at IS NULL or user_disabled_at > ?", Time.now]
   named_scope :portal_end_customer_orgs, :conditions => { :org_type => 'E'}
   named_scope :portal_reseller_orgs, :conditions => { :org_type => 'R'}
   named_scope :by_org_id, lambda{|org_id|{:conditions => { :external_org_id => org_id }}}
