@@ -63,7 +63,8 @@ Rails::Initializer.run do |config|
   config.load_paths += %W( #{RAILS_ROOT}/app/sweepers )
   
   # Force all environments to use the same logger level (by default production
-  # uses :info, the others :debug) config.log_level = :debug
+  # uses :info, the others :debug)
+  config.log_level = :info
   
   # Use the database for sessions instead of the file system (create the session
   # table with 'rake db:sessions:create')

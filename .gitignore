@@ -1,5 +1,6 @@
 solr/production
 log/*.log
+log/*.log.*
 tmp/**/*
 index/**/*
 coverage/**/*

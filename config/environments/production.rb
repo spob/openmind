@@ -10,6 +10,8 @@ config.cache_classes = true
 
 # Use a different logger for distributed setups
 # config.logger = SyslogLogger.new
+config.logger = Logger.new(config.log_path, 14, 5.megabyte)
+config.logger.level = Logger::INFO
 
 # Full error reports are disabled and caching is turned on
 config.action_controller.consider_all_requests_local = false
