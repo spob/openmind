@@ -96,7 +96,7 @@
                 Depends upon this release:
             </label>
             <% for product in Product.find(:all, :conditions => [ "id in (?)", @release.releases_dependant_on_this_release.collect(&:product_id)]) %>
-            <%= product.name %><%= product.id%>
+            <%= product.name %>
             (<%= @release.releases_dependant_on_this_release.find_all{|r| r.product_id == product.id}.sort_by{|x| x.release_date}.map{|r| link_to(h(r.version), release_path(r))}.join(", ") %>)
             <br/>
 			<% end %>

@@ -1,15 +1,15 @@
 <tr>
     <td>
-        <%= strike_text(h(customer.portal_org.try(:org_name)), nvl(nvl(customer.maintenance_expires_at, 1.days.since), 1.days.since) < Time.now) %>
+        <%= h(customer.portal_org.try(:org_name)) %>
     </td>
     <td>
-        <%= strike_text(h(customer.location), nvl(customer.maintenance_expires_at, 1.days.since) < Time.now) %>
+        <%= h(customer.location) %>
     </td>
     <td>
-        <%= strike_text(h(customer.serial_number), nvl(customer.maintenance_expires_at, 1.days.since) < Time.now) %>
+        <%= h(customer.serial_number) %>
     </td>
     <td>
-        <%= strike_text(h(customer.product), nvl(customer.maintenance_expires_at, 1.days.since) < Time.now) %>
+        <%= h(customer.product) %>
     </td>
     <td>
         <% if !customer.available %>
@@ -19,7 +19,7 @@
 		<% end %>
     </td>
     <td>
-        <%= strike_text(nvl(om_date(customer.registered_at), "&nbsp;"), nvl(customer.maintenance_expires_at, 1.days.since) < Time.now) %>
+        <%= nvl(om_date(customer.registered_at), "&nbsp;") %>
     </td>
     <td>
         <%= nvl(strike_text(om_date(customer.maintenance_expires_at), nvl(customer.maintenance_expires_at, 1.days.since) < Time.now), "&nbsp;") %>
