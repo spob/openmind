@@ -5,6 +5,12 @@
   <h1>
     <%= theme_image_tag("icons/32x32/products.png", options = {:alt=>"Products"}) %>Products
   </h1>
+<% form_tag(products_path, :method => :get, :name => 'search' ) do -%>
+  <%= hidden_field_tag 'form_based', 'yes' %>
+  <%= check_box_tag 'active_products_only', 'yes', session[:active_products_only] == 'yes',
+	{:onmouseover => "Tip('Only view active products')",
+	:onclick => 'document.search.submit();'} %>&nbsp;Active Products Only
+<% end %>
   <table cellspacing="0" cellpadding="0" class="cssform">
     <tr>
       <th>Name</th>
