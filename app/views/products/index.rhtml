@@ -18,7 +18,7 @@
         <% form_for :product, :url => products_path do |form| %>
           <td><%= form.text_field :name, { :size => 30, :maxlength => 30 } %></td>
           <td><%= form.text_field :description, { :size => 50, :maxlength => 200 } %></td>
-          <td class="center">Active</td>
+          <td class="center"><%= theme_image_tag("icons/16x16/16-check.png", options = {:alt=>"active"}) %></td>
           <td class="center">-</td>
           <td><%= submit_tag 'Create', options = {:class=> "button", :disable_with => "Please wait...",
             :onmouseover => "Tip('Create a new product')"} %></td>

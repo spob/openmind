@@ -9,7 +9,13 @@
   </div>
   <td><%= link_to product_item.name, product_path(product_item) %></td>
   <td><%= product_item.description %></td>
-  <td class="center"><input type="checkbox" name="active" value="active" <%= "checked" if product_item.active?  %> disabled ></td>
+  <td class="center">  	
+        <% if product_item.active %>
+        <%= theme_image_tag("icons/16x16/16-check.png", options = {:alt=>"active"}) %>
+        <% else %>
+        &nbsp;
+		<% end %>
+  </td>
   <td class="center">
     <% if product_item.current_release_version.nil? || product_item.current_release_version.strip.empty? %>
       &nbsp;
