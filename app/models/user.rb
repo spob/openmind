@@ -180,6 +180,14 @@ class User < ActiveRecord::Base
     u = User.find :first, :conditions => ['email = ? and activated_at IS NOT NULL', email]
     u && u.authenticated?(password) ? u : nil
   end
+  
+  def self.authenticate_otp(email, otp)
+    # hide records with a nil activated_at
+    u = User.find :first, :conditions => ['email = ? and one_time_password = ? and activated_at IS NOT NULL', email, otp]
+    u = u && !u.otp_expired? ? u : nil
+    u.update_attributes!(:one_time_password => nil) if u
+    u
+  end
 
   # Encrypts some data with the salt.
   def self.encrypt(password, salt)
@@ -282,9 +290,27 @@ class User < ActiveRecord::Base
   end
   
   def new_random_password
-    self.salt = Digest::SHA1.hexdigest("--#{Time.zone.now.to_s}--#{email}--")
+    self.salt = calc_salt
     self.password=  self.salt[0,6]
     self.password_confirmation = self.password
+  end
+  
+  def new_otp
+    self.one_time_password = APP_CONFIG['otp_expire_seconds'].to_i.from_now.xmlschema + '|' + Digest::SHA1.hexdigest("--#{calc_salt[0,6]}--#{Time.now.to_s}--")
+  end
+  
+  require 'rexml/document'
+  def otp_to_xml
+    doc = REXML::Document.new
+    root = doc.add_element "one_time_password"
+    root.add_text self.one_time_password
+    doc << REXML::XMLDecl.new(REXML::XMLDecl::DEFAULT_VERSION, REXML::XMLDecl::DEFAULT_ENCODING)
+    doc.to_s
+  end
+  
+  def otp_expired?
+    return false if self.one_time_password.nil?
+    return Time.xmlschema(self.one_time_password.split('|').first) < Time.now
   end
   
   # Activates the user in the database.
@@ -363,6 +389,10 @@ class User < ActiveRecord::Base
   memoize :mediator?, :prodmgr?, :sysadmin?
   
   private
+  
+  def calc_salt
+    Digest::SHA1.hexdigest("--#{Time.zone.now.to_s}--#{email}--")
+  end
   
   def portal_enterprise_types
     # strip surrounding ()

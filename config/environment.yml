@@ -70,3 +70,12 @@ sales_email: enter@email.com
 # the compatibility tab under roadmap menu will be displayed, with compatibility reflected
 # in relationship to this product
 root_compatibility_product: Insight
+
+# If using one time passwords for single sign on support, this value is the number of seconds from
+# now for which the one time password is valid
+otp_expire_seconds: 60
+
+# If you are using one time passwords for single sign on support, list
+# the ip addresses which can request one time passwords.  These values should
+# be separated by commas and surrounded by quotes, e.g.: (127.0.0.2,127.0.0.3)
+otp_trusted_sites: (127.0.0.1,127.0.0.3)

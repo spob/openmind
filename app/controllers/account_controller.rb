@@ -24,6 +24,18 @@ class AccountController < ApplicationController
     end
   end
 
+  def login_otp 
+    @login = params[:login] # needed to remember login info in login fails
+    self.current_user = User.authenticate_otp(params[:login], params[:password])
+    if logged_in?
+      logged_in
+    else
+      flash[:error] = "Login failed...please try again"
+        redirect_to :controller => '/account', :action => 'login'
+#      render :login
+    end
+  end
+
   def login_openid
     return unless request.post?   
     
