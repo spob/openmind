@@ -67,7 +67,7 @@ support_email: support@scribesoft.com
 sales_email: sales@scribesoft.com
 
 # A list of enterprise type lookup codes, separated by commas, within parens, that should be considered GA
-show_portal_for_enterprise_types: (Scribe,Demo)
+show_portal_for_enterprise_types: (Scribe,Demo,Authorized Reseller,Certified,Elite)
 
 # Allow the user to manually enter their portal user for the following enterprise types
 # A list of enterprise type lookup codes, separated by commas, within parens, that should be considered GA
