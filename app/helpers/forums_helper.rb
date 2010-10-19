@@ -4,7 +4,8 @@ module ForumsHelper
   end  
   
   def fetch_metric_topics forum, user_or_enterprise
-    if user_or_enterprise && !user_or_enterprise.new_record?
+    if user_or_enterprise && user_or_enterprise.id != 0
+      # id of 0 is a special value indicating unowned
       if user_or_enterprise.instance_of? Enterprise
         # view for a particular enterprise
         @owned_open_topics = Topic.owned.by_enterprise(user_or_enterprise.id).tracked.open.sort_by{|t| t.days_open * -1} 
@@ -49,6 +50,7 @@ module ForumsHelper
   
   def dummy_unassigned_mediator
     user = User.new(:last_name => "Un-owned")
+    user.id = 0
     user
   end
   
