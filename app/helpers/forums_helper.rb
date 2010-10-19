@@ -4,8 +4,9 @@ module ForumsHelper
   end  
   
   def fetch_metric_topics forum, user_or_enterprise
-    if user_or_enterprise 
+    if user_or_enterprise && !user_or_enterprise.new_record?
       if user_or_enterprise.instance_of? Enterprise
+        # view for a particular enterprise
         @owned_open_topics = Topic.owned.by_enterprise(user_or_enterprise.id).tracked.open.sort_by{|t| t.days_open * -1} 
         @owned_closed_topics = Topic.owned.by_enterprise(user_or_enterprise.id).tracked.closed.closed_after(@weeks[8])
       else
@@ -14,6 +15,7 @@ module ForumsHelper
         @owned_closed_topics = user_or_enterprise.owned_topics.by_forum(forum.id).tracked.closed.closed_after(@weeks[8])
       end
     else
+      # unowned
       @owned_open_topics = Topic.unowned.by_forum(forum.id).tracked.open.sort_by{|t| t.days_open * -1} 
       @owned_closed_topics = Topic.unowned.by_forum(forum.id).tracked.closed.closed_after(@weeks[8])
     end
