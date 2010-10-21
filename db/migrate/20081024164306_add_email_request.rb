@@ -1,6 +1,6 @@
 require "migration_helpers"
 
-class EmailRequest < ActiveRecord::Migration
+class AddEmailRequest < ActiveRecord::Migration
   extend MigrationHelpers
   
   def self.up

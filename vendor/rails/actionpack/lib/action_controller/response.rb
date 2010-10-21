@@ -47,7 +47,8 @@ module ActionController # :nodoc:
       @block = nil
 
       @body = "",
-      @session, @assigns = [], []
+      @session = []
+      @assigns = []
     end
 
     def location; headers['Location'] end
@@ -151,8 +152,8 @@ module ActionController # :nodoc:
       if @body.respond_to?(:call)
         @writer = lambda { |x| callback.call(x) }
         @body.call(self, self)
-      elsif @body.is_a?(String)
-        @body.each_line(&callback)
+      elsif @body.respond_to?(:to_str)
+        yield @body
       else
         @body.each(&callback)
       end
@@ -164,6 +165,12 @@ module ActionController # :nodoc:
     def write(str)
       @writer.call str.to_s
       str
+    end
+
+    def flush #:nodoc:
+      ActiveSupport::Deprecation.warn(
+        'Calling output.flush is no longer needed for streaming output ' +
+        'because ActionController::Response automatically handles it', caller)
     end
 
     def set_cookie(key, value)

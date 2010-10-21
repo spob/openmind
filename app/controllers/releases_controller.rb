@@ -77,6 +77,7 @@ class ReleasesController < ApplicationController
   
   def compatibility
     @root_product = Product.find_by_name(APP_CONFIG['root_compatibility_product'])
+    redirect_to releases_path unless @root_product
   end
   
   def preview
