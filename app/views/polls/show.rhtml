@@ -1,5 +1,4 @@
 <%content_for :head do -%>
-
   <%= javascript_include_tag "swfobject" %>                
 <%end%>
 <%= javascript_include_tag "wz_tooltip.js", :cache => "cache/tooltip" %> 
@@ -124,7 +123,7 @@
 </div>
 
 <% if @poll.total_responses > 0 %>
-  <div id="pollChart">
+  <div id="pollChart" style="background-color:#ffffcc;">
     <%= @graph %>
   </div>
 <% end %>

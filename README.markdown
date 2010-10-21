@@ -34,6 +34,10 @@ The current version of OpenMind is 3.0. 3.0 adds many improvements, including:
 * Added a compatibility matrix of product release versions
 * Re-implemented the searching using Thinking Sphinx for improved search capability and reliability
 
+Contributors
+============
+Bob Sturim
+Rich Sturim
 
 License
 =======
