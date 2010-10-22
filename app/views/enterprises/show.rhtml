@@ -39,7 +39,7 @@
   <p>
     <label>Users:</label>
     <% for user in @enterprise.users %>
-      &bull;&nbsp;<%=link_to h(user_display_name(user)), :controller => 'users', :action => 'show', :id => user %>
+      &bull;&nbsp;<%=link_to strike_text(h(user_display_name(user)), !user.active), :controller => 'users', :action => 'show', :id => user %>
       <br />
     <% end %>
   </p>
