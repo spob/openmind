@@ -33,6 +33,7 @@ class Enterprise < ActiveRecord::Base
   
   has_many :users, :dependent => :destroy, :order => "email ASC"   
   has_many :allocations, :dependent => :destroy, :order => "created_at ASC"  
+  has_many :forum_metrics, :dependent => :destroy, :order => "as_of ASC"
   #  has_many :active_allocations, :conditions => ["expiration_date > ?", Date.current.to_s(:db)],
   #    :order => "created_at ASC"
   has_many :votes, :through => :allocations, :order => "votes.id ASC"
