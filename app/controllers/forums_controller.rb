@@ -75,9 +75,10 @@ class ForumsController < ApplicationController
   
   def metrics_graphs    
     @open_count_graph = open_flash_chart_object(800,450, open_count_graphs_forums_path)  
+    @days_pending_graph = open_flash_chart_object(800,450, days_pending_graphs_forums_path) 
   end
   
-  def open_count_graphs
+  def calc_metric_graph chart_title, y_legend
     colors = %w(#CF2626 #5767AF  #D01FC3 #356AA0 #CF5ACD #CF750C #FF7200 #8F1A1A #ADD700 #57AF9D #C3CF5A #456F4F #C79810)
     x = 0
     max = 0    
@@ -91,9 +92,9 @@ class ForumsController < ApplicationController
     ForumMetric.all(:select => 'distinct enterprise_id').collect(&:enterprise).sort_by{|e| e.name}.each do |e|
       data = []
       e.forum_metrics.each do |m|
-        data << ScatterValue.new(m.as_of.to_time.to_i, m.open_count)
+        data << ScatterValue.new(m.as_of.to_time.to_i, yield(m))
         #        data[90 - (Date.today.jd - m.as_of.jd)] = m.open_count
-        max = m.open_count if m.open_count > max
+        max = yield(m) if yield(m) > max
       end
       #      90.times do |i|
       #        data[i] = 0 if data[i].nil?
@@ -111,7 +112,8 @@ class ForumsController < ApplicationController
     end
     
     y = YAxis.new
-    y.set_range(0, roundup(max, 5), 5)
+    max = roundup(max, 5)
+    y.set_range(0, max, calc_y_interval(max))
     #    y.set_range(0,15,5)
     chart.y_axis = y
     
@@ -127,15 +129,24 @@ class ForumsController < ApplicationController
     labels.rotate = 90    
     x.labels = labels
     
-    chart.set_title(Title.new("Open Forum Topics"))
+    chart.set_title(Title.new(chart_title))
     
-    x_legend = XLegend.new("Date")
-    x_legend.set_style('{font-size: 20px; color: #778877}')
+#    x_legend = XLegend.new("Date")
+#    x_legend.set_style('{font-size: 20px; color: #778877}')
+#    chart.set_x_legend(x_legend)
     
-    y_legend = YLegend.new("Open Forum Topics")
+    y_legend = YLegend.new(y_legend)
     y_legend.set_style('{font-size: 20px; color: #770077}')
-    
-    render :text => chart, :layout => false
+    chart.set_y_legend(y_legend)
+    chart
+  end
+  
+  def open_count_graphs    
+    render :text => calc_metric_graph("Open Forum Topics", "Topic Count"){|i| i.open_count }, :layout => false
+  end
+  
+  def days_pending_graphs    
+    render :text => calc_metric_graph("Average Days Pending Response", "Days"){|i| i.days_pending }, :layout => false
   end
   
   def create
@@ -286,6 +297,15 @@ class ForumsController < ApplicationController
   end
   
   private
+  
+  def calc_y_interval x
+    rounding_values = [1,2,5,10,15,20,25,50,75, 100,150, 200, 250,300, 400, 500,750,1000]
+    x = x/8 + 1
+    rounding_values.each do |v|
+      return v if v > x
+    end
+    x
+  end
   
   def roundup(num, into)
     return num if num % into == 0   # already a factor of into
