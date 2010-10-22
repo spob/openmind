@@ -35,7 +35,12 @@ and exists
 ( select null
   from portal_user_org_maps as puo
   where puo.email = users.email
-    and puo.user_disabled_at < now());
+    and puo.user_disabled_at < now())
+and not exists
+(select null
+  from portal_user_org_maps as puo
+  where puo.email = users.email
+    and puo.user_disabled_at >= now() or puo.user_disabled_at is null);
 eos
     
     User.find_by_sql(sql).each do |u|

@@ -1,4 +1,4 @@
 module OpenmindVersion
   # The version number for the application
-  VERSION = "2.6"
+  VERSION = "3.0"
 end
