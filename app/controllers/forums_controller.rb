@@ -3,7 +3,7 @@ class ForumsController < ApplicationController
   before_filter :login_required, :only => [:show], :if => :must_login 
   before_filter :login_required, :except => [:index, :show, :rss, :search, :tag]
   access_control [:new, :destroy ] => 'sysadmin',
-  [:edit, :create, :update, :metrics ] => 'sysadmin|mediator'
+  [:edit, :create, :update, :metrics, :metrics_graphs ] => 'sysadmin|mediator'
   helper :topics
   cache_sweeper :forums_sweeper, :only => [ :create, :update, :destroy,
   :mark_all_as_read]
@@ -79,7 +79,7 @@ class ForumsController < ApplicationController
   end
   
   def calc_metric_graph chart_title, y_legend
-    colors = %w(#CF2626 #5767AF  #D01FC3 #356AA0 #CF5ACD #CF750C #FF7200 #8F1A1A #ADD700 #57AF9D #C3CF5A #456F4F #C79810)
+    colors = %w(#CF2626 #5767AF #00FF00 #356AA0 #CF5ACD #CF750C #D01FC3 #FF7200 #8F1A1A #ADD700 #57AF9D #C3CF5A #456F4F #C79810)
     x = 0
     max = 0    
     
