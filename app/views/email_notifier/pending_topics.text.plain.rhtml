@@ -1,0 +1,10 @@
+Topics Awaiting Your Response
+
+You are the owner of the following topics which are awaiting a response from you:
+
+<% for topic in @topics %>
+Forum:                 <%= topic.forum.name %>
+Topic:                 <%= topic.title %>
+Days Pending Response: <%= format("%.1f", topic.days_comment_pending) %>
+
+<% end %>
