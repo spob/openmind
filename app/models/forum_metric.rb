@@ -9,8 +9,7 @@ class ForumMetric < ActiveRecord::Base
     enterprises.each do |e|
       metric = e.forum_metrics.find_by_as_of(Date.today) || e.forum_metrics.create(:as_of => Date.today, :days_pending => 0.0, :open_count => 0)
       @topics = Topic.owned.by_enterprise(e).tracked.open
-      metric.days_pending = 
-      @topics.inject(0){|sum, item| sum + item.days_open}/@topics.size if @topics.size > 0
+      metric.days_pending = (@topics.inject(0){|sum, item| sum + item.days_open}/@topics.size) if @topics.size > 0
       metric.open_count = @topics.size
       metric.save!
     end
