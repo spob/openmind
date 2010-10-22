@@ -73,6 +73,71 @@ class ForumsController < ApplicationController
     @forums = Forum.active.tracked.order_by_name.find_all{|f| f.can_edit? current_user}
   end
   
+  def metrics_graphs    
+    @open_count_graph = open_flash_chart_object(800,450, open_count_graphs_forums_path)  
+  end
+  
+  def open_count_graphs
+    colors = %w(#CF2626 #5767AF  #D01FC3 #356AA0 #CF5ACD #CF750C #FF7200 #8F1A1A #ADD700 #57AF9D #C3CF5A #456F4F #C79810)
+    x = 0
+    max = 0    
+    
+    dot = SolidDot.new
+    dot.size = x + 2
+    dot.halo_size = 1
+    dot.tooltip = "#date:d M y#<br>Value: #val#"
+    chart = OpenFlashChart.new
+    
+    ForumMetric.all(:select => 'distinct enterprise_id').collect(&:enterprise).sort_by{|e| e.name}.each do |e|
+      data = []
+      e.forum_metrics.each do |m|
+        data << ScatterValue.new(m.as_of.to_time.to_i, m.open_count)
+        #        data[90 - (Date.today.jd - m.as_of.jd)] = m.open_count
+        max = m.open_count if m.open_count > max
+      end
+      #      90.times do |i|
+      #        data[i] = 0 if data[i].nil?
+      #      end
+      line = ScatterLine.new(colors[x], 3)
+      line.default_dot_style = dot
+      #      line = Line.new
+      line.text = e.name
+      line.width = x + 2
+      line.colour = colors[x]
+      #      line.dot_size = 5
+      line.values = data   
+      chart.add_element(line)
+      x = x + 1
+    end
+    
+    y = YAxis.new
+    y.set_range(0, roundup(max, 5), 5)
+    #    y.set_range(0,15,5)
+    chart.y_axis = y
+    
+    x = XAxis.new
+    x.set_range(90.days.ago.to_i, Time.now.to_i)
+    x.steps = 86400 * 7
+    chart.x_axis = x
+    
+    labels = XAxisLabels.new
+    labels.text = "#date: j M Y#"
+    labels.steps = 86400 * 7
+    labels.visible_steps = 1
+    labels.rotate = 90    
+    x.labels = labels
+    
+    chart.set_title(Title.new("Open Forum Topics"))
+    
+    x_legend = XLegend.new("Date")
+    x_legend.set_style('{font-size: 20px; color: #778877}')
+    
+    y_legend = YLegend.new("Open Forum Topics")
+    y_legend.set_style('{font-size: 20px; color: #770077}')
+    
+    render :text => chart, :layout => false
+  end
+  
   def create
     params[:forum][:mediator_ids] ||= []
     params[:forum][:group_ids] ||= []
@@ -141,7 +206,7 @@ class ForumsController < ApplicationController
       search_results.each do |topic|
         @hits[topic.id] = TopicHit.new(topic, true, 1) if topic.forum.can_see?(current_user) or prodmgr?
       end
-      (params[:search].blank? ? [] : TopicComment.search(params[:search], :retry_stale => true)).each do |comment|
+       (params[:search].blank? ? [] : TopicComment.search(params[:search], :retry_stale => true)).each do |comment|
         if (comment.topic.forum.can_see?(current_user) or prodmgr?) and
          (!comment.private or comment.topic.forum.mediators.include? current_user)
           # first see if topic hit already exists
@@ -221,6 +286,11 @@ class ForumsController < ApplicationController
   end
   
   private
+  
+  def roundup(num, into)
+    return num if num % into == 0   # already a factor of into
+    return num + into - (num % into)  # go to nearest factor into
+  end
   
   def redirect_path_on_access_denied user
     return forums_path unless user == :false
