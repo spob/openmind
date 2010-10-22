@@ -1,7 +1,7 @@
 class ForumMetric < ActiveRecord::Base
   belongs_to :enterprise
   
-  named_scope :last_3_months, :conditions => ["as_of > ?", 3.months.ago]
+  named_scope :recent, :conditions => ["as_of > ?", 2.months.ago]
   
   def self.calculate
     enterprise_ids = User.mediators.all(:select => "distinct users.enterprise_id").collect(&:enterprise_id).find_all{|e| Topic.by_enterprise(e).owned.open.present? }

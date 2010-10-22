@@ -1,3 +1,4 @@
+
 ActionController::Routing::Routes.draw do |map|
   
   # The priority is based upon order of creation: first created -> highest
@@ -22,7 +23,9 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :enterprises, :member => { :next => :get, :previous => :get },
   :collection => { :search => :get, :auto_complete_for_enterprise_name => :get }
   map.resources :forums, :collection => { :search => :get, 
-    :rss => :get, :tag => :get, :metrics => :get }, :member => { :mark_all_as_read => :post }
+    :rss => :get, :tag => :get, :metrics => :get, :metrics_graphs => :get,
+    :open_count_graphs => :get, :days_pending_graphs => :get}, 
+    :member => { :mark_all_as_read => :post }
   map.resources :groups
   map.resources :hotfixes
   map.resources :link_sets, :member => { :update_sort => :post }
