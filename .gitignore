@@ -23,3 +23,5 @@ public/themes/scribe/cache/
 development.yml
 db/sphinx/development
 .idea
+.rvmrc
+log/searchd.development.pid
