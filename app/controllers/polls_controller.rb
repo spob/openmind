@@ -21,7 +21,6 @@ class PollsController < ApplicationController
     session[:polls_show_toggle_detail] ||= "HIDE"
     
     @poll = Poll.find(params[:id])
-    puts "============ #{pie_poll_url(@poll)}"
     @graph = open_flash_chart_object(450,450, pie_poll_url(@poll))     
   end
 
