@@ -28,3 +28,5 @@ log/searchd.development.pid
 log/searchd.production.pid
 db/sphinx
 config/database.yml
+restart.txt
+production.rb
