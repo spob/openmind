@@ -1,5 +1,4 @@
 <% title "#{h @release.product.name} #{h @release.version}" %>
-
 <%= render :partial => "products/tab_menu" %>
 <div id="tabBody" style="position:relative; padding-top:15px;">
     <% if prodmgr? %>
@@ -56,6 +55,14 @@
             <%= link_to @release.download_url, @release.download_url, :popup => true %>
         </p>
         <% end %>
+        <% unless @release.release_notes.blank? %>
+        <p>
+            <label for="release_notes">
+                Release Notes URL:
+            </label>
+            <%= link_to @release.release_notes, @release.release_notes, :popup => true %>
+        </p>
+        <% end %>
         <p>
             <label for="ideas">
                 Scheduled Ideas:
@@ -77,15 +84,22 @@
                 Compatible With:
             </label>
             <% for product in Product.find(:all, :conditions => [ "id in (?)", @release.dependent_releases.collect(&:product_id)]) %>
-            <%= product.name %> (<% first = true %>
-            <% for version in @release.dependent_releases.find_all_by_product_id(product.id, :order => 'releases.release_date') %>
-            <%= ", " unless first %>
-            <% first = false %>
-            <%= version.version %>
-            <% end %>
-            )
+            <%= product.name %>
+            (<%= @release.dependent_releases.find_all_by_product_id(product.id, :order => 'releases.release_date').map{|r| link_to(h(r.version), release_path(r))}.join(", ") %>)
             <br/>
-            <% end %>
+			<% end %>
+        </p>
+		<% end %>
+        <% unless @release.releases_dependant_on_this_release_dependencies.empty? %>
+        <p>
+            <label>
+                Depends upon this release:
+            </label>
+            <% for product in Product.find(:all, :conditions => [ "id in (?)", @release.releases_dependant_on_this_release.collect(&:product_id)]) %>
+            <%= product.name %>
+            (<%= @release.releases_dependant_on_this_release.find_all{|r| r.product_id == product.id}.sort_by{|x| x.release_date}.map{|r| link_to(h(r.version), release_path(r))}.join(", ") %>)
+            <br/>
+			<% end %>
         </p>
         <% end %>
         <% if prodmgr? %>

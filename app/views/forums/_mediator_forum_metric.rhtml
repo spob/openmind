@@ -1,33 +1,52 @@
 <tr>
-  <td>
-    <%= user_display_name(mediator_forum_metric)%>
-  </td>
-  <% owned_open_topics = mediator_forum_metric.owned_topics.by_forum(forum.id).tracked.open.sort_by{|t| t.days_open * -1} %>
-  <% owned_open_topics = Topic.unowned.by_forum(forum.id).tracked.open.sort_by{|t| t.days_open * -1} if mediator_forum_metric.id.nil? %>
-  <% owned_closed_topics = mediator_forum_metric.owned_topics.by_forum(forum.id).tracked.closed.closed_after(@weeks[8]) %>
-  <% owned_closed_topics = Topic.unowned.by_forum(forum.id).tracked.closed.closed_after(@weeks[8]) if mediator_forum_metric.id.nil? %>
-  <td>
-    <%= link_to owned_open_topics.size, forum_path(forum, :show_open=>'yes',
-      :show_closed=>'no', :owner_filter=>(mediator_forum_metric.id.nil? ? 0 : mediator_forum_metric.id)) unless forum.id.nil? %>
-    <%= owned_open_topics.size if forum.id.nil? %>
-  </td>
-  <td>
-    <%=  format("%.1f",
-      owned_open_topics.inject(0){|sum, item| sum + item.days_open}/owned_open_topics.size) if owned_open_topics.size > 0 %>
-    <%= '-' unless owned_open_topics.size > 0 %>
-  </td>
-  <td>
-    <%=  format("%.1f",
-      owned_open_topics.first.days_open) if owned_open_topics.size > 0 %>
-    <%= '-' unless owned_open_topics.size > 0 %>
-  </td>
-  <% (1..ForumsController.week_size).each do |i| %>
     <td>
-      <% count = owned_closed_topics.find_all{|t| t.closed_at <= @weeks[i-1] and t.closed_at > @weeks[i]}.size %>
-      <%= link_to count,
-        forum_path(forum, :show_open=>'no',
-        :show_closed=>'yes', :owner_filter=>(mediator_forum_metric.id.nil? ? 0 : mediator_forum_metric.id)) unless forum.id.nil? %>
-      <%= count if forum.id.nil? %>
+        <% if forum.nil? %>
+        <%= h mediator_forum_metric.name %>
+        <% else %>
+        <%= user_display_name(mediator_forum_metric) %>
+        <% end %>
     </td>
-  <% end %>
+    <% fetch_metric_topics forum, mediator_forum_metric %>
+    <td>
+        <% if forum.nil? || forum.id.nil? %>
+        <%= @owned_open_topics.size %>
+        <% else %>
+        <% if !mediator_forum_metric.nil? %>
+        <%= link_to @owned_open_topics.size, forum_path(forum, :show_open=>'yes', :show_closed=>'no', :owner_filter=> mediator_forum_metric.id) %>
+        <% else %>
+        0<% end %>
+        <% end %>
+    </td>
+    <td>
+        <%= format("%.1f",
+        @owned_open_topics.inject(0){|sum, item| sum + item.days_open}/@owned_open_topics.size) if @owned_open_topics.size > 0 %>
+        <%= '-' unless @owned_open_topics.size > 0 %>
+    </td>
+    <td>
+        <%= format("%.1f",
+        @owned_open_topics.first.days_open) if @owned_open_topics.size > 0 %>
+        <%= '-' unless @owned_open_topics.size > 0 %>
+    </td>
+    <td>
+        <%= format("%.1f",
+        @owned_open_topics.inject(0){|sum, item| sum + item.days_comment_pending}/@owned_open_topics.size) if @owned_open_topics.present? %>
+        <%= '-' if @owned_open_topics.empty? %>
+    </td>
+    <td>
+        <%= format("%.1f",
+        @owned_open_topics.collect{|item| item.days_comment_pending}.sort.last) if @owned_open_topics.present? %>
+        <%= '-' if @owned_open_topics.empty? %>
+    </td>
+    <% (1..ForumsController.week_size).each do |i| %>
+    <td>
+        <% count = @owned_closed_topics.find_all{|t| t.closed_at <= @weeks[i-1] and t.closed_at > @weeks[i]}.size %>
+        <% if forum && forum.id && mediator_forum_metric && mediator_forum_metric.id %>
+        <%= link_to count,
+        forum_path(forum, :show_open=>'no',
+        :show_closed=>'yes', :owner_filter=> mediator_forum_metric.id) %>
+        <% else %>
+        <%= count %>
+        <% end %>
+    </td>
+    <% end %>
 </tr>

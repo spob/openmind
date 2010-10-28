@@ -1,0 +1,30 @@
+<tr>
+    <td>
+        <%= h consultant.consultant_name %>
+    </td>
+    <td>
+        <%= h consultant.consultant_email %>
+    </td>
+    <% if type == "T" %>
+    <td>
+        <%= h consultant.certification %>
+    </td>
+    <% end %>
+    <td>
+        <%= om_date consultant.certified_at %>
+    </td>
+    <td>
+        <% if consultant.is_active %>
+        <%= theme_image_tag("icons/16x16/16-check.png", options = {:alt=>"active"}) %>
+        <% else %>
+        &nbsp;<% end %>
+    </td>
+    <% if type == "T" %>
+    <td>
+        <% if consultant.purchased_training %>
+        <%= theme_image_tag("icons/16x16/16-check.png", options = {:alt=>"active"}) %>
+        <% else %>
+        &nbsp;<% end %>
+    </td>
+    <% end %>
+</tr>

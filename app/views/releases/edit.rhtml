@@ -59,6 +59,12 @@
             <%= form.text_field :download_url, { :size => 80, :maxlength => 300 } %>
         </p>
         <p>
+            <label for="release_notes">
+                Release Notes URL:
+            </label>
+            <%= form.text_field :release_notes, { :size => 80, :maxlength => 255 } %>
+        </p>
+        <p>
             <label>
                 External Release ID:
             </label>
@@ -66,10 +72,10 @@
         </p>
         <p>
             <label>
-                Depends upon:
+                Has the Following Releases which Depend Upon It:
             </label>
             <% for release in Release.findall_with_product_names %>
-            <span style="display:block;margin-left:10px;"><%= check_box_tag "release[release_dependencies][]", release.id, @release.dependent_releases.include?(release) %>
+            <span style="display:block;margin-left:10px;"><%= check_box_tag "release[releases_dependant_on_this_release][]", release.id, @release.releases_dependant_on_this_release.include?(release) %>
                 <%= h release.version %>
             </span>
             <% end %>

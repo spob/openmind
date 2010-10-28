@@ -17,13 +17,19 @@
 
 class Topic < ActiveRecord::Base  
   has_friendly_id :title, :use_slug => true,
-    # remove accents and other diacritics from Western characters
-    :approximate_ascii => true,
-    # don't use slugs longer than 50 chars
-    :max_length => 50
+  # remove accents and other diacritics from Western characters
+  :approximate_ascii => true,
+  # don't use slugs longer than 50 chars
+  :max_length => 50
   before_update :set_close_date
   acts_as_taggable
-  acts_as_solr :fields => [:title, {:created_at => :date}]
+  #  acts_as_solr :fields => [:title, {:created_at => :date}]
+  
+  define_index do
+    indexes title
+    has created_at, updated_at
+    set_property :delta => true
+  end
   
   ajaxful_rateable :stars => 5, 
   :allow_update => true,
@@ -46,6 +52,8 @@ class Topic < ActiveRecord::Base
   
   named_scope :by_forum,
   lambda{|forum_id| {:conditions => ['forum_id = ? or ? is null', forum_id, forum_id]} }
+  named_scope :by_enterprise,
+  lambda{|enterprise_id| {:joins => { :owner => :enterprise}, :conditions => { :enterprises => {:id => enterprise_id}}} }
   
   named_scope :tracked, :joins => [:forum], :conditions => {:forums => { :tracked => 1 }}
   named_scope :closed_after,
@@ -58,8 +66,45 @@ class Topic < ActiveRecord::Base
   named_scope :open_or_recently_closed,
   lambda{|end_date| {:conditions => 
       ['open_status = 1 or (open_status = 0 and closed_at >= ?)', end_date]} }
+  sql = 
+<<-eos
+topics.owner_id is not null
+and
+  Not Exists(Select
+    Null
+  From
+    topic_watches
+  Where
+    topic_watches.user_id = topics.owner_id And
+    topic_watches.topic_id = topics.id)
+eos
+  
+  named_scope :owners_who_are_not_watchers, :conditions =>
+  [ sql ]
   
   attr_accessor :comment_body
+  
+  # the earliest comment that is pending a response from a moderator
+  def earliest_pending_comment
+    last_moderated_comment = self.comments.by_moderator.sort_by{|c| c.id}.last
+    if last_moderated_comment.nil?
+      nil
+    else
+      self.comments.find_all{|c| c.id > last_moderated_comment.id}.sort_by{|c| c.id}.first
+    end
+  end
+  
+  def days_comment_pending
+    comment = earliest_pending_comment 
+    if comment.nil? 
+      if comments.by_moderator.empty?
+        comment = comments.first
+      else
+        return 0
+      end
+    end
+     (Time.zone.now - comment.created_at)/(60.0*60.0*24.0)
+  end
   
   def set_close_date
     if !open_status and closed_at.nil?
@@ -87,6 +132,12 @@ class Topic < ActiveRecord::Base
     mediator],
     :order => "pinned DESC, last_commented_at DESC",
     :per_page => per_page
+  end
+  
+  def self.set_owners_to_watchers
+    Topic.owners_who_are_not_watchers.each do |t|
+      TopicWatch.create!(:watcher => t.owner, :topic => t)
+    end
   end
   
   def last_comment? comment

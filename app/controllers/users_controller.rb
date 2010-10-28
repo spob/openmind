@@ -1,11 +1,11 @@
 class UsersController < ApplicationController
-  before_filter :login_required, :except => [:lost_password]
+  before_filter :login_required, :except => [:lost_password, :fetch_otp]
   access_control [:new, :edit, :create, :update, :destroy, :reset_password] => 'sysadmin',
   [:index, :list, :show, :search, :next, :previous, :export, :export_import,
   :import, :process_imported] => '(sysadmin | allocmgr)'
   
   # GETs should be safe (see http://www.w3.org/2001/tag/doc/whenToUseGet.html)
-  verify :method => :post, :only => [ :destroy, :create, :update, :update_profile, :reset_password, :process_imported, :import ],
+  verify :method => :post, :only => [ :destroy, :create, :update, :update_profile, :reset_password, :process_imported, :import, :fetch_otp ],
   :redirect_to => { :action => :list }
   
   def index
@@ -29,11 +29,19 @@ class UsersController < ApplicationController
   def search
     session[:users_start_filter] = "All" 
     session[:users_end_filter] = "All"
-    session[:users_search] = params[:search]
-    params[:search] = StringUtils.sanitize_search_terms params[:search]
+    session[:users_search] = (params[:user] ? params[:user][:email] : "")
+    @user = User.new(:email => session[:users_search])
+    #    params[:search] = StringUtils.sanitize_search_terms params[:search]
+    if @user.email.blank?
+      list
+      render :list
+      return
+    end
+    
     set_start_stop_tags
     begin
-      search_results = User.find_by_solr(params[:search], :lazy => true).docs.collect(&:id)
+      search_results = User.search_for_ids @user.email, :order => :email
+      #      search_results = User.find_by_solr(params[:search], :lazy => true).docs.collect(&:id)
     rescue RuntimeError => e
       flash[:error] = "An error occurred while executing your search. Perhaps there is a problem with the syntax of your search string."
       logger.error(e)
@@ -140,6 +148,27 @@ class UsersController < ApplicationController
     end
   end
   
+  def fetch_otp
+    user = nil
+    trusted_sites = (APP_CONFIG['otp_trusted_sites'] || "").gsub(/^\s*\(|\)\s*$/, "").split(/,/) || [""]
+    if trusted_sites.include? request.remote_ip 
+      user = User.find_by_email(params[:login])
+    else
+      logger.warn("Request for a otp from an untrusted site: #{request.remote_ip} is not in #{APP_CONFIG['otp_trusted_sites']}")
+    end
+    respond_to do |format|
+      format.xml do
+        if user.nil?
+          render :nothing => true, :status => 404 
+        else
+          user.new_otp
+          user.save!
+          render :xml => user.otp_to_xml
+        end
+      end
+    end
+  end
+  
   def lost_password
     return unless request.post?    
     @email = params[:email] # needed to remember email info if fails
@@ -156,6 +185,14 @@ class UsersController < ApplicationController
         redirect_back_or_default home_path
       end
     end
+  end
+  
+  def auto_complete_for_user_email
+    search_txt = "%#{params[:user][:email]}%"
+    @users = User.find(:all, :conditions => ['email LIKE ? or first_name like ? or last_name like ?', 
+    search_txt, search_txt, search_txt],
+    :order => 'email ASC', :limit => 10) 
+    render :inline => "<%= auto_complete_result(@users, 'email') %>"
   end
   
   def new
@@ -178,6 +215,7 @@ class UsersController < ApplicationController
       flash[:notice] = "User #{@user.login} was successfully updated."
       redirect_to :action => 'show', :id => @user
     else
+      @user.errors.each{|attr,msg| puts ">>>>>>>#{attr} - #{msg}" }
       setup_session_properties
       render :action => 'edit'
     end

@@ -1,0 +1,17 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  name: MyString
+  location: MyString
+  serial_number: MyString
+  registered_at: 2010-09-08 12:49:33
+  registered_version: MyString
+  maintenance_expires_at: 2010-09-08 12:49:33
+
+two:
+  name: MyString
+  location: MyString
+  serial_number: MyString
+  registered_at: 2010-09-08 12:49:33
+  registered_version: MyString
+  maintenance_expires_at: 2010-09-08 12:49:33

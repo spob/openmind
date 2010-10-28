@@ -1,0 +1,13 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  email: MyString
+  product: MyString
+  serial_number: MyString
+  expires_at: 2010-09-08 17:53:57
+
+two:
+  email: MyString
+  product: MyString
+  serial_number: MyString
+  expires_at: 2010-09-08 17:53:57

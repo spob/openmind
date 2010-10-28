@@ -6,7 +6,7 @@
   <% if @forum.tracked and @forum.can_edit? current_user %>
     <td>
       <%= bold_text(truncate(user_display_name(topic_item.owner), :length => 30), topic_item.unread_comment?(current_user)) %>
-      (<%= (topic_item.open_status ? "Open" : "Closed") %>)
+      (<%= (topic_item.open_status ? "Open" : "Closed") %>)&nbsp;[<%= format("%.1f", (topic_item.open_status ? topic_item.days_comment_pending : 0)) %>]
     </td>
   <% end %>
   <td><%= bold_text(topic_item.comments.size - 1, topic_item.unread_comment?(current_user)) %></td>

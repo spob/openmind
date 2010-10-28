@@ -39,8 +39,14 @@
   <p>
     <label>Users:</label>
     <% for user in @enterprise.users %>
-      &bull;&nbsp;<%=link_to h(user_display_name(user)), :controller => 'users', :action => 'show', :id => user %>
+      &bull;&nbsp;<%=link_to strike_text(h(user_display_name(user)), !user.active), :controller => 'users', :action => 'show', :id => user %>
       <br />
     <% end %>
   </p>
+  <% unless APP_CONFIG['show_portal_for_enterprise_types'].blank? %>
+  <p>
+    <label>Can View Portal?:</label>
+    <%= @enterprise.view_portal ? "Yes" : "No" %>
+  </p>
+  <% end %>
 </div>

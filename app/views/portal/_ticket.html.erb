@@ -1,0 +1,35 @@
+<tr>
+    <td>
+        <%= h(ticket.case_number) %>
+    </td>
+    <td>
+        <%= h(ticket.summary) %>
+    </td>
+    <td>
+        <%= om_date(ticket.opened_at) %>
+    </td>
+    <td>
+        <%= nvl(om_date(ticket.closed_at), "&nbsp;") %>
+    </td>
+    <td>
+        <%= nvl(h(ticket.serial_number), "&nbsp;") %>
+    </td>
+    <td>
+        <%= nvl(h(ticket.opened_by), "&nbsp;") %>
+    </td>
+    <td>
+        <%= nvl(h(ticket.customer), "&nbsp;") %>
+    </td>
+    <td>
+        <% if ticket.within_sla %>
+        <%= theme_image_tag("icons/16x16/16-check.png", options = {:alt=>"active"}) %>
+        <% else %>
+        &nbsp;<% end %>
+    </td>
+    <td>
+        <% if ticket.is_billable %>
+        <%= theme_image_tag("icons/16x16/16-check.png", options = {:alt=>"active"}) %>
+        <% else %>
+        &nbsp;<% end %>
+    </td>
+</tr>

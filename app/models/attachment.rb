@@ -19,7 +19,15 @@ class Attachment < ActiveRecord::Base
   after_create :create_thumbnail
   before_update :before_update
   before_save :before_save
-  acts_as_solr :fields => [:filename, :alias, :description, {:size => :integer}],  :if => proc{|a| a.parent.nil?}
+#  acts_as_solr :fields => [:filename, :alias, :description, {:size => :integer}],  :if => proc{|a| a.parent.nil?}
+  define_index do
+    indexes filename, :sortable => true
+    indexes :alias, :sortable => true
+    indexes description, :sortable => true
+    
+    has created_at, updated_at
+    set_property :delta => true
+  end
   
   validates_presence_of :filename, :description, :content_type, :size
   validates_length_of :filename, :maximum => 200

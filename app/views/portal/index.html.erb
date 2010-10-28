@@ -1,0 +1,207 @@
+<%content_for :head do -%>     
+  <%= theme_stylesheet_link_tag 'sideBarRight' %>
+  <%= javascript_include_tag "tablecloth" %>
+<%end%>
+<%content_for :bodyTag do -%>
+  <%= set_focus_to_id 'user_email' -%>
+<%end%>
+<h1>Scribe Portal</h1>
+
+<%content_for :sidebar1 do -%>
+  <%=render(:partial => "sidebar1", :object => @current_user)%>
+<%end%>  
+<% if current_user && current_user.can_specify_email_in_portal? %>
+<% form_for :user, :url => portal_index_path, :html => { :class => 'cssform searchform' } do |f| %>
+<p>
+    <label for="search">
+        View for User Email:
+    </label>
+    <%= text_field_with_auto_complete :user, :email, {}, {:method => :get} %>
+</p>
+<p>
+    <label>
+    </label>
+    <%= submit_tag 'View', :name => nil, :class=> "button" %>
+    <%= link_to 'Reset',
+    portal_index_path(:reset => "Y"),
+    {:class=> "button"} -%>
+</p>
+<% end %>
+<% end %>
+<h3>Customer Products</h3>
+<table>
+    <tr>
+        <th>
+            Customer Name
+        </th>
+        <th>
+            Location
+        </th>
+        <th>
+            Serial Number
+        </th>
+        <th>
+            Product
+        </th>
+        <th>
+            In Use
+        </th>
+        <th>
+            Registered At
+        </th>
+        <th>
+            Expires At
+        </th>
+        <th>
+            Registered Version
+        </th>
+        <th>
+            Versions Installed
+        </th>
+    </tr>
+    <% if @customers.present? %>
+    <%= render :partial => 'customer', :collection => @customers %>
+    <% else %>
+    <td colspan="9">
+        No records found
+    </td>
+    <% end %>
+</table>
+<h3>Certified Consultants (Technical)</h3>
+<table>
+    <tr>
+        <th>
+            Consultant Name
+        </th>
+        <th>
+            Email Address
+        </th>
+        <th>
+            Certification
+        </th>
+        <th>
+            Certified At
+        </th>
+        <th>
+            Active
+        </th>
+        <th>
+            Purchased Training?
+        </th>
+    </tr>
+    <% if @technical_consultants.present? %>
+    <%= render :partial => 'consultant', :collection => @technical_consultants, :locals => { :type => "T" } %>
+    <% else %>
+    <td colspan="6">
+        No records found
+    </td>
+    <% end %>
+</table>
+<h3>Certified Consultants (Sales)</h3>
+<table>
+    <tr>
+        <th>
+            Consultant Name
+        </th>
+        <th>
+            Email Address
+        </th>
+        <th>
+            Certified At
+        </th>
+        <th>
+            Active
+        </th>
+    </tr>
+    <% if @sales_consultants.present? %>
+    <%= render :partial => 'consultant', :collection => @sales_consultants, :locals => { :type => "S" } %>
+    <% else %>
+    <td colspan="4">
+        No records found
+    </td>
+    <% end %>
+</table>
+<h3>NFRs</h3>
+<table>
+    <tr>
+        <th>
+            Product
+        </th>
+        <th>
+            Serial Number
+        </th>
+        <th>
+            Expires At
+        </th>
+        <th>
+            Registered To
+        </th>
+        <th>
+            Versions Installed
+        </th>
+    </tr>
+    <% if @nfrs.present? %>
+    <%= render :partial => 'nfr', :collection => @nfrs %>
+    <% else %>
+    <td colspan="5">
+        No records found
+    </td>
+    <% end %>
+</table>
+<h3>Support Incidents</h3>
+<table>
+    <tr>
+        <th>
+            Case Number
+        </th>
+        <th>
+            Summary
+        </th>
+        <th>
+            Opened At
+        </th>
+        <th>
+            Closed At
+        </th>
+        <th>
+            Serial Number
+        </th>
+        <th>
+            Opened By
+        </th>
+        <th>
+            Customer
+        </th>
+        <th>
+            Within SLA
+        </th>
+        <th>
+            Billable
+        </th>
+    </tr>
+    <% if @tickets.present? %>
+    <%= render :partial => 'ticket', :collection => @tickets %>
+    <% else %>
+    <td colspan="6">
+        No records found
+    </td>
+    <% end %>
+</table>
+<h3>OpenMind Users for <%= @user ? h(@user.enterprise.name) : "&mdash;Unknown Enterprise&mdash;" %></h3>
+<table>
+    <tr>
+        <th>
+            Name
+        </th>
+        <th>
+            Email
+        </th>
+        <th>
+            User Since
+        </th>
+        <th>
+            Active
+        </th>
+    </tr>
+    <%= render :partial => 'user', :collection => @users %>
+</table>

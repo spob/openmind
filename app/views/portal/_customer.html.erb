@@ -1,0 +1,38 @@
+<tr>
+    <td>
+        <%= h(customer.portal_org.try(:org_name)) %>
+    </td>
+    <td>
+        <%= h(customer.location) %>
+    </td>
+    <td>
+        <%= h(customer.serial_number) %>
+    </td>
+    <td>
+        <%= h(customer.product) %>
+    </td>
+    <td>
+        <% if !customer.available %>
+        <%= theme_image_tag("icons/16x16/16-check.png", options = {:alt=>"available"}) %>
+        <% else %>
+        &nbsp;
+		<% end %>
+    </td>
+    <td>
+        <%= nvl(om_date(customer.registered_at), "&nbsp;") %>
+    </td>
+    <td>
+        <%= nvl(om_date(customer.maintenance_expires_at), "&nbsp;") %>
+    </td>
+    <td>
+        <%= nvl(h(customer.registered_version), "&nbsp;") %>
+    </td>
+    <td width="25%">
+        <% serial_number = SerialNumber.find_by_serial_number(customer.serial_number) %>
+        <% if serial_number.nil? || serial_number.active_releases.empty? %>
+        &nbsp;
+		<% else %>
+        <%= serial_number.active_releases.collect{ |r| link_to("#{h(r.product.name)} #{h(r.version) }", release_path(r)) }.join(", ") %>
+        <% end %>
+    </td>
+</tr>

@@ -19,36 +19,36 @@ class PollsController < ApplicationController
 
   def show
     session[:polls_show_toggle_detail] ||= "HIDE"
-    @poll = Poll.find(params[:id])
-    #    @chart_data = []
-    #    for option in @poll.poll_options
-    #      data_point = [ option.description, option.user_responses.size]
-    #      @chart_data << data_point unless option.user_responses.size == 0
-    #    end
     
-    @graph = open_flash_chart_object(450,450, pie_polls_path(:id => @poll.id), true, '/')     
+    @poll = Poll.find(params[:id])
+    @graph = open_flash_chart_object(450,450, pie_poll_url(@poll))     
   end
 
   def pie
     poll = Poll.find(params[:id])
-    data = []
-    labels = []
-    g = Graph.new
+    
     #    total_responses = poll.poll_options.collect(&:user_responses).size
+    pie_values = []
     for option in poll.poll_options
       if option.user_responses.size > 0
-        data << option.user_responses.size
-        labels << "#{StringUtils.truncate option.description, 16}"
+        pie_values << PieValue.new(option.user_responses.size, "#{StringUtils.truncate option.description, 16}")
       end
     end
 
-    g.pie(70, '#505050', '{background-color:#FFFFFF; font-size: 12px; color: #404040;}')
-    g.pie_values(data, labels)
-    g.set_bg_color('#FFFFFF')
-    g.pie_slice_colors(%w(#CF2626 #5767AF  #D01FC3 #356AA0 #CF5ACD #CF750C #FF7200 #8F1A1A #ADD700 #57AF9D #C3CF5A #456F4F #C79810))
-    #    g.set_tool_tip("#val#")
-    #    g.title("Pie Chart", '{font-size:18px; color: #d01f3c}' )
-    render :text => g.render
+    pie_chart = Pie.new
+    pie_chart.start_angle = 35
+    pie_chart.animate = true
+    pie_chart.tooltip = '#val# of #total#<br>#percent#'
+    pie_chart.values  = pie_values
+    pie_chart.colours = %w(#CF2626 #5767AF  #D01FC3 #356AA0 #CF5ACD #CF750C #FF7200 #8F1A1A #ADD700 #57AF9D #C3CF5A #456F4F #C79810)
+    
+    chart = OpenFlashChart.new
+    
+    chart.bg_colour = '#ffffcc'
+    chart.title = Title.new("Survey Responses")
+    chart.add_element(pie_chart)
+    chart.x_axis = nil
+    render :text => chart.to_s
   end
 
 

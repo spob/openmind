@@ -1,0 +1,21 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  email: MyString
+  type: MyString
+  name: MyString
+  email_address: MyString
+  certification: MyString
+  certified_at: 2010-09-08 13:03:59
+  status: MyString
+  purchased_training: false
+
+two:
+  email: MyString
+  type: MyString
+  name: MyString
+  email_address: MyString
+  certification: MyString
+  certified_at: 2010-09-08 13:03:59
+  status: MyString
+  purchased_training: false

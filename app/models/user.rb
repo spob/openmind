@@ -34,8 +34,18 @@ class User < ActiveRecord::Base
   extend ActiveSupport::Memoizable
   
   ajaxful_rater
-  acts_as_solr :fields => [:email, :first_name, :last_name], 
-    :include => [:enterprise]
+#  acts_as_solr :fields => [:email, :first_name, :last_name], 
+#    :include => [:enterprise]
+    
+  define_index do
+    indexes email, :sortable => true
+    indexes first_name, :sortable => true
+    indexes last_name, :sortable => true
+    indexes enterprise(:name), :as => :enterprise, :sortable => true
+    
+    has created_at, updated_at
+    set_property :delta => true
+  end
 
   
   # Virtual attribute for the unencrypted password
@@ -91,6 +101,9 @@ class User < ActiveRecord::Base
   has_many :user_idea_reads,:dependent => :destroy
   has_many :rates
   has_many :owned_topics, :class_name => 'Topic', :foreign_key => "owner_id"
+  has_many :portal_orgs, :class_name => 'PortalUserOrgMap', :foreign_key => 'email', :primary_key => 'email'
+  has_many :portal_reseller_orgs, :class_name => 'PortalUserOrgMap', :conditions => "org_type = 'R'", :foreign_key => 'email', :primary_key => 'email'
+  has_many :portal_end_customer_orgs, :class_name => 'PortalUserOrgMap', :conditions => "org_type = 'E'", :foreign_key => 'email', :primary_key => 'email'
   
   before_create :make_activation_code
 
@@ -166,6 +179,15 @@ class User < ActiveRecord::Base
     # hide records with a nil activated_at
     u = User.find :first, :conditions => ['email = ? and activated_at IS NOT NULL', email]
     u && u.authenticated?(password) ? u : nil
+  end
+  
+  def self.authenticate_otp(email, otp)
+    # hide records with a nil activated_at
+    u = User.find :first, :conditions => ['email = ? and activated_at IS NOT NULL', email]
+    u = u && u.one_time_password == otp ? u : nil
+    u = u && !u.otp_expired? ? u : nil
+    u.update_attributes!(:one_time_password => nil) if u
+    u
   end
 
   # Encrypts some data with the salt.
@@ -269,9 +291,27 @@ class User < ActiveRecord::Base
   end
   
   def new_random_password
-    self.salt = Digest::SHA1.hexdigest("--#{Time.zone.now.to_s}--#{email}--")
+    self.salt = calc_salt
     self.password=  self.salt[0,6]
     self.password_confirmation = self.password
+  end
+  
+  def new_otp
+    self.one_time_password = APP_CONFIG['otp_expire_seconds'].to_i.from_now.xmlschema + '|' + Digest::SHA1.hexdigest("--#{calc_salt[0,6]}--#{Time.now.to_s}--")
+  end
+  
+  require 'rexml/document'
+  def otp_to_xml
+    doc = REXML::Document.new
+    root = doc.add_element "one_time_password"
+    root.add_text self.one_time_password
+    doc << REXML::XMLDecl.new(REXML::XMLDecl::DEFAULT_VERSION, REXML::XMLDecl::DEFAULT_ENCODING)
+    doc.to_s
+  end
+  
+  def otp_expired?
+    return false if self.one_time_password.nil?
+    return Time.xmlschema(self.one_time_password.split('|').first) < Time.now
   end
   
   # Activates the user in the database.
@@ -313,6 +353,14 @@ class User < ActiveRecord::Base
   def watch_topic(topic)
     topic_watches.create(:topic => topic)
   end
+  
+  def can_view_portal?
+    portal_enterprise_types.include?(self.enterprise.enterprise_type) && self.enterprise.view_portal
+  end
+  
+  def can_specify_email_in_portal?
+    portal_specify_email_enterprise_types.include? self.enterprise.enterprise_type
+  end
 
   protected
   # before filter
@@ -340,4 +388,22 @@ class User < ActiveRecord::Base
   end
 
   memoize :mediator?, :prodmgr?, :sysadmin?
+  
+  private
+  
+  def calc_salt
+    Digest::SHA1.hexdigest("--#{Time.zone.now.to_s}--#{email}--")
+  end
+  
+  def portal_enterprise_types
+    # strip surrounding ()
+    types = (APP_CONFIG['show_portal_for_enterprise_types'] || "").gsub(/^\s*\(|\)\s*$/, "").split(/,/) || [""]
+    LookupCode.find(:all, :conditions => { :short_name => types, :code_type => 'EnterpriseType'})
+  end
+  
+  def portal_specify_email_enterprise_types
+    # strip surrounding ()
+    types = (APP_CONFIG['allow_email_override_for_enterprise_types'] || "").gsub(/^\s*\(|\)\s*$/, "").split(/,/) || [""]
+    LookupCode.find(:all, :conditions => { :short_name => types, :code_type => 'EnterpriseType'})
+  end
 end

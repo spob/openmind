@@ -30,8 +30,12 @@
     </p>
 	<% end %>
     <p>
-      <label for="description">Active:</label>
-      <input type="checkbox" name="active" value="active" <%= "checked" if @product.active?  %> disabled />
+      <label for="description">Active:</label> 	
+        <% if @product.active %>
+        <%= theme_image_tag("icons/16x16/16-check.png", options = {:alt=>"active"}) %>
+        <% else %>
+        &nbsp;
+		<% end %>
     </p>
   </div>
   <br/>

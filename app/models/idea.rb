@@ -21,7 +21,14 @@
 class Idea < ActiveRecord::Base  
   has_friendly_id :friendly_identifier, :use_slug => true
   acts_as_taggable
-  acts_as_solr :fields => [:title, :description], :include => [:comments]
+#  acts_as_solr :fields => [:title, :description], :include => [:comments]
+  define_index do
+    indexes title, :sortable => true
+    indexes description
+    
+    has created_at, updated_at
+    set_property :delta => true
+  end
   
   belongs_to :user
   belongs_to :release
@@ -171,9 +178,9 @@ class Idea < ActiveRecord::Base
     unless title_filter.nil? or title_filter.blank?
       search_results = []
       begin
-        search_results = 
-          Idea.find_by_solr(StringUtils.sanitize_search_terms(title_filter),
-          :lazy => true).docs.collect(&:id)
+        search_results = Idea.search_for_ids(title_filter).to_a 
+#          Idea.find_by_solr(StringUtils.sanitize_search_terms(title_filter),
+#          :lazy => true).docs.collect(&:id)
       rescue RuntimeError => e
         logger.error(e)
       end

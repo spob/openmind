@@ -9,6 +9,6 @@
   <%= theme_image_tag("icons/32x32/ideas.png", 
       options = {:alt=>"Ideas"}) %>Idea Tags
 </h1>
-<% tag_cloud @tags, %w(css1 css2 css3 css4) do |tag, css_class| %>
+<% tag_cloud @tags.sort_by{|t| t.name.downcase}, %w(css1 css2 css3 css4) do |tag, css_class| %>
     <%= link_to tag.name, { :action => :tag, :id => tag.name }, :class => css_class %>
 <% end %>

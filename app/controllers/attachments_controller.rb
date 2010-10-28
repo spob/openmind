@@ -27,18 +27,19 @@ class AttachmentsController < ApplicationController
   def search
     session[:attachments_search] = params[:search]
     
-    params[:search] = StringUtils.sanitize_search_terms params[:search]
+#    params[:search] = StringUtils.sanitize_search_terms params[:search]
     if params[:search].blank?
       redirect_to attachments_path
       return
     end
     begin
-      search_results = Attachment.find_by_solr(params[:search], :lazy => true)
-      if search_results.nil?
-        ids = [] 
-      else
-        ids = search_results.docs.collect(&:id)
-      end
+      ids = Attachment.search_for_ids(params[:search])
+#      search_results = Attachment.find_by_solr(params[:search], :lazy => true)
+#      if search_results.nil?
+#        ids = [] 
+#      else
+#        ids = search_results.docs.collect(&:id)
+#      end
     rescue RuntimeError => e
       flash[:error] = "An error occurred while executing your search. Perhaps there is a problem with the syntax of your search string."
       logger.error(e)

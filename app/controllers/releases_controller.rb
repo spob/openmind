@@ -1,5 +1,5 @@
 class ReleasesController < ApplicationController
-  before_filter :login_required, :except => [:index, :list, :show, :check_for_updates]
+  before_filter :login_required, :except => [:index, :list, :show, :check_for_updates, :compatibility]
   access_control [:new, :commit, :index, :edit, :create, :update, :destroy] => 'prodmgr'
   
   # GETs should be safe (see http://www.w3.org/2001/tag/doc/whenToUseGet.html)
@@ -75,6 +75,11 @@ class ReleasesController < ApplicationController
     end
   end
   
+  def compatibility
+    @root_product = Product.find_by_name(APP_CONFIG['root_compatibility_product'])
+    redirect_to releases_path unless @root_product
+  end
+  
   def preview
     render :layout => false
   end
@@ -87,35 +92,65 @@ class ReleasesController < ApplicationController
   def  check_for_updates
     release_ids = {}
     @serial_number = params[:serial_number]
-    params[:releases].split(",").collect { |x| release_ids[x.split("|")[0]] = x.split("|")[1] } unless params[:releases].nil? or params[:releases].blank?
+    @tickets = SupportTicket.by_serial_number(@serial_number)
+    # release_id's is a hash. The keys to the hash are the release ids. The values are an array. The first element of the array is the expiration date, the second is the order in which is was found
+    params[:releases].split(",").enum_with_index.collect { |x, i| release_ids[x.split("|")[0]] = [x.split("|")[1], i] } unless params[:releases].nil? or params[:releases].blank?
     
     @releases = []
     @expired_maintenance = false
-    release_ids.keys.each do |id|
+    @unwatched = false
+    release_ids.keys.sort{|x,y| release_ids[x][1] <=> release_ids[y][1].to_i}.each do |id|
       release = Release.find_by_id(id)
       release = Release.find_by_external_release_id(id) unless release
       if release.nil?
         flash[:error] = "Couldn't find product with id '#{id}'" 
       else
-        if release_ids[id] 
+        @unwatched = true unless release.product.watchers.include? current_user
+        if release_ids[id][0] 
           begin
-            release.maintenance_expires = Date.parse(release_ids[id]) 
+            release.maintenance_expires = Date.parse(release_ids[id][0]) 
             
             @expired_maintenance = true if release.maintenance_expires < Date.today
           rescue ArgumentError
-            flash[:error] = "Invalid date format '#{release_ids[id]}'" 
+            flash[:error] = "Invalid date format '#{release_ids[id][0]}'" 
           end
         end
         
         @releases << release 
       end
     end
+    
+    # Persist serial number and releases
+    if !@serial_number.nil? and @serial_number.length == 19
+      @sn = SerialNumber.find_or_create_by_serial_number(@serial_number)
+       (@releases - @sn.active_releases).each do |r|
+        # these are releases which have been added
+#        ir = @sn.inactive_releases
+        if @sn.inactive_releases.include? r
+          map = @sn.serial_number_release_maps.find_by_release_id(r)
+          # if map is null something is very wrong
+          map.update_attributes!(:disabled_at => nil, :expires_at => r.maintenance_expires)
+        else
+          SerialNumberReleaseMap.create!(:serial_number => @sn, :release => r, :expires_at => r.maintenance_expires)
+        end
+      end
+      
+       (@sn.active_releases - @releases).each do |r|
+        # these are releases which have been removed
+        map = @sn.serial_number_release_maps.find_by_release_id(r)
+        # if map is null something is very wrong
+        map.update_attributes!(:disabled_at => Time.now, :expires_at => r.maintenance_expires)
+      end
+    end
+    
     @latest_release = {}
     @unsatisfied_dependencies = {}
     @releases.each do |release|
       @latest_release[release], @unsatisfied_dependencies[release] = release.update_available(@releases)
     end
-    new_releases = @latest_release.values.delete_if {|x| x.nil?}
+    new_releases = @latest_release.values.delete_if {|x| x.nil?}.collect do |x|
+      {:product => x.product.name, :version => x.version, :external_release_id => x.external_release_id }
+    end
     xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><releases type=\"array\"></releases>"
     xml = new_releases.to_xml unless new_releases.empty?
     respond_to do |wants|
@@ -135,11 +170,11 @@ class ReleasesController < ApplicationController
   def update
     @release = Release.find(params[:id])
     Release.transaction do
-      @release.release_dependencies.clear
-      if params[:release][:release_dependencies]
-        for release_id in params[:release][:release_dependencies]
-          depends_upon = Release.find(release_id.to_i)
-          @release.release_dependencies.create!(:depends_on => depends_upon)
+      @release.releases_dependant_on_this_release_dependencies.clear
+      if params[:release][:releases_dependant_on_this_release]
+        for release_id in params[:release][:releases_dependant_on_this_release]
+          dependent_release = Release.find(release_id.to_i)
+          @release.releases_dependant_on_this_release_dependencies.create!(:release => dependent_release)
         end
       end
       @release.description = params[:release][:description]
@@ -147,6 +182,7 @@ class ReleasesController < ApplicationController
       @release.release_status_id = params[:release][:release_status_id]
       @release.version = params[:release][:version]
       @release.download_url = params[:release][:download_url]
+      @release.release_notes = params[:release][:release_notes]
       @release.external_release_id = params[:release][:external_release_id]
       @release.release_date = params[:release][:release_date]
       calc_change_history @release
@@ -193,6 +229,8 @@ class ReleasesController < ApplicationController
     release.changes['version'] if release.version_changed?
     add_change_history_from_changes release, "Download URL",
     release.changes['download_url'] if release.download_url_changed?
+    add_change_history_from_changes release, "Release Notes URL",
+    release.changes['release_notes'] if release.release_notes_changed?
   end
   
   def add_change_history_old_new release, label, old_value, new_value

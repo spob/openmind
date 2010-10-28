@@ -14,6 +14,15 @@ class EmailNotifier < ActionMailer::Base
       :id => user.activation_code,
       :only_path  => false
   end
+  
+  def pending_topics(topics)
+    setup_email(topics.first.owner)
+    @subject    += "Topics assigned to #{topics.first.owner.full_name} awaiting response"
+    @body[:topics] = topics
+    @body[:url]  = url_for :controller => 'forums',
+      :action => 'index',
+      :only_path  => false    
+  end
 
   def reminder_to_vote(idea_id)
     idea = Idea.find(idea_id)

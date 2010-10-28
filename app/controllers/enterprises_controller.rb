@@ -26,12 +26,14 @@ class EnterprisesController < ApplicationController
   def search
     session[:enterprise_start_filter] = "All"
     session[:enterprise_end_filter] = "All"
-    session[:enterprises_search] = params[:search]
+    session[:enterprises_search] = params[:enterprise][:name]
+    @enterprise = Enterprise.new(:name => session[:enterprises_search])
 
-    params[:search] = StringUtils.sanitize_search_terms params[:search]
+#    params[:search] = StringUtils.sanitize_search_terms params[:search]
     set_start_end_tags
     begin
-      search_results = Enterprise.find_by_solr(params[:search], :lazy => true).docs.collect(&:id)
+#      search_results = Enterprise.find_by_solr(params[:search], :lazy => true).docs.collect(&:id)
+      search_results = Enterprise.search_for_ids(session[:enterprises_search])
     rescue RuntimeError => e
       flash[:error] = "An error occurred while executing your search. Perhaps there is a problem with the syntax of your search string."
       logger.error(e)
@@ -123,6 +125,14 @@ class EnterprisesController < ApplicationController
     flash[:notice] = "Enterprise #{name} was successfully deleted."
     redirect_to enterprises_path
   end  
+  
+  def auto_complete_for_enterprise_name
+    search_txt = "%#{params[:enterprise][:name]}%"
+    @enterprises = Enterprise.find(:all, :conditions => ['name LIKE ?', 
+    search_txt],
+    :order => 'name ASC', :limit => 10) 
+    render :inline => "<%= auto_complete_result(@enterprises, 'name') %>"
+  end
 
   private
   

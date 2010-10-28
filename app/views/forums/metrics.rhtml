@@ -1,5 +1,13 @@
+
 <%= javascript_include_tag "wz_tooltip.js", :cache => "cache/tooltip" %>
 
 <h1>Forum Management Metrics</h1>
+<div id="actionButtons2">
+  <%= link_to "View Graphically",
+    metrics_graphs_forums_path,
+    html_options = {:class=> "button",
+    :onmouseover => "Tip('View forum metrics as a graphs')" } %>
+</div>
 <%=render(:partial => "forum_metric", :locals => {:forum_metric => dummy_all_forum })%>
+<%=render(:partial => "forum_metric", :locals => {:forum_metric => nil })%>
 <%=render(:partial => "forum_metric", :collection => @forums)%>

@@ -1,4 +1,6 @@
 class TopicsController < ApplicationController
+  before_filter :fetch_topic, :only => [:show]
+  before_filter :login_required, :only => [:show], :if => :must_login 
   before_filter :login_required, :except => [:index, :show, :search]
   cache_sweeper :topics_sweeper, :only => [ :create, :update, :destroy, :toggle_status ]
   
@@ -78,7 +80,6 @@ class TopicsController < ApplicationController
   def show
     session[:forums_search] = nil
     Topic.transaction do
-      @topic = Topic.find(params[:id])
       unless @topic.forum.can_see? current_user or prodmgr?
         flash[:error] = ForumsController.flash_for_forum_access_denied(current_user)
         redirect_to redirect_path_on_access_denied(current_user)
@@ -139,10 +140,12 @@ class TopicsController < ApplicationController
     hits = {}
     @hits = []
     session[:forums_search] = params[:search]
+    
     # solr barfs if search string starts with a wild card...so strip it out
-    params[:search] = StringUtils.sanitize_search_terms params[:search]
+#    params[:search] = StringUtils.sanitize_search_terms params[:search]
     begin
-      search_results = Topic.find_by_solr(params[:search], :scores => true)
+#      search_results = Topic.find_by_solr(params[:search], :scores => true)
+      search_results = params[:search].blank? ? [] : Topic.search(params[:search], :retry_stale => true, :limit => 500)
     rescue RuntimeError => e
       flash[:error] = "An error occurred while executing your search. Perhaps there is a problem with the syntax of your search string."
       logger.error(e)
@@ -155,21 +158,22 @@ class TopicsController < ApplicationController
         redirect_to forum_path(@forum)
         return
       end
-      search_results.docs.each do |topic|
-        hits[topic.id] = TopicHit.new(topic, true, topic.solr_score) if topic.forum.can_see?(current_user) or prodmgr?
+      search_results.each do |topic|
+        hits[topic.id] = TopicHit.new(topic, true, 1) if topic.forum.can_see?(current_user) or prodmgr?
       end
-      TopicComment.find_by_solr(params[:search], :scores => true).docs.each do |comment|
+#      TopicComment.find_by_solr(params[:search], :scores => true).docs.each do |comment|
+      (params[:search].blank? ? [] : TopicComment.search(params[:search], :retry_stale => true, :limit => 500)).each do |comment|
         if (comment.topic.forum.can_see?(current_user) or prodmgr?) and
          (!comment.private or comment.topic.forum.mediators.include? current_user)
           # first see if topic hit already exists
           topic_hit = hits[comment.topic.id]
           if topic_hit.nil?
-            hit = TopicHit.new(comment.topic, false, comment.solr_score)
+            hit = TopicHit.new(comment.topic, false, 1)
             hit.comments << comment
             hits[comment.topic.id] = hit
           else
             topic_hit.comments << comment
-            topic_hit.score = comment.solr_score if topic_hit.score < comment.solr_score
+            topic_hit.score = comment.solr_score if topic_hit.score < 1
           end
         end
       end
@@ -214,6 +218,14 @@ class TopicsController < ApplicationController
   
   
   private
+  
+  def fetch_topic    
+    @topic = Topic.find(params[:id])
+  end
+  
+  def must_login
+    (!@topic.forum.public? and current_user == :false)
+  end
   
   def redirect_path_on_access_denied user
     return forums_path unless user == :false

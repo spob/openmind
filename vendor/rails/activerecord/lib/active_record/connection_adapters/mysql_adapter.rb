@@ -7,7 +7,8 @@ module MysqlCompat #:nodoc:
     raise 'Mysql not loaded' unless defined?(::Mysql)
 
     target = defined?(Mysql::Result) ? Mysql::Result : MysqlRes
-    return if target.instance_methods.include?('all_hashes')
+    return if target.instance_methods.include?('all_hashes') ||
+              target.instance_methods.include?(:all_hashes)
 
     # Ruby driver has a version string and returns null values in each_hash
     # C driver >= 2.7 returns null values in each_hash
@@ -52,12 +53,7 @@ module ActiveRecord
       socket   = config[:socket]
       username = config[:username] ? config[:username].to_s : 'root'
       password = config[:password].to_s
-
-      if config.has_key?(:database)
-        database = config[:database]
-      else
-        raise ArgumentError, "No database specified. Missing argument: database."
-      end
+      database = config[:database]
 
       # Require the MySQL driver and define Mysql::Result.all_hashes
       unless defined? Mysql
@@ -68,19 +64,22 @@ module ActiveRecord
           raise
         end
       end
+
       MysqlCompat.define_all_hashes_method!
 
       mysql = Mysql.init
       mysql.ssl_set(config[:sslkey], config[:sslcert], config[:sslca], config[:sslcapath], config[:sslcipher]) if config[:sslca] || config[:sslkey]
 
-      ConnectionAdapters::MysqlAdapter.new(mysql, logger, [host, username, password, database, port, socket], config)
+      default_flags = Mysql.const_defined?(:CLIENT_MULTI_RESULTS) ? Mysql::CLIENT_MULTI_RESULTS : 0
+      options = [host, username, password, database, port, socket, default_flags]
+      ConnectionAdapters::MysqlAdapter.new(mysql, logger, options, config)
     end
   end
 
   module ConnectionAdapters
     class MysqlColumn < Column #:nodoc:
       def extract_default(default)
-        if type == :binary || type == :text
+        if sql_type =~ /blob/i || type == :text
           if default.blank?
             return null ? nil : ''
           else
@@ -94,7 +93,7 @@ module ActiveRecord
       end
 
       def has_default?
-        return false if type == :binary || type == :text #mysql forbids defaults on blob and text columns
+        return false if sql_type =~ /blob/i || type == :text #mysql forbids defaults on blob and text columns
         super
       end
 
@@ -212,6 +211,10 @@ module ActiveRecord
         true
       end
       
+      def supports_primary_key? #:nodoc:
+        true
+      end
+
       def supports_savepoints? #:nodoc:
         true
       end
@@ -554,6 +557,12 @@ module ActiveRecord
         keys.length == 1 ? [keys.first, nil] : nil
       end
 
+      # Returns just a table's primary key
+      def primary_key(table)
+        pk_and_sequence = pk_and_sequence_for(table)
+        pk_and_sequence && pk_and_sequence.first
+      end
+
       def case_sensitive_equality_operator
         "= BINARY"
       end
@@ -572,6 +581,10 @@ module ActiveRecord
           if @config[:sslca] || @config[:sslkey]
             @connection.ssl_set(@config[:sslkey], @config[:sslcert], @config[:sslca], @config[:sslcapath], @config[:sslcipher])
           end
+
+          @connection.options(Mysql::OPT_CONNECT_TIMEOUT, @config[:connect_timeout]) if @config[:connect_timeout]
+          @connection.options(Mysql::OPT_READ_TIMEOUT, @config[:read_timeout]) if @config[:read_timeout]
+          @connection.options(Mysql::OPT_WRITE_TIMEOUT, @config[:write_timeout]) if @config[:write_timeout]
 
           @connection.real_connect(*@connection_options)
 
