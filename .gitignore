@@ -25,3 +25,6 @@ development.yml
 db/sphinx/development
 log/searchd.production.pid
 db/sphinx
+.idea
+.rvmrc
+log/searchd.development.pid

@@ -97,7 +97,7 @@ class Forum < ActiveRecord::Base
   end
   
   def self.notify_pending_topics
-     Topic.owned.open.tracked(:select => 'distinct owner_id').find_all{|t| t.days_comment_pending > 0}.collect(&:owner).each do |u|
+     Topic.owned.open.tracked(:select => 'distinct owner_id').find_all{|t| t.days_comment_pending > 0}.collect(&:owner).uniq.each do |u|
        EmailNotifier.deliver_pending_topics u.owned_topics.open.tracked if u.active
      end
   end

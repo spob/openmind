@@ -11,7 +11,7 @@
             html_options = {
             :onmouseover => "Tip('View products')" } %>
         </li>
-        <% if APP_CONFIG['root_compatibility_product'] %>
+      <% if Product.find_by_name(APP_CONFIG['root_compatibility_product']) %>
         <li>
             <%= link_to "Compatibility", compatibility_releases_path,
             html_options = {

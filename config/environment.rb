@@ -5,7 +5,7 @@
 ENV['RAILS_ENV'] ||= 'production'
 
 # Specifies gem version of Rails to use when vendor/rails is not present
-# #RAILS_GEM_VERSION = '1.2.6' unless defined? RAILS_GEM_VERSION
+RAILS_GEM_VERSION = '2.3.5' unless defined? RAILS_GEM_VERSION
 
 # Bootstrap the Rails environment, frameworks, and default configuration
 require File.join(File.dirname(__FILE__), 'boot')
@@ -21,14 +21,18 @@ Rails::Initializer.run do |config|
   
   # Uncomment the following line if you are using RedCloth -- only required for implementations
   # that upgraded from a 1.x version of OpenMind
-  config.gem "RedCloth", :lib => 'redcloth', :source => "http://code.whytheluckystiff.net/"
+  config.gem 'RedCloth', :lib => 'redcloth', :version => '>= 3.315'
   
   # Require the latest version of mysql
   config.gem "mysql"
+
+  config.gem "rmagick", :lib => "RMagick2"
   
   config.gem "fastercsv"
   
   config.gem "friendly_id"
+  
+  config.gem "daemons"
   
   config.gem 'thoughtbot-shoulda', :lib => 'shoulda/rails', :source => "http://gems.github.com"
   
@@ -39,7 +43,7 @@ Rails::Initializer.run do |config|
   config.gem(
   'thinking-sphinx',
   :lib     => 'thinking_sphinx',
-  :version => '1.3.18')
+  :version => '1.3.20')
   
   # Default timezone...Set this to the timezone where the server resides
   config.time_zone = 'Eastern Time (US & Canada)'
