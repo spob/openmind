@@ -25,3 +25,4 @@ development.yml
 db/sphinx/development
 log/searchd.production.pid
 db/sphinx
+config/database.yml
