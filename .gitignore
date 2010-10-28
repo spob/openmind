@@ -23,6 +23,8 @@ public/themes/scribe/cache/
 .tmp*
 development.yml
 db/sphinx/development
+.rvmrc
+log/searchd.development.pid
 log/searchd.production.pid
 db/sphinx
 config/database.yml

@@ -51,7 +51,7 @@ module ActionController #:nodoc:
     protected
       # Returns the cookie container, which operates as described above.
       def cookies
-        CookieJar.new(self)
+        @cookies ||= CookieJar.new(self)
       end
   end
 
@@ -87,8 +87,9 @@ module ActionController #:nodoc:
     def delete(key, options = {})
       options.symbolize_keys!
       options[:path] = "/" unless options.has_key?(:path)
-      super(key.to_s)
+      value = super(key.to_s)
       @controller.response.delete_cookie(key, options)
+      value
     end
   end
 end

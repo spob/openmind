@@ -2,7 +2,8 @@
 development:
   enable_star: 1
   min_infix_len: 1
-  bin_path: 'c:/sphinx/bin'
+#  bin_path: 'c:/sphinx/bin'
+  bin_path: '/usr/local/bin'
 production:
   enable_star: 1
   min_infix_len: 1
