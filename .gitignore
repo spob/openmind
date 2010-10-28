@@ -1,5 +1,6 @@
 solr/production
 log/*.log
+log/*.log.*
 tmp/**/*
 index/**/*
 coverage/**/*
@@ -22,6 +23,7 @@ public/themes/scribe/cache/
 .tmp*
 development.yml
 db/sphinx/development
-.idea
 .rvmrc
 log/searchd.development.pid
+log/searchd.production.pid
+db/sphinx

@@ -1,0 +1,223 @@
+<%content_for :head do -%>
+<style type="text/css">
+    .code {
+        font-family: courier;
+        font-size: 125%;
+        font-weight: bold;
+        color: blue;
+    }
+</style>
+<%end %>
+<div class="formTitle">
+    <%= theme_image_tag("icons/16x16/allocations.png",
+    options = {:alt=>"allocations"}) %>Hotfix Details
+</div>
+<div class="cssform widerLabel">
+    <p>
+        <label for="user">
+            Product:
+        </label>
+        <%=h @product.name %>
+    </p>
+    <p>
+        <label for="user">
+            Hotfix Number:
+        </label>
+        <%=h @hotfix_number %>
+    </p>
+    <p>
+        <label for="user">
+            Release:
+        </label>
+        <%=h @release_number %>
+    </p>
+    <p>
+    <p>
+        <label for="user">
+            Source Tag:
+        </label>
+        <%=h @source_tag %>
+    </p>
+    <p>
+        <label for="user">
+            Insight Version:
+        </label>
+        <%=h @insight_version %>
+    </p>
+    <p>
+        <label for="user">
+            SVN Path:
+        </label>
+        <%=h @product.svn_path %>
+    </p>
+    <p>
+        <label>
+        </label>
+        <%= link_to 'Back', hotfixes_path , html_options = {:class=> "button"} %>
+    </p>
+</div>
+<ol>
+<li>
+    Make sure there are two defects in ontime for this issue. One defect associated to the release on which the problem is occuring (which has the Hotfix flag set), and a second defect to track this defect on the trunk. These defects should be related to one another in ontime to indicate that one is a hotfix for the other. Keep the status of the hotfix defect in ontime up-to-date as you work on the fix. Include notes to reflect the steps you are performing.
+</li>
+<li>
+    Copy targeted release from Tags\Releases to Branches and delete the contents of the media subfolder
+    <br/>
+    <%= text_area_tag :copy, copy_command, :cols => 100, :rows => 4, :wrap => 'off' %>
+</li>
+<li>
+    Check out new branch to a working directory
+    <br/>
+    <%= text_area_tag :copy, "svn checkout \"#{branch}\"\r", :cols => 100, :rows => 3, :wrap => 'off' %>
+</li>
+<li>
+  Update \Branches\<project>\Planning\ReleaseInfo.xlsx with any details about the hot fix
+  <ul>
+    <li>Defect, Support Request, Case, Story number(s)</li>
+    <li>What, how, when, where, why and who?</li>
+    <li>If this .xls does not exist, get from Eddie Cole</li>
+  </ul>
+</li>
+</li>
+<li>
+    Do what you got to do
+    <ul>
+        <li>
+            If working on an adapter, bring down & build correct version of core if you plan to debug or test your changes.
+        </li>
+        <li>
+            Make any code changes you need to, check in to the branch as needed
+        </li>
+        <li>
+            <b>DO NOT bump File version</b>
+            (this will be done by the builds scripts)
+        </li>
+        <li>
+            Edit the build script file Build\Project.Config.xml: 
+            <ul>
+                <li>
+                    Change the line:
+                    <br/>
+                    <span class="code">&lt;property name="ProjectCodeLineName"        value="Current" /&gt;</span>
+                    <br/>
+                    to 
+                    <br/>
+                    <span class="code">&lt;property name="ProjectCodeLineName" value="<%= hf_tag %>" /&gt;</span>
+                </li>
+                <li>
+                    Change the line:
+                    <br/>
+                    <span class="code">&lt;property name="Target.CodeLine.Name"        value="Current" /&gt;</span>
+                    <br/>
+                    to 
+                    <br/>
+                    <span class="code">&lt;property name="Target.CodeLine.Name"        value="<%= @insight_version %>" /&gt;</span>
+                </li>
+            </ul>
+        </li>
+        <li>
+            Bump assembly version only if needed
+        </li>
+        <li>
+            Add comment in assembly info or comments
+        </li>
+    </ul>
+</li>
+<li>
+    Get Joe to build your hot fix on the build machine
+    <ul>
+        <li>
+            Start one of the existing VMs specific to the core version you are building against 
+            <ul>
+                <li>
+                    DEV-BA66 is for trunk
+                </li>
+                <li>
+                    DEV-BA652 is for 6.5.x
+                </li>
+            </ul>
+        </li>
+        <li>
+            Remote desktop into the VM and check out your branch to a folder named ProjectCodeLineName that is a sibling of Current
+        </li>
+        <li>
+            Create a new Debug and/or Release project in TeamCity (usually from a copy of an existing project) and point it to the working branch in svn. 
+        </li>
+        <li>
+            Edit project settings “Build Configuration Step” -> ”2. Version Control Settings”
+            <ul>
+                <li>
+                    change the “VCS Root” -> “SVN Connection Settings” to point to the working branch.
+                </li>
+                <li>
+                    DO NOT check the “Make this VCS root available to all of the projects“ option at the bottom of the screen.
+                </li>
+                <li>
+                    DO set the Checkout directory to the value used for ProjectCodeLineName above
+                </li>
+                <li>
+                    DO click the Save button at the bottom of the “VCS Root” screen and again on the “Version Control Settings” screen.
+                </li>
+            </ul>
+        </li>
+        <li>
+            Edit project settings “Build Configuration Step” -> 3. Runner: Command Line” and change the Working Directory to the folder name created in step 5.b above
+        </li>
+        <li>
+            Edit project settings “Build Configuration Step” -> “7. Agent Requirements” -> “Requirements for system properties” and change the “system.agent.name” property to use the working build agent started in the above step (eg, DEV-BA652)
+        </li>
+        <li>
+            Ensure that the agent is enabled and running (click on the Agents tab on the main TC screen)
+        </li>
+    </ul>
+</li>
+<li>
+    Build using CI or force Release builds as needed. The build’s output will be at \\Scribesrv3\development\Archive listed under the product folder and SVN rev that you built.
+</li>
+<li>
+    Check in media and readme, clean up SVN
+    <ul>
+        <li>
+            Add final media to Media folder and add to SVN (media may be full MSIs or only a zip of the needed files)
+        </li>
+        <li>
+            Add a ReadMe document describing the steps necessary to install the hotfix file(s) on the end user system.
+        </li>
+        <ul>
+        <li>
+        Name the file Readme.txt
+        <li>
+            Be specific re: steps to register the file (ie, regsrv32, regasm /codebase, etc) as necessary. Include a note about pausing integration processes, stopping services, etc as necessary. 
+        </li>
+        <li>
+            If the hotfix is a rollup of previous hotfixes (as described in step 1 above), ensure that previous hotfix installation steps are also considered (ie, if this is the second hotfix for MessageProcessor.exe, there needs to be only one document describing how to install the MessageProcessor.exe.) 
+        </li>
+        <li>
+            Check this file into subversion in the project’s Media folder along with the hotfix binary (.exe or .dll)
+        </li>
+    </ul>
+    <li>
+        Move branch in SVN from Branches to Tags\Releases
+        <br/>
+        <%= text_area_tag :move, "svn move \"#{branch}\" \"#{hf_release}\" -m \"Check in for fix for #{@defect}\"\r", :cols => 100, :rows => 3, :wrap => 'off' %>
+    </li>
+    </ul>
+</li>
+<li>
+    Update ontime
+    <ul>
+        <li>
+            Update the defect with any pertinent info. Include a hyperlink to the location of the hotfix in subversion.
+        </li>
+        <li>
+            Change the status of the defect in ontime to "HF Delivered"
+        </li>
+    </ul>
+</li>
+<li>
+    Merge change onto trunk or other branches. Typically hot fixes should be immediately merged on to the trunk. On exception, a hot fix will be deferred to a future release. The PM will make the decision as to what to do when
+</li>
+</ol>
+<p>
+    In order to use the subversion commands shown above, you will need to install the subversion command line client. You can download it from <%= link_to "http://subversion.apache.org/packages.html", "http://subversion.apache.org/packages.html" %>
+</p>

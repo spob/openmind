@@ -1,0 +1,624 @@
+/* global.css */
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, Verdana, Sans-Serif;
+    font-family: "Lucida Grande" , Tahoma, Arial, Verdana, sans-serif;
+    margin: 0px;
+    background-color: #537EA9;
+    font-size: 100%;
+    line-height: 1.125em; /* 18px */
+}
+
+a:link, a:visited, a:active {
+    color: #22496F;
+    text-decoration: none;
+}
+
+a:hover {
+    list-style-image: url(../images/li_hover.gif);
+    text-decoration: underline;
+    color: #312F30;
+    background-color: Transparent;
+}
+
+li {
+ /*   font-size: 0.75em; */
+    line-height: 1.5em;
+    margin-bottom: 10px;
+}
+
+h1, h2, h3 {
+    font-weight: normal;
+}
+
+h1 {
+    font-family: Trebuchet MS, Verdana, Sans-Serif;
+    font-size: 2.0em; /* 24px */
+    line-height: 1.5em; /* 18px */
+    margin: 0 0 0.5em 0;
+    border-bottom: dotted 1px #999;
+}
+
+h1 img {
+    border: 0;
+    padding-right:3px;
+}
+
+h2 {
+    font-family: Trebuchet MS, Verdana, Sans-Serif;
+    font-size: 1.83em; /*  22px */
+    line-height: 2.00em; /* 24px */
+    margin: 0 0 0.5em 0;
+    border-bottom: dotted 1px #999;
+}
+
+h3 {
+    font-size: 1.50em; /*18px */
+    line-height: 1.83em; /* 22px */
+    margin: 0 0 0.1em 0;
+    border-bottom: dotted 1px #999;
+}
+
+h4 {
+    font-size: 1.33em; /*16px*/
+    line-height: 1.67em; /* 20px */
+    font-weight: normal;
+    margin: 0 0 0.5em 0;
+    border-bottom: dotted 1px #999;
+}
+
+ul {
+    clear: both;
+    margin: 10px 5px 10px 25px;
+    list-style-type: square;
+}
+
+ol {
+    clear: both;
+    margin: 10px 5px 10px 25px;
+}
+
+img {
+    border: none;
+}
+
+.inside {
+    margin: 0px 20px;
+}
+
+/********* HEADER ***********/
+#headerBrandingAreaPageWrap {
+    z-index: 100;
+    min-width: 600px;
+    max-width: 1400px;
+    margin: 0px auto;
+    width: expression(document.body.clientWidth < 702?  "700px" : document.body.clientWidth > 1402? "1400px" : "auto" );
+    padding: 0px;
+}
+
+#headerBrandingArea {
+    position: relative;
+    padding: 0;
+    margin: 0;
+    text-align: left;
+    width: 100%;
+    height: 77px;
+    background-repeat: repeat-x;
+    background-image: url(../images/headers/headerMastheadTile.jpg);
+}
+
+#headerBackground {
+    width: 100%;
+    height: 126px;
+    background-color: ;
+    text-align: center;
+    background-image: url(../images/headers/headerBgTile.jpg);
+    background-repeat: repeat-x;
+    padding-top:15px;
+}
+
+/********* Header Nav Bar (upper) ***********/
+#headerTopNavBar {
+    margin: 0;
+    padding: 0;
+    height: 22px;
+    width: 100%;
+    background: #2D343E;
+    text-align: center;
+}
+
+.headerTopNavMenu {
+    margin: 0;
+    padding: 0;
+    float: left;
+    width: 100%;
+    white-space:nowrap;
+    background: transparent url(../images/menus/topMenuItem.gif) center center repeat-x;
+}
+
+.headerTopNavMenu li {
+    display: inline;
+    font-size: 0.75em;
+    line-height: 1.8em;
+    font-weight: normal;
+    font-family: Trebuchet MS, Verdana, Sans-Serif;
+}
+
+.headerTopNavMenu li a {
+    float: right;
+    color: #CCC;
+    padding: 0px 11px;
+    text-decoration: none;
+    border-left: 1px solid #999;
+    background: transparent url(../images/menus/topMenuItem.gif) center center repeat-x;
+    
+}
+
+.headerTopNavMenu li a:visited {
+    color: #CCC;
+}
+
+.headerTopNavMenu li a:hover, .headerTopNavMenu li .current {
+    border-top: 0;
+    border-bottom: 0;
+    color: #FFF;
+    background: black url(../images/menus/topMenuItemHover.gif) center center repeat-x;
+    
+}
+
+.headerTopNavMenu li a:active {
+    color: white;
+    background: transparent url(../images/menus/topMenuItemActive.gif) center center repeat-x;
+}
+
+
+/********* Header Nav Bar (lower) ***********/
+#headerLowerNavMenu {
+    margin: 0;
+    padding: 0;
+    float: left;
+    width: 100%;
+    background-color: #0F365F;
+    background-image: url(../images/menus/lowerNavTile.gif);
+    background-repeat: repeat-x;
+    white-space:nowrap;
+    height:27px;
+}
+
+ul#headerLowerNavMenu  {
+    white-space:nowrap;
+}
+
+#headerLowerNavMenu li {
+    white-space:nowrap;
+    display: inline;
+    font-size: 0.92em;   /* 11px */
+    line-height: 1.83em; /* 22px */
+    font-weight: normal;
+    font-family: Trebuchet MS, Verdana, Sans-Serif;
+}
+
+#headerLowerNavMenu li a {
+    float: left;
+    color: white;
+    padding: 0px 11px;
+    text-decoration: none;
+    border-right: 1px solid #666666;
+    background: black url(../images/menus/blockdefault.gif) center center repeat-x;
+}
+
+#headerLowerNavMenu li a:visited {
+    color: white;
+}
+
+#headerLowerNavMenu li .current {
+    color: white;
+    background: transparent url(../images/menus/blockactiveHover.gif) center center repeat-x;
+}
+
+#headerLowerNavMenu li a:hover {
+    color: white;
+    background: transparent url(../images/menus/blockactiveHover.gif) center center repeat-x;
+}
+#headerLowerNavMenu li a:active {
+    color: #FFD103;
+    background: transparent url(../images/menus/blockactive.gif) center center repeat-x;
+}
+
+#secondarySubnav {
+    font-size: 0.75em; /* 12px*/
+    height: 20px;
+    margin: 0;
+    padding: 0;
+    background-color: #980E10;
+    color: #000; /*    padding: 0px 3px 6px 3px; */
+}
+
+#secondarySubnav a:link, #secondarySubnav a:visited, #secondarySubnav active:visited {
+    height: 20px;
+    margin: 0;
+    padding: 0 6px;
+    color: #FFF;
+    text-decoration: none;
+}
+
+#secondarySubnav a:hover {
+    margin: 0;
+    color: #999;
+    background-color: Transparent;
+    text-decoration: underline;
+}
+
+#loggedInAs {
+    z-index:100;
+    position: absolute;
+    font-size: 0.69em;
+    right:10px;
+    top:113px;
+    color:#ccc;
+}
+
+
+/********* Flash Style ***********/
+.flash {
+    position: absolute;
+    border: solid 5px #999;
+    padding:7px 15px 7px 7px;
+    background-color:#FFF;
+    top:10px;
+    right:10px;
+    white-space:nowrap;
+    line-height:32px;
+    font-size: 0.75em;
+}
+
+.flash img {
+    float:left;
+    margin-right:7px;
+}
+
+.flashNotice {
+    border: solid 5px #12AA12;
+    color:green;
+}
+
+.flashError {
+    border: solid 5px #FFD105;
+    color:#FF000A;
+}
+
+/********* Main Content ***********/
+
+#mainBodyPageWrap {
+    z-index: 100;
+    min-width: 600px;
+    max-width: 1400px;
+    margin: 0px auto;
+    width: expression(document.body.clientWidth < 702?  "700px" : document.body.clientWidth > 1402? "1400px" : "auto" );
+    padding: 0px;
+}
+
+#main-contentShell
+{
+    background-color: #fff;
+}
+
+#main-content {
+    position:relative;
+    background-color: #fff;
+    padding: 10px 20px;
+    font-size: 0.75em;  /* 12px */
+    line-height: 1.5em;
+}
+
+.sidebar {
+    font-size: 0.92em; /*11px*/
+    line-height: 1.33em; /*16px*/
+}
+
+/********* Footer ***********/
+#footer {
+    font-size: 0.67em;
+    color: #CCC;
+    height: 35px;
+    text-align: center;
+    width: 100%;
+    background-repeat: repeat-x;
+    background-image: url(../images/menus/footerBgTile.gif);
+    vertical-align: middle;
+    padding-top: 4px;
+}
+
+#footerLinks {
+    z-index: 10000;
+    float: right;
+    background-color: Transparent;
+}
+
+#footer a:link, #footer a:visited, #footer active:visited {
+    padding: 0;
+    color: #FFF;
+    text-decoration:underline;
+}
+
+#footer a:hover {
+    color: #999;
+    background-color: Transparent;
+}
+
+#footer .separator
+{
+    padding: 0 6px;
+}
+
+#footerLeft {
+    float:left;
+    padding-left:15px;
+}
+
+#footerRight {
+    float:right;
+    padding-right:15px;
+}
+
+/********* Comment Boxes ***********/
+.commentbox {
+    font-size: 1em; /* 11px*/
+    background-color: #DFDFDF;
+    padding: 10px;
+}
+
+.commentbox p {
+    margin-bottom: 10px;
+}
+
+.commentfooter {
+    font-size: 1em; /* 11px*/
+    background: url(../images/general/commentBoxArrow.gif) 20px 0 no-repeat;
+    padding-left: 58px;
+    padding-top: 1px;
+    margin-bottom: 2em;
+    color: #4A4A4A;
+}
+
+.sideBarTitle {
+    background-color: #999;
+    color: #EFEFEF;
+    padding: 1px 5px 1px 8px;
+    font-size: 1.125em; /*18px */
+    line-height: 1.38em; /* 22px */
+    padding-left: 0.25em;
+}
+
+.sideBarItem {
+    border-left: solid 1px #999;
+    border-right: solid 1px #999;
+    border-bottom: solid 1px #999;
+    padding: 5px 1px 5px 8px;
+    margin-bottom: 10px;
+}
+
+.sideBarItem label
+{
+    font-size:0.83em;
+}
+
+/********* UnorderList with Symbol ***********/
+/************ navlist2 *************/
+.unorderListNavContainer {
+    padding: 10px 5px 10px 20px;
+    margin: 0;
+}
+
+.navlist2 {
+    list-style-image: url(../images/general/li.gif);
+    padding: 0px;
+    margin: 0;
+}
+
+.navlist2 li {
+    font-size: 0.75em; 
+}
+
+.navlist2 li a:link, .navlist2 li a:visited, .navlist2 li a:active {
+    color: #22496F;
+    text-decoration: none;
+}
+
+.navlist2 li a:hover {
+    text-decoration: underline;
+    color: #312F30;
+    background-color: Transparent;
+}
+
+
+/************ navlist1 *************/
+.navcontainer {
+    width: 100%;
+    margin: 0 0 10px 0;
+}
+
+.navcontainer ul {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+
+.navcontainer li {
+    margin: 0;
+}
+
+.navcontainer a {
+    display: block;
+    padding: 0 5px;
+    background-color: #312F30;
+    background-repeat: repeat-x;
+    border-bottom: 1px solid #fff;
+}
+
+.navcontainer a:link, .navlist1 a:visited {
+    color: #EEE;
+    text-decoration: none;
+}
+
+.navcontainer a:hover {
+    background-color: #BA2627;
+    color: #fff;
+}
+
+dt {
+    font-weight: bold;
+}
+
+dd {
+    text-indent: 20px;
+    padding-bottom: 10px;
+}
+
+
+/********* From Original CSS file (save for now) ***********/
+
+hr {
+    border:solid 1px #ccc;
+    margin: 20px 0 10px 0;
+}
+
+pre {
+    background-color: #eee;
+    padding: 10px;
+    font-size: 11px;
+}
+
+.fieldWithErrors {
+    padding: 2px;
+    border: solid 1px red;
+}
+
+#errorExplanation {
+    width: 400px;
+    border: 1px solid red;
+    padding: 5px 5px 12px 5px;
+    background-color: #f0f0f0;
+    margin-bottom: 15px;
+}
+
+#errorExplanation h2 {
+    font-family: Trebuchet MS, Verdana, Sans-Serif;
+    font-size: 1.0em; 
+    text-align: left;
+    padding: 5px 5px 5px 10px;
+    margin: -6px;
+    background-color: #c00;
+    color: #fff;
+}
+
+#errorExplanation p {
+    margin-top: 10px;
+}
+
+#errorExplanation ul li {
+    font-size: 0.92em;
+    line-height:1em;
+}
+
+
+div.uploadStatus {
+    margin: 5px;
+}
+
+div.progressBar {
+    margin: 5px;
+}
+
+div.progressBar div.border {
+    background-color: #fff;
+    border: 1px solid grey;
+    width: 100%;
+}
+
+div.progressBar div.background {
+    background-color: #333;
+    height: 18px;
+    width: 0%;
+}
+
+span.highlight {
+    background-color: yellow;
+    font-weight: bold;
+}
+
+.css1 { font-size: 0.8em; }
+.css2 { font-size: 1.2em; }
+.css3 { font-size: 1.6em; }
+.css4 { font-size: 2.0em; }
+
+.nobr {white-space:nowrap;}
+
+#openid_url {
+  background: url(../images/icons/14x14/openid-14x14.gif) no-repeat #FFF 5px;
+  padding-left: 25px;
+}
+
+/********* End original ***********/
+
+
+/********* openID login form ***********/
+#id_selector {
+  padding-left:3px;
+}
+
+#id_selector button {
+  height:24px;
+  width:40px;
+}
+
+#openid_url {
+  width:210px;
+}
+
+
+
+/********* Faq Accordian menus ***********/
+h3.faqSections
+{
+    border-top: dotted 1px #999;
+    border-bottom: none;
+    margin-bottom: 3px;
+    font-size:14px;
+}
+
+.faqSections
+{
+    /*header of 1st demo*/
+    cursor: hand;
+    cursor: pointer;
+    padding: 0 5px;
+}
+
+.theSection 
+{
+    padding: 0 10px;
+}    
+
+
+h3.openSectionHeader
+{
+    background: #ccc;
+    border-bottom: dotted 1px #999;
+}
+
+h3.closedSectionHeader
+{
+    background-color: #efefef;
+    border-bottom: dotted 1px #999;
+}
+
+h3.closedSectionHeader:hover
+{
+    background-color: #ccc;
+}

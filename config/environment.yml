@@ -1,18 +1,18 @@
 # The protocol. This is used to construct the url for the link that appears in
 # email notifications
-protocol: http
+protocol: https
 
 # The host name. This is used to construct the url for the link that appears in
 # email notifications
-host: localhost
+host: openmind.scribesoftware.com
 
 # The port number. This is used to construct the url for the link that appears in
 # email notifications
-port: 3000
+port: 443
 
 # The email address of the administrator. This email will be used as the "from"
 # address in emails sent by openmind.
-admin_email: admin@openmind.org
+admin_email: openmind@scribesoftware.com
 
 # The subject prefix. This will be the prefix in the subject for emails sent by 
 # openmind. For example, "OpenMind: Your new account has been created..."
@@ -25,11 +25,11 @@ rescind_minutes: 240
 allocation_expiration_days: 120
 
 # The url to the directory where the images for emails are stored
-email_image_url: http://localhost:3000/themes/openmind/images/email
+email_image_url: https://openmind.scribesoftware.com/themes/scribe-new/images/email
 
 # The name of the theme (e.g., skin). This should correspond to a directory 
 # under the public/themes directory
-app_theme: openmind
+app_theme: scribe-new
 
 # The number of days within which to warn the user of unused allocations
 # about to expire. A value of 0 means never warn the user.
@@ -61,13 +61,22 @@ main_site_url: http://www.scribesoft.com
 released_release_statuses: (Released)
 
 # The email address for support.
-support_email: enter@email.com
+support_email: support@scribesoft.com
 
 # The email address for sales.
-sales_email: enter@email.com
+sales_email: sales@scribesoft.com
 
-# Enter the name of the proudct which other products depend up. If you specify a value here,
-# the compatibility tab under roadmap menu will be displayed, with compatibility reflected
+# A list of enterprise type lookup codes, separated by commas, within parens, that should be considered GA
+show_portal_for_enterprise_types: (Scribe,Demo,Authorized Reseller,Certified,Elite)
+
+# Allow the user to manually enter their portal user for the following enterprise types
+# A list of enterprise type lookup codes, separated by commas, within parens, that should be considered GA
+allow_email_override_for_enterprise_types: (Scribe)
+
+
+# Can new enterprises view the portal by default? Valid values are "Y" or "N" (without quotes)
+new_enterprises_view_portal_default: Y
+
 # in relationship to this product
 root_compatibility_product: Insight
 

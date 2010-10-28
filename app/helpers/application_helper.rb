@@ -15,7 +15,7 @@ module ApplicationHelper
       # Menu Label       # controller url       # role restrictions   # other
       # controllers e.g., aliases
       ["Ideas",           "/ideas"                             ],
-      ["Forums",          forums_path,          [],                  [ "topics" ] ],
+      ["Forums & Knowledge Base",          forums_path,          [],                  [ "topics" ] ],
       ["Roadmap",        list_releases_path,   [],                    [ "products", "releases" ]   ],
       ["Users",           "/users",             ["sysadmin", "allocmgr"], ["groups", "user_requests", "user_logons"] ],
       ["Enterprises",     enterprises_path,     ["sysadmin", "allocmgr"] ],

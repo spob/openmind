@@ -1,0 +1,61 @@
+<%content_for :head do -%>
+    <%= javascript_include_tag "sevenup.0.2" %>
+<%end%>
+<%content_for :bodyTag do -%>
+  <%= set_focus_to_id 'login', "sevenUp.test()" -%>
+<%end%>
+<table>
+<tr>
+<td>
+<div style="width:450px;">
+  <div class="formTitle">Login</div>
+  <% form_tag({}, {:class => "cssform"}) do -%>
+  <!-- <% form_tag('https://www2.scribesoft.com/l/954/2009-06-17/E4KAQ', {:class => "cssform"}) do -%> -->
+    <p>
+      <label for="login">Username:</label>
+      <%= text_field_tag 'login', @login %>
+    </p>
+    <p>
+      <label for="password">Password:</label>
+      <%= password_field_tag 'password' %>
+    </p>
+    <p>
+      <%= check_box_tag 'remember_me' %>Remember me on this computer.
+    </p>
+    <p><%= submit_tag 'Sign in', html_options = {:class=> "button", :disable_with => "Please wait..."} %></p>
+  <% end %>
+  <p>
+    <%= link_to 'Request Account', new_user_request_path %>
+    &nbsp;|&nbsp;
+    <%= link_to 'Forgot your password?', { :controller => :users,
+      :action => 'lost_password' } %>
+    &nbsp;|&nbsp;
+    <%= theme_image_tag("icons/14x14/openid-14x14.gif",
+      options = {:alt=>"OpenID"}) %>
+    <%= link_to 'Login using Open ID', { :action => 'login_openid' } %>
+  </p>
+</div>
+</td>
+<td valign="top" style="padding-left: 20px;">
+
+                                                                                <br/>
+                                                                                <p style="font-size: 1.5em;">
+                                                                                        Help make Scribe products better!
+                                                                                </p>
+                                                                                <br/>
+                                                                                <p> OpenMind is an online community which allows Scribe customers and resellers to:
+  <ul>
+        <li>Log ideas for enhancements and feature requests</li>
+        <li>Vote for ideas you value most</li>
+        <li>Discuss ideas with other partners and Scribe product management</li>
+        <li>See information on upcoming releases</li>
+ </ul>
+                                                                                </p>
+                                                                                <p style="font-weight: bold;">
+                                                                                        To request an OpenMind account, click "Request Account"
+
+                                                                                </p>
+
+</td>
+</tr>
+</table>

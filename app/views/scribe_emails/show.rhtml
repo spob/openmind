@@ -1,0 +1,29 @@
+<% cache 'scribe_email_thankyou' do %>
+  <h4>Thank you!</h4>
+  <p>
+    Thank you for taking the time to give us your feedback. We greatly appreciate your input.
+    Feedback from users like yourself helps us to make Scribe products better.
+  </p>
+  <br/>
+  <p>
+    We will review your suggestions and record them in the Scribe OpenMind, our online community
+    which provides users such as yourself with the opportunity to vote for those features and
+    enhancements you'd most like to see added to the Scribe products. Additionally, OpenMind
+    is the best place to keep up-to-date on the latest news from Scribe, peruse the Scribe
+    Knowledgebase, and see the latest product plans and roadmap from Scribe.
+    Please consider voting
+    logging into to Openmind and voting for those ideas you value most.
+  </p>
+  <br/>
+  <p>
+    Click the <%= link_to 'Request Account', new_user_request_path %> link below to gain access to the OpenMind Community.
+  </p>
+  <br/>
+  <hr/>
+  <p>
+    <%= link_to 'Request Account', new_user_request_path %>
+    &nbsp;|&nbsp;
+    <%= link_to 'Forgot your password?', { :controller => :users,
+      :action => 'lost_password' } %>
+  </p>
+<% end %>

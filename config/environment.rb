@@ -2,7 +2,7 @@
 
 # Uncomment below to force Rails into production mode when you don't control
 # web/app server and can't set it the proper way 
-# ENV['RAILS_ENV'] ||= 'production'
+ENV['RAILS_ENV'] ||= 'production'
 
 # Specifies gem version of Rails to use when vendor/rails is not present
 RAILS_GEM_VERSION = '2.3.5' unless defined? RAILS_GEM_VERSION
@@ -58,6 +58,7 @@ Rails::Initializer.run do |config|
   config.load_paths += Dir["#{RAILS_ROOT}/vendor/**"].map do |dir| 
     File.directory?(lib = "#{dir}/lib") ? lib : dir
   end
+
   
   # Only load the plugins named here, by default all plugins in vendor/plugins
   # are loaded config.plugins = %W( exception_notification ssl_requirement )
@@ -67,7 +68,8 @@ Rails::Initializer.run do |config|
   config.load_paths += %W( #{RAILS_ROOT}/app/sweepers )
   
   # Force all environments to use the same logger level (by default production
-  # uses :info, the others :debug) config.log_level = :debug
+  # uses :info, the others :debug)
+  config.log_level = :info
   
   # Use the database for sessions instead of the file system (create the session
   # table with 'rake db:sessions:create')

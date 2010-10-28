@@ -4,6 +4,9 @@
 <%content_for :bodyTag do -%>
   <%= set_focus_to_id 'login', "sevenUp.test()" -%>
 <%end%>
+<table>
+<tr>
+<td>
 <div style="width:450px;">
   <div class="formTitle">Login</div>
   <% form_tag({}, {:class => "cssform"}) do -%>
@@ -31,3 +34,40 @@
     <%= link_to 'Login using Open ID', { :action => 'login_openid' } %>
   </p>
 </div>
+</td>
+<td valign="top" style="padding-left: 20px;">
+
+                                                                                <br/>
+                                                                                <p style="font-size: 1.5em;">
+                                                                                        Help make Scribe products better!
+                                                                                </p>
+                                                                                <br/>
+                                                                                <p> OpenMind is an online community which allows Scribe customers and resellers to:
+  <ul>
+        <li>Log ideas for enhancements and feature requests</li>
+        <li>Vote for ideas you value most</li>
+        <li>Discuss ideas with other partners and Scribe product management</li>
+        <li>See information on upcoming releases</li>
+ </ul>
+                                                                                </p>
+                                                                                <p style="font-weight: bold;">
+                                                                                        To request an OpenMind account, click "Request Account"
+
+                                                                                </p>
+                                                                                <br/>
+                                                                                <p style="font-size: 1.5em;">
+                                                                                        Jump to the <a href="https://openmind.scribesoftware.com/forums">KnowlegeBase</a> (no login required)
+                                                                                </p>
+<br />
+                                                                                <p style="font-size: 1.5em;">
+Stay in Touch
+</p>
+<br />
+<p>
+              <a href="http://twitter.com/scribesoft"><img alt="Follow Us on Twitter" src="/images/general/48-twitter.png" /></a> 
+              <a href="http://www.facebook.com/pages/Scribe-Software/52303105998?ref=ts"><img alt="Become a Fan" src="/images/general/48-facebook.png" /></a> 
+</p>
+
+</td>
+</tr>
+</table>

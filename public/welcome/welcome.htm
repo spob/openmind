@@ -1,0 +1,110 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+	<head>
+		<title>
+			OpenMind: login
+		</title>
+		<meta http-equiv="REFRESH" content="0;url=http://openmind.scribesoftware.com" />
+		<meta http-equiv="Content-Language" content="en-us" />
+		<link href="scribe/stylesheets/global.css" media="screen" rel="Stylesheet" type="text/css" />
+		<link href="scribe/stylesheets/forms.css" media="screen" rel="Stylesheet" type="text/css" /><!--[if lte IE 6]>
+	<link href="scribe/stylesheets/png_fix.css" media="screen" rel="Stylesheet" type="text/css" />
+	<link href="scribe/stylesheets/peekaboobug_fix.css" media="screen" rel="Stylesheet" type="text/css" />
+		<![endif]-->
+	</head>
+	<body onload="document.getElementById('login').focus();">
+		<div id="headerBackground">
+			<div id="headerBrandingAreaPageWrap">
+				<div class="inside">
+					<div id="headerTopNavBar">
+						<ul class="headerTopNavMenu">
+							<li>
+								<a href="http://openmind.scribesoftware.com/static/help">Help</a>
+							</li>
+						</ul>
+					</div>
+					<div id="headerBrandingArea">
+						<a href="/ideas"><img alt="branding logo" src="scribe/images/headers/headerBrandingLogo4.jpg" /></a> <!-- flash notices -->
+						<div id="flash_notice" class="flash flashNotice" style="display:none;"></div>
+						<div id="flash_error" class="flash flashError" style="display:none;"></div>
+					</div>
+					<div id="headerLowerNavMenu"></div><br style="clear: left" />
+				</div>
+			</div>
+		</div>
+		<div id="mainBodyPageWrap">
+			<div class="inside">
+				<div id="main-contentShell">
+					<div id="main-content">
+						<!-- form container start -->
+						<div class="formContainer">
+							<table>
+								<tr>
+									<td>
+							<div style="width:450px;">
+								<div class="formTitle">
+									Login
+								</div>
+								<form action="http://openmind.scribesoftware.com/account/login" class="cssform" method="post">
+									<p>
+										<label for="login">Username:</label> <input id="login" name="login" type="text" />
+									</p>
+									<p>
+										<label for="password">Password:</label> <input id="password" name="password" type="password" />
+									</p>
+									<p>
+										<input id="remember_me" name="remember_me" type="checkbox" value="1" />Remember me on this computer.
+									</p>
+									<p>
+										<input class="button" name="commit" onclick="this.disabled=true;this.value='Please wait...';this.form.submit();" type="submit" value="Sign in" />
+									</p>
+								</form>
+								<p>
+									<a href="http://openmind.scribesoftware.com/users/lost_password">Forgot your password?</a>
+								</p>
+							</div>
+									</td>
+									<td valign="top" style="padding-left: 20px;">
+										<br/>
+										<p style="font-size: 1.5em;">
+											Help make Scribe products better!
+										</p>
+										<br/>
+										<p> OpenMind is an online community which allows Scribe customers and resellers to:
+  <ul>
+	<li>Log ideas for enhancements and feature requests</li>
+	<li>Vote for ideas you value most</li>
+	<li>Discuss ideas with other partners and Scribe product management</li>
+	<li>See information on upcoming releases</li>
+ </ul>
+										</p>
+										<p style="font-weight: bold;">
+											To request an OpenMind account, click "Register"
+
+
+										</p>
+									</td>
+								</tr>
+							</table>
+						</div>
+						<div style="clear: both;"></div>
+					</div>
+				</div>
+				<div id="footer">
+					<div id="footerLeft">
+						Contact <script type="text/javascript">
+//<![CDATA[
+eval(unescape('%64%6f%63%75%6d%65%6e%74%2e%77%72%69%74%65%28%27%3c%61%20%68%72%65%66%3d%22%6d%61%69%6c%74%6f%3a%6f%70%65%6e%6d%69%6e%64%40%73%63%72%69%62%65%73%6f%66%74%77%61%72%65%2e%63%6f%6d%22%3e%53%79%73%74%65%6d%20%41%64%6d%69%6e%69%73%74%72%61%74%6f%72%3c%2f%61%3e%27%29%3b'))
+//]]>
+</script>
+					</div>
+					<div id="footerRight">
+						Powered by <a href="http://openmind.sourceforge.net">Openmind</a> v1.1.4<span class="separator">|</span>Distributed under the <a href="http://openmind.scribesoftware.com/static/license">GNU GPL license</a>
+					</div>
+				</div>
+			</div>
+			<div style="clear: both;"></div>
+		</div>
+	</body>
+</html>

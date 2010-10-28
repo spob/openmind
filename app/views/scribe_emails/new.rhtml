@@ -1,0 +1,52 @@
+<%content_for :bodyTag do -%>
+  <%= set_focus_to_id 'email' -%>
+<%end%>
+<table>
+  <tr>
+    <td>
+      <div style="width:600px;">
+        <div class="formTitle">Product Feedback</div>
+        <% form_tag('/scribe_emails/create', {:class => "cssform"}) do -%>
+          <p>
+            <label for="email">Your Email:</label>
+            <%= text_field_tag 'email' %>
+            <br/>
+            (optional)
+          </p>
+          <p>
+            <label for="comment">Your Comments:</label>
+            <%=  text_area_tag :comments, nil, :rows => '40'  %>
+          </p>
+          <p><%= submit_tag 'Send Feedback', html_options = {:class=> "button", :disable_with => "Please wait..."} %></p>
+        <% end %>
+        <p>
+          <%= link_to 'Request Account', new_user_request_path %>
+          &nbsp;|&nbsp;
+          <%= link_to 'Forgot your password?', { :controller => :users,
+            :action => 'lost_password' } %>
+        </p>
+      </div>
+    </td>
+    <td>
+      <h1><%= theme_image_tag("icons/32x32/warning.gif", options = {:alt=>"Product Releases"}) %>Do you have an OpenMind account?</h1>
+      <p>
+        We want your feedback any way you can give it us!
+      </p>
+      <br/>
+      <p>
+        If you already have an OpenMind account, please consider
+        <%= link_to "logging in", { :controller => 'account', :action => 'login' } %>
+        to the Scribe OpenMind community and creating an idea.
+      </p>
+      <br/>
+      <p>
+        If you don't have an account but would like one, please click the
+        <%= link_to 'Request Account', new_user_request_path %> link.
+      </p>
+      <br/>
+      <p>
+        Otherwise, simply enter your comments in this screen to send us an email.
+      </p>
+    </td>
+  </tr>
+</table>

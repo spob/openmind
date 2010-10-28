@@ -27,6 +27,7 @@ ActionController::Routing::Routes.draw do |map|
     :open_count_graphs => :get, :days_pending_graphs => :get}, 
     :member => { :mark_all_as_read => :post }
   map.resources :groups
+  map.resources :hotfixes
   map.resources :link_sets, :member => { :update_sort => :post }
   map.resources :lookup_codes
   map.resources :merge_ideas
