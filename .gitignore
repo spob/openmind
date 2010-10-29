@@ -32,3 +32,4 @@ log/searchd.development.pid
 config/database.yml
 restart.txt
 production.rb
+newrelic.yml
