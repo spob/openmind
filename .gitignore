@@ -28,3 +28,7 @@ db/sphinx
 .idea
 .rvmrc
 log/searchd.development.pid
+.rvmrc
+config/database.yml
+restart.txt
+production.rb
