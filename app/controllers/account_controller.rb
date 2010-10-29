@@ -34,6 +34,8 @@ class AccountController < ApplicationController
         flash[:error] = "Login failed...please try again"
         redirect_to :controller => '/account', :action => 'login'
       else
+        flash[:error] = "It looks like you don't have an OpenMind account. Please request one."
+        redirect_to new_user_request_path
       end
     end
   end
