@@ -33,6 +33,8 @@ Rails::Initializer.run do |config|
   config.gem "friendly_id"
 
   config.gem 'hoptoad_notifier'
+
+  config.gem 'newrelic_rpm'
   
   config.gem "daemons"
   
