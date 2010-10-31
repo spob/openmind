@@ -7,12 +7,12 @@ class AccountController < ApplicationController
   before_filter :login_from_cookie, :except => [:login]
   before_filter :login_required, :only => [ :logout ]
   cache_sweeper :allocations_sweeper, :only => [ :login, :continue_openid ]
-
+  
   # say something nice, you goof!  something sweet.
   def index
     redirect_to(:action => 'signup') unless logged_in? || User.count > 0
   end
-
+  
   def login
     return unless request.post?    
     @login = params[:login] # needed to remember login info in login fails
@@ -23,19 +23,23 @@ class AccountController < ApplicationController
       flash[:error] = "Login failed...please try again"
     end
   end
-
+  
   def login_otp 
     @login = params[:login] # needed to remember login info in login fails
     self.current_user = User.authenticate_otp(params[:login], params[:password])
     if logged_in?
       logged_in
     else
-      flash[:error] = "Login failed...please try again"
+      if User.find_by_email(params[:login])
+        flash[:error] = "Login failed...please try again"
         redirect_to :controller => '/account', :action => 'login'
-#      render :login
+      else
+        flash[:error] = "It looks like you don't have an OpenMind account. Please request one."
+        redirect_to new_user_request_path
+      end
     end
   end
-
+  
   def login_openid
     return unless request.post?   
     
@@ -48,24 +52,24 @@ class AccountController < ApplicationController
     end
     
     status = begin_openid_authentication(@openid_url, '/account/continue_openid')
-      
+    
     flash[:error] = case status 
-    when :missing then 'Sorry, the OpenID is missing.'
-    when :failed  then 'Sorry, the OpenID verification failed.'
-    when :timeout then 'Timed out.'
-    when :unknown then 'Not sure what happened.'
+      when :missing then 'Sorry, the OpenID is missing.'
+      when :failed  then 'Sorry, the OpenID verification failed.'
+      when :timeout then 'Timed out.'
+      when :unknown then 'Not sure what happened.'
     end
   end
-    
+  
   def continue_openid
     status = complete_openid_authentication
-      
+    
     case status 
-    when :missing   then failed_login('Sorry, the OpenID server couldn\'t be found.')
-    when :canceled  then failed_login('OpenID verification was canceled.')
-    when :failed    then failed_login('Sorry, the OpenID verification failed.')
-    when :unknown   then failed_login('Not sure what happened.')
-    when :success
+      when :missing   then failed_login('Sorry, the OpenID server couldn\'t be found.')
+      when :canceled  then failed_login('OpenID verification was canceled.')
+      when :failed    then failed_login('Sorry, the OpenID verification failed.')
+      when :unknown   then failed_login('Not sure what happened.')
+      when :success
       self.current_user = User.find_by_identity_url(openid_result[:identity_url])
       logged_in
     end
@@ -87,7 +91,7 @@ class AccountController < ApplicationController
       flash[:error] = "Unable to activate the account: no such activation code '#{activator}'."
     end
   end
-
+  
   def signup
     @user = User.new(params[:user])
     return unless request.post?
@@ -123,7 +127,7 @@ class AccountController < ApplicationController
       flash[:error] = "Password authentication failed" 
       render :action => 'change_password'
     end
-
+    
   rescue ActiveRecord::RecordInvalid
     render :action => 'change_password'
   end
