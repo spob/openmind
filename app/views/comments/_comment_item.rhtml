@@ -69,11 +69,11 @@
       <% end %>
 
       <!-- <%= "&nbsp;" if ( comment_item.can_unendorse? current_user or comment_item.can_endorse? current_user) and can_edit_comment? comment_item %> -->
-  <%= link_to '[Edit]', edit_comment_path(comment_item),
+  <%= link_to '[Edit]', edit_comment_path(comment_item, :type => (comment_item.class.to_s == "IdeaComment" ? "Idea" : "Topic")),
     html_options = { :class=> "btTxt editButton",
     :onmouseover => "Tip('Edit this comment')"} if can_edit_comment? comment_item %>
       <!-- <%= "&nbsp;" if can_edit_comment? comment_item %> -->
-  <%= link_to '[Add Image]', attach_comment_path(comment_item),
+  <%= link_to '[Add Image]', attach_comment_path(comment_item, :type => (comment_item.class.to_s == "IdeaComment" ? "Idea" : "Topic")),
     html_options = { :class=> "btTxt editButton",
     :onmouseover => "Tip('Add an image to this comment')"} if can_edit_comment? comment_item %>
   <%= "&nbsp;&nbsp;" if comment_item.class.to_s == "IdeaComment" %>
