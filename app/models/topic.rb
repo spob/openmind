@@ -210,7 +210,7 @@ eos
           "WHERE tw.user_id = users.id " +
           "AND t.last_commented_at > tw.last_checked_at)"])
     
-    users.each do |each|
+    users.each do |user|
       # puts "user #{user.email}"
       tws = TopicWatch.find_all_by_user_id(user, :include => "topic",
       :conditions => "topics.last_commented_at > topic_watches.last_checked_at",
