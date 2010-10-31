@@ -217,7 +217,7 @@ eos
       :order => "topics.forum_id")
       topics = tws.find_all{|tw| tw.topic.forum.can_see?(user) && tw.topic.unread_comments(user).present?}.collect(&:topic) 
                                     
-      EmailNotifier.deliver_new_topic_comment_notification(topics, user) if user.active and u.activated_at.present?
+      EmailNotifier.deliver_new_topic_comment_notification(topics, user) if user.active and user.activated_at.present?
       
       for tw in tws
         tw.last_checked_at = Time.zone.now
