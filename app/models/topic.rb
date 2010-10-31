@@ -210,15 +210,14 @@ eos
           "WHERE tw.user_id = users.id " +
           "AND t.last_commented_at > tw.last_checked_at)"])
     
-    for user in users.find_all{|u| u.active and !u.activated_at.nil?}
+    users.each do |user|
       # puts "user #{user.email}"
       tws = TopicWatch.find_all_by_user_id(user, :include => "topic",
       :conditions => "topics.last_commented_at > topic_watches.last_checked_at",
       :order => "topics.forum_id")
-      topics = tws.find_all{|tw| tw.topic.forum.can_see? user}.collect(&:topic)
-      topics = topics.find_all{ |topic| !topic.unread_comments(user).empty? }
-      
-      EmailNotifier.deliver_new_topic_comment_notification(topics, user)
+      topics = tws.find_all{|tw| tw.topic.forum.can_see?(user) && tw.topic.unread_comments(user).present?}.collect(&:topic) 
+                                    
+      EmailNotifier.deliver_new_topic_comment_notification(topics, user) if user.active and user.activated_at.present?
       
       for tw in tws
         tw.last_checked_at = Time.zone.now
