@@ -33,3 +33,4 @@ config/database.yml
 restart.txt
 production.rb
 newrelic.yml
+config/initializers/hoptoad.rb
