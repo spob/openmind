@@ -75,6 +75,7 @@ class ForumsController < ApplicationController
   
   def metrics_graphs    
     @open_count_graph = open_flash_chart_object(800,450, open_count_graphs_forums_path)  
+    @pending_count_graph = open_flash_chart_object(800,450, pending_count_graphs_forums_path)  
     @days_pending_graph = open_flash_chart_object(800,450, days_pending_graphs_forums_path) 
   end
   
@@ -143,6 +144,10 @@ class ForumsController < ApplicationController
   
   def open_count_graphs    
     render :text => calc_metric_graph("Open Forum Topics", "Topic Count"){|i| i.open_count }, :layout => false
+  end
+  
+  def pending_count_graphs    
+    render :text => calc_metric_graph("Pending Forum Topics", "Topic Count"){|i| i.pending_count }, :layout => false
   end
   
   def days_pending_graphs    
