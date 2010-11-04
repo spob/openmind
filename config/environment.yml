@@ -66,6 +66,10 @@ support_email: enter@email.com
 # The email address for sales.
 sales_email: enter@email.com
 
+# A list of enterprise type lookup codes, separated by commas, within parens, for which member users
+# will be presented with navigation options to view forum entries
+show_metrics_for_enterprise_types: (EnterpriseType)
+
 # Enter the name of the proudct which other products depend up. If you specify a value here,
 # the compatibility tab under roadmap menu will be displayed, with compatibility reflected
 # in relationship to this product
