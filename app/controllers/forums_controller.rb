@@ -151,9 +151,9 @@ class ForumsController < ApplicationController
   def pending_count_graphs
     render :text => calc_metric_graph("Pending Forum Topics", "Topic Count"){|i| i.pending_count }, :layout => false
   end
-
-  def days_pending_graphs
-    render :text => calc_metric_graph("Average Days Pending Response", "Days") { |i| i.days_pending }, :layout => false
+  
+  def days_pending_graphs    
+    render :text => calc_metric_graph("Average Days Pending Response", "Days"){|i| i.days_pending }, :layout => false
   end
 
   def create
