@@ -357,7 +357,7 @@ class User < ActiveRecord::Base
   end
 
   def can_view_metrics?
-    self.mediator? || metrics_enterprise_types.include?(self.enterprise.enterprise_type)
+    self.sysadmin? || self.mediator? || metrics_enterprise_types.include?(self.enterprise.enterprise_type)
   end
   
   def can_specify_email_in_portal?
