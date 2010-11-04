@@ -15,7 +15,7 @@
       :onmouseover => "Tip('Create a new forum')"} if sysadmin? %>
     <%= link_to 'Metrics', metrics_forums_path,
       html_options = {:class => "button",
-      :onmouseover => "Tip('View management metrics')"} if current_user.mediator? and !Forum.active.tracked.limit1.empty? %>
+      :onmouseover => "Tip('View management metrics')"} if current_user.can_view_metrics? and !Forum.active.tracked.limit1.empty? %>
   </div>
 <% end %>
 

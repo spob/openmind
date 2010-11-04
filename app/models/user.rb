@@ -355,6 +355,10 @@ class User < ActiveRecord::Base
   def can_view_portal?
     portal_enterprise_types.include?(self.enterprise.enterprise_type) && self.enterprise.view_portal
   end
+
+  def can_view_metrics?
+    self.mediator? || metrics_enterprise_types.include?(self.enterprise.enterprise_type)
+  end
   
   def can_specify_email_in_portal?
     portal_specify_email_enterprise_types.include? self.enterprise.enterprise_type
@@ -392,16 +396,22 @@ class User < ActiveRecord::Base
   def calc_salt
     Digest::SHA1.hexdigest("--#{Time.zone.now.to_s}--#{email}--")
   end
-  
-  def portal_enterprise_types
+
+  def fetch_enterprise_types config_type
     # strip surrounding ()
-    types = (APP_CONFIG['show_portal_for_enterprise_types'] || "").gsub(/^\s*\(|\)\s*$/, "").split(/,/) || [""]
+    types = (APP_CONFIG[config_type] || "").gsub(/^\s*\(|\)\s*$/, "").split(/,/) || [""]
     LookupCode.find(:all, :conditions => { :short_name => types, :code_type => 'EnterpriseType'})
   end
   
+  def portal_enterprise_types
+    fetch_enterprise_types 'show_portal_for_enterprise_types'
+  end
+  
   def portal_specify_email_enterprise_types
-    # strip surrounding ()
-    types = (APP_CONFIG['allow_email_override_for_enterprise_types'] || "").gsub(/^\s*\(|\)\s*$/, "").split(/,/) || [""]
-    LookupCode.find(:all, :conditions => { :short_name => types, :code_type => 'EnterpriseType'})
+    fetch_enterprise_types 'allow_email_override_for_enterprise_types'
+  end
+
+  def metrics_enterprise_types
+    fetch_enterprise_types 'show_metrics_for_enterprise_types'
   end
 end

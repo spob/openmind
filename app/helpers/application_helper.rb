@@ -50,16 +50,13 @@ module ApplicationHelper
       # Special case for partner portal
       puts menu[0]
       accessible = false if accessible && menu[0] == "Portal" && (!logged_in? || !current_user.try(:can_view_portal?))
-      puts "here"
       if accessible then          # should the user see the menu?
         clazz = nil
         clazz = "current" if menu_selected menu[1]
-        puts clazz
         if menu_selected(comments_path) && params[:type] == "Idea"
           clazz = "current" if menu[0] == "Ideas"
         else
           if clazz.nil? && !menu[3].nil? # not selected...but check it's aliases
-            puts "::::::::::::::::::#{params[:controller]} == #{comments_path} type: #{params[:type]} menu #{menu[0]}"
             for controller_alias in menu[3]
               clazz = "current" if menu_selected controller_alias
             end
