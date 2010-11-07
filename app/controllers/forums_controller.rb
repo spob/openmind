@@ -77,7 +77,7 @@ class ForumsController < ApplicationController
   def metrics_graphs
     return unless has_metric_access?
     @open_count_graph = open_flash_chart_object(800, 450, open_count_graphs_forums_path)
-    @pending_count_graph = open_flash_chart_object(800,450, pending_count_graphs_forums_path)  
+    @pending_count_graph = open_flash_chart_object(800,450, pending_count_graphs_forums_path)
     @days_pending_graph = open_flash_chart_object(800, 450, days_pending_graphs_forums_path)
   end
 
@@ -151,8 +151,8 @@ class ForumsController < ApplicationController
   def pending_count_graphs
     render :text => calc_metric_graph("Pending Forum Topics", "Topic Count"){|i| i.pending_count }, :layout => false
   end
-  
-  def days_pending_graphs    
+
+  def days_pending_graphs
     render :text => calc_metric_graph("Average Days Pending Response", "Days"){|i| i.days_pending }, :layout => false
   end
 
@@ -347,7 +347,11 @@ class ForumsController < ApplicationController
   end
 
   def has_metric_access?
-    if current_user.can_view_metrics?
+    if !logged_in?
+      flash[:error] = "You must login to access that page"
+      redirect_to forums_path
+      return false
+    elsif current_user.can_view_metrics?
       return true
     else
       flash[:error] = "You don't have access to view that page"
