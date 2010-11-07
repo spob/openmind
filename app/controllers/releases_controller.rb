@@ -1,6 +1,6 @@
 class ReleasesController < ApplicationController
   before_filter :login_required, :except => [:index, :list, :show, :check_for_updates, :compatibility]
-  access_control [:new, :commit, :index, :edit, :create, :update, :destroy] => 'prodmgr'
+  access_control [:new, :commit, :edit, :create, :update, :destroy] => 'prodmgr'
   
   # GETs should be safe (see http://www.w3.org/2001/tag/doc/whenToUseGet.html)
   verify :method => :post, :only => [:create, :commit ],
