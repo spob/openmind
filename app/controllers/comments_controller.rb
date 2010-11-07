@@ -15,7 +15,8 @@ class CommentsController < ApplicationController
   :redirect_to => { :controller => 'ideas', :action => :index }
   
   def index
-    @comment_pages, @comments = paginate :comments, :per_page => 10
+    redirect_to :controller => 'ideas', :action => 'list' 
+#    @comment_pages, @comments = paginate(:comments, :per_page => 10)
   end
   
   def preview
