@@ -32,7 +32,7 @@ class Idea < ActiveRecord::Base
   
   belongs_to :user
   belongs_to :release
-  belongs_to :product
+  belongs_to :product, :counter_cache => true
   has_one :last_comment, 
     :class_name => "IdeaComment", 
     :order => "id DESC"

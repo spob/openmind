@@ -27,7 +27,7 @@
             <% for product in Product.find(:all, :conditions => [ "id in (?)", release_item.dependent_releases.collect(&:product_id)]) %>
 			<li>
             <%= h product.name %>
-            (<%= release_item.dependent_releases.find_all_by_product_id(product.id, :order => 'releases.release_date').map{|r| link_to(h(r.version), release_path(r))}.join(", ") %>)
+            (<%= release_item.dependent_releases.find_all_by_product_id(product.id, :include => [:slugs], :order => 'releases.release_date').map{|r| link_to(h(r.version), release_path(r))}.join(", ") %>)
 			</li>
             <% end %>
         </ul>
