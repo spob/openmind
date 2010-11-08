@@ -103,7 +103,7 @@ eos
         return 0
       end
     end
-     (Time.zone.now - comment.created_at)/(60.0*60.0*24.0)
+     (comment ? (Time.zone.now - comment.created_at)/(60.0*60.0*24.0) : 0)
   end
   
   def set_close_date
