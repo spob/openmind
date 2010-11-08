@@ -4,6 +4,6 @@
  
 
 class CommentAttachment < Attachment
-  belongs_to :comment
+  belongs_to :comment, :counter_cache => true
   validates_presence_of :comment
 end

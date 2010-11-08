@@ -37,7 +37,7 @@ class Release < ActiveRecord::Base
   :finder_sql => 'select r.* from releases r inner join release_dependencies rd on r.id = rd.release_id where rd.depends_on_id = #{id}'
   has_many :release_dependencies, :dependent => :destroy
   has_many :dependent_releases, :source => 'depends_on', :through => :release_dependencies, :order => "releases.product_id ASC"
-  belongs_to :product
+  belongs_to :product, :counter_cache => true
   belongs_to :release_status, :class_name => "LookupCode", 
   :foreign_key => "release_status_id"
   
@@ -63,7 +63,8 @@ class Release < ActiveRecord::Base
   end
   
   def self.list_by_status(page, per_page, status_id)
-    paginate :page => page,       
+    paginate :page => page,
+    :include => [:product, :slug, :dependent_releases, :ideas],       
     :conditions => ['release_status_id = ?', status_id],
     :order => "to_days(release_date) * if (release_date < now(),  -1, 1)", 
     :per_page => per_page

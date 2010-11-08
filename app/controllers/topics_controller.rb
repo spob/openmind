@@ -220,7 +220,7 @@ class TopicsController < ApplicationController
   private
   
   def fetch_topic    
-    @topic = Topic.find(params[:id])
+    @topic = Topic.find(params[:id], :include => {:comments => [:endorser, :user, :topic]})
   end
   
   def must_login
