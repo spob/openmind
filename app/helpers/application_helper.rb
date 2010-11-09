@@ -48,7 +48,7 @@ module ApplicationHelper
       end
       
       # Special case for partner portal
-      puts menu[0]
+    #  puts menu[0]
       accessible = false if accessible && menu[0] == "Portal" && (!logged_in? || !current_user.try(:can_view_portal?))
       if accessible then          # should the user see the menu?
         clazz = nil
