@@ -17,7 +17,7 @@ class ForumGroup < LookupCode
   has_many :forums, :order => 'display_order ASC, name ASC'
   
   def self.list_all user
-    groups = ForumGroup.find(:all, :include => [:forums], :order => 'sort_value ASC')
+    groups = ForumGroup.find(:all, :include => [{:forums => [:slug, {:topics => :last_comment}]}], :order => 'sort_value ASC')
     groups.find_all{|group| !group.forums.find_all{|forum| forum.can_see? user}.empty? }
   end
   
