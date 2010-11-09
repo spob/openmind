@@ -162,16 +162,16 @@ class Idea < ActiveRecord::Base
     filter_by_product = properties[:product_filter]
     # product filter
     condition_params = add_criteria(condition_params, 
-      "product_id = ?", 
+      "ideas.product_id = ?", 
       filter_by_product) unless filter_by_product.to_i == 0
     
     filter_by_release = properties[:release_filter]
     # product filter
     condition_params = add_criteria(condition_params, 
-      "release_id = ?", 
+      "ideas.release_id = ?", 
       filter_by_release) unless filter_by_release.to_i <= 0
     condition_params = add_criteria(condition_params, 
-      "release_id is null") if filter_by_release.to_i == 0
+      "ideas.release_id is null") if filter_by_release.to_i == 0
     
     title_filter = properties[:title_filter]
     # title filter
@@ -212,7 +212,8 @@ class Idea < ActiveRecord::Base
         :joins => joins,
         :order => order_by, 
         :group => group_by,
-        :per_page => user.row_limit, :include => ['product', 'watchers']
+        :per_page => user.row_limit,
+        :include => [:slug, :merged_to_idea, :release, {:product => [:slug]}, :votes, :comments, :user]
     else
       Idea.find :all,
         :conditions => condition_params,
