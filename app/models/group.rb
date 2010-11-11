@@ -58,7 +58,8 @@ class Group < ActiveRecord::Base
           Select Null
           From group_members As gm
           Where gm.group_id = 4
-            And gm.user_id = users.id)
+            And gm.user_id = users.id) And
+      portal_certified_consultants.consultant_type = 'T'
   eos
       group = Group.find(4)    
       User.find_by_sql(sql).each do |u|
