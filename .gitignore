@@ -34,3 +34,4 @@ restart.txt
 production.rb
 newrelic.yml
 config/initializers/hoptoad.rb
+tmp/lock.txt
