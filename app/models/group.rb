@@ -46,4 +46,24 @@ class Group < ActiveRecord::Base
   def name_and_description
     "#{name}#{":" if description} #{description}"
   end
+
+
+  def self.assign_certified_users
+    sql =
+  <<-eos
+      Select distinct users.*
+      From portal_certified_consultants
+      Inner Join users On portal_certified_consultants.consultant_email = users.email
+      Where Not Exists(
+          Select Null
+          From group_members As gm
+          Where gm.group_id = 4
+            And gm.user_id = users.id)
+  eos
+      group = Group.find(4)    
+      User.find_by_sql(sql).each do |u|
+        u.groups << group
+        u.save!
+      end
+  end
 end
