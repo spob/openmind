@@ -11,7 +11,7 @@ class CreatePortalCertifiedConsultants < ActiveRecord::Migration
       t.string :consultant_email
       t.string :certification
       t.datetime :certified_at
-      t.string :is_active
+      t.boolean :is_active
       t.boolean :purchased_training
       t.timestamps
     end
