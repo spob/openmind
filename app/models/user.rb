@@ -185,6 +185,7 @@ class User < ActiveRecord::Base
     # hide records with a nil activated_at
     u = User.find :first, :conditions => ['email = ? and activated_at IS NOT NULL and one_time_password = ?', email, otp]
     u.update_attributes!(:one_time_password => nil) if u
+    u = (u && !u.otp_expired? ? u : nil)
     u
   end
 
