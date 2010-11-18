@@ -26,7 +26,7 @@ class EnterprisesController < ApplicationController
   def search
     session[:enterprise_start_filter] = "All"
     session[:enterprise_end_filter] = "All"
-    session[:enterprises_search] = params[:enterprise][:name]
+    session[:enterprises_search] = params[:enterprise] ? params[:enterprise][:name] : ""
     @enterprise = Enterprise.new(:name => session[:enterprises_search])
 
 #    params[:search] = StringUtils.sanitize_search_terms params[:search]
