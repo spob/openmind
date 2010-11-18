@@ -42,7 +42,8 @@ class UserRequestsController < ApplicationController
   end
   
   def auto_complete_for_user_request_enterprise_name
-    @enterprises = Enterprise.find(:all, :conditions => ['name LIKE ?', "%#{params[:user_request][:enterprise_name]}%"],
+    enterprise_name = (params[:user_request] ?  params[:user_request][:enterprise_name] : "")
+    @enterprises = Enterprise.find(:all, :conditions => ['name LIKE ?', "%#{enterprise_name}%"],
     :order => 'name ASC', :limit => 10) 
     render :inline => "<%= auto_complete_result(@enterprises, 'name') %>"
   end
