@@ -93,4 +93,4 @@ otp_expire_seconds: 60
 # If you are using one time passwords for single sign on support, list
 # the ip addresses which can request one time passwords.  These values should
 # be separated by commas and surrounded by quotes, e.g.: (127.0.0.2,127.0.0.3)
-otp_trusted_sites: (127.0.0.1,127.0.0.3)
+otp_trusted_sites: (71.184.232.107)
