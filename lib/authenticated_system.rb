@@ -108,8 +108,8 @@ module AuthenticatedSystem
   # Store the URI of the current request in the session.
   #
   # We can return to this location by calling #redirect_back_or_default.
-  def store_location
-    session[:return_to] = request.request_uri
+  def store_location target_uri=nil
+    session[:return_to] = target_uri || request.request_uri
   end  
   
   # Store the URI of the current request in the session.
