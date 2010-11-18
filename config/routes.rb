@@ -30,7 +30,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :link_sets, :member => { :update_sort => :post }
   map.resources :lookup_codes
   map.resources :merge_ideas
-  map.resources :periodic_jobs, :member => { :rerun => :post }
+  map.resources :periodic_jobs, :member => { :rerun => :post, :runnow => :post }
   map.resources :polls, :member => { :publish => :post, :unpublish => :post, :pie => :get,
     :present_survey => :get, :take_survey => :post}, 
   :collection => {:toggle_details => :get, :display_comments => :get }
