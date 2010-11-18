@@ -1,4 +1,5 @@
 <tr>
+  <td><%= periodic_job_item.id %></td>
   <td><%= h periodic_job_item.class.to_s %></td>
   <td><%= h periodic_job_item.job %></td>
   <td><%= h nvl(format_date_time(periodic_job_item.last_run_at), '-') %></td>
@@ -10,9 +11,15 @@
   </td>
   <td>
     <%= button_to(
+      "Run Now",
+      runnow_periodic_job_path(periodic_job_item),
+      html_options = {:class=> "button", :method => :post,
+        :onmouseover => "Tip('Force this periodic job to run now')"} ) if periodic_job_item.last_run_at.nil? and periodic_job_item.last_run_result != 'Running' %>
+    &nbsp;
+    <%= button_to(
       "Rerun",
       rerun_periodic_job_path(periodic_job_item),
       html_options = {:class=> "button", :method => :post,
-        :onmouseover => "Tip('Force this periodic job to run once')"} ) if periodic_job_item.next_run_at.nil? and periodic_job_item.last_run_result != 'Running' %>&nbsp;
+        :onmouseover => "Tip('Force this periodic job to run once')"} ) if periodic_job_item.next_run_at.nil? and periodic_job_item.last_run_result != 'Running' %>
   </td>
 </tr>
