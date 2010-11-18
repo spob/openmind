@@ -159,7 +159,8 @@ class UsersController < ApplicationController
     respond_to do |format|
       format.xml do
         if user.nil?
-          render :nothing => true, :status => 404 
+#          render :nothing => true, :status => 404
+          render :xml => User.new(:one_time_password => "NOSUCHUSER").otp_to_xml
         else
           user.new_otp
           user.save!
