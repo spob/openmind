@@ -27,9 +27,14 @@ class AccountController < ApplicationController
   def login_otp 
     @login = params[:login] # needed to remember login info in login fails
     self.current_user = User.authenticate_otp(params[:login], params[:password])
+    if self.current_user
+      logger.info "Current user is #{self.current_user.id}"
+    else
+      logger.info "current user is empty"
+    end
     if logged_in?
       # if a uri is specified, automatically navigate to it
-      store_location(params[:target_uri])
+      store_location(params[:target_uri]) if params[:target_uri]
       logged_in
     else
       if User.find_by_email(params[:login])

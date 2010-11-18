@@ -183,9 +183,18 @@ class User < ActiveRecord::Base
   
   def self.authenticate_otp(email, otp)
     # hide records with a nil activated_at
+    logger.debug("User with email #{email} and otp #{otp}")
     u = User.find :first, :conditions => ['email = ? and activated_at IS NOT NULL and one_time_password = ?', email, otp]
+    unless u
+      logger.info "No active user found for email #{email} and otp #{otp}"
+      return nil
+    end
+    if u.otp_expired?
+      logger.info "OTP is expired"
+      u = nil
+    end
     u.update_attributes!(:one_time_password => nil) if u
-    u = (u && !u.otp_expired? ? u : nil)
+    logger.info("Login via otp succeeded") if u
     u
   end
 
