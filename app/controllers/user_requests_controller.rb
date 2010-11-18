@@ -12,7 +12,8 @@ class UserRequestsController < ApplicationController
   :redirect_to => { :action => :index }
   
   def new
-    @user_request = UserRequest.new
+    @user_request = UserRequest.new(:email => params[:email], :first_name => params[:first_name],
+                                    :last_name => params[:last_name], :enterprise_name => params[:enterprise_name])
     
     @user_request.time_zone = APP_CONFIG['default_user_timezone']
   end
