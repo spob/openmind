@@ -12,7 +12,8 @@ class UserRequestsController < ApplicationController
   :redirect_to => { :action => :index }
   
   def new
-    @user_request = UserRequest.new
+    @user_request = UserRequest.new(:email => params[:email], :first_name => params[:first_name],
+                                    :last_name => params[:last_name], :enterprise_name => params[:enterprise_name])
     
     @user_request.time_zone = APP_CONFIG['default_user_timezone']
   end
@@ -42,7 +43,8 @@ class UserRequestsController < ApplicationController
   end
   
   def auto_complete_for_user_request_enterprise_name
-    @enterprises = Enterprise.find(:all, :conditions => ['name LIKE ?', "%#{params[:user_request][:enterprise_name]}%"],
+    enterprise_name = (params[:user_request] ?  params[:user_request][:enterprise_name] : "")
+    @enterprises = Enterprise.find(:all, :conditions => ['name LIKE ?', "%#{enterprise_name}%"],
     :order => 'name ASC', :limit => 10) 
     render :inline => "<%= auto_complete_result(@enterprises, 'name') %>"
   end
