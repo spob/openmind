@@ -31,6 +31,7 @@ eos
       select users.*
 from users
 where users.active = 1
+and users.email != 'support@scribesoft.com'
 and exists
 ( select null
   from portal_user_org_maps as puo
