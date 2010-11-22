@@ -57,8 +57,10 @@ class TopicsController < ApplicationController
         @topic.watchers << user unless @topic.watchers.include? user
       end
       
-      tw = TopicWatch.find_by_user_id_and_topic_id(current_user, @topic)
-      @topic.watchers << current_user if tw.nil?
+      if params[:watch] == 'yes'
+        tw = TopicWatch.find_by_user_id_and_topic_id(current_user, @topic)
+        @topic.watchers << current_user if tw.nil?
+      end
       @topic.save!
       if params[:attach] == 'yes'
         redirect_to attach_comment_path(comment)
@@ -142,9 +144,9 @@ class TopicsController < ApplicationController
     session[:forums_search] = params[:search]
     
     # solr barfs if search string starts with a wild card...so strip it out
-#    params[:search] = StringUtils.sanitize_search_terms params[:search]
+    #    params[:search] = StringUtils.sanitize_search_terms params[:search]
     begin
-#      search_results = Topic.find_by_solr(params[:search], :scores => true)
+      #      search_results = Topic.find_by_solr(params[:search], :scores => true)
       search_results = params[:search].blank? ? [] : Topic.search(params[:search], :retry_stale => true, :limit => 500)
     rescue RuntimeError => e
       flash[:error] = "An error occurred while executing your search. Perhaps there is a problem with the syntax of your search string."
@@ -161,8 +163,8 @@ class TopicsController < ApplicationController
       search_results.each do |topic|
         hits[topic.id] = TopicHit.new(topic, true, 1) if topic.forum.can_see?(current_user) or prodmgr?
       end
-#      TopicComment.find_by_solr(params[:search], :scores => true).docs.each do |comment|
-      (params[:search].blank? ? [] : TopicComment.search(params[:search], :retry_stale => true, :limit => 500)).each do |comment|
+      #      TopicComment.find_by_solr(params[:search], :scores => true).docs.each do |comment|
+       (params[:search].blank? ? [] : TopicComment.search(params[:search], :retry_stale => true, :limit => 500)).each do |comment|
         if (comment.topic.forum.can_see?(current_user) or prodmgr?) and
          (!comment.private or comment.topic.forum.mediators.include? current_user)
           # first see if topic hit already exists
@@ -224,7 +226,7 @@ class TopicsController < ApplicationController
   end
   
   def must_login
-    (!@topic.forum.public? and current_user == :false)
+   (!@topic.forum.public? and current_user == :false)
   end
   
   def redirect_path_on_access_denied user

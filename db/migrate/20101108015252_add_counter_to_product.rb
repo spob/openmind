@@ -21,12 +21,12 @@ class AddCounterToProduct < ActiveRecord::Migration
     end
 
     change_table :users do |t|
-      t.integer :topic_comments_count, :default => 0
+      t.integer :comments_count, :default => 0
     end
 
     User.reset_column_information
     User.all.each do |p|
-      p.update_attribute :topic_comments_count, p.topic_comments.length
+      p.update_attribute :comments_count, p.topic_comments.length
     end
   end
 
@@ -41,7 +41,7 @@ class AddCounterToProduct < ActiveRecord::Migration
     end
 
     change_table :users do |t|
-      t.remove :topic_comments_count
+      t.remove :comments_count
     end
   end
 end
