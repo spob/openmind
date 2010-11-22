@@ -52,11 +52,12 @@ class TopicsController < ApplicationController
       comment.endorser = current_user if @topic.forum.mediators.include? current_user
       @topic.comments << comment
       
-      #      @topic = Topic.find(@topic.id)
+      # Is the user watching the forum
       for user in @topic.forum.watchers
         @topic.watchers << user unless @topic.watchers.include? user
       end
       
+      # or did they indicate they want to watch this topic explicitly
       if params[:watch] == 'yes'
         tw = TopicWatch.find_by_user_id_and_topic_id(current_user, @topic)
         @topic.watchers << current_user if tw.nil?
