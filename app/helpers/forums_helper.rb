@@ -68,14 +68,17 @@ module ForumsHelper
   end
   
   def last_topic_post topic
-    return if topic.last_comment.nil?
-    comment = topic.last_comment.body
+    # For some reason topic.last_comment is not always returning the last comment. 
+    # it's less efficient, but I'll return all comments and grab the last one
+    return if topic.comments.empty?
+    last_comment = topic.comments.last
+    comment = last_comment.body
     comment = boldify(comment) if topic.unread_comment?(current_user)
     
-    author = user_display_name topic.last_comment.user
+    author = user_display_name last_comment.user
     author = boldify(author) if topic.unread_comment?(current_user)
     "#{author} wrote \"#{link_to truncate(StringUtils.strip_html(comment), :length => 40),
-    topic_path(topic, :anchor => topic.last_comment.id)}\"<br/>#{om_date_time topic.last_comment.created_at}"
+    topic_path(topic, :anchor => last_comment.id)}\"<br/>#{om_date_time last_comment.created_at}"
   end
   
   
