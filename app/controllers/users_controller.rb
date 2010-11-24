@@ -150,8 +150,8 @@ class UsersController < ApplicationController
   
   def fetch_otp
     user = nil
-    trusted_sites = (APP_CONFIG['otp_trusted_sites'] || "").gsub(/^\s*\(|\)\s*$/, "").split(/,/) || [""]
-    if trusted_sites.include? request.remote_ip 
+    trusted_sites = (APP_CONFIG['otp_trusted_sites'] || "")
+    if Regexp.new(trusted_sites).match(request.remote_ip )
       user = User.find_by_email(params[:login])
     else
       logger.warn("Request for a otp from an untrusted site: #{request.remote_ip} is not in #{APP_CONFIG['otp_trusted_sites']}")
