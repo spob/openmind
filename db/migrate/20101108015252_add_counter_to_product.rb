@@ -41,7 +41,7 @@ class AddCounterToProduct < ActiveRecord::Migration
     end
 
     change_table :users do |t|
-      t.remove :topic_comments_count
+      t.remove :comments_count
     end
   end
 end

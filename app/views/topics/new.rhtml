@@ -6,6 +6,7 @@
   <%= set_focus_to_id 'topic_title' -%>
 <%end%>
 <%= error_messages_for 'topic' %>
+<%= javascript_include_tag "wz_tooltip.js", :cache => "cache/tooltip" %> 
 
 <% form_for :topic, :html => {:id => "new-topic"}, :url => topics_path do |form| %>
   <input type="hidden" value="<%= @topic.forum.id %>" name="forum_id"/>
@@ -32,6 +33,11 @@
       <%= form.text_field :tag_list %>
       <br/>
       (separate with commas)
+    </p>
+    <p>
+      <label></label>
+      <%= check_box_tag 'watch', 'yes', true,
+        {:onmouseover => "Tip('Watch this topic to be notified via email when comments are added')"} %>Watch This Topic
     </p>
     <p>
       <label></label>

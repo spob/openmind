@@ -40,7 +40,9 @@ class Topic < ActiveRecord::Base
   has_many :comments, :class_name => "TopicComment", :dependent => :destroy,
            :order => "id ASC"
   has_many :user_topic_reads, :dependent => :delete_all
-  has_one :last_comment, :class_name => "TopicComment", :order => "id DESC"
+  # last comment is not behaving properly...I'll write a separate method to calculate even
+  # though it is less efficient
+#  has_one :last_comment, :class_name => "TopicComment", :order => "id DESC"
   has_one :main_comment, :class_name => "TopicComment", :order => "id ASC"
   has_many :topic_watches, :dependent => :delete_all
   has_many :watchers, :through => :topic_watches, :foreign_key => 'user_id'
@@ -93,6 +95,10 @@ and
       self.comments.find_all { |c| c.id > last_moderated_comment.id }.sort_by { |c| c.id }.first
     end
   end
+  
+  def last_comment
+    self.comments.last
+  end
 
   def days_comment_pending
     comment = earliest_pending_comment
@@ -120,7 +126,7 @@ and
 
   def self.list(page, per_page, forum, mediator, show_open, show_closed, owner_id)
     paginate :page => page,
-             :include => [:last_comment, :slug, :user, :owner, {:comments => [:user]}, :forum],
+             :include => [:slug, :user, :owner, {:comments => [:user]}, :forum],
              :conditions => ["forum_id = ? " +
                      "AND ((open_status = 1 and ? = 1) OR (open_status = 0 and ? = 1))" +
                      "AND (? = -1 or (? = 0 and owner_id is null) or owner_id = ?)" +
