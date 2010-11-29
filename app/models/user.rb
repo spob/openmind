@@ -148,6 +148,10 @@ class User < ActiveRecord::Base
   def sysadmin?
     roles.collect(&:title).include? 'sysadmin'
   end
+
+  def forecaster?
+    roles.collect(&:title).include? 'forecaster'
+  end
   
   def prodmgr?
     roles.collect(&:title).include? 'prodmgr'
@@ -366,6 +370,10 @@ class User < ActiveRecord::Base
     portal_enterprise_types.include?(self.enterprise.enterprise_type) && self.enterprise.view_portal
   end
 
+  def can_view_forecasts?
+    can_view_portal? && self.forecaster?
+  end
+
   def can_view_metrics?
     self.sysadmin? || self.mediator? || metrics_enterprise_types.include?(self.enterprise.enterprise_type)
   end
@@ -399,7 +407,7 @@ class User < ActiveRecord::Base
     end
   end
 
-  memoize :mediator?, :prodmgr?, :sysadmin?
+  memoize :mediator?, :prodmgr?, :sysadmin?, :forecaster?
   
   private
   

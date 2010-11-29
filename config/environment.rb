@@ -144,6 +144,6 @@ Mime::SET << Mime::CSV
 # see http://lemurware.blogspot.com/2006/08/ruby-on-rails-configuration-and.html
 # RBS 1/1/2008
 
-  WhiteListHelper.tags.merge %w(u table tbody tr td iframe)
-  WhiteListHelper.attributes.merge %w(id class style src target align frameborder marginheight marginwidth)
+WhiteListHelper.tags.merge %w(u table tbody tr td iframe)
+WhiteListHelper.attributes.merge %w(id class style src target align frameborder marginheight marginwidth)
  

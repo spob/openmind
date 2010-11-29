@@ -45,6 +45,7 @@ namespace :db do
     create_role("voter", "Voter", true)
     create_role("mediator", "Forum Moderator", false)
     create_role("allocmgr", "Allocations Manager", false)
+    create_role("forecaster", "Forecaster", false)
 
     assign_user 'admin@openmindsw.com', "sysadmin"
     assign_user 'prodmgr@openmindsw.com', "prodmgr"

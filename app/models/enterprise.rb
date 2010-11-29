@@ -30,7 +30,8 @@ class Enterprise < ActiveRecord::Base
   # to allow user to create an allocation at the same time they create an
   # enterprise
   attr_accessor :initial_allocation 
-  
+
+  has_many :forecasts, :dependent => :destroy, :order => "close_at DESC"
   has_many :users, :dependent => :destroy, :order => "email ASC"   
   has_many :allocations, :dependent => :destroy, :order => "created_at ASC"  
   has_many :forum_metrics, :dependent => :destroy, :order => "as_of ASC"

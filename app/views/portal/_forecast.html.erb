@@ -1,0 +1,49 @@
+<tr>
+  <td>
+    <%= h forecast.account_name %>
+  </td>
+  <td>
+    <%= h forecast.location %>
+  </td>
+  <td>
+    <%= h forecast.partner_representative %>
+  </td>
+  <td>
+    <%= h forecast.rbm %>
+  </td>
+  <td>
+    <%= h forecast.account_exec %>
+  </td>
+  <td>
+    <%= h forecast.product %>
+  </td>
+  <td>
+    &nbsp;
+  </td>
+  <td>
+    <%= number_to_currency(forecast.amount, :precision => 0, :unit => "$") %>
+  </td>
+  <td>
+    <%= om_date(forecast.close_at) %>
+  </td>
+  <td>
+    <%= h forecast.stage %>
+  </td>
+  <td>
+    <%= h forecast.comments %>
+  </td>
+  <td>
+
+    <%= link_to theme_image_tag("icons/16x16/editAction.png", :alt=>"edit", :title=> "edit"),
+                edit_forecast_path(forecast),
+                html_options = {
+                        :onmouseover => "Tip('Edit this forecast')"}
+    %>
+
+    <%= link_to(
+            theme_image_tag("icons/16x16/deleteAction.png", :alt=>"delete", :title=> "delete"),
+            forecast_path(forecast),
+            html_options = {:confirm => 'Are you sure?', :method => :delete,
+                            :onmouseover => "Tip('Delete this forecast')"}) %>
+  </td>
+</tr>
