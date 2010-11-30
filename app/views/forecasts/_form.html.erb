@@ -14,7 +14,7 @@
       </p>
       <p>
         <%= form.label :account_name %>
-        <%= form.text_field :account_name, {:size => 50, :maxlength => 50} %>
+        <%= text_field_with_auto_complete :forecast, :account_name, {}, {:method => :get} %>
       </p>
       <p>
         <%= form.label :rbm, "Scribe RBM" %>

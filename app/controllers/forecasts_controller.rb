@@ -52,6 +52,13 @@ class ForecastsController < ApplicationController
     flash[:notice] = "Opportunity #{@forecast.account_name} was successfully deleted."
     redirect_to portal_index_path
   end
+  
+  def auto_complete_for_forecast_account_name
+    search_txt = ".*#{params[:forecast][:account_name]}.*"
+    @account_names = PortalUserOrgMap.active.portal_end_customer_orgs.by_email(session[:portal_email]).collect{ |uo| uo.portal_org.portal_customers }.flatten.map{|x| x.portal_org}.uniq.find_all{|x| Regexp.new(search_txt, Regexp::IGNORECASE).match(x.org_name)}.sort
+    puts @account_names
+    render :inline => "<%= auto_complete_result(@account_names, 'org_name') %>"
+  end
 
   private
 
