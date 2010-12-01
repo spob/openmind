@@ -20,12 +20,12 @@
 
       <p>
         <%= form.label :rbm, "Scribe RBM" %>
-        <%= form.select :rbm, options_for_select(rbm_options), :prompt => "Please select..." %>
+        <%= form.select :rbm, options_for_select(rbm_options, @forecast.rbm), :prompt => "Please select..." %>
       </p>
 
       <p>
         <%= form.label :account_exec %>
-        <%= form.select :account_exec, options_for_select(account_exec_options), :prompt => "Please select..." %>
+        <%= form.select :account_exec, options_for_select(account_exec_options, @forecast.account_exec), :prompt => "Please select..." %>
       </p>
 
       <p>
@@ -35,12 +35,12 @@
 
       <p>
         <%= form.label :stage %>
-        <%= form.select :stage, options_for_select(stage_options), :prompt => "Please select..." %>
+        <%= form.select :stage, options_for_select(stage_options, @forecast.stage), :prompt => "Please select..." %>
       </p>
 
       <p>
         <%= form.label :product %>
-        <%= form.select :product, options_for_select(product_options), :prompt => "Please select..." %>
+        <%= form.select :product, options_for_select(product_options, @forecast.product), :prompt => "Please select..." %>
       </p>
 
       <p>

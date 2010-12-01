@@ -19,7 +19,7 @@ class PortalController < ApplicationController
       @tickets = PortalUserOrgMap.active.by_email(session[:portal_email]).collect{ |uo| uo.portal_org.portal_support_incidents }.flatten.sort{|x,y| y.opened_at <=> x.opened_at }
       @user = User.find_by_email(session[:portal_email])
       @users = @user.enterprise.users if @user
-      @forecasts = @user.enterprise.forecasts.active if @user
+      @forecasts = @user.enterprise.forecasts.active.sort{|x,y| Forecast.stages[x.stage] <=> Forecast.stages[y.stage]} if @user
       @users ||= []
       @forecasts ||= []
     end

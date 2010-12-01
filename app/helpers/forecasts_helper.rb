@@ -9,7 +9,7 @@ module ForecastsHelper
   end
 
   def stage_options
-    %w(   Prospecting Qualification Needs\ Analysis Selected Committed/Order\ Pending Closed/Won Closed/Lost   )
+    Forecast.stages.to_a.sort{|x,y| x[1] <=> y[1]}.collect{|x| x[0]}
   end
 
   def product_options

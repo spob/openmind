@@ -16,5 +16,17 @@ class Forecast < ActiveRecord::Base
   validates_numericality_of :amount, :greater_than => 0, :allow_nil => true
 
 
-  named_scope :active, :conditions => ["deleted_at is null" ]
+  named_scope :active, :conditions => ["deleted_at is null" ] 
+
+  def self.stages
+    {
+    "Prospecting" => 1,
+    "Qualification" => 2,
+    "Needs Analysis" => 3,
+    "Selected" => 4,
+    "Committed/Order Pending" => 5,
+    "Closed/Won" => 6,
+    "Closed/Lost" => 7
+  }
+  end
 end
