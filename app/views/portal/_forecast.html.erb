@@ -18,7 +18,11 @@
     <%= h forecast.product %>
   </td>
   <td>
-    &nbsp;
+    <% if forecast.products.present? %>
+          <%= forecast.products.collect{|p| h p.name}.join("<br />") %>
+    <% else %>
+        &nbsp;
+    <% end %>
   </td>
   <td>
     <%= number_to_currency(forecast.amount, :precision => 0, :unit => "$") %>
@@ -41,9 +45,9 @@
     %>
 
     <%= link_to(
-            theme_image_tag("icons/16x16/deleteAction.png", :alt=>"delete", :title=> "delete"),
-            forecast_path(forecast),
-            html_options = {:confirm => 'Are you sure?', :method => :delete,
-                            :onmouseover => "Tip('Delete this forecast')"}) %>
+                theme_image_tag("icons/16x16/deleteAction.png", :alt=>"delete", :title=> "delete"),
+                forecast_path(forecast),
+                html_options = {:confirm     => 'Are you sure?', :method => :delete,
+                                :onmouseover => "Tip('Delete this forecast')"}) %>
   </td>
 </tr>

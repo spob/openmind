@@ -12,38 +12,56 @@
         <%= form.label :partner_representative %>
         <%= form.text_field :partner_representative, {:size => 50, :maxlength => 50} %>
       </p>
+
       <p>
         <%= form.label :account_name %>
         <%= text_field_with_auto_complete :forecast, :account_name, {}, {:method => :get} %>
       </p>
+
       <p>
         <%= form.label :rbm, "Scribe RBM" %>
         <%= form.select :rbm, options_for_select(rbm_options), :prompt => "Please select..." %>
       </p>
+
       <p>
         <%= form.label :account_exec %>
         <%= form.select :account_exec, options_for_select(account_exec_options), :prompt => "Please select..." %>
       </p>
+
       <p>
         <%= form.label :location %>
         <%= form.text_field :location, {:size => 50, :maxlength => 50} %>
       </p>
+
       <p>
         <%= form.label :stage %>
         <%= form.select :stage, options_for_select(stage_options), :prompt => "Please select..." %>
       </p>
+
       <p>
         <%= form.label :product %>
         <%= form.select :product, options_for_select(product_options), :prompt => "Please select..." %>
       </p>
+
+      <p>
+        <label>Adapters</label>
+        <% for product in forecasted_products %>
+            <span style="display:block;margin-left:10px;"><%= check_box_tag "forecast[product_ids][]", product.id, @forecast.products.include?(product) %>
+              <%= h product.name %>
+            </span>
+        <% end %>
+      </p>
+
       <p>
         <%= form.label :close_at %>
         <%= calendar_date_select :forecast, :close_at, :popup => :force, :time => false %>
       </p>
+
       <p>
-        <%= form.label :amount, "Amount (in dollars)"%>
+        <%= form.label :amount, "Amount (in dollars)" %>
         <%= form.text_field :amount, {:size => 50, :maxlength => 50} %>
       </p>
+
       <p>
         <%= form.label :comments %>
         <%= form.text_area :comments %>
@@ -51,9 +69,9 @@
 
       <p>
         <label></label>
-        <%= submit_tag (@forecast.new_record? ? "Create" : "Update"), options = {:class=> "button", :disable_with => "Please wait...",
+        <%= submit_tag (@forecast.new_record? ? "Create" : "Update"), options = {:class       => "button", :disable_with => "Please wait...",
                                                                                  :onmouseover => "Tip('Create a new opportunity')"} %>
-        <%= link_to 'Cancel', portal_index_path, {:class=> "button",
+        <%= link_to 'Cancel', portal_index_path, {:class       => "button",
                                                   :onmouseover => "Tip('Do not save changes to the opportunity')"} %>
       </p>
     </div>

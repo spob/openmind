@@ -2,11 +2,11 @@ class ForecastsController < ApplicationController
   before_filter :login_required
   before_filter :fetch_forecast, :only => [:edit, :update, :destroy]
 
-  verify :method => :post, :only => [:create],
+  verify :method      => :post, :only => [:create],
          :redirect_to => {:action => :index}
-  verify :method => :put, :only => [:update],
+  verify :method      => :put, :only => [:update],
          :redirect_to => {:action => :index}
-  verify :method => :delete, :only => [:destroy],
+  verify :method      => :delete, :only => [:destroy],
          :redirect_to => {:action => :index}
 
   def index
@@ -20,9 +20,10 @@ class ForecastsController < ApplicationController
 
   def create
     if can_forecast?
-      @forecast = Forecast.new(params[:forecast])
-      @forecast.enterprise = current_user.enterprise
-      @forecast.user = current_user
+      params[:forecast][:product_ids] ||= []
+      @forecast                 = Forecast.new(params[:forecast])
+      @forecast.enterprise      = current_user.enterprise
+      @forecast.user            = current_user
       if @forecast.save
         flash[:notice] = "Opportunity #{@forecast.account_name} was successfully created."
         redirect_to portal_index_path
@@ -38,6 +39,7 @@ class ForecastsController < ApplicationController
 
   def update
     if can_forecast? true
+      params[:forecast][:product_ids] ||= []
       if @forecast.update_attributes(params[:forecast])
         flash[:notice] = "Opportunity #{@forecast.account_name} was successfully updated."
         redirect_to portal_index_path
@@ -52,10 +54,10 @@ class ForecastsController < ApplicationController
     flash[:notice] = "Opportunity #{@forecast.account_name} was successfully deleted."
     redirect_to portal_index_path
   end
-  
+
   def auto_complete_for_forecast_account_name
-    search_txt = ".*#{params[:forecast][:account_name]}.*"
-    @account_names = PortalUserOrgMap.active.portal_end_customer_orgs.by_email(session[:portal_email]).collect{ |uo| uo.portal_org.portal_customers }.flatten.map{|x| x.portal_org}.uniq.find_all{|x| Regexp.new(search_txt, Regexp::IGNORECASE).match(x.org_name)}.sort
+    search_txt     = ".*#{params[:forecast][:account_name]}.*"
+    @account_names = PortalUserOrgMap.active.portal_end_customer_orgs.by_email(session[:portal_email]).collect { |uo| uo.portal_org.portal_customers }.flatten.map { |x| x.portal_org }.uniq.find_all { |x| Regexp.new(search_txt, Regexp::IGNORECASE).match(x.org_name) }.sort
     puts @account_names
     render :inline => "<%= auto_complete_result(@account_names, 'org_name') %>"
   end

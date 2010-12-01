@@ -23,4 +23,8 @@ module ForecastsHelper
             "Enterprise"
     ]
   end
+
+  def forecasted_products
+    Product.find(:all, :conditions => {:id => APP_CONFIG['forecasted_products'].gsub(/^\s*\(|\)\s*$/, "").split(/,/).map{|x| x.to_i}}, :order => :name)
+  end
 end
