@@ -9,12 +9,12 @@
 
     <div class="cssform widerLabel">
       <p>
-        <%= form.label :partner_representative %>
+        <%= form.label :partner_representative, "Partner Representative" %>
         <%= form.text_field :partner_representative, {:size => 50, :maxlength => 50} %>
       </p>
 
       <p>
-        <%= form.label :account_name %>
+        <%= form.label :account_name, "Account Name" %>
         <%= text_field_with_auto_complete :forecast, :account_name, {}, {:method => :get} %>
       </p>
 
@@ -24,7 +24,7 @@
       </p>
 
       <p>
-        <%= form.label :account_exec %>
+        <%= form.label :account_exec, "Account Exec" %>
         <%= form.select :account_exec, options_for_select(account_exec_options, @forecast.account_exec), :prompt => "Please select..." %>
       </p>
 
