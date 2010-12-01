@@ -28,6 +28,7 @@ class Product < ActiveRecord::Base
   :dependent => :destroy, :order => "id ASC"
   has_and_belongs_to_many :watchers, :join_table => 'products_watches',
   :class_name => 'User'
+  has_and_belongs_to_many :forecasts
   
   named_scope :by_name, :order => "name ASC"
   named_scope :active, :conditions => ["active = ?", true]

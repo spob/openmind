@@ -1,6 +1,7 @@
 class Forecast < ActiveRecord::Base
   belongs_to :enterprise
   belongs_to :user
+  has_and_belongs_to_many :products
 
   validates_presence_of :enterprise, :user, :partner_representative, :account_name, :rbm, :account_exec,
                         :location, :stage, :product, :close_at, :amount
