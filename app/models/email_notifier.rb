@@ -151,6 +151,7 @@ class EmailNotifier < ActionMailer::Base
   end
   
   def new_topic_comment_notification(topics, user)
+    puts "notifying #{user.email} for #{topics.size} topics id #{topics.first.id}"
     setup_email
     @body[:topics]  = topics
     @body[:user] = user

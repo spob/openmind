@@ -41,6 +41,12 @@
         :onmouseover => "Tip('Don't show full name or email address to other users')"}, '1', '0') %>
     </p>
     <p>
+      <label for="hide_contact_info">Topic Notifications As Digest:</label>
+      <%= f.check_box(:topic_notification_digests,
+        html_options = {
+        :onmouseover => "Tip('By checking this option, you will receive at most one email a day regarding new topic comments for watched topics. Unchecking means you will receive email notifications immediately as comments as added to watched topics')"}, '1', '0') %>
+    </p>
+    <p>
       <label for="watch_on_vote">Watch Ideas I Vote For:</label>
       <%= f.check_box(:watch_on_vote,
         html_options = {

@@ -191,7 +191,7 @@ class CommentsController < ApplicationController
     if params[:private] == 'yes'
       @comment.private = true
     end
-    if params[:watch] == 'yes'
+    if params[:watch] == 'yes' && !@topic.watched?(current_user)
       @topic.watchers << current_user
     end
     if @topic.save and @comment.save

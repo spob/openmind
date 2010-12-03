@@ -116,6 +116,9 @@ class User < ActiveRecord::Base
   named_scope :imported_users,
     :conditions => ["activated_at is null and activation_code is null" ]
 
+  named_scope :immediate_topic_watcher,
+    :conditions => { :topic_notification_digests => false }
+
   named_scope :sysadmins,
     :joins => [:roles],
     :conditions => {:active => 1, :roles => {:title => 'sysadmin'}},
