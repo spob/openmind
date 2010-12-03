@@ -27,6 +27,7 @@ class TopicComment < Comment
   belongs_to :topic, :counter_cache => true
   belongs_to :endorser, :class_name => 'User'
   before_create :update_topic_commented_at_on_create
+  before_create :notify_immediate_watchers
   before_update :update_topic_commented_at_on_update
   
   validates_presence_of :topic_id
@@ -90,5 +91,12 @@ class TopicComment < Comment
   
   def rss_body
     "<i>#{user.display_name} wrote:</i><br/>#{body}"
+  end
+
+  private
+
+  def notify_immediate_watchers
+      RunOncePeriodicJob.create(
+      	:job => "Topic.notify_immediate_watchers(#{self.topic.id})")
   end
 end

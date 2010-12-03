@@ -16,11 +16,11 @@
 #
 
 class Topic < ActiveRecord::Base
-  has_friendly_id :title, :use_slug => true,
+  has_friendly_id :title, :use_slug  => true,
                   # remove accents and other diacritics from Western characters
                   :approximate_ascii => true,
                   # don't use slugs longer than 50 chars
-                  :max_length => 50
+                  :max_length        => 50
   before_update :set_close_date
   acts_as_taggable
   #  acts_as_solr :fields => [:title, {:created_at => :date}]
@@ -31,14 +31,14 @@ class Topic < ActiveRecord::Base
     set_property :delta => true
   end
 
-  ajaxful_rateable :stars => 5,
+  ajaxful_rateable :stars        => 5,
                    :allow_update => true,
                    :cache_column => :rating_average
   belongs_to :forum
   belongs_to :user
   belongs_to :owner, :class_name => 'User', :foreign_key => :owner_id
   has_many :comments, :class_name => "TopicComment", :dependent => :destroy,
-           :order => "id ASC"
+           :order                 => "id ASC"
   has_many :user_topic_reads, :dependent => :delete_all
   # last comment is not behaving properly...I'll write a separate method to calculate even
   # though it is less efficient
@@ -67,9 +67,9 @@ class Topic < ActiveRecord::Base
   named_scope :unowned, :conditions => ['owner_id is null']
   named_scope :open_or_recently_closed,
               lambda { |end_date| {:conditions =>
-                      ['open_status = 1 or (open_status = 0 and closed_at >= ?)', end_date]} }
+                                       ['open_status = 1 or (open_status = 0 and closed_at >= ?)', end_date]} }
   sql =
-          <<-eos
+      <<-eos
 topics.owner_id is not null
 and
   Not Exists(Select
@@ -82,7 +82,7 @@ and
   eos
 
   named_scope :owners_who_are_not_watchers, :conditions =>
-          [sql]
+      [sql]
 
   attr_accessor :comment_body
 
@@ -95,7 +95,7 @@ and
       self.comments.find_all { |c| c.id > last_moderated_comment.id }.sort_by { |c| c.id }.first
     end
   end
-  
+
   def last_comment
     self.comments.last
   end
@@ -125,18 +125,18 @@ and
   end
 
   def self.list(page, per_page, forum, mediator, show_open, show_closed, owner_id)
-    paginate :page => page,
-             :include => [:slug, :user, :owner, {:comments => [:user]}, :forum],
+    paginate :page       => page,
+             :include    => [:slug, :user, :owner, {:comments => [:user]}, :forum],
              :conditions => ["forum_id = ? " +
-                     "AND ((open_status = 1 and ? = 1) OR (open_status = 0 and ? = 1))" +
-                     "AND (? = -1 or (? = 0 and owner_id is null) or owner_id = ?)" +
-                     "AND (? = 1 OR " +
-                     "EXISTS (SELECT NULL FROM comments AS c " +
-                     "WHERE c.topic_id = topics.id " +
-                     "AND c.private != 1))",
+                                 "AND ((open_status = 1 and ? = 1) OR (open_status = 0 and ? = 1))" +
+                                 "AND (? = -1 or (? = 0 and owner_id is null) or owner_id = ?)" +
+                                 "AND (? = 1 OR " +
+                                 "EXISTS (SELECT NULL FROM comments AS c " +
+                                 "WHERE c.topic_id = topics.id " +
+                                 "AND c.private != 1))",
                              forum.id, show_open, show_closed, owner_id, owner_id, owner_id, mediator],
-             :order => "pinned DESC, last_commented_at DESC",
-             :per_page => per_page
+             :order      => "pinned DESC, last_commented_at DESC",
+             :per_page   => per_page
   end
 
   def self.set_owners_to_watchers
@@ -183,18 +183,18 @@ and
 
   def unread_comments user
     TopicComment.find(:all,
-                      :select => "comments.*",
-                      :joins => [:topic],
+                      :select     => "comments.*",
+                      :joins      => [:topic],
                       :conditions =>
-                              [
-                                      "comments.topic_id = ? " +
-                                              "and exists (" +
-                                              "select null " +
-                                              "from topic_watches as tw " +
-                                              "where tw.last_checked_at < comments.published_at " +
-                                              " and tw.topic_id = comments.topic_id " +
-                                              "and tw.user_id = ?)", id, user.id],
-                      :order => "comments.id DESC")
+                          [
+                                                         "comments.topic_id = ? " +
+                                                             "and exists (" +
+                                                             "select null " +
+                                                             "from topic_watches as tw " +
+                                                             "where tw.last_checked_at < comments.published_at " +
+                                                             " and tw.topic_id = comments.topic_id " +
+                                                             "and tw.user_id = ?)", id, user.id],
+                      :order      => "comments.id DESC")
   end
 
   def watched? user
@@ -209,25 +209,37 @@ and
     # puts "Checking for topic notifications at #{Time.zone.now.to_s}"
     # Find users who have a comment more recent than the last watch check
     users = User.find(:all, :conditions =>
-            ["EXISTS " +
-                    "(SELECT NULL FROM topic_watches AS tw " +
-                    "INNER JOIN topics AS t ON t.id = tw.topic_id " +
-                    "WHERE tw.user_id = users.id " +
-                    "AND t.last_commented_at > tw.last_checked_at)"])
+        ["EXISTS " +
+             "(SELECT NULL FROM topic_watches AS tw " +
+             "INNER JOIN topics AS t ON t.id = tw.topic_id " +
+             "WHERE tw.user_id = users.id " +
+             "AND t.last_commented_at > tw.last_checked_at)"])
 
     users.each do |user|
       # puts "user #{user.email}"
-      tws = TopicWatch.find_all_by_user_id(user, :include => "topic",
-                                           :conditions => "topics.last_commented_at > topic_watches.last_checked_at",
-                                           :order => "topics.forum_id")
+      tws    = TopicWatch.find_all_by_user_id(user, :include => "topic",
+                                              :conditions    => "topics.last_commented_at > topic_watches.last_checked_at",
+                                              :order         => "topics.forum_id")
       topics = tws.find_all { |tw| tw.topic.forum.can_see?(user) && tw.topic.unread_comments(user).present? }.collect(& :topic)
 
-      EmailNotifier.deliver_new_topic_comment_notification(topics, user) if user.active and user.activated_at.present?
+      EmailNotifier.deliver_new_topic_comment_notification(topics, user) if user.active && user.activated_at.present?
 
       for tw in tws
         tw.last_checked_at = Time.zone.now
         tw.save
       end
+    end
+  end
+
+  def self.notify_immediate_watchers topic_id
+    topic = Topic.find(topic_id)
+    topic.watchers.immediate_topic_watcher.uniq.each do |w|
+      puts "found #{w.email}"
+      if topic.forum.can_see?(w) && topic.unread_comments(w).present? && w.active && w.activated_at.present?
+        EmailNotifier.deliver_new_topic_comment_notification([topic], w)
+        topic_watch = topic.topic_watches.find_by_user_id(w)
+      end
+      topic_watch.update_attribute(:last_checked_at, Time.now)
     end
   end
 end

@@ -232,6 +232,7 @@ class UsersController < ApplicationController
     @user.first_name = params[:user][:first_name]
     @user.last_name = params[:user][:last_name]
     @user.time_zone = params[:user][:time_zone]
+    @user.topic_notification_digests = params[:user][:topic_notification_digests]
     @user.row_limit = params[:user][:row_limit]
     @user.identity_url = add_trailing_slash params[:user][:identity_url]
     @user.hide_contact_info = params[:user][:hide_contact_info]
