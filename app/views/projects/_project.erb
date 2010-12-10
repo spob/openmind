@@ -21,8 +21,13 @@
         <%= link_to(
                     theme_image_tag("icons/16x16/deleteAction.png", :alt=>"delete", :title=> "delete"),
                     project_path(project),
-                    html_options = {:confirm     => 'Are you sure?', :method => :delete,
+                    {:confirm     => 'Are you sure?', :method => :delete,
                                     :onmouseover => "Tip('Delete this project')"}) %>
+        <%= link_to(
+                    "Refresh",
+                    refresh_project_path(project),
+                    {:method => :post,
+                     :onmouseover => "Tip('Refresh the project information from pivotal tracker')"}) %>
     <% else %>
         &nbsp;
     <% end %>
