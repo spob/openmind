@@ -1,0 +1,19 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  pivotal_id: 1
+  story_type: MyString
+  url: MyString
+  points: 1
+  status: MyString
+  name: MyString
+  owner: MyString
+
+two:
+  pivotal_id: 1
+  story_type: MyString
+  url: MyString
+  points: 1
+  status: MyString
+  name: MyString
+  owner: MyString

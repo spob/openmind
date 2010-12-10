@@ -155,6 +155,10 @@ class User < ActiveRecord::Base
   def forecaster?
     roles.collect(&:title).include? 'forecaster'
   end
+
+  def developer?
+    roles.collect(&:title).include? 'developer'
+  end
   
   def prodmgr?
     roles.collect(&:title).include? 'prodmgr'

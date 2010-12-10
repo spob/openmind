@@ -1,0 +1,15 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  pivotal_task_id: 1
+  description: MyString
+  total_hours: 1.5
+  remaining_hours: 1.5
+  status: MyString
+
+two:
+  pivotal_task_id: 1
+  description: MyString
+  total_hours: 1.5
+  remaining_hours: 1.5
+  status: MyString
