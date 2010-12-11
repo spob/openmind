@@ -24,6 +24,7 @@ module ApplicationHelper
     ["Attachments",     attachments_path,     ["sysadmin", "prodmgr", "mediator"]  ],
     ["Polls",           polls_path,           ],
     ["Portal",          portal_index_path,          ],
+    ["Projects",        projects_path ,  ["developer"]  ],
     ["Admin",           periodic_jobs_path,    ["sysadmin"],  ["lookup_codes", "link_sets"] ],
     ]
     
