@@ -18,15 +18,21 @@
                             :onmouseover => "Tip('View details for this project')"}
         %>
 
+        <%= link_to theme_image_tag("icons/16x16/editAction.png", :alt=>"edit", :title=> "edit"),
+                    edit_project_path(project),
+                    html_options = {
+                            :onmouseover => "Tip('Edit this project')"}
+        %>
+
         <%= link_to(
                     theme_image_tag("icons/16x16/deleteAction.png", :alt=>"delete", :title=> "delete"),
                     project_path(project),
                     {:confirm     => 'Are you sure?', :method => :delete,
-                                    :onmouseover => "Tip('Delete this project')"}) %>
+                     :onmouseover => "Tip('Delete this project')"}) %>
         <%= link_to(
                     "Refresh",
                     refresh_project_path(project),
-                    {:method => :post,
+                    {:method      => :post,
                      :onmouseover => "Tip('Refresh the project information from pivotal tracker')"}) %>
     <% else %>
         &nbsp;
