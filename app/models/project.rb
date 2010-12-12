@@ -38,7 +38,7 @@ class Project < ActiveRecord::Base
 
       self.name             = doc.at('name').innerHTML
       self.iteration_length = doc.at('iteration_length').innerHTML
-      fetch_current_iteration
+      fetch_current_iteration unless self.new_record?
     else
       "#{pivotal_identifier} not found in pivotal tracker"
     end
