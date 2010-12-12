@@ -32,6 +32,8 @@ Rails::Initializer.run do |config|
   
   config.gem "friendly_id"
 
+  config.gem "hpricot"
+
   config.gem 'hoptoad_notifier'
 
   config.gem 'newrelic_rpm'
@@ -72,7 +74,7 @@ Rails::Initializer.run do |config|
   
   # Force all environments to use the same logger level (by default production
   # uses :info, the others :debug)
-  config.log_level = :info
+  config.log_level = :debug
   
   # Use the database for sessions instead of the file system (create the session
   # table with 'rake db:sessions:create')

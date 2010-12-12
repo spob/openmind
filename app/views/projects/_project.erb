@@ -1,0 +1,41 @@
+<tr>
+  <td><%= link_to project.name, project_path(project) %></td>
+  <td>
+    <%= project.pivotal_identifier %>
+  </td>
+  <td class="center">
+    <% if project.active %>
+        <%= theme_image_tag("icons/16x16/16-check.png", options = {:alt=>"active"}) %>
+    <% else %>
+        &nbsp;
+    <% end %>
+  </td>
+  <td>
+    <% if current_user.sysadmin? %>
+        <%= link_to theme_image_tag("icons/16x16/viewAction.png", :alt=>"view", :title=> "view"),
+                    project_path(project),
+                    html_options = {
+                            :onmouseover => "Tip('View details for this project')"}
+        %>
+
+        <%= link_to theme_image_tag("icons/16x16/editAction.png", :alt=>"edit", :title=> "edit"),
+                    edit_project_path(project),
+                    html_options = {
+                            :onmouseover => "Tip('Edit this project')"}
+        %>
+
+        <%= link_to(
+                    theme_image_tag("icons/16x16/deleteAction.png", :alt=>"delete", :title=> "delete"),
+                    project_path(project),
+                    {:confirm     => 'Are you sure?', :method => :delete,
+                     :onmouseover => "Tip('Delete this project')"}) %>
+        <%= link_to(
+                    "Refresh",
+                    refresh_project_path(project),
+                    {:method      => :post,
+                     :onmouseover => "Tip('Refresh the project information from pivotal tracker')"}) %>
+    <% else %>
+        &nbsp;
+    <% end %>
+  </td>
+</tr>

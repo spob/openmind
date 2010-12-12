@@ -1,0 +1,48 @@
+<% content_for :head do -%>
+    <%= javascript_include_tag "tablecloth" %>
+<% end %>
+<%= javascript_include_tag "wz_tooltip.js", :cache => "cache/tooltip" %>
+<%= error_messages_for 'project' %>
+<h1>Projects</h1>
+<table cellspacing="0" cellpadding="0" class="cssform">
+  <tr>
+    <th>
+      Name
+    </th>
+    <th>
+      Pivotal ID
+    </th>
+    <th class="center">
+      Active
+    </th>
+    <th>
+      Action
+    </th>
+  </tr>
+  <% if current_user.sysadmin? %>
+      <% form_for :project, :url => projects_path do |form| %>
+          <tr>
+            <td>-</td>
+            <td>
+              <%= form.text_field :pivotal_identifier %>
+            </td>
+            <td class="center">
+              <%= theme_image_tag("icons/16x16/16-check.png", options = {:alt=>"active"}) %>
+            </td>
+            <td>
+              <%= submit_tag 'Create', html_options = {:class       => "button", :disable_with => "Please wait...",
+                                                       :onmouseover => "Tip('Create a new project')"} %>
+            </td>
+          </tr>
+      <% end %>
+  <% end %>
+  <%= render :partial => 'project', :collection => @projects %>
+</table>
+<p>
+<div class="digg_pagination">
+  <div class="page_info">
+    <%= page_entries_info @projects %>
+  </div>
+  <%= will_paginate @projects, :container => false %>
+</div>
+</p>

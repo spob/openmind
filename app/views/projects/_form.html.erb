@@ -1,0 +1,23 @@
+<%= error_messages_for 'project' %>
+
+<% form_for @project do |form| %>
+
+    <div class="cssform widerLabel">
+      <p>
+        <%= form.label :name %>
+        <%= h @project.name %>
+      </p>
+    <p>
+        <%= form.label :active %>
+      <%= form.check_box :active %>
+    </p>
+
+      <p>
+        <label></label>
+        <%= submit_tag (@project.new_record? ? "Create" : "Update"), options = {:class       => "button", :disable_with => "Please wait...",
+                                                                                 :onmouseover => "Tip('Save opportunity')"} %>
+        <%= link_to 'Cancel', projects_path, {:class       => "button",
+                                                  :onmouseover => "Tip('Do not save changes to the project')"} %>
+      </p>
+    </div>
+<% end %>

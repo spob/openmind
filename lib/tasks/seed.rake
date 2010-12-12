@@ -42,6 +42,7 @@ namespace :db do
   task :seed_roles => :environment do
     create_role("sysadmin", "System Administrator", false)
     create_role("prodmgr", "Product Manager", false)
+    create_role("developer", "Developer", false)
     create_role("voter", "Voter", true)
     create_role("mediator", "Forum Moderator", false)
     create_role("allocmgr", "Allocations Manager", false)
