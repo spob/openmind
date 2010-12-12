@@ -83,7 +83,7 @@ class Project < ActiveRecord::Base
                                        :points             => story.at('estimate').try(:inner_html),
                                        :status             => story.at('current_state').inner_html,
                                        :name               => story.at('name').inner_html,
-                                       :owner              => story.at('owned_by').inner_html,
+                                       :owner              => story.at('owned_by').try(:inner_html),
                                        :story_type         => story.at('story_type').inner_html)
           end
 
