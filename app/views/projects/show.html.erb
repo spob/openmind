@@ -1,0 +1,17 @@
+<% content_for :head do -%>
+    <%= javascript_include_tag "tablecloth" %>
+<% end %>
+
+<h1>Project <%= h @project.name %>, Iteration <%= @project.latest_iteration.iteration_number %>
+  (<%= om_date(@project.latest_iteration.start_on) %> to <%= om_date(@project.latest_iteration.end_on) %>)</h1>
+Target Velocity: <%= @project.latest_iteration.total_points %>
+
+<table>
+  <tr>
+    <th rowspan="2">Story</th>
+    <th colspan="<%= @project.latest_iteration.daily_hour_totals.count %>">Day</th>
+  </tr>
+  <tr>
+    <% (1..@project.latest_iteration.daily_hour_totals.count).each { |d| "<th>#{d}</th>" } %>
+  </tr>
+</table>

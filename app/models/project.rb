@@ -8,17 +8,26 @@ class Project < ActiveRecord::Base
   validates_numericality_of :pivotal_identifier, :greater_than_or_equal_to => 1, :only_integer => true, :allow_nil => true
   validates_uniqueness_of :pivotal_identifier, :case_sensitive => false
 
+  has_one :latest_iteration, :class_name => "Iteration", :order => "iteration_number DESC"
+  has_many :iterations
+
   STATUS_PUSHED = "Pushed"
 
-  has_many :iterations
+  named_scope :active, :conditions => { :active => true }
+
 
   def self.list(page, per_page)
     paginate :page     => page, :order => 'name',
              :per_page => per_page
   end
 
+  def self.refresh_all
+    Project.active.each {|project| project.refresh }
+  end
+
   def refresh
     # fetch project
+    logger.info("Refreshing project #{name}")
     resource_uri = URI.parse("http://www.pivotaltracker.com/services/v3/projects/#{pivotal_identifier}")
     response     = Net::HTTP.start(resource_uri.host, resource_uri.port) do |http|
       http.get(resource_uri.path, {'X-TrackerToken' => APP_CONFIG['pivotal_api_token']})
@@ -84,12 +93,7 @@ class Project < ActiveRecord::Base
               pivotal_id = task.at('id').inner_html.to_i
               @task      = @story.tasks.find_by_pivotal_identifier(pivotal_id)
               total_hours, remaining_hours, description = parse_hours(task.at('description').inner_html)
-              status = "Not Started"
-              if task.at('complete').inner_html == 'true'
-                status = "Done"
-              elsif total_hours > 0 && remaining_hours < total_hours
-                status = "In Progress"
-              end
+              status = calc_status(task.at('complete').inner_html, remaining_hours, total_hours)
 
               if @task
                 @task.update_attributes!(:description     => description,
@@ -107,6 +111,21 @@ class Project < ActiveRecord::Base
               end
             end
           end
+
+          @day = @iteration.daily_hour_totals.find_by_as_of(self.calc_iteration_day)
+          if @day
+            @day.update_attributes!(:total_hours      => self.latest_iteration.total_hours,
+                                    :total_hours      => self.latest_iteration.total_hours,
+                                    :remaining_hours  => self.latest_iteration.remaining_hours,
+                                    :points_delivered => self.latest_iteration.total_points_delivered,
+                                    :velocity         => self.latest_iteration.total_points)
+          else
+            @day = @iteration.daily_hour_totals.create!(:as_of            => self.calc_iteration_day,
+                                          :total_hours      => self.latest_iteration.total_hours,
+                                          :remaining_hours  => self.latest_iteration.remaining_hours,
+                                          :points_delivered => self.latest_iteration.total_points_delivered,
+                                          :velocity         => self.latest_iteration.total_points)
+          end
         end
       end
       nil
@@ -115,7 +134,21 @@ class Project < ActiveRecord::Base
     end
   end
 
+  def calc_iteration_day the_date=Date.current
+    (the_date.cwday > 5 ? the_date - (the_date.cwday - 5) : the_date)
+  end
+
   protected
+
+  def calc_status(complete, remaining_hours, total_hours)
+    status = "Not Started"
+    if complete == 'true'
+      status = "Done"
+    elsif total_hours > 0 && remaining_hours < total_hours
+      status = "In Progress"
+    end
+    status
+  end
 
   def parse_hours description
     remaining_hours = 0.0

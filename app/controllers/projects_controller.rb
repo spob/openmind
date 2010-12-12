@@ -1,6 +1,6 @@
 class ProjectsController < ApplicationController
   before_filter :login_required
-  before_filter :fetch_project, :only => [:refresh, :destroy, :edit, :update]
+  before_filter :fetch_project, :only => [:refresh, :destroy, :edit, :update, :show]
 
   verify :method      => :post, :only => [:create, :refresh],
          :redirect_to => {:action => :index}
@@ -51,6 +51,10 @@ class ProjectsController < ApplicationController
     redirect_to projects_path
   end
 
+  def show
+    
+  end
+
   def refresh
     @project.refresh
     if @project.save
@@ -73,7 +77,7 @@ class ProjectsController < ApplicationController
   def can_edit_projects?
     return true if current_user.developer? && current_user.sysadmin?
     flash[:error] = "You do not have access to edit a project"
-    redirect_to proejcts_path
+    redirect_to projects_path
     false
   end
 
