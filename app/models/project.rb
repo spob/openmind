@@ -78,7 +78,7 @@ class Project < ActiveRecord::Base
 
             @story.tasks.each { |t| t.status = STATUS_PUSHED }
           else
-            @iteration.stories.create!(:pivotal_identifier => story.at('id').inner_html,
+            @story = @iteration.stories.create!(:pivotal_identifier => story.at('id').inner_html,
                                        :url                => story.at('url').inner_html,
                                        :points             => story.at('estimate').try(:inner_html),
                                        :status             => story.at('current_state').inner_html,
