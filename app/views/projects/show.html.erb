@@ -8,10 +8,12 @@ Target Velocity: <%= @project.latest_iteration.total_points %>
 
 <table>
   <tr>
-    <th rowspan="2">Story</th>
+    <th rowspan="2" valign="bottom">Story</th>
+    <th rowspan="2" valign="bottom" width="5%">Status</th>
     <th colspan="<%= @project.latest_iteration.daily_hour_totals.count %>">Day</th>
   </tr>
   <tr>
-    <% (1..@project.latest_iteration.daily_hour_totals.count).each { |d| "<th>#{d}</th>" } %>
+    <%= day_headings @project %>
   </tr>
+  <%= render :partial => 'story', :collection => @project.latest_iteration.stories %>
 </table>

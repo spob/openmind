@@ -1,0 +1,5 @@
+<tr>
+  <td colspan="<%= story.iteration.daily_hour_totals.count + 2 %>">
+    <strong><%= h story.name %></strong> (<%= h story.status.titleize %>, <%= pluralize(story.points, "point") %>)
+  </td>
+</tr>
