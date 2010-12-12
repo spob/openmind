@@ -5,7 +5,7 @@ class CreateTasks < ActiveRecord::Migration
 
   def self.up
     create_table :tasks do |t|
-      t.integer :pivotal_task_id
+      t.integer :pivotal_identifier
       t.references :story, :null => false
       t.string :description
       t.float :total_hours
@@ -15,6 +15,7 @@ class CreateTasks < ActiveRecord::Migration
       t.timestamps
     end
     add_foreign_key(:tasks, :story_id, :stories)
+    add_index :tasks, [:pivotal_identifier], :unique => true
   end
 
   def self.down

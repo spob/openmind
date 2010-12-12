@@ -56,7 +56,7 @@ class ProjectsController < ApplicationController
     if @project.save
       flash[:notice] = "Project #{@project.name} was successfully refreshed."
     else
-      flash[:error] = "Project #{name} refresh failed."
+      flash[:error] = "Project #{@project.name} refresh failed."
     end
     redirect_to projects_path
   end
