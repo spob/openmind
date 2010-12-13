@@ -19,6 +19,21 @@ class Task < ActiveRecord::Base
       puts "#{k}: #{@estimates[k].try(:id)}"
     end
   end
+  
+  def self.sort_by_status tasks
+    tasks.sort_by do |s|
+      case s.status
+        when "Done" then
+          1
+        when "In Progress" then
+          2
+        when "Not Started" then
+          3
+        else
+          7
+      end
+    end
+  end
 
   private
 
