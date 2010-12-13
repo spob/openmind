@@ -164,13 +164,13 @@ class Project < ActiveRecord::Base
     remaining_hours = 0.0
     total_hours     = 0.0
 
-    m1              = /\d*/x.match(description)
+    m1              = /[\d.]*/x.match(description)
     # Did the match end with a slash?
     if /\// =~ m1.post_match
       remaining_hours = m1[0].to_f if !completed
 
-      m2              = /\d*/x.match(m1.post_match[1..255])
-      total_hours     = m2[0].to_f
+      m2              = /[\d.]*/x.match(m1.post_match[1..255])
+      git co
     end
 
 #    puts "TOTAL: #{total_hours} REMAINING: #{remaining_hours}"
