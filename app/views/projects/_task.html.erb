@@ -1,0 +1,8 @@
+<tr>
+  <td>&nbsp;&nbsp;&nbsp;&nbsp;<%= h task.description %></td>
+  <td><%= h task.status.titleize %></td>
+  <td><%= task.total_hours %></td>
+  <% (1..task.story.iteration.calc_day_number).each do |d| %>
+  <td><%= task_estimate_for_day task, d %></td>
+  <% end %>
+</tr>
