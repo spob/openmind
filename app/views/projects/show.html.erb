@@ -16,5 +16,44 @@ Target Velocity: <%= @project.latest_iteration.total_points %>
   <tr>
     <%= day_headings @project %>
   </tr>
-  <%= render :partial => 'story', :collection => Story.sort_by_status(@project.latest_iteration.stories) %>
+  <%= render :partial => 'story', :collection => Story.sort_by_status(@project.latest_iteration.stories), :locals => {:iteration => @project.latest_iteration }%>
+
+  <tr>
+    <td colspan="<%= @project.latest_iteration.calc_day_number + 3 %>">&nbsp;</td>
+  </tr>
+  <tr>
+    <td><strong>REMAINING HOURS:</strong></td>
+    <td>-</td>
+    <td>-</td>
+    <% (1..@project.latest_iteration.calc_day_number).each do |d| %>
+      <td><%= '%.2f' % @project.latest_iteration.remaining_hours_for_day_number(d) %></td>
+  <% end %>
+  </tr>
+
+  <tr>
+    <td><strong>TOTAL HOURS:</strong></td>
+    <td>-</td>
+    <td><%= '%.2f' % @project.latest_iteration.total_hours %></td>
+    <% (1..@project.latest_iteration.calc_day_number).each do |d| %>
+      <td><%= '%.2f' % @project.latest_iteration.total_hours_for_day_number(d) %></td>
+  <% end %>
+  </tr>
+
+  <tr>
+    <td><strong>VELOCITY:</strong></td>
+    <td>-</td>
+    <td>-</td>
+    <% (1..@project.latest_iteration.calc_day_number).each do |d| %>
+      <td><%= @project.latest_iteration.velocity_for_day_number(d) %></td>
+  <% end %>
+  </tr>
+
+  <tr>
+    <td><strong>POINTS DELIVERED:</strong></td>
+    <td>-</td>
+    <td>-</td>
+    <% (1..@project.latest_iteration.calc_day_number).each do |d| %>
+      <td><%= @project.latest_iteration.points_delivered_for_day_number(d) %></td>
+  <% end %>
+  </tr>
 </table>

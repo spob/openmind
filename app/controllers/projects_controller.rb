@@ -1,6 +1,6 @@
 class ProjectsController < ApplicationController
   before_filter :login_required
-  before_filter :fetch_project, :only => [:refresh, :destroy, :edit, :update, :show]
+  before_filter :fetch_project, :only => [:refresh, :destroy, :edit, :update]
 
   verify :method      => :post, :only => [:create, :refresh],
          :redirect_to => {:action => :index}
@@ -52,7 +52,7 @@ class ProjectsController < ApplicationController
   end
 
   def show
-    
+    @project = Project.find(params[:id], :include => [{:latest_iteration => {:stories => {:tasks => :task_estimates}}}])
   end
 
   def refresh
