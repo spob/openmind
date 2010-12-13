@@ -2,6 +2,9 @@ class Task < ActiveRecord::Base
   belongs_to :story
   has_many :task_estimates, :order => "as_of"
 
+  named_scope :pushed,
+              :conditions => {:status => "pushed"}
+
   @estimates = nil
 
   def fetch_estimate_by_day_number day_number, iteration=self.story.iteration
