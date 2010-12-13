@@ -90,8 +90,7 @@ class Project < ActiveRecord::Base
                                       :story_type => story.at('story_type').inner_html)
 
             @story.tasks.each do |t|
-              t.status          = STATUS_PUSHED
-              t.remaining_hours = 0.0
+		t.update_attributes!(:status => STATUS_PUSHED, :remaining_hours => 0.0)
             end
           else
             @story = @iteration.stories.create!(:pivotal_identifier => story.at('id').inner_html,
@@ -129,6 +128,7 @@ class Project < ActiveRecord::Base
           end
 
           @story.tasks.pushed.each do |t|
+puts "Founded pushed #{t.id}"
             update_task_estimate(t, @iteration)
           end
 

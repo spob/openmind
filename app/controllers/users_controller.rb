@@ -156,6 +156,7 @@ class UsersController < ApplicationController
     else
       logger.warn("Request for a otp from an untrusted site: #{request.remote_ip} is not in #{APP_CONFIG['otp_trusted_sites']}")
     end
+    logger.info("Requested otp from #{request.remote_ip}")
     respond_to do |format|
       format.xml do
         if user.nil?
