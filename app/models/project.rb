@@ -92,8 +92,8 @@ class Project < ActiveRecord::Base
             (tasks/"task").each do |task|
               pivotal_id = task.at('id').inner_html.to_i
               @task      = @story.tasks.find_by_pivotal_identifier(pivotal_id)
-              completed = task.at('complete').inner_html == "true" || @story.status == "accepted" || @story.status == "pushed"
-              total_hours, remaining_hours, description = parse_hours(task.at('description').inner_html, completed)
+              completed = task.at('complete').inner_html == "true" || @story.status == "accepted" || @story.status == STATUS_PUSHED
+              total_hours, remaining_hours, description = self.parse_hours(task.at('description').inner_html, completed)
               status = calc_status(completed, remaining_hours, total_hours)
 
               if @task
@@ -101,8 +101,6 @@ class Project < ActiveRecord::Base
                                          :total_hours     => total_hours,
                                          :remaining_hours => remaining_hours,
                                          :status          => status)
-
-                @story.tasks.each { |t| t.status = STATUS_PUSHED }
               else
                 @task = @story.tasks.create!(:pivotal_identifier => task.at('id').inner_html,
                                              :description        => description,
