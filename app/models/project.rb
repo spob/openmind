@@ -44,6 +44,19 @@ class Project < ActiveRecord::Base
     end
   end
 
+  def update_task_estimate task, iteration
+    estimate = task.task_estimates.find_by_as_of(self.calc_iteration_day)
+    if estimate
+      estimate.update_attributes!(:total_hours     => task.total_hours,
+                                  :remaining_hours => task.remaining_hours)
+    else
+      task.task_estimates.create!(:as_of           => self.calc_iteration_day,
+                                  :iteration       => iteration,
+                                  :total_hours     => task.total_hours,
+                                  :remaining_hours => task.remaining_hours)
+    end
+  end
+
   def fetch_current_iteration
     resource_uri = URI.parse("http://www.pivotaltracker.com/services/v3/projects/#{pivotal_identifier}/iterations/current")
     response     = Net::HTTP.start(resource_uri.host, resource_uri.port) do |http|
@@ -76,7 +89,11 @@ class Project < ActiveRecord::Base
                                       :owner      => story.at('owned_by').try(:inner_html),
                                       :story_type => story.at('story_type').inner_html)
 
-            @story.tasks.each { |t| t.status = STATUS_PUSHED }
+#            @story.tasks.each { |t| t.update_attributes!(:status => STATUS_PUSHED, :remaining_hours => 0.0) }
+            @story.tasks.each do |t|
+              t.status          = STATUS_PUSHED
+              t.remaining_hours = 0.0
+            end
           else
             @story = @iteration.stories.create!(:pivotal_identifier => story.at('id').inner_html,
                                                 :url                => story.at('url').inner_html,
@@ -92,7 +109,7 @@ class Project < ActiveRecord::Base
             (tasks/"task").each do |task|
               pivotal_id = task.at('id').inner_html.to_i
               @task      = @story.tasks.find_by_pivotal_identifier(pivotal_id)
-              completed = task.at('complete').inner_html == "true" || @story.status == "accepted" || @story.status == STATUS_PUSHED
+              completed  = (task.at('complete').inner_html == "true" || @story.status == "accepted" || @story.status == STATUS_PUSHED)
               total_hours, remaining_hours, description = self.parse_hours(task.at('description').inner_html, completed)
               status = calc_status(completed, remaining_hours, total_hours)
 
@@ -108,17 +125,12 @@ class Project < ActiveRecord::Base
                                              :remaining_hours    => remaining_hours,
                                              :status             => status)
               end
-              @estimate = @task.task_estimates.find_by_as_of(self.calc_iteration_day)
-              if @estimate
-                @estimate.update_attributes!(:total_hours     => @task.total_hours,
-                                             :remaining_hours => @task.remaining_hours)
-              else
-                @day = @task.task_estimates.create!(:as_of           => self.calc_iteration_day,
-                                                         :iteration       => @iteration,
-                                                         :total_hours     => @task.total_hours,
-                                                         :remaining_hours => @task.remaining_hours)
-              end
+              update_task_estimate(@task, @iteration)
             end
+          end
+
+          @story.tasks.pushed.each do |t|
+            update_task_estimate(t, @iteration)
           end
 
           @estimate = @iteration.task_estimates.find_by_as_of(self.calc_iteration_day)
@@ -167,8 +179,8 @@ class Project < ActiveRecord::Base
     if /\// =~ m1.post_match
       remaining_hours = m1[0].to_f if !completed
 
-      m2              = /[\d.]*/x.match(m1.post_match[1..255])
-      total_hours     = m2[0].to_f
+      m2          = /[\d.]*/x.match(m1.post_match[1..255])
+      total_hours = m2[0].to_f
     end
 
 #    puts "TOTAL: #{total_hours} REMAINING: #{remaining_hours}"
