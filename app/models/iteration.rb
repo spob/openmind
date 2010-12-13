@@ -2,7 +2,7 @@ class Iteration < ActiveRecord::Base
   belongs_to :project
   has_many :stories
   has_many :tasks, :through => :stories
-  has_many :task_estimates, :conditions => { :task_id => nil }, :order => "as_of"
+  has_many :task_estimates, :conditions => {:task_id => nil}, :order => "as_of"
 
   validates_presence_of :iteration_number
   validates_presence_of :start_on
@@ -11,7 +11,27 @@ class Iteration < ActiveRecord::Base
   validates_numericality_of :iteration_number, :greater_than_or_equal_to => 1, :only_integer => true, :allow_nil => true
 
   named_scope :by_iteration_number,
-    lambda{|num|{:conditions => { :iteration_number => num}}}
+              lambda { |num| {:conditions => {:iteration_number => num}} }
+
+  def remaining_hours_for_day_number day_number
+    @estimate = fetch_estimate_by_day_number day_number
+    (@estimate ? @estimate.remaining_hours : 0.0)
+  end
+
+  def total_hours_for_day_number day_number
+    @estimate = fetch_estimate_by_day_number day_number
+    (@estimate ? @estimate.total_hours : 0.0)
+  end
+
+  def velocity_for_day_number day_number
+    @estimate = fetch_estimate_by_day_number day_number
+    (@estimate ? @estimate.velocity : 0)
+  end
+
+  def points_delivered_for_day_number day_number
+    @estimate = fetch_estimate_by_day_number day_number
+    (@estimate ? @estimate.points_delivered : 0)
+  end
 
   def total_hours
     self.tasks.sum('total_hours')
@@ -41,9 +61,36 @@ class Iteration < ActiveRecord::Base
 
   def calc_day_number the_date=Date.current
     day_num = 0
-    (project.latest_iteration.start_on..the_date).each do |d|
+    (self.start_on..the_date).each do |d|
       day_num += 1 if d.cwday < 6
     end
     day_num
+  end
+
+  @estimates = nil
+
+  def fetch_estimate_by_day_number day_number
+    fetch_estimate_by_date(self.calc_date(day_number))
+  end
+
+  def fetch_estimate_by_date the_date
+    populate_estimates_hash unless @estimates
+    @estimates[the_date]
+  end
+
+  def debug
+    populate_estimates_hash unless @estimates
+    @estimates.keys.each do |k|
+      puts "#{k}: #{@estimates[k].try(:id)}"
+    end
+  end
+
+  private
+
+  def populate_estimates_hash
+    @estimates = {}
+    self.task_estimates.each do |e|
+      @estimates[e.as_of] = e
+    end
   end
 end

@@ -18,8 +18,19 @@ module ProjectsHelper
     end
   end
 
-  def cell_color_by_hours estimate
-    if estimate && ((estimate.total_hours > 0.0 && estimate.remaining_hours != estimate.total_hours) || estimate.task.story.status == "accepted")
+  def cell_color_by_story_status story
+    case story.status
+      when "accepted" then
+        bgcolor "#B2EDAF"
+      when "delivered" then
+        bgcolor "#F5F4AB"
+      else
+        " "
+    end
+  end
+
+  def cell_color_by_hours estimate,story=estimate.task.story
+    if estimate && ((estimate.total_hours > 0.0 && estimate.remaining_hours != estimate.total_hours) || story.status == "accepted")
       if estimate.remaining_hours == 0.0
         bgcolor "#B2EDAF"
       elsif estimate.remaining_hours < estimate.total_hours
@@ -31,6 +42,7 @@ module ProjectsHelper
   end
 
   private
+  
   def bgcolor color
     "style=\"background-color: #{color}\""
   end
