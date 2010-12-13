@@ -8,7 +8,6 @@ module ProjectsHelper
   end
 
   def cell_color_by_task_status task
-    puts "=========#{task.status}"
     case task.status
       when "Done" then
         bgcolor "#B2EDAF"

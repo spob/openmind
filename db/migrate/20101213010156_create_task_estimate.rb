@@ -17,6 +17,8 @@ class CreateTaskEstimate < ActiveRecord::Migration
     add_foreign_key(:task_estimates, :iteration_id, :iterations)
     add_foreign_key(:task_estimates, :task_id, :tasks)
     add_index :task_estimates, [:iteration_id, :task_id, :as_of], :unique => true
+    add_index :task_estimates, [:iteration_id, :as_of], :unique => false
+    add_index :task_estimates, [:task_id, :as_of], :unique => false
   end
 
   def self.down
