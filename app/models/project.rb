@@ -89,7 +89,6 @@ class Project < ActiveRecord::Base
                                       :owner      => story.at('owned_by').try(:inner_html),
                                       :story_type => story.at('story_type').inner_html)
 
-#            @story.tasks.each { |t| t.update_attributes!(:status => STATUS_PUSHED, :remaining_hours => 0.0) }
             @story.tasks.each do |t|
               t.status          = STATUS_PUSHED
               t.remaining_hours = 0.0
