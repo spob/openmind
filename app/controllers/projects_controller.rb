@@ -1,6 +1,6 @@
 class ProjectsController < ApplicationController
   before_filter :login_required
-  before_filter :fetch_project, :only => [:refresh, :destroy, :edit, :update]
+  before_filter :fetch_project, :only => [:destroy, :edit, :update]
 
   verify :method      => :post, :only => [:create, :refresh],
          :redirect_to => {:action => :index}
@@ -56,6 +56,7 @@ class ProjectsController < ApplicationController
   end
 
   def refresh
+    @project = Project.find(params[:id], :include => [{:latest_iteration => {:stories => {:tasks => :task_estimates}}}])
     @project.refresh
     if @project.save
       flash[:notice] = "Project #{@project.name} was successfully refreshed."
