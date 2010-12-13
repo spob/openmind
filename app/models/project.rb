@@ -92,7 +92,7 @@ class Project < ActiveRecord::Base
             (tasks/"task").each do |task|
               pivotal_id = task.at('id').inner_html.to_i
               @task      = @story.tasks.find_by_pivotal_identifier(pivotal_id)
-              completed = task.at('complete').inner_html || @story.status == "accepted"
+              completed = task.at('complete').inner_html == "true" || @story.status == "accepted"
               total_hours, remaining_hours, description = parse_hours(task.at('description').inner_html, completed)
               status = calc_status(completed, remaining_hours, total_hours)
 
