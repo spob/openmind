@@ -1,8 +1,9 @@
 <tr>
   <td>&nbsp;&nbsp;&nbsp;&nbsp;<%= h task.description %></td>
-  <td><%= h task.status.titleize %></td>
-  <td><%= task.total_hours %></td>
+  <td <%= cell_color_by_task_status task  %>><%= h task.status.titleize %></td>
+  <td><%= '%.2f' % task.total_hours %></td>
   <% (1..task.story.iteration.calc_day_number).each do |d| %>
-  <td><%= task_estimate_for_day task, d %></td>
+      <% @estimate = task.task_estimates.find_by_as_of(task.story.iteration.calc_date d) %>
+  <td <%= cell_color_by_hours @estimate %>><%= task_estimate_for_day @estimate %></td>
   <% end %>
 </tr>

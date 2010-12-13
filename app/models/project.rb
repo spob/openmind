@@ -92,8 +92,8 @@ class Project < ActiveRecord::Base
             (tasks/"task").each do |task|
               pivotal_id = task.at('id').inner_html.to_i
               @task      = @story.tasks.find_by_pivotal_identifier(pivotal_id)
-              completed = task.at('complete').inner_html
-              total_hours, remaining_hours, description = parse_hours(task.at('description').inner_html, completed == "true")
+              completed = task.at('complete').inner_html || @story.status == "accepted"
+              total_hours, remaining_hours, description = parse_hours(task.at('description').inner_html, completed)
               status = calc_status(completed, remaining_hours, total_hours)
 
               if @task
@@ -152,9 +152,9 @@ class Project < ActiveRecord::Base
 
   def calc_status(complete, remaining_hours, total_hours)
     status = "Not Started"
-    if complete == 'true'
+    if complete || (total_hours > 0.0 && remaining_hours == 0.0)
       status = "Done"
-    elsif total_hours > 0 && remaining_hours < total_hours
+    elsif total_hours > 0.0 && remaining_hours < total_hours
       status = "In Progress"
     end
     status
@@ -166,8 +166,8 @@ class Project < ActiveRecord::Base
 
     m1              = /\d*/x.match(description)
     # Did the match end with a slash?
-    if /\// =~ m1.post_match && !completed
-      remaining_hours = m1[0].to_f
+    if /\// =~ m1.post_match
+      remaining_hours = m1[0].to_f if !completed
 
       m2              = /\d*/x.match(m1.post_match[1..255])
       total_hours     = m2[0].to_f
