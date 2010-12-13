@@ -2,7 +2,7 @@ class Iteration < ActiveRecord::Base
   belongs_to :project
   has_many :stories
   has_many :tasks, :through => :stories
-  has_many :daily_hour_totals, :order => "as_of"
+  has_many :task_estimates, :conditions => { :task_id => nil }, :order => "as_of"
 
   validates_presence_of :iteration_number
   validates_presence_of :start_on
@@ -29,7 +29,21 @@ class Iteration < ActiveRecord::Base
     self.stories.accepted.sum('points')
   end
 
+  def calc_date day_num
+    the_date = self.start_on
+    (2..day_num).each do
+      the_date = the_date + 1
+      the_date = the_date + 2 if the_date.cwday == 6
+      the_date = the_date + 1 if the_date.cwday == 7
+    end
+    the_date
+  end
+
   def calc_day_number the_date=Date.current
-    self.daily_hour_totals.before_date(the_date).count
+    day_num = 0
+    (project.latest_iteration.start_on..the_date).each do |d|
+      day_num += 1 if d.cwday < 6
+    end
+    day_num
   end
 end
