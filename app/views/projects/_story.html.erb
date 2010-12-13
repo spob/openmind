@@ -3,4 +3,4 @@
     <strong><%= strike_text(h(story.name), story.status == "pushed") %></strong> (<%= h story.status.titleize %>, <%= pluralize(story.points, "point") %>)
   </td>
 </tr>
-<%= render :partial => 'task', :collection => story.tasks, :locals => {:iteration => iteration, :story => story} %>
+<%= render :partial => 'task', :collection => Task.sort_by_status(story.tasks), :locals => {:iteration => iteration, :story => story} %>

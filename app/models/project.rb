@@ -170,7 +170,7 @@ class Project < ActiveRecord::Base
       remaining_hours = m1[0].to_f if !completed
 
       m2              = /[\d.]*/x.match(m1.post_match[1..255])
-      git co
+      total_hours     = m2[0].to_f
     end
 
 #    puts "TOTAL: #{total_hours} REMAINING: #{remaining_hours}"

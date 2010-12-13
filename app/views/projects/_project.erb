@@ -11,12 +11,12 @@
     <% end %>
   </td>
   <td>
+    <%= link_to theme_image_tag("icons/16x16/viewAction.png", :alt=>"view", :title=> "view"),
+                project_path(project),
+                html_options = {
+                        :onmouseover => "Tip('View details for this project')"}
+    %>
     <% if current_user.sysadmin? %>
-        <%= link_to theme_image_tag("icons/16x16/viewAction.png", :alt=>"view", :title=> "view"),
-                    project_path(project),
-                    html_options = {
-                            :onmouseover => "Tip('View details for this project')"}
-        %>
 
         <%= link_to theme_image_tag("icons/16x16/editAction.png", :alt=>"edit", :title=> "edit"),
                     edit_project_path(project),
