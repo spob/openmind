@@ -2,58 +2,67 @@
     <%= javascript_include_tag "tablecloth" %>
 <% end %>
 
-<h1>Project <%= h @project.name %>, Iteration <%= @project.latest_iteration.iteration_number %>
-  (<%= om_date(@project.latest_iteration.start_on) %> to <%= om_date(@project.latest_iteration.end_on) %>)</h1>
-Target Velocity: <%= @project.latest_iteration.total_points %>
-
+<h1>Project <%= h @project.name %>, Iteration <%= @iteration.iteration_number %>
+  (<%= om_date(@iteration.start_on) %> to <%= om_date(@iteration.end_on) %>)</h1>
+Target Velocity: <%= @iteration.total_points %>
+<% form_tag(project_path(@project), :method => :get, :class => 'cssform searchform', :name => 'search') do -%>
+    Iteration:
+    <%= select_tag :iteration_id,
+                   options_from_collection_for_select(
+                           @project.iterations,
+                           "id",
+                           "iteration_name",
+                           @iteration.id),
+                   html_options = {:onchange => 'document.search.submit();'} %>
+<% end %>
 <table>
   <tr>
     <th rowspan="2" valign="bottom">Story</th>
     <th rowspan="2" valign="bottom" width="5%">Status</th>
-    <th rowspan="2" valign="bottom" width="5%">Estimate<br />(hours)</th>
-    <th colspan="<%= @project.latest_iteration.calc_day_number %>">Day</th>
+    <th rowspan="2" valign="bottom" width="5%">Estimate<br/>(hours)</th>
+    <th colspan="<%= @iteration.calc_day_number %>">Day</th>
   </tr>
   <tr>
-    <%= day_headings @project %>
+    <%= day_headings @iteration %>
   </tr>
-  <%= render :partial => 'story', :collection => Story.sort_by_status(@project.latest_iteration.stories), :locals => {:iteration => @project.latest_iteration }%>
+  <%= render :partial => 'story', :collection => Story.sort_by_status(@iteration.stories), :locals => {:iteration => @iteration} %>
 
   <tr>
-    <td colspan="<%= @project.latest_iteration.calc_day_number + 3 %>">&nbsp;</td>
+    <td colspan="<%= @iteration.calc_day_number + 3 %>">&nbsp;</td>
   </tr>
   <tr>
     <td><strong>REMAINING HOURS:</strong></td>
     <td>-</td>
     <td>-</td>
-    <% (1..@project.latest_iteration.calc_day_number).each do |d| %>
-      <td><%= '%.2f' % @project.latest_iteration.remaining_hours_for_day_number(d) %></td>
-  <% end %>
+    <% (1..@iteration.calc_day_number).each do |d| %>
+        <td><%= '%.2f' % @iteration.remaining_hours_for_day_number(d) %></td>
+    <% end %>
   </tr>
 
   <tr>
     <td><strong>TOTAL HOURS:</strong></td>
     <td>-</td>
-    <td><%= '%.2f' % @project.latest_iteration.total_hours %></td>
-    <% (1..@project.latest_iteration.calc_day_number).each do |d| %>
-      <td><%= '%.2f' % @project.latest_iteration.total_hours_for_day_number(d) %></td>
-  <% end %>
+    <td><%= '%.2f' % @iteration.total_hours %></td>
+    <% (1..@iteration.calc_day_number).each do |d| %>
+        <td><%= '%.2f' % @iteration.total_hours_for_day_number(d) %></td>
+    <% end %>
   </tr>
 
   <tr>
     <td><strong>VELOCITY:</strong></td>
     <td>-</td>
     <td>-</td>
-    <% (1..@project.latest_iteration.calc_day_number).each do |d| %>
-      <td><%= @project.latest_iteration.velocity_for_day_number(d) %></td>
-  <% end %>
+    <% (1..@iteration.calc_day_number).each do |d| %>
+        <td><%= @iteration.velocity_for_day_number(d) %></td>
+    <% end %>
   </tr>
 
   <tr>
     <td><strong>POINTS DELIVERED:</strong></td>
     <td>-</td>
     <td>-</td>
-    <% (1..@project.latest_iteration.calc_day_number).each do |d| %>
-      <td><%= @project.latest_iteration.points_delivered_for_day_number(d) %></td>
-  <% end %>
+    <% (1..@iteration.calc_day_number).each do |d| %>
+        <td><%= @iteration.points_delivered_for_day_number(d) %></td>
+    <% end %>
   </tr>
 </table>

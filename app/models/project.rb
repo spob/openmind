@@ -128,7 +128,6 @@ class Project < ActiveRecord::Base
           end
 
           @story.tasks.pushed.each do |t|
-puts "Founded pushed #{t.id}"
             update_task_estimate(t, @iteration)
           end
 

@@ -1,6 +1,6 @@
 module ProjectsHelper
-  def day_headings project
-    (1..project.latest_iteration.calc_day_number).collect { |d| "<th>#{d}</th>" }.join
+  def day_headings iteration
+    (1..iteration.calc_day_number).collect { |d| "<th>#{d}</th>" }.join
   end
 
   def task_estimate_for_day estimate

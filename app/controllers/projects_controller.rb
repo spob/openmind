@@ -52,7 +52,12 @@ class ProjectsController < ApplicationController
   end
 
   def show
-    @project = Project.find(params[:id], :include => [{:latest_iteration => {:stories => {:tasks => :task_estimates}}}])
+    @project = Project.find(params[:id])
+    if params[:iteration_id]
+      @iteration = Iteration.find(params[:iteration_id], :include => [{:stories => {:tasks => :task_estimates}}])
+    else
+      @iteration = @project.latest_iteration
+    end
   end
 
   def refresh

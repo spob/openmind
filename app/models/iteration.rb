@@ -13,6 +13,10 @@ class Iteration < ActiveRecord::Base
   named_scope :by_iteration_number,
               lambda { |num| {:conditions => {:iteration_number => num}} }
 
+  def iteration_name
+    "Iteration #{self.iteration_number}"
+  end
+
   def remaining_hours_for_day_number day_number
     @estimate = fetch_estimate_by_day_number day_number
     (@estimate ? @estimate.remaining_hours : 0.0)
