@@ -58,7 +58,6 @@ class Iteration < ActiveRecord::Base
     the_date = self.start_on
     (2..day_num).each do
       the_date = the_date + 1
-    add_foreign_key(:tasks, :story_id, :stories)
       the_date = the_date + 2 if the_date.cwday == 6
       the_date = the_date + 1 if the_date.cwday == 7
     end
