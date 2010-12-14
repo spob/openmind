@@ -7,14 +7,13 @@
 
 body {
     font-family: Arial, Verdana, Sans-Serif;
-    font-family: "Lucida Grande" , Tahoma, Arial, Verdana, sans-serif;
+    font-family: "Lucida Grande", Tahoma, Arial, Verdana, sans-serif;
     margin: 0px;
     background-color: #F8F8F8;
     font-size: 100%;
     line-height: 1.125em; /* 18px */
     background-image: url(../images/general/bg.jpg);
     background-repeat: repeat-x;
-
 
 }
 
@@ -30,7 +29,7 @@ a:hover {
 }
 
 li {
-    /*   font-size: 0.75em; */
+/*   font-size: 0.75em; */
     line-height: 1.5em;
     margin-bottom: 10px;
 }
@@ -49,7 +48,7 @@ h1 {
 
 h1 img {
     border: 0;
-    padding-right:3px;
+    padding-right: 3px;
 }
 
 h2 {
@@ -117,7 +116,7 @@ img {
     width: 100%;
     height: 144px;
     text-align: center;
-    padding-top:0px;
+    padding-top: 0px;
 }
 
 /********* Header Nav Bar (upper) ***********/
@@ -126,7 +125,7 @@ img {
     padding: 0;
     height: 22px;
     width: 100%;
-    background:transparent;
+    background: transparent;
     text-align: center;
 }
 
@@ -135,7 +134,7 @@ img {
     padding: 0;
     float: left;
     width: 100%;
-    white-space:nowrap;
+    white-space: nowrap;
 }
 
 .headerTopNavMenu li {
@@ -156,13 +155,12 @@ img {
     border-top: 0;
     border-bottom: 0;
     background: #E7EDF9;
-    text-decoration:underline;
+    text-decoration: underline;
 }
 
 .headerTopNavMenu li a:active {
     color: white;
 }
-
 
 /********* Header Nav Bar (lower) ***********/
 #headerLowerNavMenu {
@@ -173,20 +171,21 @@ img {
     background-color: #82A42C;
     background-image: url(../images/menus/blockdefault.gif);
     background-repeat: repeat-x;
-    white-space:nowrap;
-    height:38px;
+    white-space: nowrap;
+    height: 38px;
 }
 
-ul#headerLowerNavMenu  {
-    white-space:nowrap;
+ul#headerLowerNavMenu {
+    white-space: nowrap;
 }
 
 #headerLowerNavMenu li {
-    white-space:nowrap;
+    white-space: nowrap;
     display: inline;
-    font-size: 0.92em;   /* 11px */
-    /*line-height: 1.83em;*/ /* 22px */
-    line-height:38px;
+    font-size: 0.92em; /* 11px */
+/*line-height: 1.83em;*/
+/* 22px */
+    line-height: 38px;
     font-weight: normal;
     font-family: Trebuchet MS, Verdana, Sans-Serif;
 }
@@ -213,6 +212,7 @@ ul#headerLowerNavMenu  {
     color: white;
     background: transparent url(../images/menus/blockactiveHover.gif) center center repeat-x;
 }
+
 #headerLowerNavMenu li a:active {
     color: #294B6F;
     background: transparent url(../images/menus/blockactive.gif) center center repeat-x;
@@ -243,40 +243,40 @@ ul#headerLowerNavMenu  {
 }
 
 #loggedInAs {
-    z-index:100;
+    z-index: 100;
     position: absolute;
     font-size: 0.69em;
-    right:10px;
-    top:113px;
-    color:#ccc;
+    right: 10px;
+    top: 113px;
+    color: #ccc;
 }
 
 /********* Flash Style ***********/
 .flash {
     position: absolute;
     border: solid 5px #999;
-    padding:7px 15px 7px 7px;
-    background-color:#FFF;
-    top:10px;
-    right:10px;
-    white-space:nowrap;
-    line-height:32px;
+    padding: 7px 15px 7px 7px;
+    background-color: #FFF;
+    top: 10px;
+    right: 10px;
+    white-space: nowrap;
+    line-height: 32px;
     font-size: 0.75em;
 }
 
 .flash img {
-    float:left;
-    margin-right:7px;
+    float: left;
+    margin-right: 7px;
 }
 
 .flashNotice {
     border: solid 5px #12AA12;
-    color:green;
+    color: green;
 }
 
 .flashError {
     border: solid 5px #FFD105;
-    color:#FF000A;
+    color: #FF000A;
 }
 
 /********* Main Content ***********/
@@ -289,16 +289,15 @@ ul#headerLowerNavMenu  {
     padding: 0px;
 }
 
-#main-contentShell
-{
+#main-contentShell {
     background-color: #fff;
 }
 
 #main-content {
-    position:relative;
+    position: relative;
     background-color: #F4F4F5;
     padding: 10px 20px;
-    font-size: 0.75em;  /* 12px */
+    font-size: 0.75em; /* 12px */
     line-height: 1.5em;
 }
 
@@ -314,7 +313,7 @@ ul#headerLowerNavMenu  {
     height: 35px;
     text-align: center;
     width: 100%;
-    background-color:#F1F1F2;
+    background-color: #F1F1F2;
     vertical-align: middle;
     padding-top: 4px;
 }
@@ -327,7 +326,7 @@ ul#headerLowerNavMenu  {
 
 #footer a:link, #footer a:visited, #footer active:visited {
     padding: 0;
-    text-decoration:underline;
+    text-decoration: underline;
 }
 
 #footer a:hover {
@@ -335,19 +334,18 @@ ul#headerLowerNavMenu  {
     background-color: Transparent;
 }
 
-#footer .separator
-{
+#footer .separator {
     padding: 0 6px;
 }
 
 #footerLeft {
-    float:left;
-    padding-left:15px;
+    float: left;
+    padding-left: 15px;
 }
 
 #footerRight {
-    float:right;
-    padding-right:15px;
+    float: right;
+    padding-right: 15px;
 }
 
 /********* Comment Boxes ***********/
@@ -389,9 +387,8 @@ ul#headerLowerNavMenu  {
     margin-bottom: 10px;
 }
 
-.sideBarItem label
-{
-    font-size:0.83em;
+.sideBarItem label {
+    font-size: 0.83em;
 }
 
 /********* UnorderList with Symbol ***********/
@@ -465,10 +462,9 @@ dd {
     padding-bottom: 10px;
 }
 
-
 /********* From Original CSS file (save for now) ***********/
 hr {
-    border:solid 1px #ccc;
+    border: solid 1px #ccc;
     margin: 20px 0 10px 0;
 }
 
@@ -507,9 +503,8 @@ pre {
 
 #errorExplanation ul li {
     font-size: 0.92em;
-    line-height:1em;
+    line-height: 1em;
 }
-
 
 div.uploadStatus {
     margin: 5px;
@@ -536,12 +531,25 @@ span.highlight {
     font-weight: bold;
 }
 
-.css1 { font-size: 0.8em; }
-.css2 { font-size: 1.2em; }
-.css3 { font-size: 1.6em; }
-.css4 { font-size: 2.0em; }
+.css1 {
+    font-size: 0.8em;
+}
 
-.nobr {white-space:nowrap;}
+.css2 {
+    font-size: 1.2em;
+}
+
+.css3 {
+    font-size: 1.6em;
+}
+
+.css4 {
+    font-size: 2.0em;
+}
+
+.nobr {
+    white-space: nowrap;
+}
 
 #openid_url {
     background: url(../images/icons/14x14/openid-14x14.gif) no-repeat #FFF 5px;
@@ -550,57 +558,75 @@ span.highlight {
 
 /********* End original ***********/
 
-
 /********* openID login form ***********/
 #id_selector {
-    padding-left:3px;
+    padding-left: 3px;
 }
 
 #id_selector button {
-    height:24px;
-    width:40px;
+    height: 24px;
+    width: 40px;
 }
 
 #openid_url {
-    width:210px;
+    width: 210px;
 }
 
 /********* Faq Accordian menus ***********/
-h3.faqSections
-{
+h3.faqSections {
     border-top: dotted 1px #999;
     border-bottom: none;
     margin-bottom: 3px;
-    font-size:14px;
+    font-size: 14px;
 }
 
-.faqSections
-{
-    /*header of 1st demo*/
+.faqSections {
+/*header of 1st demo*/
     cursor: hand;
     cursor: pointer;
     padding: 0 5px;
 }
 
-.theSection 
-{
+.theSection {
     padding: 0 10px;
-}    
+}
 
-
-h3.openSectionHeader
-{
+h3.openSectionHeader {
     background: #ccc;
     border-bottom: dotted 1px #999;
 }
 
-h3.closedSectionHeader
-{
+h3.closedSectionHeader {
     background-color: #efefef;
     border-bottom: dotted 1px #999;
 }
 
-h3.closedSectionHeader:hover
-{
+h3.closedSectionHeader:hover {
     background-color: #ccc;
+}
+
+@media print {
+    body {
+        background-color: #FFF;
+    }
+
+    #main-content {
+        background-color: #FFF;
+    }
+
+    #actionButtons2 {
+        display: none;
+    }
+
+    #headerBackground {
+        display: none;
+    }
+
+    #select_iteration {
+        display: none;
+    }
+
+    #footer {
+        display: none;
+    }
 }

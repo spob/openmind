@@ -3,6 +3,12 @@ module ProjectsHelper
     (1..iteration.calc_day_number).collect { |d| "<th>#{d}</th>" }.join
   end
 
+  def format_float(value, precision)
+    if value
+      "%.#{precision}f" % value
+    end
+  end
+
   def task_estimate_for_day estimate
     (estimate ? '%.2f' % estimate.remaining_hours : "-")
   end

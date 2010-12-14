@@ -20,7 +20,7 @@
     <%= project.latest_iteration.try(:latest_estimate).try(:points_delivered) %>
   </td>
   <td>
-    <%= '%.2f' % project.latest_iteration.try(:latest_estimate).try(:remaining_hours) %> / <%= '%.2f' % project.latest_iteration.try(:latest_estimate).try(:total_hours) %> 
+    <%= format_float(project.latest_iteration.try(:latest_estimate).try(:remaining_hours), 2) %> / <%= format_float(project.latest_iteration.try(:latest_estimate).try(:total_hours), 2) %>
   </td>
   <td>
     <%= link_to theme_image_tag("icons/16x16/viewAction.png", :alt=>"view", :title=> "view"),

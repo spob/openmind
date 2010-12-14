@@ -2,10 +2,13 @@
     <%= javascript_include_tag "tablecloth" %>
 <% end %>
 
+  <div id="actionButtons2">
+      <%= link_to 'Download Burndown (PDF)', project_path(@project, :format => "pdf"), html_options = {:class=> "button"} %>
+  </div>
+
 <h1>Project <%= h @project.name %>, Iteration <%= @iteration.iteration_number %>
   (<%= om_date(@iteration.start_on) %> to <%= om_date(@iteration.end_on) %>)</h1>
-Target Velocity: <%= @iteration.total_points %>
-<% form_tag(project_path(@project), :method => :get, :class => 'cssform searchform', :name => 'search') do -%>
+<% form_tag(project_path(@project), :id => 'select_iteration', :method => :get, :class => 'cssform searchform', :name => 'search') do -%>
     Iteration:
     <%= select_tag :iteration_id,
                    options_from_collection_for_select(
