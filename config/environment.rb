@@ -39,6 +39,8 @@ Rails::Initializer.run do |config|
   config.gem 'newrelic_rpm'
   
   config.gem "daemons"
+
+  config.gem "pdfkit"
   
   config.gem 'thoughtbot-shoulda', :lib => 'shoulda/rails', :source => "http://gems.github.com"
   

@@ -11,6 +11,18 @@
     <% end %>
   </td>
   <td>
+    <%= h project.latest_iteration.try(:iteration_name) %>
+  </td>
+  <td>
+    <%= project.latest_iteration.try(:latest_estimate).try(:velocity) %>
+  </td>
+  <td>
+    <%= project.latest_iteration.try(:latest_estimate).try(:points_delivered) %>
+  </td>
+  <td>
+    <%= '%.2f' % project.latest_iteration.try(:latest_estimate).try(:remaining_hours) %> / <%= '%.2f' % project.latest_iteration.try(:latest_estimate).try(:total_hours) %> 
+  </td>
+  <td>
     <%= link_to theme_image_tag("icons/16x16/viewAction.png", :alt=>"view", :title=> "view"),
                 project_path(project),
                 html_options = {

@@ -3,6 +3,7 @@ class Iteration < ActiveRecord::Base
   has_many :stories
   has_many :tasks, :through => :stories
   has_many :task_estimates, :conditions => {:task_id => nil}, :order => "as_of"
+  has_one :latest_estimate, :class_name => "TaskEstimate", :conditions => {:task_id => nil}, :order => "as_of DESC"
 
   validates_presence_of :iteration_number
   validates_presence_of :start_on
