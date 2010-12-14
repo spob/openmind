@@ -4,6 +4,8 @@ class Task < ActiveRecord::Base
 
   named_scope :pushed,
               :conditions => {:status => "pushed"}
+  named_scope :not_pushed,
+              :conditions => ["tasks.status <> ?", "pushed"]
 
   @estimates = nil
 
