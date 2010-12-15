@@ -1,5 +1,6 @@
 <% content_for :head do -%>
     <%= javascript_include_tag "tablecloth" %>
+    <%= javascript_include_tag "swfobject" %>
 
     <style type="text/css">
         table td {
@@ -25,6 +26,11 @@
                            @iteration.id),
                    html_options = {:onchange => 'document.search.submit();'} %>
 <% end %>
+
+xxx
+<%= @burndown_chart %>
+xxx
+
 <table>
   <tr>
     <th rowspan="2" valign="bottom">Story</th>
