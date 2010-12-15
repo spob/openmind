@@ -30,6 +30,10 @@ module ProjectsHelper
       when "accepted" then
         bgcolor "#B2EDAF", style
       when "delivered" then
+        bgcolor "#66CCFF", style
+      when "finished" then #FFCC33
+        bgcolor "#FFCC33", style
+      when "started" then #FFCC33
         bgcolor "#F5F4AB", style
       else
         "style=\"#{style}\""
