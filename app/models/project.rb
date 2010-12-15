@@ -71,13 +71,15 @@ class Project < ActiveRecord::Base
         @iteration       = self.iterations.by_iteration_number(iteration_number).first
 
         if @iteration
-          @iteration.update_attributes!(:start_on => iteration.at('start').inner_html,
-                                        :end_on   => iteration.at('finish').inner_html)
+          @iteration.update_attributes!(:start_on       => iteration.at('start').inner_html,
+                                        :end_on         => iteration.at('finish').inner_html,
+                                        :last_synced_at => Time.now)
           @iteration.stories.each { |s| s.update_attributes!(:status => STATUS_PUSHED, :points => 0) }
         else
           @iteration = self.iterations.create!(:iteration_number => iteration_number,
                                                :start_on         => iteration.at('start').inner_html,
-                                               :end_on           => iteration.at('finish').inner_html)
+                                               :end_on           => iteration.at('finish').inner_html,
+                                               :last_synced_at   => Time.now)
         end
         (iteration.at('stories')/"story").each do |story|
           pivotal_id = story.at('id').inner_html.to_i
@@ -109,7 +111,7 @@ class Project < ActiveRecord::Base
               @task      = @story.tasks.find_by_pivotal_identifier(pivotal_id)
               completed  = (task.at('complete').inner_html == "true" || @story.status == "accepted" || @story.status == STATUS_PUSHED)
               total_hours, remaining_hours, description = self.parse_hours(task.at('description').inner_html, completed)
-              status = calc_status(completed, remaining_hours, total_hours)
+              status = calc_status(completed, remaining_hours, total_hours, description)
 
               if @task
                 @task.update_attributes!(:description     => description,
@@ -164,9 +166,11 @@ class Project < ActiveRecord::Base
 
   protected
 
-  def calc_status(complete, remaining_hours, total_hours)
+  def calc_status(complete, remaining_hours, total_hours, description)
     status = "Not Started"
-    if complete || (total_hours > 0.0 && remaining_hours == 0.0)
+    if description =~ /^x/i
+      status = STATUS_PUSHED
+    elsif complete || (total_hours > 0.0 && remaining_hours == 0.0)
       status = "Done"
     elsif total_hours > 0.0 && remaining_hours < total_hours
       status = "In Progress"

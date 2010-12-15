@@ -14,6 +14,9 @@
     <%= h project.latest_iteration.try(:iteration_name) %>
   </td>
   <td>
+    <%= (project.latest_iteration.try(:last_synced_at) ? om_date_time(project.latest_iteration.last_synced_at) : "-" ) %>
+  </td>
+  <td>
     <%= project.latest_iteration.try(:latest_estimate).try(:velocity) %>
   </td>
   <td>
