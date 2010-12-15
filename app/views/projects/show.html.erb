@@ -27,10 +27,6 @@
                    html_options = {:onchange => 'document.search.submit();'} %>
 <% end %>
 
-xxx
-<%= @burndown_chart %>
-xxx
-
 <table>
   <tr>
     <th rowspan="2" valign="bottom">Story</th>
@@ -82,3 +78,10 @@ xxx
     <% end %>
   </tr>
 </table>
+<br />
+<div id="charts">
+  <%= @burndown_chart %>
+  <br/>
+  <br/>
+  <%= @velocity_chart %>
+</div>

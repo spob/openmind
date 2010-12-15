@@ -40,7 +40,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :portal, :only => :index,
   :collection => {:auto_complete_for_user_email => :get }
   map.resources :products
-  map.resources :projects, :member => { :refresh => :post, :burndown_chart => :get }
+  map.resources :projects, :member => { :refresh => :post, :burndown_chart => :get, :velocity_chart => :get }
   map.resources :releases, :member => { :commit => :post },
   :collection => { :preview => :get, :list => :get, :check_for_updates => :get, 
   :compatibility => :get }

@@ -1,4 +1,5 @@
 class ProjectsController < ApplicationController
+  COLORS = %w( #CF2626 #5767AF #336600 #356AA0 #CF5ACD #CF750C #D01FC3 #FF7200 #8F1A1A #ADD700 #57AF9D #C3CF5A #456F4F #C79810 )
   before_filter :login_required
   before_filter :fetch_project, :only => [:destroy, :edit, :update]
 
@@ -58,7 +59,8 @@ class ProjectsController < ApplicationController
     else
       @iteration = @project.latest_iteration
     end
-    @burndown_chart = open_flash_chart_object(800, 450, burndown_chart_project_path(@iteration))
+    @burndown_chart = open_flash_chart_object(1024, 450, burndown_chart_project_path(@iteration))
+    @velocity_chart = open_flash_chart_object(1024, 450, velocity_chart_project_path(@iteration))
   end
 
   def refresh
@@ -73,74 +75,122 @@ class ProjectsController < ApplicationController
   end
 
   def chart_line(data, label, color)
-    dot                    = SolidDot.new
-    dot.size               = 2
-    dot.halo_size          = 1
-    dot.tooltip            = "#date:d M y#<br>Value: #val#"
-
-    line                   = ScatterLine.new(color, 3)
-    line.default_dot_style = dot
-    line.text              = label
-    line.width             = 2
-    line.colour            = color
-    line.values            = data
+    line          = Line.new
+    line.text     = label
+    line.width    = 2
+    line.colour   = color
+    line.dot_size = 5
+    line.values   = data
     line
   end
 
-  def burndown_chart
-    iteration            = Iteration.find(params[:id])
-    colors               = %w( #CF2626 #5767AF #336600 #356AA0 #CF5ACD #CF750C #D01FC3 #FF7200 #8F1A1A #ADD700 #57AF9D #C3CF5A #456F4F #C79810 )
-    hours_max            = 0.0
+  def chart_bar(data, label, color)
+    bar         = Bar.new
+    bar.text    = label
+    bar.values  = data
+    bar.tooltip = "#{label}<br>val = #val#"
+    bar.colour  = color
+    bar
+  end
 
-    chart                = OpenFlashChart.new
+  def calc_velocity_chart_data(iteration)
+    velocity_data  = []
+    delivered_data = []
 
-    remaining_hours_data = []
-    total_hours_data     = []
-    ideal_hours_data     = []
-    daily_progress = iteration.latest_estimate.total_hours/(iteration.project.iteration_length * 5)
     iteration.task_estimates.each do |e|
-      remaining_hours_data << ScatterValue.new(e.as_of.to_time.to_i, e.remaining_hours)
-      total_hours_data << ScatterValue.new(e.as_of.to_time.to_i, e.total_hours)
-      ideal_hours_data << ScatterValue.new(e.as_of.to_time.to_i, iteration.latest_estimate.total_hours - (daily_progress * iteration.calc_day_number(e.as_of)))
-      hours_max = max(hours_max, e.remaining_hours, e.total_hours)
+      day_number                 = iteration.calc_day_number(e.as_of)
+      velocity_data[day_number]  = e.velocity
+      delivered_data[day_number] = e.points_delivered
     end
-    chart.add_element(chart_line(remaining_hours_data, "Remaining Hours", colors[0]))
-    chart.add_element(chart_line(total_hours_data, "Total Hours", colors[1]))
-    chart.add_element(chart_line(ideal_hours_data, "Ideal Hours", colors[2]))
+    return velocity_data, delivered_data
+  end
 
+  def calc_hour_chart_data(iteration)
+    remaining_hours_data    = []
+    total_hours_data        = []
+    ideal_hours_data        = []
+    daily_progress          = iteration.latest_estimate.total_hours/(iteration.project.iteration_length * 5)
+
+    remaining_hours_data[0] = iteration.latest_estimate.total_hours
+    total_hours_data[0]     = iteration.latest_estimate.total_hours
+    ideal_hours_data[0]     = iteration.latest_estimate.total_hours
+
+    iteration.task_estimates.each do |e|
+      day_number                       = iteration.calc_day_number(e.as_of)
+      remaining_hours_data[day_number] = e.remaining_hours
+      total_hours_data[day_number]     = e.total_hours
+      ideal_hours_data[day_number]     = iteration.latest_estimate.total_hours - (daily_progress * day_number)
+    end
+    return ideal_hours_data, remaining_hours_data, total_hours_data
+  end
+
+  def velocity_chart
+    iteration = Iteration.find(params[:id])
+
+    title     = Title.new("Daily Velocity for #{iteration.iteration_name}")
+    velocity_data, delivered_data = calc_velocity_chart_data(iteration)
+
+
+    t = Tooltip.new
+    t.set_shadow(false)
+    t.stroke = 5
+    t.colour = '#6E604F'
+    t.set_background_colour("#BDB396")
+    t.set_title_style("{font-size: 14px; color: #CC2A43;}")
+    t.set_body_style("{font-size: 10px; font-weight: bold; color: #000000;}")
+
+    chart       = OpenFlashChart.new
+    chart.title = title
+    set_legend(chart, "Day #", "Story Points")
+    chart.y_axis = generate_y_axis(max(velocity_data, delivered_data))
+    chart.add_element(chart_bar(velocity_data, "Velocity", COLORS[1]))
+    chart.add_element(chart_bar(delivered_data, "Points Delivered", COLORS[2]))
+    chart.set_tooltip(t)
+
+    render :text => chart.to_s
+  end
+
+  def generate_y_axis(max)
     y          = YAxis.new
-    hours_max  = roundup(hours_max, 5)
+    hours_max  = roundup(max, 5)
     y_interval = calc_y_interval(hours_max)
     hours_max = ((hours_max/y_interval).to_i + 1) * y_interval if hours_max/y_interval != (hours_max/y_interval).to_i
     y.set_range(0, hours_max, y_interval)
-    #    y.set_range(0,15,5)
-    chart.y_axis = y
+    y
+  end
 
-    x            = XAxis.new
-    x.set_range(iteration.task_estimates.first.as_of.to_time.to_i, iteration.task_estimates.last.as_of.to_time.to_i)
-    x.steps              = 86400
-    chart.x_axis         = x
+  def burndown_chart
+    iteration = Iteration.find(params[:id])
 
-    labels               = XAxisLabels.new
-    labels.text          = "#date: j M Y#"
-    labels.steps         = 86400
-    labels.visible_steps = 1
-    labels.rotate        = 90
-    x.labels             = labels
-    title                = Title.new(iteration.iteration_name)
+    ideal_hours_data, remaining_hours_data, total_hours_data = calc_hour_chart_data(iteration)
+
+    title = Title.new("Task Hours for #{iteration.iteration_name}")
+
+
+    chart =OpenFlashChart.new
     chart.set_title(title)
+    chart.y_axis = generate_y_axis(max(ideal_hours_data, remaining_hours_data, total_hours_data))
+    set_legend(chart, "Day #", "Task Hours")
 
-#    x_legend = XLegend.new("Date")
-#    x_legend.set_style('{font-size: 20px; color: #778877}')
-#    chart.set_x_legend(x_legend)
+    chart.add_element(chart_line(remaining_hours_data, "Remaining Hours", COLORS[0]))
+    chart.add_element(chart_line(total_hours_data, "Total Hours", COLORS[1]))
+    chart.add_element(chart_line(ideal_hours_data, "Ideal Hours", COLORS[2]))
 
-    y_legend = YLegend.new("Points")
-    y_legend.set_style('{font-size: 20px; color: #770077}')
-    chart.set_y_legend(y_legend)
-    render :text => chart, :layout => false
+    render :text => chart.to_s
   end
 
   private
+
+  def set_legend(chart, x_legend, y_legend)
+    x_legend = XLegend.new(x_legend)
+    x_legend.set_style('{font-size: 20px; color: #778877}')
+
+    y_legend = YLegend.new(y_legend)
+    y_legend.set_style('{font-size: 20px; color: #770077}')
+
+    chart.set_x_legend(x_legend)
+    chart.set_y_legend(y_legend)
+  end
 
   def can_view_projects?
     return true if current_user.developer?
@@ -178,11 +228,12 @@ class ProjectsController < ApplicationController
     maximum = nil
     args.each do |a|
       if a.kind_of? Array
-        a.each {|x| maximum = x if maximum.nil? || x > maximum }
+        a.each { |x| maximum = x if !x.nil? && (maximum.nil? || x > maximum) }
       else
         maximum = a if maximum.nil? || a > maximum
       end
     end
     maximum
   end
+
 end
