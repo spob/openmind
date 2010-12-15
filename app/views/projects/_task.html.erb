@@ -1,6 +1,6 @@
 <tr>
   <td>&nbsp;&nbsp;&nbsp;&nbsp;<%= strike_text(h(task.description), task.status == "pushed") %></td>
-  <td <%= cell_color_by_task_status task  %>><%= h task.status.try(:titleize) %></td>
+  <td <%= cell_color_by_task_status task  %>><span style="white-space: nowrap;"><%= h task.status.try(:titleize) %></span></td>
   <td><%= '%.2f' % task.total_hours %></td>
   <% (1..iteration.calc_day_number).each do |d| %>
       <% @estimate = task.fetch_estimate_by_day_number(d, iteration) %>

@@ -50,6 +50,6 @@ module ProjectsHelper
   private
   
   def bgcolor color
-    "style=\"background-color: #{color}\""
+    "style=\"background-color: #{color}\";"
   end
 end

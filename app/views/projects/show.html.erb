@@ -1,10 +1,17 @@
 <% content_for :head do -%>
     <%= javascript_include_tag "tablecloth" %>
+
+    <style type="text/css">
+        table td {
+            padding-top: 0px;
+            padding-bottom: 0px;
+        }
+    </style>
 <% end %>
 
-  <div id="actionButtons2">
-      <%= link_to 'Download Burndown (PDF)', project_path(@project, :format => "pdf"), html_options = {:class=> "button"} %>
-  </div>
+<div id="actionButtons2">
+  <%= link_to 'Download Burndown (PDF)', project_path(@project, :format => "pdf"), html_options = {:class=> "button"} %>
+</div>
 
 <h1>Project <%= h @project.name %>, Iteration <%= @iteration.iteration_number %>
   (<%= om_date(@iteration.start_on) %> to <%= om_date(@iteration.end_on) %>)</h1>
