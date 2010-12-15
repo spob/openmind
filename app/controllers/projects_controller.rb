@@ -74,6 +74,54 @@ class ProjectsController < ApplicationController
     redirect_to projects_path
   end
 
+  def velocity_chart
+    iteration = Iteration.find(params[:id])
+
+    title     = Title.new("Daily Velocity for #{iteration.iteration_name}")
+    velocity_data, delivered_data = calc_velocity_chart_data(iteration)
+
+
+    t = Tooltip.new
+    t.set_shadow(false)
+    t.stroke = 5
+    t.colour = '#6E604F'
+    t.set_background_colour("#BDB396")
+    t.set_title_style("{font-size: 14px; color: #CC2A43;}")
+    t.set_body_style("{font-size: 10px; font-weight: bold; color: #000000;}")
+
+    chart       = OpenFlashChart.new
+    chart.title = title
+    set_legend(chart, "Day #", "Story Points")
+    chart.y_axis = generate_y_axis(max(velocity_data, delivered_data))
+    chart.add_element(chart_bar(velocity_data, "Velocity", COLORS[1]))
+    chart.add_element(chart_bar(delivered_data, "Points Delivered", COLORS[2]))
+    chart.set_tooltip(t)
+
+    render :text => chart.to_s
+  end
+
+  def burndown_chart
+    iteration = Iteration.find(params[:id])
+
+    ideal_hours_data, remaining_hours_data, total_hours_data = calc_hour_chart_data(iteration)
+
+    title = Title.new("Task Hours for #{iteration.iteration_name}")
+
+
+    chart =OpenFlashChart.new
+    chart.set_title(title)
+    chart.y_axis = generate_y_axis(max(ideal_hours_data, remaining_hours_data, total_hours_data))
+    set_legend(chart, "Day #", "Task Hours")
+
+    chart.add_element(chart_line(remaining_hours_data, "Remaining Hours", COLORS[0]))
+    chart.add_element(chart_line(total_hours_data, "Total Hours", COLORS[1]))
+    chart.add_element(chart_line(ideal_hours_data, "Ideal Hours", COLORS[2]))
+
+    render :text => chart.to_s
+  end
+
+  private
+
   def chart_line(data, label, color)
     line          = Line.new
     line.text     = label
@@ -105,14 +153,23 @@ class ProjectsController < ApplicationController
     return velocity_data, delivered_data
   end
 
+  def generate_y_axis(max)
+    y          = YAxis.new
+    hours_max  = roundup(max, 5)
+    y_interval = calc_y_interval(hours_max)
+    hours_max = ((hours_max/y_interval).to_i + 1) * y_interval if hours_max/y_interval != (hours_max/y_interval).to_i
+    y.set_range(0, hours_max, y_interval)
+    y
+  end
+
   def calc_hour_chart_data(iteration)
     remaining_hours_data    = []
     total_hours_data        = []
     ideal_hours_data        = []
     daily_progress          = iteration.latest_estimate.total_hours/(iteration.project.iteration_length * 5)
 
-    remaining_hours_data[0] = iteration.latest_estimate.total_hours
-    total_hours_data[0]     = iteration.latest_estimate.total_hours
+    remaining_hours_data[0] = iteration.task_estimates.first.total_hours
+    total_hours_data[0]     = iteration.task_estimates.first.total_hours
     ideal_hours_data[0]     = iteration.latest_estimate.total_hours
 
     iteration.task_estimates.each do |e|
@@ -123,63 +180,6 @@ class ProjectsController < ApplicationController
     end
     return ideal_hours_data, remaining_hours_data, total_hours_data
   end
-
-  def velocity_chart
-    iteration = Iteration.find(params[:id])
-
-    title     = Title.new("Daily Velocity for #{iteration.iteration_name}")
-    velocity_data, delivered_data = calc_velocity_chart_data(iteration)
-
-
-    t = Tooltip.new
-    t.set_shadow(false)
-    t.stroke = 5
-    t.colour = '#6E604F'
-    t.set_background_colour("#BDB396")
-    t.set_title_style("{font-size: 14px; color: #CC2A43;}")
-    t.set_body_style("{font-size: 10px; font-weight: bold; color: #000000;}")
-
-    chart       = OpenFlashChart.new
-    chart.title = title
-    set_legend(chart, "Day #", "Story Points")
-    chart.y_axis = generate_y_axis(max(velocity_data, delivered_data))
-    chart.add_element(chart_bar(velocity_data, "Velocity", COLORS[1]))
-    chart.add_element(chart_bar(delivered_data, "Points Delivered", COLORS[2]))
-    chart.set_tooltip(t)
-
-    render :text => chart.to_s
-  end
-
-  def generate_y_axis(max)
-    y          = YAxis.new
-    hours_max  = roundup(max, 5)
-    y_interval = calc_y_interval(hours_max)
-    hours_max = ((hours_max/y_interval).to_i + 1) * y_interval if hours_max/y_interval != (hours_max/y_interval).to_i
-    y.set_range(0, hours_max, y_interval)
-    y
-  end
-
-  def burndown_chart
-    iteration = Iteration.find(params[:id])
-
-    ideal_hours_data, remaining_hours_data, total_hours_data = calc_hour_chart_data(iteration)
-
-    title = Title.new("Task Hours for #{iteration.iteration_name}")
-
-
-    chart =OpenFlashChart.new
-    chart.set_title(title)
-    chart.y_axis = generate_y_axis(max(ideal_hours_data, remaining_hours_data, total_hours_data))
-    set_legend(chart, "Day #", "Task Hours")
-
-    chart.add_element(chart_line(remaining_hours_data, "Remaining Hours", COLORS[0]))
-    chart.add_element(chart_line(total_hours_data, "Total Hours", COLORS[1]))
-    chart.add_element(chart_line(ideal_hours_data, "Ideal Hours", COLORS[2]))
-
-    render :text => chart.to_s
-  end
-
-  private
 
   def set_legend(chart, x_legend, y_legend)
     x_legend = XLegend.new(x_legend)
