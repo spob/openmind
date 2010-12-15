@@ -25,13 +25,14 @@ module ProjectsHelper
   end
 
   def cell_color_by_story_status story
+    style = "border: 2px solid grey;"
     case story.status
       when "accepted" then
-        bgcolor "#B2EDAF"
+        bgcolor "#B2EDAF", style
       when "delivered" then
-        bgcolor "#F5F4AB"
+        bgcolor "#F5F4AB", style
       else
-        " "
+        "style=\"#{style}\""
     end
   end
 
@@ -47,9 +48,17 @@ module ProjectsHelper
     end
   end
 
+  def owner_text story
+    if story.owner
+      "owned by #{h(story.owner)}"
+    else
+      "not owned"
+    end
+  end
+
   private
   
-  def bgcolor color
-    "style=\"background-color: #{color}\";"
+  def bgcolor color, other_style=""
+    "style=\"background-color: #{color}; #{other_style}\""
   end
 end
