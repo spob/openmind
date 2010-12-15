@@ -8,6 +8,8 @@ class Story < ActiveRecord::Base
 
   named_scope :accepted,
               :conditions => {:status => "accepted"}
+  named_scope :pushed,
+              :conditions => {:status => "pushed"}
 
   def self.sort_by_status stories
     stories.sort_by do |s|

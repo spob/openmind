@@ -73,7 +73,7 @@ class Project < ActiveRecord::Base
         if @iteration
           @iteration.update_attributes!(:start_on => iteration.at('start').inner_html,
                                         :end_on   => iteration.at('finish').inner_html)
-          @iteration.stories.each { |s| s.status = STATUS_PUSHED }
+          @iteration.stories.each { |s| s.update_attributes!(:status => STATUS_PUSHED, :points => 0) }
         else
           @iteration = self.iterations.create!(:iteration_number => iteration_number,
                                                :start_on         => iteration.at('start').inner_html,
@@ -90,7 +90,7 @@ class Project < ActiveRecord::Base
                                       :story_type => story.at('story_type').inner_html)
 
             @story.tasks.each do |t|
-		t.update_attributes!(:status => STATUS_PUSHED, :remaining_hours => 0.0)
+              t.update_attributes!(:status => STATUS_PUSHED, :remaining_hours => 0.0)
             end
           else
             @story = @iteration.stories.create!(:pivotal_identifier => story.at('id').inner_html,
@@ -143,6 +143,12 @@ class Project < ActiveRecord::Base
                                                      :remaining_hours  => self.latest_iteration.remaining_hours,
                                                      :points_delivered => self.latest_iteration.total_points_delivered,
                                                      :velocity         => self.latest_iteration.total_points)
+          end
+        end
+        @iteration.stories.pushed.each do |s|
+          s.tasks.each do |t|
+            t.update_attributes!(:status => STATUS_PUSHED, :remaining_hours => 0.0)
+            update_task_estimate(t, @iteration)
           end
         end
       end
