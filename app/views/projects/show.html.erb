@@ -27,6 +27,7 @@
                    html_options = {:onchange => 'document.search.submit();'} %>
 <% end %>
 
+<p>Synced at <%= om_date_time(@iteration.last_synced_at) %></p>
 <table>
   <tr>
     <th rowspan="2" valign="bottom">Story</th>
@@ -78,7 +79,7 @@
     <% end %>
   </tr>
 </table>
-<br />
+<br/>
 <div id="actionButtons2">
   <%= link_to 'Printer Friendly Charts', show_chart_project_path(@project), :target => "_blank", :class=> "button" %>
 </div>
