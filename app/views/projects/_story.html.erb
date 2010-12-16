@@ -1,6 +1,6 @@
 <tr>
   <td colspan="<%= iteration.calc_day_number + 3 %>"  <%= cell_color_by_story_status story  %>>
-    <strong><%= strike_text(link_to(h(story.name), story.url, :target => "_blank"), story.status == "pushed") %></strong> (<%= h story.status.titleize %>, <%= pluralize(story.points, "point") %>, <%= owner_text story %>)
+    <strong><span style="font-size:125%;"><%= strike_text(link_to(h(story.name), story.url, :target => "_blank"), story.status == "pushed") %></span> (<%= h story.status.titleize %>, <%= pluralize(story.points, "point") %>, <%= owner_text story %>)</strong>
   </td>
 </tr>
 <%= render :partial => 'task', :collection => Task.sort_by_status(story.tasks), :locals => {:iteration => iteration, :story => story} %>

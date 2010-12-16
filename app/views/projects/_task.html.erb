@@ -1,4 +1,4 @@
-<tr>
+<tr style="font-weight:800;">
   <td style="padding-left: 14px;"><%= strike_text(h(task.description), task.status == "pushed") %></td>
   <td <%= cell_color_by_task_status task  %>><span style="white-space: nowrap;"><%= h task.status.try(:titleize) %></span></td>
   <td><%= '%.2f' % task.total_hours %></td>
