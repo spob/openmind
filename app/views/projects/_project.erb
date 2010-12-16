@@ -14,7 +14,7 @@
     <%= h project.latest_iteration.try(:iteration_name) %>
   </td>
   <td>
-    <%= (project.latest_iteration.try(:last_synced_at) ? om_date_time(project.latest_iteration.last_synced_at) : "-" ) %>
+    <%= (project.latest_iteration.try(:last_synced_at) ? om_date_time(project.latest_iteration.last_synced_at) : "-") %>
   </td>
   <td>
     <%= project.latest_iteration.try(:latest_estimate).try(:velocity) %>
@@ -23,7 +23,8 @@
     <%= project.latest_iteration.try(:latest_estimate).try(:points_delivered) %>
   </td>
   <td>
-    <%= format_float(project.latest_iteration.try(:latest_estimate).try(:remaining_hours), 2) %> / <%= format_float(project.latest_iteration.try(:latest_estimate).try(:total_hours), 2) %>
+    <%= format_float(project.latest_iteration.try(:latest_estimate).try(:remaining_hours), 2) %>
+    / <%= format_float(project.latest_iteration.try(:latest_estimate).try(:total_hours), 2) %>
   </td>
   <td>
     <%= link_to theme_image_tag("icons/16x16/viewAction.png", :alt=>"view", :title=> "view"),
@@ -44,13 +45,11 @@
                     project_path(project),
                     {:confirm     => 'Are you sure?', :method => :delete,
                      :onmouseover => "Tip('Delete this project')"}) %>
-        <%= link_to(
-                    "Refresh",
-                    refresh_project_path(project),
-                    {:method      => :post,
-                     :onmouseover => "Tip('Refresh the project information from pivotal tracker')"}) %>
-    <% else %>
-        &nbsp;
     <% end %>
+    <%= link_to(
+                "Refresh",
+                refresh_project_path(project),
+                {:method      => :post,
+                 :onmouseover => "Tip('Refresh the project information from pivotal tracker')"}) %>
   </td>
 </tr>
