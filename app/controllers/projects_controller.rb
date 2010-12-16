@@ -1,7 +1,7 @@
 class ProjectsController < ApplicationController
   COLORS = %w( #CF2626 #5767AF #336600 #356AA0 #CF5ACD #CF750C #D01FC3 #FF7200 #8F1A1A #ADD700 #57AF9D #C3CF5A #456F4F #C79810 )
   before_filter :login_required
-  before_filter :fetch_project, :only => [:destroy, :edit, :update]
+  before_filter :fetch_project, :only => [:destroy, :edit, :update, :show, :show_chart]
 
   verify :method      => :post, :only => [:create, :refresh],
          :redirect_to => {:action => :index}
@@ -9,6 +9,10 @@ class ProjectsController < ApplicationController
          :redirect_to => {:action => :index}
   verify :method      => :delete, :only => [:destroy],
          :redirect_to => {:action => :index}
+
+  access_control [:burndown_chart, :destroy,  :show, :velocity_chart] => 'developer'
+
+  layout :layout_for_action
 
   def index
     if can_view_projects?
@@ -53,7 +57,6 @@ class ProjectsController < ApplicationController
   end
 
   def show
-    @project = Project.find(params[:id])
     if params[:iteration_id]
       @iteration = Iteration.find(params[:iteration_id], :include => [{:stories => {:tasks => :task_estimates}}])
     else
@@ -61,6 +64,10 @@ class ProjectsController < ApplicationController
     end
     @burndown_chart = open_flash_chart_object(1024, 450, burndown_chart_project_path(@iteration))
     @velocity_chart = open_flash_chart_object(1024, 450, velocity_chart_project_path(@iteration))
+  end
+
+  def show_chart
+    show
   end
 
   def refresh
@@ -236,4 +243,11 @@ class ProjectsController < ApplicationController
     maximum
   end
 
+  def layout_for_action
+    if %w(show_chart).include?(params[:action])
+      'printer'
+    else
+      'application'
+    end
+  end
 end

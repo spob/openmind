@@ -1,0 +1,80 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <title>OpenMind: <%= yield(:title) || "#{controller.controller_name} #{controller.action_name}" %></title>
+    <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
+<meta name="verify-v1" content="gXRl53BZCyQyEXMIs3N6FgbZi1US1OF+qIdJMmk9R1Y=" />
+    <meta http-equiv="Content-Language" content="en-us" />
+    <%= theme_stylesheet_link_tag 'global', 'forms', 'tables', 'ideas', 'tabs', 'pagination' %>
+    <%= javascript_include_tag 'prototype', 'scriptaculous', 'effects', 'tablecloth' %>
+    <%= yield :head %>
+    <!--[if lte IE 6]>
+<%= theme_stylesheet_link_tag 'png_fix', 'peekaboobug_fix' %>
+<%= yield :ieOnlyCss-%>
+    <![endif]-->
+  </head>
+  <body<%= yield :bodyTag-%>>
+    <a name="top"/>
+
+    <div id="mainBodyPageWrap">
+      <div class="inside">
+        <%
+        #<div style="display: none;" id="secondarySubnav">
+        #Expandable Secondary Nav Area: <a href="#">Link 1</a> | <a href="#">Link 2</a> | <a href="#">Link 3</a> | <a href="#">Link 4</a> | <a href="#">Link 5</a>
+        #</div>
+      %>
+        <%= yield :sidebar1-%>
+        <%= yield :sidebar2-%>
+
+        <div id="main-contentShell">
+          <div id="main-content">
+            <!-- form container start -->
+            <div class="formContainer">
+              <%= yield  %>
+            </div>
+            <div style="clear: both;"></div>
+          </div>
+        </div>
+      </div>
+      <div style="clear: both;"></div>
+    </div>
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+var pageTracker = _gat._getTracker("UA-3698257-1");
+pageTracker._initData();
+pageTracker._trackPageview();
+</script>
+
+<!-- Bob Account -->
+<script type="text/javascript">
+var piProtocol = (("https:" == document.location.protocol) ? "https://" : "http://"); document.write(unescape("%3Cscript src='" + piProtocol + "pi.pardot.com/pi.js' type='text/javascript'%3E%3C/script%3E"));
+
+</script>
+<script type="text/javascript">
+	<!--
+		piAId = "1954";
+		piCId = "25794";
+		piHostname = "pi.pardot.com";
+
+		piTracker();
+	-->
+</script>
+
+<!-- Scribe/Gravely account -->
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("UA-9384776-1");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+
+
+  </body>
+</html>
