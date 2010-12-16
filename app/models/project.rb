@@ -68,18 +68,16 @@ class Project < ActiveRecord::Base
 
       (doc/"iteration").each do |iteration|
         iteration_number = iteration.at('id').inner_html.to_i
-        @iteration       = self.iterations.by_iteration_number(iteration_number).first
+        @iteration       = self.iterations.by_iteration_number(iteration_number).lock.first
 
         if @iteration
-          @iteration.update_attributes!(:start_on       => iteration.at('start').inner_html,
-                                        :end_on         => iteration.at('finish').inner_html,
-                                        :last_synced_at => Time.now)
+          @iteration.update_attributes!(:start_on        => iteration.at('start').inner_html,
+                                        :end_on          => iteration.at('finish').inner_html)
           @iteration.stories.each { |s| s.update_attributes!(:status => STATUS_PUSHED, :points => 0) }
         else
           @iteration = self.iterations.create!(:iteration_number => iteration_number,
                                                :start_on         => iteration.at('start').inner_html,
-                                               :end_on           => iteration.at('finish').inner_html,
-                                               :last_synced_at   => Time.now)
+                                               :end_on           => iteration.at('finish').inner_html)
         end
         (iteration.at('stories')/"story").each do |story|
           pivotal_id = story.at('id').inner_html.to_i
@@ -153,6 +151,7 @@ class Project < ActiveRecord::Base
             update_task_estimate(t, @iteration)
           end
         end
+        @iteration.update_attributes!(:last_synced_at => Time.now)
       end
       nil
     else

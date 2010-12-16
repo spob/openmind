@@ -13,6 +13,7 @@ class Iteration < ActiveRecord::Base
 
   named_scope :by_iteration_number,
               lambda { |num| {:conditions => {:iteration_number => num}} }
+  named_scope :lock, :lock=> true
 
   def iteration_name
     "Iteration #{self.iteration_number}"
