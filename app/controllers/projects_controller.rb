@@ -10,7 +10,7 @@ class ProjectsController < ApplicationController
   verify :method      => :delete, :only => [:destroy],
          :redirect_to => {:action => :index}
 
-  access_control [:burndown_chart, :destroy,  :show, :velocity_chart] => 'developer'
+  access_control [:burndown_chart, :destroy, :show, :velocity_chart] => 'developer'
 
   layout :layout_for_action
 
@@ -63,7 +63,7 @@ class ProjectsController < ApplicationController
       @iteration = @project.latest_iteration
     end
     @burndown_chart = open_flash_chart_object(1024, 450, burndown_chart_project_path(@iteration))
-    @velocity_chart = open_flash_chart_object(1024, 450, velocity_chart_project_path(@iteration))
+#    @velocity_chart = open_flash_chart_object(1024, 450, velocity_chart_project_path(@iteration))
   end
 
   def show_chart
@@ -102,18 +102,23 @@ class ProjectsController < ApplicationController
     iteration = Iteration.find(params[:id])
 
     ideal_hours_data, remaining_hours_data, total_hours_data = calc_hour_chart_data(iteration)
+    velocity_data, delivered_data = calc_velocity_chart_data(iteration)
 
-    title = Title.new("Task Hours for #{iteration.iteration_name}")
+    title = Title.new("Burn Down for #{iteration.iteration_name}")
+    title.set_style('{font-size: 20px; color: #770077}')
 
 
     chart =OpenFlashChart.new
     chart.set_title(title)
-    chart.y_axis = generate_y_axis(max(ideal_hours_data, remaining_hours_data, total_hours_data))
-    set_legend(chart, "Day #", "Task Hours")
+    chart.y_axis       = generate_y_axis(max(ideal_hours_data, remaining_hours_data, total_hours_data))
+    chart.y_axis_right = generate_y_axis(max(velocity_data, delivered_data), true)
+    set_legend(chart, "Day #", "Task Hours", "Story Points")
 
     chart.add_element(chart_line(remaining_hours_data, "Remaining Hours", COLORS[0]))
     chart.add_element(chart_line(total_hours_data, "Total Hours", COLORS[1]))
     chart.add_element(chart_line(ideal_hours_data, "Ideal Hours", COLORS[2]))
+    chart.add_element(chart_bar(velocity_data, "Velocity", COLORS[4]))
+    chart.add_element(chart_bar(delivered_data, "Points Delivered", COLORS[5]))
     chart.set_tooltip(create_tooltip())
 
     render :text => chart.to_s
@@ -133,18 +138,18 @@ class ProjectsController < ApplicationController
   end
 
   def chart_line(data, label, color)
-    dot = HollowDot.new
-    dot.size = 3
-    dot.halo_size = 2
-    dot.tooltip = "#{label}<br>val = #val#"
-    
-    line          = Line.new
-    line.text     = label
-    line.width    = 2
-    line.colour   = color
+    dot                    = HollowDot.new
+    dot.size               = 3
+    dot.halo_size          = 2
+    dot.tooltip            = "#{label}<br>val = #val#"
+
+    line                   = Line.new
+    line.text              = label
+    line.width             = 2
+    line.colour            = color
     line.default_dot_style = dot
-    line.dot_size = 5
-    line.values   = data
+    line.dot_size          = 5
+    line.values            = data
     line
   end
 
@@ -154,6 +159,7 @@ class ProjectsController < ApplicationController
     bar.values  = data
     bar.tooltip = "#{label}<br>val = #val#"
     bar.colour  = color
+    bar.attach_to_right_y_axis
     bar
   end
 
@@ -169,8 +175,8 @@ class ProjectsController < ApplicationController
     return velocity_data, delivered_data
   end
 
-  def generate_y_axis(max)
-    y          = YAxis.new
+  def generate_y_axis(max, right=false)
+    y          = (right ? YAxisRight.new : YAxis.new)
     hours_max  = roundup(max, 5)
     y_interval = calc_y_interval(hours_max)
     hours_max = ((hours_max/y_interval).to_i + 1) * y_interval if hours_max/y_interval != (hours_max/y_interval).to_i
@@ -197,7 +203,7 @@ class ProjectsController < ApplicationController
     return ideal_hours_data, remaining_hours_data, total_hours_data
   end
 
-  def set_legend(chart, x_legend, y_legend)
+  def set_legend(chart, x_legend, y_legend, y_legend_right=nil)
     x_legend = XLegend.new(x_legend)
     x_legend.set_style('{font-size: 20px; color: #778877}')
 
@@ -206,6 +212,12 @@ class ProjectsController < ApplicationController
 
     chart.set_x_legend(x_legend)
     chart.set_y_legend(y_legend)
+
+    if y_legend_right
+      y_legend_right = YLegendRight.new(y_legend_right)
+      y_legend_right.set_style('{font-size: 20px; color: #770077}')
+#      chart.y_legend = y_legend_right
+    end
   end
 
   def can_view_projects?
