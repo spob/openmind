@@ -87,22 +87,13 @@ class ProjectsController < ApplicationController
     title     = Title.new("Daily Velocity for #{iteration.iteration_name}")
     velocity_data, delivered_data = calc_velocity_chart_data(iteration)
 
-
-    t = Tooltip.new
-    t.set_shadow(false)
-    t.stroke = 5
-    t.colour = '#6E604F'
-    t.set_background_colour("#BDB396")
-    t.set_title_style("{font-size: 14px; color: #CC2A43;}")
-    t.set_body_style("{font-size: 10px; font-weight: bold; color: #000000;}")
-
     chart       = OpenFlashChart.new
     chart.title = title
     set_legend(chart, "Day #", "Story Points")
     chart.y_axis = generate_y_axis(max(velocity_data, delivered_data))
     chart.add_element(chart_bar(velocity_data, "Velocity", COLORS[1]))
     chart.add_element(chart_bar(delivered_data, "Points Delivered", COLORS[2]))
-    chart.set_tooltip(t)
+    chart.set_tooltip(create_tooltip())
 
     render :text => chart.to_s
   end
@@ -123,17 +114,35 @@ class ProjectsController < ApplicationController
     chart.add_element(chart_line(remaining_hours_data, "Remaining Hours", COLORS[0]))
     chart.add_element(chart_line(total_hours_data, "Total Hours", COLORS[1]))
     chart.add_element(chart_line(ideal_hours_data, "Ideal Hours", COLORS[2]))
+    chart.set_tooltip(create_tooltip())
 
     render :text => chart.to_s
   end
 
   private
 
+  def create_tooltip
+    t = Tooltip.new
+    t.set_shadow(false)
+    t.stroke = 5
+    t.colour = '#6E604F'
+    t.set_background_colour("#BDB396")
+    t.set_title_style("{font-size: 14px; color: #CC2A43;}")
+    t.set_body_style("{font-size: 10px; font-weight: bold; color: #000000;}")
+    t
+  end
+
   def chart_line(data, label, color)
+    dot = HollowDot.new
+    dot.size = 3
+    dot.halo_size = 2
+    dot.tooltip = "#{label}<br>val = #val#"
+    
     line          = Line.new
     line.text     = label
     line.width    = 2
     line.colour   = color
+    line.default_dot_style = dot
     line.dot_size = 5
     line.values   = data
     line
