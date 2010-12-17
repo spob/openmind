@@ -48,12 +48,14 @@ class Project < ActiveRecord::Base
     estimate = task.task_estimates.find_by_as_of(self.calc_iteration_day)
     if estimate
       estimate.update_attributes!(:total_hours     => task.total_hours,
-                                  :remaining_hours => task.remaining_hours)
+                                  :remaining_hours => task.remaining_hours,
+                                  :status          => task.status)
     else
       task.task_estimates.create!(:as_of           => self.calc_iteration_day,
                                   :iteration       => iteration,
                                   :total_hours     => task.total_hours,
-                                  :remaining_hours => task.remaining_hours)
+                                  :remaining_hours => task.remaining_hours,
+                                  :status          => task.status)
     end
   end
 
@@ -71,8 +73,8 @@ class Project < ActiveRecord::Base
         @iteration       = self.iterations.by_iteration_number(iteration_number).lock.first
 
         if @iteration
-          @iteration.update_attributes!(:start_on        => iteration.at('start').inner_html,
-                                        :end_on          => iteration.at('finish').inner_html)
+          @iteration.update_attributes!(:start_on => iteration.at('start').inner_html,
+                                        :end_on   => iteration.at('finish').inner_html)
           @iteration.stories.each { |s| s.update_attributes!(:status => STATUS_PUSHED, :points => 0) }
         else
           @iteration = self.iterations.create!(:iteration_number => iteration_number,
@@ -167,8 +169,10 @@ class Project < ActiveRecord::Base
 
   def calc_status(complete, remaining_hours, total_hours, description)
     status = "Not Started"
-    if description =~ /^x/i
+    if description =~ /^x/ix
       status = STATUS_PUSHED
+    elsif description =~ /^b/ix
+      status = "Blocked"
     elsif complete || (total_hours > 0.0 && remaining_hours == 0.0)
       status = "Done"
     elsif total_hours > 0.0 && remaining_hours < total_hours
@@ -181,7 +185,12 @@ class Project < ActiveRecord::Base
     remaining_hours = 0.0
     total_hours     = 0.0
 
-    m1              = /[\d.]*/x.match(description)
+    # does description start with a B (as in blocked)
+    desc            = description
+    if /^B\d/x =~ description
+      desc = description[1..500]
+    end
+    m1 = /[\d.]*/x.match(desc)
     # Did the match end with a slash?
     if /\// =~ m1.post_match
       remaining_hours = m1[0].to_f if !completed

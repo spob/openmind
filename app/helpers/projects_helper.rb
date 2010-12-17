@@ -19,6 +19,8 @@ module ProjectsHelper
         bgcolor "#B2EDAF"
       when "In Progress" then
         bgcolor "#F5F4AB"
+      when "Blocked" then
+        bgcolor "#FF7373"
       else
         " "
     end
@@ -40,10 +42,13 @@ module ProjectsHelper
     end
   end
 
-  def cell_color_by_hours estimate,story=estimate.task.story
-    if estimate && ((estimate.total_hours > 0.0 && estimate.remaining_hours != estimate.total_hours) || story.status == "accepted") && estimate.task.status != "pushed"
+  def cell_color_by_hours estimate, story=estimate.task.story
+    if estimate && ((estimate.total_hours > 0.0 && estimate.remaining_hours != estimate.total_hours) ||
+        story.status == "accepted" || estimate.status == "Blocked") && estimate.task.status != "pushed"
       if estimate.remaining_hours == 0.0
         bgcolor "#B2EDAF"
+      elsif estimate.status == "Blocked"
+        bgcolor "#FF7373"
       elsif estimate.remaining_hours < estimate.total_hours
         bgcolor "#F5F4AB"
       end

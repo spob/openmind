@@ -30,10 +30,12 @@ class Task < ActiveRecord::Base
       case s.status
         when "Done" then
           1
-        when "In Progress" then
+        when "Blocked" then
           2
-        when "Not Started" then
+        when "In Progress" then
           3
+        when "Not Started" then
+          4
         else
           7
       end
