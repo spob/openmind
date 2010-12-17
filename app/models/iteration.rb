@@ -1,8 +1,8 @@
 class Iteration < ActiveRecord::Base
   belongs_to :project
-  has_many :stories
+  has_many :stories, :dependent => :destroy
   has_many :tasks, :through => :stories
-  has_many :task_estimates, :conditions => {:task_id => nil}, :order => "as_of"
+  has_many :task_estimates, :conditions => {:task_id => nil}, :order => "as_of", :dependent => :destroy
   has_one :latest_estimate, :class_name => "TaskEstimate", :conditions => {:task_id => nil}, :order => "as_of DESC"
 
   validates_presence_of :iteration_number
@@ -65,16 +65,7 @@ class Iteration < ActiveRecord::Base
     the_date
   end
 
-  def calc_day_number the_date=nil
-    if the_date.nil?
-      minutes = Time.now.in_time_zone(APP_CONFIG['default_user_timezone']).hour * 60 +
-          Time.now.in_time_zone(APP_CONFIG['default_user_timezone']).min
-      if minutes < APP_CONFIG['sprint_standup_time'].to_i
-        the_date = Date.current - 1
-      else
-        the_date = Date.current
-      end
-    end
+  def calc_day_number the_date=Project.calculate_project_date
     day_num = 0
     (self.start_on..the_date).each do |d|
       day_num += 1 if d.cwday < 6

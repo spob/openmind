@@ -9,7 +9,7 @@ class Project < ActiveRecord::Base
   validates_uniqueness_of :pivotal_identifier, :case_sensitive => false
 
   has_one :latest_iteration, :class_name => "Iteration", :order => "iteration_number DESC"
-  has_many :iterations
+  has_many :iterations, :dependent => :destroy, :order => "iteration_number DESC"
 
   STATUS_PUSHED = "pushed"
 
@@ -19,6 +19,18 @@ class Project < ActiveRecord::Base
   def self.list(page, per_page)
     paginate :page     => page, :order => 'name',
              :per_page => per_page
+  end
+
+  def self.calculate_project_date
+    Date.current
+#    minutes = Time.now.in_time_zone(APP_CONFIG['default_user_timezone']).hour * 60 +
+#        Time.now.in_time_zone(APP_CONFIG['default_user_timezone']).min
+#    if minutes < APP_CONFIG['sprint_standup_time'].to_i
+#      the_date = Date.current - 1
+#    else
+#      the_date = Date.current
+#    end
+#    the_date
   end
 
   def self.refresh_all
@@ -70,6 +82,8 @@ class Project < ActiveRecord::Base
 
       (doc/"iteration").each do |iteration|
         iteration_number = iteration.at('id').inner_html.to_i
+        start_on = iteration.at('start').inner_html.to_date
+        iteration_number = iteration_number - 1 if iteration_number > 1 && Project.calculate_project_date < start_on
         @iteration       = self.iterations.by_iteration_number(iteration_number).lock.first
 
         if @iteration
@@ -161,7 +175,7 @@ class Project < ActiveRecord::Base
     end
   end
 
-  def calc_iteration_day the_date=Date.current
+  def calc_iteration_day the_date=Project.calculate_project_date
     (the_date.cwday > 5 ? the_date - (the_date.cwday - 5) : the_date)
   end
 

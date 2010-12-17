@@ -1,6 +1,6 @@
 class Task < ActiveRecord::Base
   belongs_to :story
-  has_many :task_estimates, :order => "as_of"
+  has_many :task_estimates, :order => "as_of", :dependent => :destroy
 
   named_scope :pushed,
               :conditions => {:status => "pushed"}
