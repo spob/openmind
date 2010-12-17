@@ -199,7 +199,7 @@ class Project < ActiveRecord::Base
     remaining_hours = 0.0
     total_hours     = 0.0
 
-    unless /^X\d/x =~ description
+    unless /^X\d/ix =~ description
       # does description start with a B (as in blocked)
       desc = description
       if /^B\d/x =~ description
@@ -215,7 +215,7 @@ class Project < ActiveRecord::Base
       end
     end
 
-#    puts "TOTAL: #{total_hours} REMAINING: #{remaining_hours}"
+    puts "TOTAL: #{total_hours} REMAINING: #{remaining_hours} #{description}"
     return total_hours, remaining_hours, description
   end
 
