@@ -82,8 +82,8 @@ class Project < ActiveRecord::Base
 
       (doc/"iteration").each do |iteration|
         iteration_number = iteration.at('id').inner_html.to_i
-        start_on = iteration.at('start').inner_html.to_date
-        iteration_number = iteration_number - 1 if iteration_number > 1 && Project.calculate_project_date < start_on
+#        start_on = iteration.at('start').inner_html.to_date
+#        iteration_number = iteration_number - 1 if iteration_number > 1 && Project.calculate_project_date < start_on
         @iteration       = self.iterations.by_iteration_number(iteration_number).lock.first
 
         if @iteration
