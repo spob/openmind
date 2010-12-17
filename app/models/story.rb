@@ -10,6 +10,8 @@ class Story < ActiveRecord::Base
               :conditions => {:status => "accepted"}
   named_scope :pushed,
               :conditions => {:status => "pushed"}
+  named_scope :pointed,
+              :conditions => ['points >= 0']
 
   def self.sort_by_status stories
     stories.sort_by do |s|

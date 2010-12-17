@@ -48,7 +48,7 @@ class Iteration < ActiveRecord::Base
   end
 
   def total_points
-    self.stories.sum('points')
+    self.stories.pointed.sum('points')
   end
 
   def total_points_delivered
