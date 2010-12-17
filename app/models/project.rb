@@ -199,18 +199,20 @@ class Project < ActiveRecord::Base
     remaining_hours = 0.0
     total_hours     = 0.0
 
-    # does description start with a B (as in blocked)
-    desc            = description
-    if /^B\d/x =~ description
-      desc = description[1..500]
-    end
-    m1 = /[\d.]*/x.match(desc)
-    # Did the match end with a slash?
-    if /\// =~ m1.post_match
-      remaining_hours = m1[0].to_f if !completed
+    unless /^X\d/x =~ description
+      # does description start with a B (as in blocked)
+      desc = description
+      if /^B\d/x =~ description
+        desc = description[1..500]
+      end
+      m1 = /[\d.]*/x.match(desc)
+      # Did the match end with a slash?
+      if /\// =~ m1.post_match
+        remaining_hours = m1[0].to_f if !completed
 
-      m2          = /[\d.]*/x.match(m1.post_match[1..255])
-      total_hours = m2[0].to_f
+        m2          = /[\d.]*/x.match(m1.post_match[1..255])
+        total_hours = m2[0].to_f
+      end
     end
 
 #    puts "TOTAL: #{total_hours} REMAINING: #{remaining_hours}"
