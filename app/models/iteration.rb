@@ -65,7 +65,16 @@ class Iteration < ActiveRecord::Base
     the_date
   end
 
-  def calc_day_number the_date=Date.current
+  def calc_day_number the_date=nil
+    if the_date.nil?
+      minutes = Time.now.in_time_zone(APP_CONFIG['default_user_timezone']).hour * 60 +
+          Time.now.in_time_zone(APP_CONFIG['default_user_timezone']).min
+      if minutes < APP_CONFIG['sprint_standup_time'].to_i
+        the_date = Date.current - 1
+      else
+        the_date = Date.current
+      end
+    end
     day_num = 0
     (self.start_on..the_date).each do |d|
       day_num += 1 if d.cwday < 6

@@ -214,9 +214,9 @@ class ProjectsController < ApplicationController
     chart.set_y_legend(y_legend)
 
     if y_legend_right
-      y_legend_right = YLegendRight.new(y_legend_right)
+      y_legend_right = YLegendRight.new("My Legend")
       y_legend_right.set_style('{font-size: 20px; color: #770077}')
-#      chart.y_legend = y_legend_right
+      chart.y_legend = y_legend_right
     end
   end
 
