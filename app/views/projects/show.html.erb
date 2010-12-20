@@ -14,7 +14,7 @@
 <div id="actionButtons2">
     <%= link_to(
                 "Refresh",
-                refresh_project_path(@project),
+                refresh_project_path(@project, :from => "show"),
                 {:method      => :post,
                  :onmouseover => "Tip('Refresh the project information from pivotal tracker')",
                  :class       => "button"}) %>
