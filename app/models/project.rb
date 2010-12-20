@@ -215,7 +215,7 @@ class Project < ActiveRecord::Base
       end
     end
 
-    puts "TOTAL: #{total_hours} REMAINING: #{remaining_hours} #{description}"
+#    puts "TOTAL: #{total_hours} REMAINING: #{remaining_hours} #{description}"
     return total_hours, remaining_hours, description
   end
 

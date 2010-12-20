@@ -12,6 +12,12 @@
 <% end %>
 
 <div id="actionButtons2">
+    <%= link_to(
+                "Refresh",
+                refresh_project_path(@project),
+                {:method      => :post,
+                 :onmouseover => "Tip('Refresh the project information from pivotal tracker')",
+                 :class       => "button"}) %>
   <%= link_to 'Download Burndown (PDF)', project_path(@project, :format => "pdf"), html_options = {:class=> "button"} %>
 </div>
 

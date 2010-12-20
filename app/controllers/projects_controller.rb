@@ -78,7 +78,7 @@ class ProjectsController < ApplicationController
     else
       flash[:error] = "Project #{@project.name} refresh failed."
     end
-    redirect_to projects_path
+    redirect_to (params[:from] == "show" ? project_path(@project) : projects_path)
   end
 
   def velocity_chart
