@@ -10,7 +10,7 @@ module ProjectsHelper
   end
 
   def task_estimate_for_day estimate
-    (estimate ? '%.2f' % estimate.remaining_hours : "-")
+    (estimate && estimate.status != "pushed" ? '%.2f' % estimate.remaining_hours : "-")
   end
 
   def cell_color_by_task_status task
