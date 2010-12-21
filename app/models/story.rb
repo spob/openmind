@@ -12,6 +12,11 @@ class Story < ActiveRecord::Base
               :conditions => {:status => "pushed"}
   named_scope :pointed,
               :conditions => ['points >= 0']
+  named_scope :conditional_pushed,
+              lambda { |param| return {} if param.nil? or param == "Y"
+              {:conditions => ["stories.status <> ?", "pushed"]}
+              }
+
 
   def self.sort_by_status stories
     stories.sort_by do |s|

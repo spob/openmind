@@ -3,4 +3,4 @@
     <strong><span style="font-size:125%;"><%= strike_text(link_to(h(story.name), story.url, :target => "_blank"), story.status == "pushed") %></span> (<%= h story.status.titleize %>, <%= pluralize(story.points, "point") %>, <%= owner_text story %>)</strong>
   </td>
 </tr>
-<%= render :partial => 'task', :collection => Task.sort_by_status(story.tasks), :locals => {:iteration => iteration, :story => story} %>
+<%= render :partial => 'task', :collection => Task.sort_by_status(story.tasks.conditional_pushed(cookies[:show_pushed_stories])), :locals => {:iteration => iteration, :story => story} %>
