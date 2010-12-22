@@ -1,5 +1,6 @@
 <tr>
   <td colspan="<%= iteration.calc_day_number + 3 %>"  <%= cell_color_by_story_status story  %>>
+    <%= theme_image_tag("pivotal/#{story.story_type}.png", options = {:alt=>"active"}) %>
     <strong><span style="font-size:125%;"><%= strike_text(link_to(h(story.name), story.url, :target => "_blank"), story.status == "pushed") %></span> (<%= h story.status.titleize %>, <%= pluralize(story.points, "point") %>, <%= owner_text story %>)</strong>
   </td>
 </tr>
