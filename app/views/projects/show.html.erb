@@ -10,7 +10,6 @@
         }
     </style>
 <% end %>
-
 <div id="actionButtons2">
     <%= link_to(
                 "Refresh",
@@ -20,11 +19,10 @@
                  :class       => "button"}) %>
   <%= link_to 'Download Burndown (PDF)', project_path(@project, :format => "pdf"), html_options = {:class=> "button"} %>
 </div>
-
 <h1>Project <%= h @project.name %>, Iteration <%= @iteration.iteration_number %>
   (<%= om_date(@iteration.start_on) %> to <%= om_date(@iteration.end_on) %>)</h1>
 <% form_tag(project_path(@project), :id => 'select_iteration', :method => :get, :class => 'cssform searchform', :name => 'search') do -%>
-    Iteration:
+      <strong>Iteration:</strong>
     <%= select_tag :iteration_id,
                    options_from_collection_for_select(
                            @project.iterations,
@@ -32,6 +30,11 @@
                            "iteration_name",
                            @iteration.id),
                    html_options = {:onchange => 'document.search.submit();'} %>
+    <br /><br />
+    <strong>Show Pushed Items:</strong> <%= radio_button_tag "show_pushed_stories", "Y", cookies[:show_pushed_stories] != "N",
+                   html_options = {:onchange => 'document.search.submit();'} %>Yes&nbsp;&nbsp;
+    <%= radio_button_tag "show_pushed_stories", "N", cookies[:show_pushed_stories] == "N",
+                   html_options = {:onchange => 'document.search.submit();'} %>No
 <% end %>
 
 <p>Synced at <%= om_date_time(@iteration.last_synced_at) %></p>
@@ -45,7 +48,7 @@
   <tr>
     <%= day_headings @iteration %>
   </tr>
-  <%= render :partial => 'story', :collection => Story.sort_by_status(@iteration.stories), :locals => {:iteration => @iteration} %>
+  <%= render :partial => 'story', :collection => Story.sort_by_status(@iteration.stories.conditional_pushed(cookies[:show_pushed_stories])), :locals => {:iteration => @iteration} %>
 
   <tr>
     <td colspan="<%= @iteration.calc_day_number + 3 %>">&nbsp;</td>

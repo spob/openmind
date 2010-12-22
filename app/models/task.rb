@@ -6,6 +6,10 @@ class Task < ActiveRecord::Base
               :conditions => {:status => "pushed"}
   named_scope :not_pushed,
               :conditions => ["tasks.status <> ?", "pushed"]
+  named_scope :conditional_pushed,
+              lambda { |param| return {} if param.nil? or param == "Y"
+              {:conditions => ["tasks.status <> ?", "pushed"]}
+              }
 
   @estimates = nil
 

@@ -57,6 +57,7 @@ class ProjectsController < ApplicationController
   end
 
   def show
+    cookies[:show_pushed_stories] = params[:show_pushed_stories] if params[:show_pushed_stories]
     if params[:iteration_id]
       @iteration = Iteration.find(params[:iteration_id], :include => [{:stories => {:tasks => :task_estimates}}])
     else
@@ -213,11 +214,11 @@ class ProjectsController < ApplicationController
     chart.set_x_legend(x_legend)
     chart.set_y_legend(y_legend)
 
-    if y_legend_right
-      y_legend_right = YLegendRight.new("My Legend")
-      y_legend_right.set_style('{font-size: 20px; color: #770077}')
-      chart.y_legend = y_legend_right
-    end
+#    if y_legend_right
+#      y_legend_right = YLegendRight.new("My Legend")
+#      y_legend_right.set_style('{font-size: 20px; color: #770077}')
+#      chart.y_legend = y_legend_right
+#    end
   end
 
   def can_view_projects?
