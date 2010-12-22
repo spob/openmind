@@ -33,9 +33,11 @@ module ProjectsHelper
         bgcolor "#B2EDAF", style
       when "delivered" then
         bgcolor "#66CCFF", style
-      when "finished" then #FFCC33
+      when "finished" then
         bgcolor "#FFCC33", style
-      when "started" then #FFCC33
+      when "rejected" then
+        bgcolor "#FF7373", style
+      when "started" then
         bgcolor "#F5F4AB", style
       else
         "style=\"#{style}\""
@@ -66,7 +68,7 @@ module ProjectsHelper
   end
 
   private
-  
+
   def bgcolor color, other_style=""
     "style=\"background-color: #{color}; #{other_style}\""
   end
