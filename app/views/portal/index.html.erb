@@ -33,7 +33,7 @@
     <% if @user == current_user && current_user.can_view_forecasts? %>
         <div id="actionButtons">
           <%= link_to 'New Opportunity', new_forecast_path,
-                      html_options = {:class => "button",
+                      html_options = {:class       => "button",
                                       :onmouseover => "Tip('Create a new opportunity')"} %>
         </div>
     <% end %>
@@ -206,6 +206,45 @@
       </td>
   <% end %>
 </table>
+<h3>Entitlements</h3>
+<table>
+  <tr>
+    <th colspan="3">
+      Entitlements
+    </th>
+    <th colspan="3">
+      Incidents
+    </th>
+  </tr>
+  <tr>
+    <th>
+      Annual Total
+    </th>
+    <th>
+      Consumed
+    </th>
+    <th>
+      Available
+    </th>
+    <th>
+      Total Purchased
+    </th>
+    <th>
+      Consumed
+    </th>
+    <th>
+      Available
+    </th>
+  </tr>
+  <% if @entitlements.present? %>
+      <%= render :partial => 'entitlement', :collection => @entitlements %>
+  <% else %>
+      <td colspan="6">
+        No records found
+      </td>
+  <% end %>
+</table>
+
 <h3>Support Incidents</h3>
 <table>
   <tr>
