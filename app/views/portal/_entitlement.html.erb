@@ -12,7 +12,7 @@
         <%= entitlement.purchased_entitlements_total %>
     </td>
     <td>
-        <%= entitlement.purchased_entitlements_used %>
+        <%= entitlement.purchased_entitlements_total - entitlement.purchased_entitlements_available %>
     </td>
     <td>
         <%= entitlement.purchased_entitlements_available %>
