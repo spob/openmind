@@ -2,13 +2,15 @@
 <%content_for :head do -%>
   <%= theme_stylesheet_link_tag 'sideBarRight' %>
 <%end%>
-<%= javascript_include_tag "wz_tooltip.js", :cache => "cache/tooltip" %> 
+<%= javascript_include_tag "wz_tooltip.js", :cache => "cache/tooltip" %>
+
+
 <div id="actionButtons2">
   <%= link_to "Add Comment",
     new_comment_path(:id => @topic, :type => 'Topic'),
     html_options = {:class=> "button",
     :onmouseover => "Tip('Add a comment to discussion forum for this topic')" } if @topic.can_add_comment? current_user %>
-        
+
   <%= show_topic_watch_button @topic %>
   <% if can_edit_topic? @topic %>
     <%= link_to 'Edit', edit_topic_path(@topic) , html_options = {:class=> "button",
@@ -60,3 +62,20 @@ Topic: <%= truncate @topic.title, :length => 40 %>
   :onmouseover => "Tip('Add a comment to discussion forum for this topic')" } if @topic.can_add_comment? current_user %>
 <%= link_to 'Back to Topics', forum_path(@topic.forum.id) , html_options = {:class=> "button",
   :onmouseover => "Tip('Return to list of topics for the #{@topic.forum.name} forum')"}%>
+
+<br />
+<br />
+  <!-- AddThis Button BEGIN -->
+     <div class="addthis_toolbox addthis_pill_combo">
+        <a class="addthis_button_tweet" tw:count="horizontal"></a>
+        <a class="addthis_button_facebook_like"></a>
+        <a class="addthis_counter addthis_pill_style"></a>
+    </div>
+<!-- AddThis Button END -->
+
+<script type="text/javascript">
+    var addthis_config = {
+        "data_track_clickback":true
+    };
+</script>
+<script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#username=spob"></script>
