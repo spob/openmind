@@ -202,7 +202,7 @@ class Project < ActiveRecord::Base
     unless /^X\d/ix =~ description
       # does description start with a B (as in blocked)
       desc = description
-      if /^B\d/x =~ description
+      if /^B\d/ix =~ description
         desc = description[1..500]
       end
       m1 = /[\d.]*/x.match(desc)
