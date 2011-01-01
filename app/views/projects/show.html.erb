@@ -16,7 +16,7 @@
                 refresh_project_path(@project, :from => "show"),
                 {:method      => :post,
                  :onmouseover => "Tip('Refresh the project information from pivotal tracker')",
-                 :class       => "button"}) %>
+                 :class       => "button"}) if @project.latest_iteration == @iteration %>
   <%= link_to 'Download Burndown (PDF)', project_path(@project, :format => "pdf", :iteration_id => @iteration), :target => "_blank", :class=> "button" %>
 </div>
 <h1>Project <%= h @project.name %>, Iteration <%= @iteration.iteration_number %>
