@@ -17,7 +17,7 @@
                 {:method      => :post,
                  :onmouseover => "Tip('Refresh the project information from pivotal tracker')",
                  :class       => "button"}) %>
-  <%= link_to 'Download Burndown (PDF)', project_path(@project, :format => "pdf"), html_options = {:class=> "button"} %>
+  <%= link_to 'Download Burndown (PDF)', project_path(@project, :format => "pdf", :iteration_id => @iteration), html_options = {:class=> "button"} %>
 </div>
 <h1>Project <%= h @project.name %>, Iteration <%= @iteration.iteration_number %>
   (<%= om_date(@iteration.start_on) %> to <%= om_date(@iteration.end_on) %>)</h1>
