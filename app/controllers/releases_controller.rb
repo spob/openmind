@@ -1,7 +1,7 @@
 class ReleasesController < ApplicationController
   before_filter :login_required, :except => [:index, :list, :show, :check_for_updates, :compatibility]
   access_control [:new, :commit, :edit, :create, :update, :destroy] => 'prodmgr'
-  
+
   # GETs should be safe (see http://www.w3.org/2001/tag/doc/whenToUseGet.html)
   verify :method => :post, :only => [:create, :commit ],
   :redirect_to => { :action => :index }
@@ -9,7 +9,7 @@ class ReleasesController < ApplicationController
   :redirect_to => { :action => :index }
   verify :method => :delete, :only => [ :destroy ],
   :redirect_to => { :action => :index }
-  
+
   def index
     begin
       id = params[:product_id]
@@ -20,27 +20,27 @@ class ReleasesController < ApplicationController
       redirect_to products_path
       return false
     else
-      @releases = Release.list params[:page], @product.id, 
+      @releases = Release.list params[:page], @product.id,
        (logged_in? ? current_user.row_limit : 10)
       @release_statuses = ReleaseStatus.find(:all, :order => "sort_value ASC")
       return true
     end
   end
-  
-  def list    
+
+  def list
     @release_statuses ||= ReleaseStatus.find(:all, :order => "sort_value ASC")
     session[:release_status_id] = params[:release_status_id] unless params[:release_status_id].nil?
     session[:release_status_id] ||= @release_statuses[0].id
-    @releases = Release.list_by_status params[:page], 
+    @releases = Release.list_by_status params[:page],
      (logged_in? ? current_user.row_limit : 10),
     session[:release_status_id]
   end
-  
+
   def show
     id = params[:id]
     @release = Release.find(id)
   end
-  
+
   def new
     begin
       @product = Product.find(params[:product_id])
@@ -53,7 +53,7 @@ class ReleasesController < ApplicationController
       @release = Release.new
     end
   end
-  
+
   def create
     Release.transaction do
       Release.transaction do
@@ -62,7 +62,7 @@ class ReleasesController < ApplicationController
         @release.product_id = product_id
         @release.change_logs <<  ReleaseChangeLog.new(:message => "Release created",
         :user => current_user)
-        
+
         if @release.save
           run_change_log_job @release.id
           flash[:notice] = "Release #{@release.version} was successfully created."
@@ -74,52 +74,59 @@ class ReleasesController < ApplicationController
       end
     end
   end
-  
+
   def compatibility
     @root_product = Product.find_by_name(APP_CONFIG['root_compatibility_product'])
     redirect_to releases_path unless @root_product
   end
-  
+
   def preview
     render :layout => false
   end
-  
+
   def edit
     @release_statuses ||= ReleaseStatus.find(:all, :order => "sort_value ASC")
     @release ||= Release.find(params[:id])
   end
-  
-  def  check_for_updates
+
+  def check_for_updates
     release_ids = {}
     @serial_number = params[:serial_number]
     @tickets = SupportTicket.by_serial_number(@serial_number)
     # release_id's is a hash. The keys to the hash are the release ids. The values are an array. The first element of the array is the expiration date, the second is the order in which is was found
     params[:releases].split(",").enum_with_index.collect { |x, i| release_ids[x.split("|")[0]] = [x.split("|")[1], i] } unless params[:releases].nil? or params[:releases].blank?
-    
+
     @releases = []
     @expired_maintenance = false
     @unwatched = false
     release_ids.keys.sort{|x,y| release_ids[x][1] <=> release_ids[y][1].to_i}.each do |id|
       release = Release.find_by_id(id)
       release = Release.find_by_external_release_id(id) unless release
+      unless release
+        # search by near match, then search for a full match
+        Release.by_external_release_id(id).each do |r|
+          release = r if r.external_release_id.split("|").include?(id)
+        end
+      end
       if release.nil?
-        flash[:error] = "Couldn't find product with id '#{id}'" 
+        flash[:error] = "Couldn't find product with id '#{id}'"
       else
         @unwatched = true unless release.product.watchers.include? current_user
-        if release_ids[id][0] 
+        if release_ids[id][0]
           begin
-            release.maintenance_expires = Date.parse(release_ids[id][0]) 
-            
+            release.maintenance_expires = Date.parse(release_ids[id][0])
+
             @expired_maintenance = true if release.maintenance_expires < Date.today
           rescue ArgumentError
-            flash[:error] = "Invalid date format '#{release_ids[id][0]}'" 
+            flash[:error] = "Invalid date format '#{release_ids[id][0]}'"
           end
         end
-        
-        @releases << release 
+
+        @releases << release
       end
     end
-    
+    @releases.uniq!
+
     # Persist serial number and releases
     if !@serial_number.nil? and @serial_number.length == 19
       @sn = SerialNumber.find_or_create_by_serial_number(@serial_number)
@@ -134,7 +141,7 @@ class ReleasesController < ApplicationController
           SerialNumberReleaseMap.create!(:serial_number => @sn, :release => r, :expires_at => r.maintenance_expires)
         end
       end
-      
+
        (@sn.active_releases - @releases).each do |r|
         # these are releases which have been removed
         map = @sn.serial_number_release_maps.find_by_release_id(r)
@@ -142,7 +149,7 @@ class ReleasesController < ApplicationController
         map.update_attributes!(:disabled_at => Time.now, :expires_at => r.maintenance_expires)
       end
     end
-    
+
     @latest_release = {}
     @unsatisfied_dependencies = {}
     @releases.each do |release|
@@ -156,9 +163,9 @@ class ReleasesController < ApplicationController
     respond_to do |wants|
       wants.html
       wants.xml { render :xml => xml }
-    end   
+    end
   end
-  
+
   #
   # I needed to create a special method called commit that was a post because,
   # for some reason, the update (which is a put) wouldn't work with the preview
@@ -166,7 +173,7 @@ class ReleasesController < ApplicationController
   def commit
     update
   end
-  
+
   def update
     @release = Release.find(params[:id])
     Release.transaction do
@@ -187,7 +194,7 @@ class ReleasesController < ApplicationController
       @release.release_date = params[:release][:release_date]
       calc_change_history @release
       run_change_log_job @release.id
-      
+
       if @release.save
         flash[:notice] = "Release #{@release.version} was successfully updated."
         redirect_to release_path(@release)
@@ -197,7 +204,7 @@ class ReleasesController < ApplicationController
       end
     end
   end
-  
+
   def destroy
     release = Release.find(params[:id])
     product = release.product
@@ -206,9 +213,9 @@ class ReleasesController < ApplicationController
     flash[:notice] = "Release #{version} for product #{product.name} was successfully deleted."
     redirect_to releases_path(:product_id => product.id)
   end
-  
+
   private
-  
+
   def run_change_log_job release_id
     # run job in the feature to notify of changes (in case user makes several
     # changes, we will only ping watchers once
@@ -216,8 +223,8 @@ class ReleasesController < ApplicationController
                               :job => "Release.send_change_notifications(#{release_id})",
     :next_run_at => Time.zone.now + 10.minutes)
   end
-  
-  def calc_change_history release    
+
+  def calc_change_history release
     add_change_history_from_message release, "Description updated" if release.description_changed?
     add_change_history_old_new release, "Release Date",
     @release.user_release_date_was,
@@ -232,7 +239,7 @@ class ReleasesController < ApplicationController
     add_change_history_from_changes release, "Release Notes URL",
     release.changes['release_notes'] if release.release_notes_changed?
   end
-  
+
   def add_change_history_old_new release, label, old_value, new_value
     if old_value.nil? or old_value.blank?
       add_change_history_from_message release, "#{label} set to \"#{new_value}\""
@@ -242,11 +249,11 @@ class ReleasesController < ApplicationController
       add_change_history_from_message release, "#{label} changed from \"#{old_value}\" to \"#{new_value}\""
     end
   end
-  
+
   def add_change_history_from_changes release, label, old_and_new_values
     add_change_history_old_new release, label, old_and_new_values[0], old_and_new_values[1]
   end
-  
+
   def add_change_history_from_message release, message
     release.change_logs <<  ReleaseChangeLog.new(:message => message,
                                                  :user => current_user)
