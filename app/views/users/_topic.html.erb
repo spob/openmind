@@ -1,0 +1,7 @@
+<tr>
+  <td><%= link_to h(topic.forum.name), forum_path(topic.forum) %></td>
+  <td><%= link_to h(topic.title), topic_path(topic) %></td>
+  <td><%= user_display_name(topic.user) %></td>
+  <td><%= topic.comments.by_user(@user).count %></td>
+  <td><%= om_date_time topic.comments.by_user(@user).last.try(:created_at) %></td>
+</tr>
