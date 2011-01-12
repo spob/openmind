@@ -1,111 +1,125 @@
-<%content_for :bodyTag do -%>
-  <%= set_focus_to_id 'user_email' %>
-<%end%>
+<% content_for :bodyTag do -%>
+    <%= set_focus_to_id 'user_email' %>
+<% end %>
 <%= javascript_include_tag "wz_tooltip.js", :cache => "cache/tooltip" %>
 
-<%= render :partial => "tab_menu"%>
+<%= render :partial => "tab_menu" %>
 <div id="tabBody" style="position:relative; padding-top:15px;">
-<%= error_messages_for 'user' %>
-<% form_for :user, :url => { :action => "update", :id => @user } do |form| %>
-  <div class="formTitle"><%=theme_image_tag("icons/16x16/userEdit.png", :alt=>"Edit User")%>Edit User</div>
-  <div class="cssform widerLabel" style="margin-top:0;">
-    <p>
-      <label for="user_email">Email:</label>
-      <%= form.text_field :email, { } %>
-    </p>
-    <p>
-      <label for="first_name">First Name:</label>
-      <%= form.text_field :first_name, { } %>
-    </p>
-    <p>
-      <label for="last_name">Last Name:</label>
-      <%= form.text_field :last_name, { } %>
-    </p>
-    <p>
-      <label for="enterprise_id">Enterprise:</label>
-      <%= form.collection_select :enterprise_id, @enterprises, :id, :name %>
-    </p>
-    <p>
-      <label for="identity_url">Open Id:</label>
-      <%= form.text_field :identity_url, { } %>
-    </p>
-    <p>
-      <label for="user_active">Active:</label>
-      <%= form.check_box :active %>
-    </p>
-    <p>
-      <label></label>
-      <input type="button" id="hide_show_password" class="button" onClick="reverseDisplay('password');" value="Show Password" onmouseover="Tip('Enable editing of password fields')">
-    </p>
-    <div id="password" style="display:none;">
-      <p>
-        <label for="user_password">Password:</label>
-        <%= form.password_field :password, { } %>
-      </p>
-      <p>
-        <label for="user_password_confirmation">Confirm Password:</label>
-        <%= form.password_field :password_confirmation, { } %>
-      </p>   
-    </div>
-    <br/>
-    <p>
-      <label for="time_zone">User Time Zone:</label>
-      <%= form.time_zone_select :time_zone, ActiveSupport::TimeZone.us_zones %>
-    </p>
-    <p>
-      <label for="row_limit">Rows to Display:</label>
-      <%= form.select :row_limit, User.row_limit_options %>
-    </p>
-    <p>
-      <label for="hide_contact_info">Hide Contact Info:</label>
-      <%= form.check_box(:hide_contact_info, {}, '1', '0') %>
-    </p>
-    <p>
-      <label>Roles:</label>
-      <% for role in Role.list %>
+  <%= error_messages_for 'user' %>
+  <% form_for :user, :url => user_path(@user),
+              :html       => {:method => :put} do |form| %>
+      <div class="formTitle"><%= theme_image_tag("icons/16x16/userEdit.png", :alt=>"Edit User") %>Edit User</div>
+      <div class="cssform widerLabel" style="margin-top:0;">
+        <p>
+          <label for="user_email">Email:</label>
+          <%= form.text_field :email, {} %>
+        </p>
+
+        <p>
+          <label for="first_name">First Name:</label>
+          <%= form.text_field :first_name, {} %>
+        </p>
+
+        <p>
+          <label for="last_name">Last Name:</label>
+          <%= form.text_field :last_name, {} %>
+        </p>
+
+        <p>
+          <label for="enterprise_id">Enterprise:</label>
+          <%= form.collection_select :enterprise_id, @enterprises, :id, :name %>
+        </p>
+
+        <p>
+          <label for="identity_url">Open Id:</label>
+          <%= form.text_field :identity_url, {} %>
+        </p>
+
+        <p>
+          <label for="user_active">Active:</label>
+          <%= form.check_box :active %>
+        </p>
+
+        <p>
+          <label></label>
+          <input type="button" id="hide_show_password" class="button" onClick="reverseDisplay('password');" value="Show Password" onmouseover="Tip('Enable editing of password fields')">
+        </p>
+
+        <div id="password" style="display:none;">
+          <p>
+            <label for="user_password">Password:</label>
+            <%= form.password_field :password, {} %>
+          </p>
+
+          <p>
+            <label for="user_password_confirmation">Confirm Password:</label>
+            <%= form.password_field :password_confirmation, {} %>
+          </p>
+        </div>
+        <br />
+
+        <p>
+          <label for="time_zone">User Time Zone:</label>
+          <%= form.time_zone_select :time_zone, ActiveSupport::TimeZone.us_zones %>
+        </p>
+
+        <p>
+          <label for="row_limit">Rows to Display:</label>
+          <%= form.select :row_limit, User.row_limit_options %>
+        </p>
+
+        <p>
+          <label for="hide_contact_info">Hide Contact Info:</label>
+          <%= form.check_box(:hide_contact_info, {}, '1', '0') %>
+        </p>
+
+        <p>
+          <label>Roles:</label>
+          <% for role in Role.list %>
         <span style="display:block;margin-left:10px;">
           <%= check_box_tag "user[role_ids][]", role.id, @user.roles.include?(role) %>
           <%= h role.description %>
         </span>
-      <% end %>
-    </p>
-    <p>
-      <label>User Groups:</label>
-      <% for group in Group.by_name %>
+          <% end %>
+        </p>
+
+        <p>
+          <label>User Groups:</label>
+          <% for group in Group.by_name %>
         <span style="display:block;margin-left:10px;">
           <%= check_box_tag "user[group_ids][]", group.id, @user.groups.include?(group) %>
           <%= h group.name %>: <%= h group.description %>
         </span>
-      <% end %>
-    </p>
-    <% if !CustomField.users_custom_boolean1.nil? %>
-    <p>
-      <label for="custom_boolean1"><%= CustomField.users_custom_boolean1 %>:</label>
-      <%= form.check_box(:custom_boolean1, {}, '1', '0') %>
-    </p>
-    <% end %>
-    <p>
-      <label></label>
-      <%= submit_tag 'Save', html_options = {:class=> "button", :disable_with => "Please wait...", 
-        :onmouseover => "Tip('Save changes')"} %>
-    <%= link_to 'Cancel', options = {:action => 'show', :id => @user}, 
-      html_options = { :class=> "button", 
-      :onmouseover => "Tip('View details for this user')" } %>
-    </p>
-</div>
-<% end %>
+          <% end %>
+        </p>
+        <% if !CustomField.users_custom_boolean1.nil? %>
+            <p>
+              <label for="custom_boolean1"><%= CustomField.users_custom_boolean1 %>:</label>
+              <%= form.check_box(:custom_boolean1, {}, '1', '0') %>
+            </p>
+        <% end %>
+        <p>
+          <label></label>
+          <%= submit_tag 'Save', html_options = {:class       => "button", :disable_with => "Please wait...",
+                                                 :onmouseover => "Tip('Save changes')"} %>
+          <%= link_to 'Cancel', options = {:action => 'show', :id => @user},
+                      html_options      = {:class       => "button",
+                                           :onmouseover => "Tip('View details for this user')"} %>
+        </p>
+      </div>
+  <% end %>
 </div>
 <script type="text/javascript" language="JavaScript"><!--
-  function reverseDisplay(d) {
-    if(document.getElementById(d).style.display == "none") { 
-      document.getElementById(d).style.display = "block"; 
-      document.getElementById('hide_show_password').value = 'Hide Password';
-      document.getElementById('user_password').focus();
+function reverseDisplay(d) {
+    if (document.getElementById(d).style.display == "none") {
+        document.getElementById(d).style.display = "block";
+        document.getElementById('hide_show_password').value = 'Hide Password';
+        document.getElementById('user_password').focus();
     }
-    else { 
-      document.getElementById(d).style.display = "none";
-      document.getElementById('hide_show_password').value = 'Show Password';
+    else {
+        document.getElementById(d).style.display = "none";
+        document.getElementById('hide_show_password').value = 'Show Password';
     }
-  }
+}
 //--></script>
 

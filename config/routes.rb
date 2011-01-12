@@ -1,4 +1,3 @@
-
 ActionController::Routing::Routes.draw do |map|
 
   # The priority is based upon order of creation: first created -> highest
@@ -24,7 +23,7 @@ ActionController::Routing::Routes.draw do |map|
   :collection => { :search => :get, :auto_complete_for_enterprise_name => :get }
   map.resources :forecasts,
   :collection => {:auto_complete_for_forecast_account_name => :get }
-  map.resources :forums, :collection => { :search => :get, 
+  map.resources :forums, :collection => { :search => :get,
     :rss => :get, :tag => :get, :metrics => :get, :metrics_graphs => :get,
     :open_count_graphs => :get, :days_pending_graphs => :get, :pending_count_graphs => :get},
     :member => { :mark_all_as_read => :post }
@@ -33,12 +32,12 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :link_sets, :member => { :update_sort => :post }
   map.resources :lookup_codes
   map.resources :merge_ideas
-  map.resources :periodic_jobs, :member => { :rerun => :post, :runnow => :post }
-  map.resources :polls, :member => { :publish => :post, :unpublish => :post, :pie => :get,
-    :present_survey => :get, :take_survey => :post},
-  :collection => {:toggle_details => :get, :display_comments => :get }
+  map.resources :periodic_jobs, :member => {:rerun => :post, :runnow => :post}
+  map.resources :polls, :member => {:publish        => :post, :unpublish => :post, :pie => :get,
+                                    :present_survey => :get, :take_survey => :post},
+                :collection     => {:toggle_details => :get, :display_comments => :get}
   map.resources :portal, :only => :index,
-  :collection => {:auto_complete_for_user_email => :get }
+                :collection    => {:auto_complete_for_user_email => :get}
   map.resources :products
   map.resources :projects, :member => { :refresh => :post,
                                         :burndown_chart => :get,
@@ -51,21 +50,21 @@ ActionController::Routing::Routes.draw do |map|
     :tag => :get }, :member => {:rate => :post, :toggle_status => :put}
   map.resources :users, :collection => { :activity => :get, :auto_complete_for_user_email => :get }
   map.resources :user_logons
-  map.resources :user_requests, :member => { :approve => :post, :reject => :post,
-    :acknowledge => :get, :next => :get, :previous => :get },
-  :collection => {:auto_complete_for_user_request_enterprise_name => :get }
-  map.resources :votes, :collection => { :create_from_show => :post }
+  map.resources :user_requests, :member => {:approve     => :post, :reject => :post,
+                                            :acknowledge => :get, :next => :get, :previous => :get},
+                :collection             => {:auto_complete_for_user_request_enterprise_name => :get}
+  map.resources :votes, :collection => {:create_from_show => :post}
   # NOTE: create_topic_watch really should just support a post. That said,
   # googlebot hits that page and tries to do a create_topic_watch with a git,
   # which fills the hoptoadapp log...so we'll handle enforcement down at
   # the controller level instead
-  map.resources :watches, :member => { :create_topic_watch => [:post, :get],
-    :destroy_topic_watch => :delete, :create_forum_watch => :post,
-    :create_product_watch => :post,
-    :create_product_watch_from_check_for_update => :post, :destroy_forum_watch => :delete,
-    :destroy_product_watch => :delete},
-  :collection => {:create_from_show => :post,
-    :create_product_watches => :get }
+  map.resources :watches, :member => {:create_topic_watch                         => [:post, :get],
+                                      :destroy_topic_watch                        => :delete, :create_forum_watch => :post,
+                                      :create_product_watch                       => :post,
+                                      :create_product_watch_from_check_for_update => :post, :destroy_forum_watch => :delete,
+                                      :destroy_product_watch                      => :delete},
+                :collection       => {:create_from_show       => :post,
+                                      :create_product_watches => :get}
 
   # Allow downloading Web Service WSDL as a file with an extension instead of a
   # file named 'wsdl'
