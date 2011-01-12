@@ -159,7 +159,7 @@ class UsersController < ApplicationController
     respond_to do |format|
       format.xml do
         if user.nil?
-          render :nothing => true, :status => 404 
+          render :nothing => true, :status => 404
         else
           user.new_otp
           user.save!
