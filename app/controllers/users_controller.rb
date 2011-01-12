@@ -6,7 +6,7 @@ class UsersController < ApplicationController
 
   # GETs should be safe (see http://www.w3.org/2001/tag/doc/whenToUseGet.html)
   verify :method      => :post, :only => [:destroy, :create, :update, :update_profile, :reset_password, :process_imported, :import, :fetch_otp],
-         :redirect_to => {:action => :list}
+         :redirect_to => {:action => :index}
 
   def index
     list
@@ -45,7 +45,7 @@ class UsersController < ApplicationController
     rescue RuntimeError => e
       flash[:error] = "An error occurred while executing your search. Perhaps there is a problem with the syntax of your search string."
       logger.error(e)
-      redirect_to :action => 'list'
+      redirect_to users_path
     else
       @users = User.list params[:page], 999,
                          session[:users_start_filter],
@@ -225,7 +225,7 @@ class UsersController < ApplicationController
 
     if @user.update_attributes(params[:user])
       flash[:notice] = "User #{@user.login} was successfully updated."
-      redirect_to :action => 'show', :id => @user
+      redirect_to user_path(@user)
     else
       @user.errors.each { |attr, msg| puts ">>>>>>>#{attr} - #{msg}" }
       setup_session_properties
@@ -263,7 +263,7 @@ class UsersController < ApplicationController
     email = user.email
     user.destroy
     flash[:notice] = "User #{email} was successfully deleted."
-    redirect_to :action => 'list'
+    redirect_to users_path
   end
 
   def edit
