@@ -23,8 +23,7 @@
   <p>
     <%= link_to 'Request Account', new_user_request_path %>
     &nbsp;|&nbsp;
-    <%= link_to 'Forgot your password?', { :controller => :users,
-      :action => 'lost_password' } %>
+    <%= link_to 'Forgot your password?', lost_password_users_path %>
     &nbsp;|&nbsp;
     <%= theme_image_tag("icons/14x14/openid-14x14.gif",
       options = {:alt=>"OpenID"}) %>

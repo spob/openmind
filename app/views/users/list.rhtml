@@ -10,7 +10,7 @@
         <%= button_to 'Create User', option = {:action => 'new'},
         html_options = {:class=> "button",
         :onmouseover => "Tip('Create a new user')"} %>
-        <%= button_to 'Bulk Load', option = {:action => 'export_import'},
+        <%= button_to 'Bulk Load', export_import_users_path,
         html_options = {:class=> "button",
         :onmouseover => "Tip('Bulk load users into the users table')",
         :method => :get } %>

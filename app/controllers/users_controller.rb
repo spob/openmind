@@ -5,7 +5,11 @@ class UsersController < ApplicationController
                   :import, :process_imported, :activity]                    => '(sysadmin | allocmgr)'
 
   # GETs should be safe (see http://www.w3.org/2001/tag/doc/whenToUseGet.html)
-  verify :method      => :post, :only => [:destroy, :create, :update, :update_profile, :reset_password, :process_imported, :import, :fetch_otp],
+  verify :method      => :post, :only => [:create, :reset_password, :process_imported, :import, :fetch_otp],
+         :redirect_to => {:action => :index}
+  verify :method      => :put, :only => [:update, :update_profile],
+         :redirect_to => {:action => :index}
+  verify :method      => :delete, :only => [:destroy],
          :redirect_to => {:action => :index}
 
   def index
@@ -192,7 +196,7 @@ class UsersController < ApplicationController
     @user = User.find_by_email(session[:activity_email])
     if @user
       @topics = Topic.find(:all,
-                           :include    => [{:forum => :slug }, :user, :slug],
+                           :include    => [{:forum => :slug}, :user, :slug],
                            :conditions => ["topics.id IN (?)", @user.topic_comments.topic_ids.collect(&:topic_id) + [-1]],
                            :order      => "topics.created_at")
     end
