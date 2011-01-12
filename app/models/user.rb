@@ -32,27 +32,27 @@ require 'digest/sha1'
 
 class User < ActiveRecord::Base
   extend ActiveSupport::Memoizable
-  
+
   ajaxful_rater
-#  acts_as_solr :fields => [:email, :first_name, :last_name], 
+#  acts_as_solr :fields => [:email, :first_name, :last_name],
 #    :include => [:enterprise]
-    
+
   define_index do
     indexes email, :sortable => true
     indexes first_name, :sortable => true
     indexes last_name, :sortable => true
     indexes enterprise(:name), :as => :enterprise, :sortable => true
-    
+
     has created_at, updated_at
     set_property :delta => true
   end
 
-  
+
   # Virtual attribute for the unencrypted password
   attr_accessor :password
   attr_accessor :initial_allocation # to allow user to create an allocation at the
   # same time they create a user
-  attr_protected :activated_at 
+  attr_protected :activated_at
 
   validates_presence_of     :email, :row_limit, :last_name, :enterprise
   validates_presence_of     :password,                   :if => :password_required?
@@ -62,14 +62,14 @@ class User < ActiveRecord::Base
   validates_length_of       :email,    :within => 3..100
   validates_uniqueness_of   :email, :case_sensitive => false
   validates_email_format_of :email, :allow_nil => true
-  validates_numericality_of :row_limit 
+  validates_numericality_of :row_limit
   validates_length_of       :first_name, :maximum => 40, :allow_nil => true
   validates_length_of       :last_name, :maximum => 40, :allow_nil => true
   validates_length_of       :activation_code, :maximum => 40, :allow_nil => true
   before_save :encrypt_password
-  
+
   belongs_to :enterprise
-  has_and_belongs_to_many :roles  
+  has_and_belongs_to_many :roles
   # This collection is for watches
   has_and_belongs_to_many :watched_ideas, :join_table => 'watches', :class_name => 'Idea'
   has_and_belongs_to_many :forum_watches, :join_table => 'forum_watches', :class_name => 'Forum'
@@ -85,11 +85,11 @@ class User < ActiveRecord::Base
     'ORDER BY t.forum_id, t.updated_at DESC'
   has_and_belongs_to_many :poll_options, :join_table => 'poll_user_responses'
   has_and_belongs_to_many :mediated_forums, :join_table => 'forum_mediators', :class_name => 'Forum'
-  
+
   has_one :last_logon, :class_name => "UserLogon", :order => "created_at DESC"
-  has_many :user_logons, :order => "created_at DESC", :dependent => :destroy   
-  has_many :ideas,:dependent => :destroy, :order => "id ASC"   
-  has_many :allocations, :dependent => :destroy, :order => "created_at ASC"   
+  has_many :user_logons, :order => "created_at DESC", :dependent => :destroy
+  has_many :ideas,:dependent => :destroy, :order => "id ASC"
+  has_many :allocations, :dependent => :destroy, :order => "created_at ASC"
   #  has_many :active_allocations, :conditions => ["expiration_date > ?", Date.current.to_s(:db)],
   #    :order => "created_at ASCactive_allocations"
   # all votes by this user based only on user allocations
@@ -104,10 +104,10 @@ class User < ActiveRecord::Base
   has_many :portal_orgs, :class_name => 'PortalUserOrgMap', :foreign_key => 'email', :primary_key => 'email'
   has_many :portal_reseller_orgs, :class_name => 'PortalUserOrgMap', :conditions => "org_type = 'R'", :foreign_key => 'email', :primary_key => 'email'
   has_many :portal_end_customer_orgs, :class_name => 'PortalUserOrgMap', :conditions => "org_type = 'E'", :foreign_key => 'email', :primary_key => 'email'
-  
+
   before_create :make_activation_code
 
-  
+
   named_scope :active,
     :conditions => [ "active = ?", true],
     :order => 'email asc'
@@ -147,7 +147,7 @@ class User < ActiveRecord::Base
   def self.row_limit_options
     [10, 25, 50, 100]
   end
-  
+
   def sysadmin?
     roles.collect(&:title).include? 'sysadmin'
   end
@@ -159,7 +159,7 @@ class User < ActiveRecord::Base
   def developer?
     roles.collect(&:title).include? 'developer'
   end
-  
+
   def prodmgr?
     roles.collect(&:title).include? 'prodmgr'
   end
@@ -175,15 +175,15 @@ class User < ActiveRecord::Base
   def mediator?
     roles.collect(&:title).include? 'mediator'
   end
-  
+
   def user_logons_90_days
     user_logons.find(:all, :conditions => ['created_at > ?', (Time.zone.now - 60*60*24*90).to_s(:db)])
   end
-  
+
   def last_logon_date
     last_logon.created_at unless last_logon.nil?
   end
-  
+
   # Authenticates a user by their email and unencrypted password.  Returns the
   # user or nil.
   def self.authenticate(email, password)
@@ -191,7 +191,7 @@ class User < ActiveRecord::Base
     u = User.find :first, :conditions => ['email = ? and activated_at IS NOT NULL', email]
     u && u.authenticated?(password) ? u : nil
   end
-  
+
   def self.authenticate_otp(email, otp)
     # hide records with a nil activated_at
     logger.debug("User with email #{email} and otp #{otp}")
@@ -220,18 +220,18 @@ class User < ActiveRecord::Base
   end
 
   def authenticated?(password)
-    crypted_password == encrypt(password) && enterprise.active && active && 
+    crypted_password == encrypt(password) && enterprise.active && active &&
       !activated_at.nil?
   end
 
   def remember_token?
-    remember_token_expires_at && Time.zone.now < remember_token_expires_at 
+    remember_token_expires_at && Time.zone.now < remember_token_expires_at
   end
-  
+
   def login
     email
   end
-  
+
   def login=(p_login)
     self.email = p_login
   end
@@ -249,11 +249,11 @@ class User < ActiveRecord::Base
     self.remember_token            = nil
     save(false)
   end
-  
+
   def can_delete?
     ideas.empty? and allocations.empty? and comments.empty?
   end
-  
+
   def available_user_votes
     if @available_user_votes.nil?
       @available_user_votes = 0
@@ -263,7 +263,7 @@ class User < ActiveRecord::Base
     end
     @available_user_votes
   end
-  
+
   def available_enterprise_votes
     if @available_enterprise_votes.nil?
       @available_enterprise_votes = 0
@@ -273,11 +273,11 @@ class User < ActiveRecord::Base
     end
     @available_enterprise_votes
   end
-  
+
   def available_votes
     available_user_votes + available_enterprise_votes
   end
-    
+
   def self.list(page, per_page, start_filter, end_filter, ids)
     conditions = []
     unless start_filter == 'All'
@@ -290,10 +290,10 @@ class User < ActiveRecord::Base
       conditions << ids
     end
     paginate :page => page, :order => 'email',
-      :per_page => per_page, :include => 'enterprise',
+      :per_page => per_page, :include => [:enterprise, :last_logon],
       :conditions => conditions
   end
-  
+
   def full_name
     full_name = ""
     if !self.first_name.nil?
@@ -303,22 +303,22 @@ class User < ActiveRecord::Base
     full_name << self.last_name
     full_name
   end
-  
+
   def short_name
     return self.last_name if self.first_name.nil? or self.first_name.length == 0
     "#{self.first_name} #{self.last_name[0, 1]}"
   end
-  
+
   def new_random_password
     self.salt = calc_salt
     self.password=  self.salt[0,6]
     self.password_confirmation = self.password
   end
-  
+
   def new_otp
     self.one_time_password = APP_CONFIG['otp_expire_seconds'].to_i.from_now.xmlschema + '|' + Digest::SHA1.hexdigest("--#{calc_salt[0,6]}--#{Time.now.to_s}--")
   end
-  
+
   require 'rexml/document'
   def otp_to_xml
     doc = REXML::Document.new
@@ -327,12 +327,12 @@ class User < ActiveRecord::Base
     doc << REXML::XMLDecl.new(REXML::XMLDecl::DEFAULT_VERSION, REXML::XMLDecl::DEFAULT_ENCODING)
     doc.to_s
   end
-  
+
   def otp_expired?
     return false if self.one_time_password.nil?
     return Time.xmlschema(self.one_time_password.split('|').first) < Time.now
   end
-  
+
   # Activates the user in the database.
   def activate
     @activated = true
@@ -345,34 +345,34 @@ class User < ActiveRecord::Base
   def recently_activated?
     @activated
   end
-  
+
   def display_name always_full=false
     return "#{self.short_name}" if (self.hide_contact_info and !always_full) or self.email.nil?
     "#{self.full_name} (#{self.email})"
   end
-  
+
   def reset_password
     new_random_password
     self.activated_at = nil
     make_activation_code
     self.force_change_password = true
   end
-  
+
   def unread_announcements?
     last_announcement = Announcement.find(:first, :order => "created_at DESC")
     return false if last_announcement.nil?
     return true if self.last_message_read.nil?
     self.last_message_read < last_announcement.created_at
   end
-  
+
   def open_polls
     Poll.open_polls(self)
   end
-  
+
   def watch_topic(topic)
     topic_watches.create(:topic => topic)
   end
-  
+
   def can_view_portal?
     portal_enterprise_types.include?(self.enterprise.enterprise_type) && self.enterprise.view_portal
   end
@@ -384,7 +384,7 @@ class User < ActiveRecord::Base
   def can_view_metrics?
     self.sysadmin? || self.mediator? || metrics_enterprise_types.include?(self.enterprise.enterprise_type)
   end
-  
+
   def can_specify_email_in_portal?
     portal_specify_email_enterprise_types.include? self.enterprise.enterprise_type
   end
@@ -396,7 +396,7 @@ class User < ActiveRecord::Base
     self.salt = Digest::SHA1.hexdigest("--#{Time.zone.now.to_s}--#{email}--") if new_record?
     self.crypted_password = encrypt(password)
   end
-    
+
   def password_required?
     crypted_password.blank? || !password.blank?
   end
@@ -415,9 +415,9 @@ class User < ActiveRecord::Base
   end
 
   memoize :mediator?, :prodmgr?, :sysadmin?, :forecaster?
-  
+
   private
-  
+
   def calc_salt
     Digest::SHA1.hexdigest("--#{Time.zone.now.to_s}--#{email}--")
   end
@@ -427,11 +427,11 @@ class User < ActiveRecord::Base
     types = (APP_CONFIG[config_type] || "").gsub(/^\s*\(|\)\s*$/, "").split(/,/) || [""]
     LookupCode.find(:all, :conditions => { :short_name => types, :code_type => 'EnterpriseType'})
   end
-  
+
   def portal_enterprise_types
     fetch_enterprise_types 'show_portal_for_enterprise_types'
   end
-  
+
   def portal_specify_email_enterprise_types
     fetch_enterprise_types 'allow_email_override_for_enterprise_types'
   end
