@@ -90,7 +90,7 @@ class UsersController < ApplicationController
       counter = counter + 1
     end
     flash[:notice] = "Processed #{StringUtils.pluralize(counter, 'imported user')}"
-    redirect_to :action => 'list'
+    redirect_to users_path
   end
 
   def reset_password
@@ -99,7 +99,7 @@ class UsersController < ApplicationController
     if @user.save
       flash[:notice] = "The password for #{@user.login} was reset and an email was sent to that user."
       EmailNotifier.deliver_reset_notification(@user)
-      redirect_to :action => 'show', :id => @user
+      redirect_to user_path(@user)
     else
       setup_session_properties
       render :action => 'show', :id => @user
@@ -141,7 +141,7 @@ class UsersController < ApplicationController
         alloc.save
       end
       flash[:notice] = "User #{@user.login} was successfully created."
-      redirect_to :action => 'list'
+      redirect_to users_path
     else
       setup_session_properties
       render :action => 'new'
