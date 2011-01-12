@@ -57,7 +57,7 @@ class ProjectsController < ApplicationController
   end
 
   def show
-    cookies[:show_pushed_stories] = params[:show_pushed_stories] if params[:show_pushed_stories]
+    cookies[:show_pushed_stories] = { :value => params[:show_pushed_stories], :expires => 6.month.since } if params[:show_pushed_stories]
     if params[:iteration_id]
       @iteration = Iteration.find(params[:iteration_id], :include => [{:stories => {:tasks => :task_estimates}}])
     else
