@@ -1,0 +1,8 @@
+<tr>
+  <td>
+    <%= om_date_time vote.created_at %>
+  </td>
+  <td>
+    <%= link_to "#{vote.idea.id}: #{h vote.idea.title}", {:action => 'show', :id => vote.idea } %>
+  </td>
+</tr>
