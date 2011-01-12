@@ -64,7 +64,7 @@
           </th>
         </tr>
         <% if @user.all_votes.include_idea.present? %>
-            <%= render :partial => 'vote', :collection => @user.all_votes.sort{|v| v.id * -1} %>
+            <%= render :partial => 'vote', :collection => @user.all_votes.sort_by{|v| v.id * -1} %>
         <% else %>
             <td colspan="2">
               No records found
