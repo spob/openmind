@@ -23,7 +23,8 @@ ActionController::Routing::Routes.draw do |map|
                 :collection           => {:search => :get, :auto_complete_for_enterprise_name => :get}
   map.resources :forums, :collection => {:search            => :get,
                                          :rss               => :get, :tag => :get, :metrics => :get, :metrics_graphs => :get,
-                                         :open_count_graphs => :get, :days_pending_graphs => :get, :pending_count_graphs => :get},
+                                         :open_count_graphs => :get, :days_pending_graphs => :get,
+                                         :pending_count_graphs => :get, :oldest_days_pending_graphs => :get},
                 :member              => {:mark_all_as_read => :post}
   map.resources :groups
   map.resources :link_sets, :member => {:update_sort => :post}
