@@ -1,7 +1,7 @@
 <%content_for :head do -%>
-  <%= javascript_include_tag "swfobject" %>             
+  <%= javascript_include_tag "swfobject" %>
 <%end%>
-<%= javascript_include_tag "wz_tooltip.js", :cache => "cache/tooltip" %>   
+<%= javascript_include_tag "wz_tooltip.js", :cache => "cache/tooltip" %>
 
 <h1>Forum Management Metrics</h1>
 <div id="actionButtons2">
@@ -17,3 +17,6 @@
 <br />
 <br />
 <%= @days_pending_graph %>
+<br />
+<br />
+<%= @oldest_days_pending_graph %>
