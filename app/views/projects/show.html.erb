@@ -35,6 +35,11 @@
                    html_options = {:onchange => 'document.search.submit();'} %>Yes&nbsp;&nbsp;
     <%= radio_button_tag "show_pushed_stories", "N", cookies[:show_pushed_stories] == "N",
                    html_options = {:onchange => 'document.search.submit();'} %>No
+    &nbsp;&nbsp;&nbsp;&nbsp;
+    <strong>Show Accepted Stories:</strong> <%= radio_button_tag "show_accepted_stories", "Y", cookies[:show_accepted_stories] != "N",
+                   html_options = {:onchange => 'document.search.submit();'} %>Yes&nbsp;&nbsp;
+    <%= radio_button_tag "show_accepted_stories", "N", cookies[:show_accepted_stories] == "N",
+                   html_options = {:onchange => 'document.search.submit();'} %>No
 <% end %>
 
 <p>Synced at <%= om_date_time(@iteration.last_synced_at) %></p>
@@ -48,7 +53,7 @@
   <tr>
     <%= day_headings @iteration %>
   </tr>
-  <%= render :partial => 'story', :collection => Story.sort_by_status(@iteration.stories.conditional_pushed(cookies[:show_pushed_stories])), :locals => {:iteration => @iteration} %>
+  <%= render :partial => 'story', :collection => Story.sort_by_status(@iteration.stories.conditional_not_accepted(cookies[:show_accepted_stories]).conditional_pushed(cookies[:show_pushed_stories])), :locals => {:iteration => @iteration} %>
 
   <tr>
     <td colspan="<%= @iteration.calc_day_number + 3 %>">&nbsp;</td>

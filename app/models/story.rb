@@ -16,6 +16,10 @@ class Story < ActiveRecord::Base
               lambda { |param| return {} if param.nil? or param == "Y"
               {:conditions => ["stories.status <> ?", "pushed"]}
               }
+  named_scope :conditional_not_accepted,
+              lambda { |param| return {} if param.nil? or param == "Y"
+              {:conditions => ["status != 'accepted'"]}
+              }
 
 
   def self.sort_by_status stories

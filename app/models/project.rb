@@ -18,6 +18,7 @@ class Project < ActiveRecord::Base
 
   def self.list(page, per_page)
     paginate :page     => page, :order => 'name',
+             :include  => [{:latest_iteration => :latest_estimate}],
              :per_page => per_page
   end
 
