@@ -95,7 +95,7 @@ class ForumsController < ApplicationController
 
     ForumMetric.all(:select => 'distinct enterprise_id').collect(& :enterprise).sort_by { |e| e.name }.each do |e|
       data = []
-      e.forum_metrics.each do |m|
+      e.forum_metrics.recent.each do |m|
         data << ScatterValue.new(m.as_of.to_time.to_i, yield(m))
         #        data[90 - (Date.today.jd - m.as_of.jd)] = m.open_count
         max = yield(m) if yield(m) > max
