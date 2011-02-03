@@ -47,7 +47,7 @@ module ProjectsHelper
   def cell_color_by_hours estimate, story=estimate.task.story
     if estimate && ((estimate.total_hours > 0.0 && estimate.remaining_hours != estimate.total_hours) ||
         story.status == "accepted" || estimate.status == "Blocked") && estimate.task.status != "pushed"
-      if estimate.remaining_hours == 0.0
+      if estimate.remaining_hours == 0.0 && estimate.task.status != "pushed"
         bgcolor "#B2EDAF"
       elsif estimate.status == "Blocked"
         bgcolor "#FF7373"
