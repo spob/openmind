@@ -21,9 +21,9 @@ class ForecastsController < ApplicationController
   def create
     if can_forecast?
       params[:forecast][:product_ids] ||= []
-      @forecast                 = Forecast.new(params[:forecast])
-      @forecast.enterprise      = current_user.enterprise
-      @forecast.user            = current_user
+      @forecast                       = Forecast.new(params[:forecast])
+      @forecast.enterprise            = current_user.enterprise
+      @forecast.user                  = current_user
       if @forecast.save
         flash[:notice] = "Opportunity #{@forecast.account_name} was successfully created."
         redirect_to portal_index_path
@@ -60,6 +60,54 @@ class ForecastsController < ApplicationController
     @account_names = PortalUserOrgMap.active.portal_end_customer_orgs.by_email(session[:portal_email]).collect { |uo| uo.portal_org.portal_customers }.flatten.map { |x| x.portal_org }.uniq.find_all { |x| Regexp.new(search_txt, Regexp::IGNORECASE).match(x.org_name) }.sort
     puts @account_names
     render :inline => "<%= auto_complete_result(@account_names, 'org_name') %>"
+  end
+
+
+#    t.integer  "enterprise_id",                        :null => false
+#    t.integer  "user_id",                              :null => false
+#    t.string   "partner_representative", :limit => 50, :null => false
+#    t.string   "account_name",           :limit => 50, :null => false
+#    t.string   "rbm",                    :limit => 50, :null => false
+#    t.string   "account_exec",           :limit => 50, :null => false
+#    t.string   "location",               :limit => 50, :null => false
+#    t.string   "stage",                  :limit => 25, :null => false
+#    t.string   "product",                :limit => 50, :null => false
+#    t.date     "close_at",                             :null => false
+#    t.integer  "amount",                               :null => false
+#    t.string   "comments"
+#    t.datetime "deleted_at"
+#    t.datetime "created_at"
+#    t.datetime "updated_at"
+
+
+  # Generate a csv file of users and enterprises
+  def export
+    response = ""
+    csv      = FasterCSV.new(response, :row_sep => "\r\n")
+    csv     << ["Enterprise", "Account", "Location", "Region", "Partner Rep", "Scribe RBM", "Scribe Account Exec",
+                "Product", "Adapters", "Amount", "Close Date", "Stage", "Stage Rank", "Comments", "Created At", "Updated At"]
+
+    Forecast.export_sort.each do |f|
+      csv << [f.enterprise.name,
+              f.account_name,
+              f.location,
+              f.region.description,
+              f.partner_representative,
+              f.rbm.description,
+              f.account_exec.description,
+              f.product,
+              f.products.present? ? f.products.collect { |p| p.name }.join(", ") : "",
+              f.amount,
+              f.close_at,
+              f.stage,
+              Forecast.stages[f.stage],
+              f.comments,
+              f.created_at,
+              f.updated_at,
+      ]
+    end
+    CsvUtils.setup_request_for_csv headers, request, "forecasts.csv"
+    render :text => response
   end
 
   private
