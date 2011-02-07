@@ -18,6 +18,7 @@ class Forecast < ActiveRecord::Base
 
 
   named_scope :active, :conditions => ["deleted_at is null" ]
+  named_scope :export_sort, :order => "enterprise_id, close_at"
 
   def self.stages
     {

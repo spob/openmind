@@ -35,8 +35,12 @@
           <%= link_to 'New Opportunity', new_forecast_path,
                       html_options = {:class       => "button",
                                       :onmouseover => "Tip('Create a new opportunity')"} %>
+          <% if current_user.can_specify_email_in_portal? %>
+              <%= button_to 'Export', export_forecasts_path, :target => "_blank", :class=> "button" %>
+          <% end %>
         </div>
     <% end %>
+
     <h3>Forecasts</h3>
     <table>
       <tr>
@@ -210,44 +214,44 @@
   <% end %>
 </table>
 <% if false %>
-<h3>Entitlements</h3>
-<table>
-  <tr>
-    <th colspan="3">
-      Entitlements
-    </th>
-    <th colspan="3">
-      Incidents
-    </th>
-  </tr>
-  <tr>
-    <th>
-      Annual Total
-    </th>
-    <th>
-      Consumed
-    </th>
-    <th>
-      Available
-    </th>
-    <th>
-      Total Purchased
-    </th>
-    <th>
-      Consumed
-    </th>
-    <th>
-      Available
-    </th>
-  </tr>
-  <% if @entitlements.present? %>
-      <%= render :partial => 'entitlement', :collection => @entitlements %>
-  <% else %>
-      <td colspan="6">
-        No records found
-      </td>
-  <% end %>
-</table>
+    <h3>Entitlements</h3>
+    <table>
+      <tr>
+        <th colspan="3">
+          Entitlements
+        </th>
+        <th colspan="3">
+          Incidents
+        </th>
+      </tr>
+      <tr>
+        <th>
+          Annual Total
+        </th>
+        <th>
+          Consumed
+        </th>
+        <th>
+          Available
+        </th>
+        <th>
+          Total Purchased
+        </th>
+        <th>
+          Consumed
+        </th>
+        <th>
+          Available
+        </th>
+      </tr>
+      <% if @entitlements.present? %>
+          <%= render :partial => 'entitlement', :collection => @entitlements %>
+      <% else %>
+          <td colspan="6">
+            No records found
+          </td>
+      <% end %>
+    </table>
 <% end %>
 
 <h3>Support Incidents</h3>
