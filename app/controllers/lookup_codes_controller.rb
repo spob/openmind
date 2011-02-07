@@ -1,14 +1,17 @@
 class LookupCodesController < ApplicationController
   before_filter :login_required
   access_control :DEFAULT => 'sysadmin'
-  
+
   def index
     @types = [
       ["Enterprise Type",  "EnterpriseType"],
       ["Forum Group",  "ForumGroup"],
       ["Release Status",  "ReleaseStatus"],
       ["Release Dependency Group",  "ReleaseDependencyGroup"],
-      ["Custom Field",  "CustomField"]
+      ["Custom Field",  "CustomField"],
+      ["Account Exec",  "AccountExec"],
+      ["RBM",  "Rbm"],
+      ["Region",  "Region"]
     ]
     @lookup_codes = LookupCode.list params[:page], current_user.row_limit
   end

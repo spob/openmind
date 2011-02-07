@@ -6,13 +6,16 @@
     <%= h forecast.location %>
   </td>
   <td>
+    <%= h forecast.region.description %>
+  </td>
+  <td>
     <%= h forecast.partner_representative %>
   </td>
   <td>
-    <%= h forecast.rbm %>
+    <%= h forecast.rbm.description %>
   </td>
   <td>
-    <%= h forecast.account_exec %>
+    <%= h forecast.account_exec.description %>
   </td>
   <td>
     <%= h forecast.product %>
