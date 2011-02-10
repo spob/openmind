@@ -15,6 +15,8 @@ class Project < ActiveRecord::Base
 
   named_scope :active, :conditions => {:active => true}
 
+  has_friendly_id :name, :use_slug => true
+
 
   def self.list(page, per_page)
     paginate :page     => page, :order => 'name',
