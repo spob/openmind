@@ -22,7 +22,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :enterprises, :member => { :next => :get, :previous => :get },
   :collection => { :search => :get, :auto_complete_for_enterprise_name => :get }
   map.resources :forecasts,
-  :collection => {:auto_complete_for_forecast_account_name => :get }
+  :collection => {:auto_complete_for_forecast_account_name => :get, :export => :get }
   map.resources :forums, :collection => {:search            => :get,
                                          :rss               => :get, :tag => :get, :metrics => :get, :metrics_graphs => :get,
                                          :open_count_graphs => :get, :days_pending_graphs => :get,
