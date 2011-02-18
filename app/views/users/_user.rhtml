@@ -4,7 +4,12 @@
   <td class="center"><%= h user.available_enterprise_votes %></td>
   <td class="center"><%= h user.available_user_votes %></td>
   <td><%= link_to h(user.enterprise.name), enterprise_path(user.enterprise) %></td>
-  <td class="center"><input type="checkbox" name="active" value="active" <%= "checked" if user.active?  %> disabled ></td>
+  <td class="center">
+        <% if user.active? %>
+        <%= theme_image_tag("icons/16x16/16-check.png", options = {:alt=>"active"}) %>
+        <% else %>
+        &nbsp;<% end %>    
+    </td>
   <td><%= h nvl(om_date_time(user.last_logon_date), "-") %></td>
   <td class="nowrap">
     <%= link_to theme_image_tag("icons/16x16/viewAction.png",
