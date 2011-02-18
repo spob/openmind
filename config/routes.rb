@@ -26,9 +26,11 @@ ActionController::Routing::Routes.draw do |map|
                                          :open_count_graphs    => :get, :days_pending_graphs => :get,
                                          :pending_count_graphs => :get, :oldest_days_pending_graphs => :get},
                 :member              => {:mark_all_as_read => :post}
+  map.resources :forecasts,
+                :collection => {:auto_complete_for_forecast_account_name => :get, :export => :get}
   map.resources :groups
   map.resources :hotfixes
-  map.resources :link_sets, :member => { :update_sort => :post }
+  map.resources :link_sets, :member => {:update_sort => :post}
   map.resources :lookup_codes
   map.resources :merge_ideas
   map.resources :periodic_jobs, :member => {:rerun => :post, :runnow => :post}
@@ -39,15 +41,15 @@ ActionController::Routing::Routes.draw do |map|
                 :member        => {:show_serial_number => :get},
                 :collection    => {:auto_complete_for_user_email => :get}
   map.resources :products
-  map.resources :projects, :member => { :refresh => :post,
-                                        :burndown_chart => :get,
-                                        :velocity_chart => :get,
-                                        :show_chart => :get }
-  map.resources :releases, :member => { :commit => :post },
-  :collection => { :preview => :get, :list => :get, :check_for_updates => :get,
-  :compatibility => :get }
-  map.resources :topics, :collection => { :preview => :get, :search => :get,
-    :tag => :get }, :member => {:rate => :post, :toggle_status => :put}
+  map.resources :projects, :member => {:refresh        => :post,
+                                       :burndown_chart => :get,
+                                       :velocity_chart => :get,
+                                       :show_chart     => :get}
+  map.resources :releases, :member => {:commit => :post},
+                :collection        => {:preview       => :get, :list => :get, :check_for_updates => :get,
+                                       :compatibility => :get}
+  map.resources :topics, :collection => {:preview => :get, :search => :get,
+                                         :tag     => :get}, :member => {:rate => :post, :toggle_status => :put}
   map.resources :users,
                 :member     => {:update_profile => :put, :reset_password => :get},
                 :collection => {:activity         => :get, :edit_profile => :get, :auto_complete_for_user_email => :get, :list => :get,
