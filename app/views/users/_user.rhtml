@@ -8,7 +8,7 @@
         <% if user.active? %>
         <%= theme_image_tag("icons/16x16/16-check.png", options = {:alt=>"active"}) %>
         <% else %>
-        &nbsp;<% end %>    
+        &nbsp;<% end %>
     </td>
   <td><%= h nvl(om_date_time(user.last_logon_date), "-") %></td>
   <td class="nowrap">

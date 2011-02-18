@@ -83,3 +83,8 @@ otp_expire_seconds: 60
 # the ip addresses which can request one time passwords.  These values should
 # be separated by commas and surrounded by quotes, e.g.: (127.0.0.2,127.0.0.3)
 otp_trusted_sites: (127.0.0.1,127.0.0.3)
+
+# Allow the user to manually enter their portal user for the following enterprise types
+# A list of enterprise type lookup codes, separated by commas, within parens, that should be considered GA
+allow_email_override_for_enterprise_types: (Scribe)
+

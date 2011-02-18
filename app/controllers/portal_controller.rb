@@ -23,4 +23,13 @@ class PortalController < ApplicationController
       @users ||= []
     end
   end
+
+  def show_serial_number
+    if !current_user.can_specify_email_in_portal?
+      flash[:error] = "You don't have access to the partner portal"
+      redirect_to home_path
+    else
+      @serial_number = SerialNumber.find(params[:id])
+    end
+  end
 end
