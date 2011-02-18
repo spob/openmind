@@ -37,6 +37,7 @@ class TopicComment < Comment
   named_scope :by_moderator, :joins => {:topic => { :forum => :mediators }},
     :conditions => [ "comments.user_id = forum_mediators.user_id" ]
   named_scope :topic_ids, :select => ["comments.topic_id"]
+  named_scope :endorsed, :conditions => ['endorser_id is not null']
 
   def update_topic_commented_at_on_create
     unless private

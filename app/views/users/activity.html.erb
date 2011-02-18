@@ -88,13 +88,16 @@
             Posts By User
           </th>
           <th>
+            Endorsed Posts
+          </th>
+          <th>
             Last Posted At
           </th>
         </tr>
         <% if @topics.present? %>
             <%= render :partial => 'topic', :collection => @topics %>
         <% else %>
-            <td colspan="5">
+            <td colspan="6">
               No records found
             </td>
         <% end %>
