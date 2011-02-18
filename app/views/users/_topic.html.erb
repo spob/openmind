@@ -3,5 +3,6 @@
   <td><%= link_to h(topic.title), topic_path(topic) %></td>
   <td><%= user_display_name(topic.user) %></td>
   <td><%= topic.comments.by_user(@user).count %></td>
+  <td><%= topic.comments.by_user(@user).endorsed.count %></td>
   <td><%= om_date_time topic.comments.by_user(@user).last.try(:created_at) %></td>
 </tr>

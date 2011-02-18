@@ -1,0 +1,39 @@
+<h2>
+  Details for <%= h @serial_number.serial_number %>
+</h2>
+<table>
+  <tr>
+    <th>
+      Product
+    </th>
+    <th>
+      Release
+    </th>
+    <th>
+      Registered At
+    </th>
+    <th>
+      Un-Registered At
+    </th>
+    <th>
+      Active
+    </th>
+  </tr>
+  <% @serial_number.serial_number_release_maps.sort_by_created_at_desc.each do |map| %>
+      <tr>
+        <td><%= h map.release.product.name %></td>
+        <td><%= h map.release.version %></td>
+        <td><%= om_date_time map.created_at %></td>
+        <td>
+          <%= map.disabled_at ? om_date_time(map.disabled_at) : "&nbsp;" %>
+        </td>
+        <td>
+          <% if map.disabled_at %>
+              &nbsp;
+          <% else %>
+              <%= theme_image_tag("icons/16x16/16-check.png", options = {:alt=>"active"}) %>
+          <% end %>
+        </td>
+      </tr>
+  <% end %>
+</table>

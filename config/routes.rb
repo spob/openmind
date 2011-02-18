@@ -11,21 +11,19 @@ ActionController::Routing::Routes.draw do |map|
   # 'catalog', :action => 'purchase' This route can be invoked with
   # purchase_url(:id => product.id)
 
-  map.resources :allocations, :collection => { :export_import => :get,
-    :export => :post, :import => :post, :toggle_pix => :get }
-  map.resources :announcements, :collection => { :preview => :get, :rss => :get }
-  map.resources :attachments, :member => { :download => :get, :html => :get },
-  :collection => { :search => :get }
-  map.resources :comments, :collection => { :preview => :get },
-  :member => { :endorse => :post, :unendorse => :post, :attach => :get,
-    :privatize => :post, :publicize => :post, :promote_power_user => :post }
-  map.resources :enterprises, :member => { :next => :get, :previous => :get },
-  :collection => { :search => :get, :auto_complete_for_enterprise_name => :get }
-  map.resources :forecasts,
-  :collection => {:auto_complete_for_forecast_account_name => :get, :export => :get }
-  map.resources :forums, :collection => {:search            => :get,
-                                         :rss               => :get, :tag => :get, :metrics => :get, :metrics_graphs => :get,
-                                         :open_count_graphs => :get, :days_pending_graphs => :get,
+  map.resources :allocations, :collection => {:export_import => :get,
+                                              :export        => :post, :import => :post, :toggle_pix => :get}
+  map.resources :announcements, :collection => {:preview => :get, :rss => :get}
+  map.resources :attachments, :member => {:download => :get, :html => :get},
+                :collection           => {:search => :get}
+  map.resources :comments, :collection => {:preview => :get},
+                :member                => {:endorse   => :post, :unendorse => :post, :attach => :get,
+                                           :privatize => :post, :publicize => :post, :promote_power_user => :post}
+  map.resources :enterprises, :member => {:next => :get, :previous => :get},
+                :collection           => {:search => :get, :auto_complete_for_enterprise_name => :get}
+  map.resources :forums, :collection => {:search               => :get,
+                                         :rss                  => :get, :tag => :get, :metrics => :get, :metrics_graphs => :get,
+                                         :open_count_graphs    => :get, :days_pending_graphs => :get,
                                          :pending_count_graphs => :get, :oldest_days_pending_graphs => :get},
                 :member              => {:mark_all_as_read => :post}
   map.resources :groups
@@ -38,6 +36,7 @@ ActionController::Routing::Routes.draw do |map|
                                     :present_survey => :get, :take_survey => :post},
                 :collection     => {:toggle_details => :get, :display_comments => :get}
   map.resources :portal, :only => :index,
+                :member        => {:show_serial_number => :get},
                 :collection    => {:auto_complete_for_user_email => :get}
   map.resources :products
   map.resources :projects, :member => { :refresh => :post,
