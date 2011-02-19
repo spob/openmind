@@ -66,6 +66,14 @@
         <td><%= '%.2f' % @iteration.remaining_hours_for_day_number(d) %></td>
     <% end %>
   </tr>
+  <tr>
+    <td><strong>REMAINING QA HOURS:</strong></td>
+    <td>-</td>
+    <td>-</td>
+    <% (1..@iteration.calc_day_number).each do |d| %>
+        <td><%= '%.2f' % (@iteration.remaining_qa_hours_for_day_number(d) ? @iteration.remaining_qa_hours_for_day_number(d) : 0.0) %></td>
+    <% end %>
+  </tr>
 
   <tr>
     <td><strong>TOTAL HOURS:</strong></td>

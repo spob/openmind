@@ -24,6 +24,11 @@ class Iteration < ActiveRecord::Base
     (@estimate ? @estimate.remaining_hours : 0.0)
   end
 
+  def remaining_qa_hours_for_day_number day_number
+    @estimate = fetch_estimate_by_day_number day_number
+    (@estimate ? @estimate.remaining_qa_hours : 0.0)
+  end
+
   def total_hours_for_day_number day_number
     @estimate = fetch_estimate_by_day_number day_number
     (@estimate ? @estimate.total_hours : 0.0)
@@ -45,6 +50,10 @@ class Iteration < ActiveRecord::Base
 
   def remaining_hours
     self.tasks.sum('remaining_hours')
+  end
+
+  def remaining_qa_hours
+    self.tasks.qa.sum('remaining_qa_hours')
   end
 
   def total_points

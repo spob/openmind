@@ -6,6 +6,7 @@ class Task < ActiveRecord::Base
               :conditions => {:status => "pushed"}
   named_scope :not_pushed,
               :conditions => ["tasks.status <> ?", "pushed"]
+  named_scope :qa, :conditions  => { :qa => true }
   named_scope :conditional_pushed,
               lambda { |param| return {} if param.nil? or param == "Y"
               {:conditions => ["tasks.status <> ?", "pushed"]}
@@ -28,7 +29,7 @@ class Task < ActiveRecord::Base
       puts "#{k}: #{@estimates[k].try(:id)}"
     end
   end
-  
+
   def self.sort_by_status tasks
     tasks.sort_by do |s|
       case s.status
