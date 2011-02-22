@@ -58,8 +58,8 @@ class ProjectsController < ApplicationController
 
   def show
     @project = Project.find(params[:id])
-    cookies[:show_pushed_stories] = { :value => params[:show_pushed_stories], :expires => 6.month.since } if params[:show_pushed_stories]
-    cookies[:show_accepted_stories] = { :value => params[:show_accepted_stories], :expires => 6.month.since } if params[:show_accepted_stories]
+    cookies[:show_pushed_stories] = {:value => params[:show_pushed_stories], :expires => 6.month.since} if params[:show_pushed_stories]
+    cookies[:show_accepted_stories] = {:value => params[:show_accepted_stories], :expires => 6.month.since} if params[:show_accepted_stories]
 
     if params[:iteration_id]
       @iteration = Iteration.find(params[:iteration_id], :include => [{:stories => {:tasks => :task_estimates}}])
@@ -105,7 +105,7 @@ class ProjectsController < ApplicationController
   def burndown_chart
     iteration = Iteration.find(params[:id])
 
-    ideal_hours_data, remaining_hours_data, total_hours_data = calc_hour_chart_data(iteration)
+    ideal_hours_data, remaining_hours_data, remaining_qa_hours_data, total_hours_data = calc_hour_chart_data(iteration)
     velocity_data, delivered_data = calc_velocity_chart_data(iteration)
 
     title = Title.new("Burn Down for #{iteration.iteration_name}")
@@ -119,6 +119,7 @@ class ProjectsController < ApplicationController
     set_legend(chart, "Day #", "Task Hours", "Story Points")
 
     chart.add_element(chart_line(remaining_hours_data, "Remaining Hours", COLORS[0]))
+    chart.add_element(chart_line(remaining_qa_hours_data, "Remaining QA Hours", COLORS[6]))
     chart.add_element(chart_line(total_hours_data, "Total Hours", COLORS[1]))
     chart.add_element(chart_line(ideal_hours_data, "Ideal Hours", COLORS[2]))
     chart.add_element(chart_bar(velocity_data, "Velocity", COLORS[4]))
@@ -190,21 +191,24 @@ class ProjectsController < ApplicationController
 
   def calc_hour_chart_data(iteration)
     remaining_hours_data    = []
+    remaining_qa_hours_data = []
     total_hours_data        = []
     ideal_hours_data        = []
     daily_progress          = iteration.latest_estimate.total_hours/(iteration.project.iteration_length * 5)
 
     remaining_hours_data[0] = iteration.task_estimates.first.total_hours
+    remaining_qa_hours_data[0] = iteration.task_estimates.first.remaining_qa_hours
     total_hours_data[0]     = iteration.task_estimates.first.total_hours
     ideal_hours_data[0]     = iteration.latest_estimate.total_hours
 
     iteration.task_estimates.each do |e|
       day_number                       = iteration.calc_day_number(e.as_of)
       remaining_hours_data[day_number] = e.remaining_hours
+      remaining_qa_hours_data[day_number] = e.remaining_qa_hours
       total_hours_data[day_number]     = e.total_hours
       ideal_hours_data[day_number]     = iteration.latest_estimate.total_hours - (daily_progress * day_number)
     end
-    return ideal_hours_data, remaining_hours_data, total_hours_data
+    return ideal_hours_data, remaining_hours_data, remaining_qa_hours_data, total_hours_data
   end
 
   def set_legend(chart, x_legend, y_legend, y_legend_right=nil)

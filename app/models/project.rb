@@ -127,20 +127,22 @@ class Project < ActiveRecord::Base
               pivotal_id = task.at('id').inner_html.to_i
               @task      = @story.tasks.find_by_pivotal_identifier(pivotal_id)
               completed  = (task.at('complete').inner_html == "true" || @story.status == "accepted" || @story.status == STATUS_PUSHED)
-              total_hours, remaining_hours, description = self.parse_hours(task.at('description').inner_html, completed)
+              total_hours, remaining_hours, description, is_qa = self.parse_hours(task.at('description').inner_html, completed)
               status = calc_status(completed, remaining_hours, total_hours, description)
 
               if @task
                 @task.update_attributes!(:description     => description,
                                          :total_hours     => total_hours,
                                          :remaining_hours => remaining_hours,
-                                         :status          => status)
+                                         :status          => status,
+                                         :qa              => is_qa)
               else
                 @task = @story.tasks.create!(:pivotal_identifier => task.at('id').inner_html,
                                              :description        => description,
                                              :total_hours        => total_hours,
                                              :remaining_hours    => remaining_hours,
-                                             :status             => status)
+                                             :status             => status,
+                                             :qa                 => is_qa)
               end
               update_task_estimate(@task, @iteration)
             end
@@ -219,7 +221,8 @@ class Project < ActiveRecord::Base
     end
 
 #    puts "TOTAL: #{total_hours} REMAINING: #{remaining_hours} #{description}"
-    return total_hours, remaining_hours, description
+    is_qa = /\[qa\]/xi =~ description
+    return total_hours, remaining_hours, description, is_qa
   end
 
   def validate
