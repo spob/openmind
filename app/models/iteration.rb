@@ -53,7 +53,7 @@ class Iteration < ActiveRecord::Base
   end
 
   def remaining_qa_hours
-    self.tasks.qa.sum('remaining_qa_hours')
+    self.tasks.qa.sum('remaining_hours')
   end
 
   def total_points

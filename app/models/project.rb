@@ -128,6 +128,7 @@ class Project < ActiveRecord::Base
               @task      = @story.tasks.find_by_pivotal_identifier(pivotal_id)
               completed  = (task.at('complete').inner_html == "true" || @story.status == "accepted" || @story.status == STATUS_PUSHED)
               total_hours, remaining_hours, description, is_qa = self.parse_hours(task.at('description').inner_html, completed)
+#              puts "#{description}, QA: #{is_qa}" if is_qa
               status = calc_status(completed, remaining_hours, total_hours, description)
 
               if @task
@@ -154,16 +155,18 @@ class Project < ActiveRecord::Base
 
           @estimate = @iteration.task_estimates.find_by_as_of(self.calc_iteration_day)
           if @estimate
-            @estimate.update_attributes!(:total_hours      => self.latest_iteration.total_hours,
-                                         :remaining_hours  => self.latest_iteration.remaining_hours,
-                                         :points_delivered => self.latest_iteration.total_points_delivered,
-                                         :velocity         => self.latest_iteration.total_points)
+            @estimate.update_attributes!(:total_hours        => self.latest_iteration.total_hours,
+                                         :remaining_hours    => self.latest_iteration.remaining_hours,
+                                         :remaining_qa_hours => self.latest_iteration.remaining_qa_hours,
+                                         :points_delivered   => self.latest_iteration.total_points_delivered,
+                                         :velocity           => self.latest_iteration.total_points)
           else
-            @day = @iteration.task_estimates.create!(:as_of            => self.calc_iteration_day,
-                                                     :total_hours      => self.latest_iteration.try(:total_hours),
-                                                     :remaining_hours  => self.latest_iteration.try(:remaining_hours),
-                                                     :points_delivered => self.latest_iteration.try(:total_points_delivered),
-                                                     :velocity         => self.latest_iteration.try(:total_points))
+            @day = @iteration.task_estimates.create!(:as_of              => self.calc_iteration_day,
+                                                     :total_hours        => self.latest_iteration.try(:total_hours),
+                                                     :remaining_hours    => self.latest_iteration.try(:remaining_hours),
+                                                     :remaining_qa_hours => self.latest_iteration.remaining_qa_hours,
+                                                     :points_delivered   => self.latest_iteration.try(:total_points_delivered),
+                                                     :velocity           => self.latest_iteration.try(:total_points))
           end
         end
         @iteration.stories.pushed.each do |s|
@@ -222,7 +225,7 @@ class Project < ActiveRecord::Base
 
 #    puts "TOTAL: #{total_hours} REMAINING: #{remaining_hours} #{description}"
     is_qa = /\[qa\]/xi =~ description
-    return total_hours, remaining_hours, description, is_qa
+    return total_hours, remaining_hours, description, is_qa.present?
   end
 
   def validate
