@@ -51,7 +51,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :topics, :collection => {:preview => :get, :search => :get,
                                          :tag     => :get}, :member => {:rate => :post, :toggle_status => :put}
   map.resources :users,
-                :member     => {:update_profile => :put, :reset_password => :get},
+                :member     => {:update_profile => :put, :reset_password => :post},
                 :collection => {:activity         => :get, :edit_profile => :get, :auto_complete_for_user_email => :get, :list => :get,
                                 :process_imported => :post, :import => :get, :fetch_otp => :post, :export_import => :get,
                                 :lost_password    => :get}
