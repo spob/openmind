@@ -1,33 +1,33 @@
-<%= javascript_include_tag "wz_tooltip.js", :cache => "cache/tooltip" %> 
+<%= javascript_include_tag "wz_tooltip.js", :cache => "cache/tooltip" %>
 
 <%= render :partial => "tab_menu"%>
 <div id="tabBody" style="position:relative; padding-top:15px;">
   <div id="actionButtons2">
     <%= link_to '<',
-      option = { :action => 'previous', :id => @user }, 
+      option = { :action => 'previous', :id => @user },
       html_options = { :class => 'button',
       :onmouseover => "Tip('View the previous user')"} %>
     <%= link_to '>',
-      option = { :action => 'next', :id => @user }, 
+      option = { :action => 'next', :id => @user },
       html_options = {:class => 'button',
       :onmouseover => "Tip('View the next user')"} %>
     <% restrict_to "sysadmin" do %>
-      <%= link_to 'New User', option = {:action => 'new'}, 
+      <%= link_to 'New User', option = {:action => 'new'},
         html_options = { :class=> "button",
         :onmouseover => "Tip('Create a new user')"} %>
-      <%= link_to 'Edit', option = {:action => 'edit', :id => @user}, 
+      <%= link_to 'Edit', option = {:action => 'edit', :id => @user},
         html_options = { :class=> "button",
         :onmouseover => "Tip('Edit this user')"} %>
     <% end %>
     <% restrict_to "sysadmin" do %>
-      <%= link_to 'Reset Password', options = { :action => 'reset_password', :id => @user },
-        html_options = {:method => :post, 
+      <%= link_to 'Reset Password', reset_password_user_path(@user),
+        html_options = {:method => :post,
         :class => "button",
         :onmouseover => "Tip('Reset the password for this user')"      } %>
     <% end %>
   </div>
   <div class="formTitle"><%=theme_image_tag("icons/16x16/user.png", :alt=>"Edit User")%>User Detail</div>
-  
+
   <div class="cssform" style="margin-top:0;">
     <p>
       <label for="email">Email:</label>
@@ -90,7 +90,7 @@
       <% for allocation in @user.allocations %>
         &bull;&nbsp;
         <%= strike_text(
-          "Allocation of quantity #{allocation.quantity} (#{pluralize allocation.votes.size, 'vote'} used) expires on #{om_date_time(allocation.expiration_date)}", 
+          "Allocation of quantity #{allocation.quantity} (#{pluralize allocation.votes.size, 'vote'} used) expires on #{om_date_time(allocation.expiration_date)}",
           allocation.expiration_date <= DateUtils.today_utc) %>
         <br/>
       <% end %>
@@ -100,7 +100,7 @@
       <% for eallocation in @user.enterprise.allocations %>
         &bull;&nbsp;
         <%= strike_text(
-          "Allocation of quantity #{eallocation.quantity} (#{pluralize eallocation.votes.size, 'vote'} used) expires on #{om_date_time(eallocation.expiration_date)}", 
+          "Allocation of quantity #{eallocation.quantity} (#{pluralize eallocation.votes.size, 'vote'} used) expires on #{om_date_time(eallocation.expiration_date)}",
           eallocation.expiration_date <= DateUtils.today_utc) %>
         <br/>
       <% end %>
