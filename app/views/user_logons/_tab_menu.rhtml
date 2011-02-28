@@ -1,19 +1,24 @@
 <div id="tabs">
   <ul class="tabs">
-    <li><%= link_to "Users", option = {:controller => 'users', :action => :list } %></li>
-    <li><%= link_to "Groups", groups_path, 
+    <li><%= link_to "Users", users_path %></li>
+    <li><%= link_to "Groups", groups_path,
       html_options = {
       :onmouseover => "Tip('View user groups')",
       :method => :get } %></li>
-    <li class="selected"><%= link_to "Logon History", 
-      user_logons_path,  
+    <li class="selected"><%= link_to "Logon History",
+      user_logons_path,
       html_options = {
       :onmouseover => "Tip('View logons in the last 90 days')",
       :method => :get } %></li>
     <li><%= link_to "Account Requests#{'(*)' if UserRequest.pending_requests?}",
-      user_requests_path, 
+      user_requests_path,
       html_options = {
       :onmouseover => "Tip('View account requests')",
+      :method => :get } %></li>
+    <li><%= link_to "Activity",
+      activity_users_path,
+      html_options = {
+      :onmouseover => "Tip('View user activity')",
       :method => :get } %></li>
   </ul>
 </div>

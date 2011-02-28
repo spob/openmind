@@ -1,0 +1,124 @@
+<% content_for :head do -%>
+    <%= javascript_include_tag "tablecloth" %>
+<% end %>
+<% content_for :bodyTag do -%>
+    <%= set_focus_to_id 'user_email' -%>
+<% end %>
+
+<div id="tabs">
+  <ul class="tabs">
+    <li><%= link_to "Users", users_path %></li>
+    <li><%= link_to "Groups",
+                    groups_path,
+                    html_options = {
+                            :onmouseover => "Tip('View user groups')",
+                            :method      => :get} %></li>
+    <li><%= link_to "Logon History",
+                    user_logons_path,
+                    html_options = {
+                            :onmouseover => "Tip('View logons in the last 90 days')",
+                            :method      => :get} %></li>
+    <li><%= link_to "Account Requests#{'(*)' if UserRequest.pending_requests?}",
+                    user_requests_path,
+                    html_options = {
+                            :onmouseover => "Tip('View account requests')",
+                            :method      => :get} %></li>
+    <li class="selected"><%= link_to "Activity",
+                                     activity_users_path,
+                                     html_options = {
+                                             :onmouseover => "Tip('View user activity')",
+                                             :method      => :get} %></li>
+  </ul>
+</div>
+<div id="menuline"></div>
+
+<div id="tabBody" style="position:relative; padding-top:15px;">
+
+  <h1>User Activity</h1>
+
+  <% form_for :user, :url => activity_users_path, :html => {:class => 'cssform searchform'} do |f| %>
+      <p>
+        <label for="search">
+          View for User Email:
+        </label>
+        <%= text_field_with_auto_complete :user, :email, {}, {:method => :get} %>
+      </p>
+
+      <p>
+        <label>
+        </label>
+        <%= submit_tag 'View', :name => nil, :class=> "button" %>
+      </p>
+  <% end %>
+
+  <% if @user %>
+
+      <h3>Votes</h3>
+      <table>
+        <tr>
+          <th>
+            Voted On
+          </th>
+          <th>
+            Idea
+          </th>
+        </tr>
+        <% if @user.all_votes.include_idea.present? %>
+            <%= render :partial => 'vote', :collection => @user.all_votes.sort_by{|v| v.id * -1} %>
+        <% else %>
+            <td colspan="2">
+              No records found
+            </td>
+        <% end %>
+      </table>
+
+      <h3>Forum Activity</h3>
+      <table>
+        <tr>
+          <th>
+            Forum
+          </th>
+          <th>
+            Topic
+          </th>
+          <th>
+            Author
+          </th>
+          <th>
+            Posts By User
+          </th>
+          <th>
+            Endorsed Posts
+          </th>
+          <th>
+            Last Posted At
+          </th>
+        </tr>
+        <% if @topics.present? %>
+            <%= render :partial => 'topic', :collection => @topics %>
+        <% else %>
+            <td colspan="6">
+              No records found
+            </td>
+        <% end %>
+      </table>
+
+      <h3>User Logons</h3>
+      <table>
+        <tr>
+          <th>
+            Logged On At
+          </th>
+        </tr>
+        <% if @user.user_logons.in_last_year.present? %>
+            <%= render :partial => 'logon', :collection => @user.user_logons.in_last_year %>
+        <% else %>
+            <td colspan="1">
+              No records found
+            </td>
+        <% end %>
+      </table>
+  <% elsif session[:activity_email] %>
+  No such user
+  <% end %>
+</div>

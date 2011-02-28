@@ -79,6 +79,7 @@ class ForumsController < ApplicationController
     @open_count_graph = open_flash_chart_object(800, 450, open_count_graphs_forums_path)
     @pending_count_graph = open_flash_chart_object(800,450, pending_count_graphs_forums_path)
     @days_pending_graph = open_flash_chart_object(800, 450, days_pending_graphs_forums_path)
+    @oldest_days_pending_graph = open_flash_chart_object(800, 450, oldest_days_pending_graphs_forums_path)
   end
 
   def calc_metric_graph chart_title, y_legend
@@ -94,7 +95,7 @@ class ForumsController < ApplicationController
 
     ForumMetric.all(:select => 'distinct enterprise_id').collect(& :enterprise).sort_by { |e| e.name }.each do |e|
       data = []
-      e.forum_metrics.each do |m|
+      e.forum_metrics.recent.each do |m|
         data << ScatterValue.new(m.as_of.to_time.to_i, yield(m))
         #        data[90 - (Date.today.jd - m.as_of.jd)] = m.open_count
         max = yield(m) if yield(m) > max
@@ -154,6 +155,10 @@ class ForumsController < ApplicationController
 
   def days_pending_graphs
     render :text => calc_metric_graph("Average Days Pending Response", "Days"){|i| i.days_pending }, :layout => false
+  end
+
+  def oldest_days_pending_graphs
+    render :text => calc_metric_graph("Oldest Days Pending Response", "Days"){|i| i.oldest_pending_days || 0.0 }, :layout => false
   end
 
   def create
@@ -335,8 +340,6 @@ class ForumsController < ApplicationController
       end
     end
   end
-
-  private
 
   def fetch_forum
     @forum = Forum.find(params[:id])

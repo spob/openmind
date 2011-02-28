@@ -1,6 +1,6 @@
-<%= javascript_include_tag "wz_tooltip.js", :cache => "cache/tooltip" %> 
-<div id="actionButtons2">  
-  <%= link_to 'List Users', option = {:action => 'list'}, 
+<%= javascript_include_tag "wz_tooltip.js", :cache => "cache/tooltip" %>
+<div id="actionButtons2">
+  <%= link_to 'List Users', option = {:action => 'list'},
           html_options = { :class=> "button",
           :onmouseover => "Tip('Return to List Users')"} %>
 </div>
@@ -15,8 +15,8 @@
     </ul>
     Correct these errors and reimport the file.
   <% end %>
-  
-  
+
+
   <% unless @users.empty? %>
     Users processed:
     <p/>
@@ -35,27 +35,27 @@
       <% end %>
     </ul>
   <% end %>
-    
+
   <br/>
-  
+
   <div id="show_images" style="<%= pix_button_display_style "SHOW" %>">
     &nbsp;&nbsp;
     <%= link_to_remote("Show Images",
             {:url => { :action => "toggle_pix" }},
             {:class => "button"} ) %>
   </div>
-  
+
   <div id="hide_images" style="<%= pix_button_display_style "HIDE" %>">
     &nbsp;&nbsp;
     <%= link_to_remote("Hide Images",
             {:url => { :action => "toggle_pix" }},
             {:class => "button"} ) %>
   </div>
-  
+
   <ol>
     <li>
-      Export the spreadsheet template. 
-      <%= button_to 'Export', options = { :action => "export" }, 
+      Export the spreadsheet template.
+      <%= button_to 'Export', options = { :action => "export" },
               html_options = {:class=> "button", :method => :post }%>
     </li>
     <li>
@@ -68,9 +68,9 @@
       <div ID="image2" style="<%= pix_display_style %>">
         <%= theme_image_tag("general/users/export.png", :border=>0) %>
       </div>
-      Edit the contents of the file. Each new row will create a new user. 
-      <i>NOTE: be very careful about the values you specify in the enterprise column. 
-        If you enter an enterprise that is not recognized by the system, the bulk load 
+      Edit the contents of the file. Each new row will create a new user.
+      <i>NOTE: be very careful about the values you specify in the enterprise column.
+        If you enter an enterprise that is not recognized by the system, the bulk load
       will result in the creation of a new enterprise. Be sure this is what you intend.</i>
     </li>
     <li>
@@ -78,16 +78,16 @@
     </li>
     <li>
       Import the saved file.
-      <% form_for :dump, :url=> {:action => "import"},
-              :html => { :multipart => true } do |f| -%>
+      <% form_for :dump, :url=> import_users_path,
+              :html => { :multipart => true, :method => :post } do |f| -%>
         Select a CSV File: <%= f.file_field :file -%>&nbsp;&nbsp;&nbsp;<%= submit_tag 'Import', html_options = {:class=> "button", :disable_with => "Please wait..."}-%>
       <% end -%>
     </li>
     <li>
-      When you are ready to notify users that their new accounts have been created, 
+      When you are ready to notify users that their new accounts have been created,
       select "Process Imported Users".
-      <%= button_to 'Process Imported Users', option = {:action => 'process_imported'}, 
-            html_options = {:class=> "button", 
+      <%= button_to 'Process Imported Users', process_imported_users_path,
+            html_options = {:class=> "button",
             :onmouseover => "Tip('Process user records that were imported into the users table')",
             :method => :post } %>
     </li>

@@ -17,22 +17,27 @@
 
 class TopicComment < Comment
 #  acts_as_solr :fields => [:body, {:created_at => :date}]
-  
+
   define_index do
     indexes body
     has created_at, updated_at
     set_property :delta => true
   end
-  
+
   belongs_to :topic, :counter_cache => true
   belongs_to :endorser, :class_name => 'User'
   before_create :update_topic_commented_at_on_create
+  before_create :notify_immediate_watchers
   before_update :update_topic_commented_at_on_update
-  
+
   validates_presence_of :topic_id
-  
+
+  named_scope :by_user,
+    lambda{|user|{:conditions => ['comments.user_id = ?', user.id]}}
   named_scope :by_moderator, :joins => {:topic => { :forum => :mediators }},
     :conditions => [ "comments.user_id = forum_mediators.user_id" ]
+  named_scope :topic_ids, :select => ["comments.topic_id"]
+  named_scope :endorsed, :conditions => ['endorser_id is not null']
 
   def update_topic_commented_at_on_create
     unless private
@@ -48,7 +53,7 @@ class TopicComment < Comment
   def can_see? current_user
     !self.private or topic.forum.mediators.include? current_user
   end
-  
+
   def can_edit? current_user, role_override=false
     return true if role_override
     (topic.last_comment?(self) and user.id == current_user.id) or
@@ -66,7 +71,7 @@ class TopicComment < Comment
   def can_unendorse? current_user
     !self.endorser.nil? and topic.forum.mediators.include? current_user
   end
-  
+
   def self.top_users forum=nil
     sql = %Q{
         select u.id, u.first_name, u.last_name, u.email, u.hide_contact_info, count(*)
@@ -83,12 +88,19 @@ class TopicComment < Comment
     User.find(:all, :conditions => ["id in (?)",
         User.find_by_sql([sql, forum_id, forum_id]).collect(&:id)]).sort_by{|u| u.topic_comments.size * -1}
   end
-  
+
   def rss_headline
     "Forum: #{topic.forum.name}, Topic: #{topic.title}"
   end
-  
+
   def rss_body
     "<i>#{user.display_name} wrote:</i><br/>#{body}"
+  end
+
+  private
+
+  def notify_immediate_watchers
+      RunOncePeriodicJob.create(
+      	:job => "Topic.notify_immediate_watchers(#{self.topic.id})")
   end
 end

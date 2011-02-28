@@ -14,11 +14,13 @@
 #
 
 class Vote < ActiveRecord::Base
-  
+
   belongs_to :idea
   belongs_to :allocation
   belongs_to :user
-  
+
+  named_scope :include_idea, :include => [:idea]
+
   validates_presence_of :user_id, :allocation_id, :idea_id
 
   def self.list(page, per_page, enterprise = nil, user = nil)
@@ -38,10 +40,10 @@ class Vote < ActiveRecord::Base
       conditions[1] = enterprise.id
       conditions[2] = user.id
     end
-    
-    paginate :page => page, 
+
+    paginate :page => page,
       :conditions => conditions,
-      :order => 'votes.created_at DESC', 
+      :order => 'votes.created_at DESC',
       :per_page => per_page,
       :include => :idea
   end
@@ -50,7 +52,7 @@ class Vote < ActiveRecord::Base
     true
   end
 
-  # The number of seconds until a vote can no longer be rescinded  
+  # The number of seconds until a vote can no longer be rescinded
   def self.rescind_seconds
     APP_CONFIG['rescind_minutes'].to_i * 60
   end

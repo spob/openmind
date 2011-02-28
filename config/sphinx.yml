@@ -4,3 +4,11 @@ development:
   min_infix_len: 1
 #  bin_path: 'c:/sphinx/bin'
   bin_path: '/usr/local/bin'
+production:
+  enable_star: 1
+  min_infix_len: 1
+  max_matches: 5000
+  morphology: stem_en
+  html_strip: 1
+#  bin_path: 'c:/sphinx/bin'
+  bin_path: '/usr/local/bin'

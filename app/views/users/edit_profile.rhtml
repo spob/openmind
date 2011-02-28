@@ -2,23 +2,24 @@
   <%= set_focus_to_id 'user_first_name' %>
 <%end%>
 
-<%= javascript_include_tag "wz_tooltip.js", :cache => "cache/tooltip" %> 
+<%= javascript_include_tag "wz_tooltip.js", :cache => "cache/tooltip" %>
 
 <%= error_messages_for :user %>
-<% form_for :user, :url => { :action => "update_profile", :id => @user } do |f| -%>
+<% form_for :user, :url => update_profile_user_path(@user),
+              :html       => {:method => :put} do |f| -%>
   <div class="formTitle">
-    <%= theme_image_tag("icons/16x16/userEdit.png", 
+    <%= theme_image_tag("icons/16x16/userEdit.png",
       options = {:alt=>"Update Profile"}) %>Update Profile
   </div>
   <div class="cssform widerLabel">
-    <p>  
+    <p>
       <label for="Email">Email:</label><%= h @user.email %>
     </p>
-    <p>  
+    <p>
       <label for="first_name">First Name:</label>
       <%= f.text_field :first_name %>
     </p>
-    <p>  
+    <p>
       <label for="last_name">Last Name:</label>
       <%= f.text_field :last_name %>
     </p>
@@ -26,11 +27,11 @@
       <label for="Open Id">Open Id:</label>
       <%= f.text_field :identity_url %>
     </p>
-    <p>  
+    <p>
       <label for="time_zone">User Time Zone:</label>
       <%= f.time_zone_select :time_zone, ActiveSupport::TimeZone.us_zones %>
     </p>
-    <p> 
+    <p>
       <label for="row_limit">Rows to Display:</label>
       <%= f.select :row_limit, User.row_limit_options %>
     </p>
@@ -41,12 +42,18 @@
         :onmouseover => "Tip('Don't show full name or email address to other users')"}, '1', '0') %>
     </p>
     <p>
+      <label for="hide_contact_info">Topic Notifications As Digest:</label>
+      <%= f.check_box(:topic_notification_digests,
+        html_options = {
+        :onmouseover => "Tip('By checking this option, you will receive at most one email a day regarding new topic comments for watched topics. Unchecking means you will receive email notifications immediately as comments as added to watched topics')"}, '1', '0') %>
+    </p>
+    <p>
       <label for="watch_on_vote">Watch Ideas I Vote For:</label>
       <%= f.check_box(:watch_on_vote,
         html_options = {
         :onmouseover => "Tip('Watch ideas for which you vote')"}, '1', '0') %>
     </p>
-    <p>  
+    <p>
       <label></label>
     <%= submit_tag 'Submit', html_options = {:class=> "button", :disable_with => "Please wait..."} %>  </p>
   </div>

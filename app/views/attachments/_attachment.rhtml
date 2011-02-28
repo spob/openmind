@@ -7,7 +7,12 @@
       <img src="<%= download_attachment_path(attachment.thumbnail) %>"/>
     <% end %>
   </td>
-  <td class="center"><input type="checkbox" name="public" disabled="true" value="true" <%= "checked" if attachment.public?  %></td>
+  <td class="center">
+        <% if attachment.public? %>
+        <%= theme_image_tag("icons/16x16/16-check.png", options = {:alt=>"active"}) %>
+        <% else %>
+        &nbsp;<% end %>
+  </td>
   <td><%= truncate(attachment.alias, :length => 12) %></td>
   <td><%= number_to_human_size attachment.size %></td>
   <td><%= truncate(attachment.content_type, :length => 20) %></td>
@@ -20,12 +25,12 @@
       html_options = {
       :onmouseover => "Tip('View details for this attachment')"}
   %>
-    <%= link_to theme_image_tag("icons/16x16/editAction.png", :alt=>"edit", :title=> "edit"), 
+    <%= link_to theme_image_tag("icons/16x16/editAction.png", :alt=>"edit", :title=> "edit"),
       edit_attachment_path(attachment),
       html_options = {
       :onmouseover => "Tip('Edit this attachment')"}
   %>
-    
+
     <%= link_to(
       theme_image_tag("icons/16x16/deleteAction.png", :alt=>"delete", :title=> "delete"),
       attachment_path(attachment),

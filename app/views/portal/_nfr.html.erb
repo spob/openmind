@@ -1,22 +1,22 @@
+<% serial_number = SerialNumber.find_by_serial_number(nfr.serial_number) %>
 <tr>
-    <td>
-        <%= strike_text(h(nfr.product), nvl(nfr.expires_at, 1.days.since) < Time.now) %>
-    </td>
-    <td>
-        <%= strike_text(h(nfr.serial_number), nvl(nfr.expires_at, 1.days.since) < Time.now) %>
-    </td>
-    <td>
-        <%= strike_text(nvl(om_date(nfr.expires_at), "&nbsp;"), nvl(nfr.expires_at, 1.days.since) < Time.now) %>
-    </td>
-    <td>
-        <%= strike_text(nvl(h(nfr.registered_to), "&nbsp;"), nvl(nfr.expires_at, 1.days.since) < Time.now) %>
-    </td>
-    <td width="25%">
-        <% serial_number = SerialNumber.find_by_serial_number(nfr.serial_number) %>
-        <% if serial_number.nil? || serial_number.active_releases.empty? %>
+  <td>
+    <%= strike_text(h(nfr.product), nvl(nfr.expires_at, 1.days.since) < Date.current) %>
+  </td>
+  <td>
+    <%= serial_number_link(strike_text(h(nfr.serial_number), nvl(nfr.expires_at, 1.days.since) < Date.current), serial_number) %>
+  </td>
+  <td>
+    <%= strike_text(nvl(om_date(nfr.expires_at), "&nbsp;"), nvl(nfr.expires_at, 1.days.since) < Date.current) %>
+  </td>
+  <td>
+    <%= strike_text(nvl(h(nfr.registered_to), "&nbsp;"), nvl(nfr.expires_at, 1.days.since) < Date.current) %>
+  </td>
+  <td width="25%">
+    <% if serial_number.nil? || serial_number.active_releases.empty? %>
         &nbsp;
-		<% else %>
-        <%= serial_number.active_releases.collect{ |r| link_to("#{h(r.product.name)} #{h(r.version) }", release_path(r)) }.join(", ") %>
-        <% end %>
-    </td>
+    <% else %>
+        <%= serial_number.active_releases.collect { |r| link_to("#{h(r.product.name)} #{h(r.version) }", release_path(r)) }.join(", ") %>
+    <% end %>
+  </td>
 </tr>

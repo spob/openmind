@@ -11,11 +11,14 @@
 
 class UserLogon < ActiveRecord::Base
   belongs_to :user
-    
+
+  named_scope :in_last_year, :conditions => ['created_at > ?', 1.year.ago.to_s(:db)]
+
   def self.list(page, per_page)
-    paginate :page => page, 
+    paginate :page => page,
+        :include => [:user],
       :conditions => ['created_at > ?', (Time.zone.now - 60*60*24*90).to_s(:db)],
-      :order => 'created_at desc', 
+      :order => 'created_at desc',
       :per_page => per_page
   end
 end
