@@ -87,7 +87,7 @@
   <tr>
     <td><strong>COMPLETED HOURS:</strong></td>
     <td>-</td>
-    <td><%= '%.2f' % @iteration.total_hours %></td>
+    <td>-</td>
     <% (1..@iteration.calc_day_number).each do |d| %>
         <td><%= '%.2f' % (@iteration.total_hours_for_day_number(d) - @iteration.remaining_hours_for_day_number(d)) %></td>
     <% end %>
