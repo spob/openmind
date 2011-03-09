@@ -1,7 +1,7 @@
 # Be sure to restart your web server when you modify this file.
 
 # Uncomment below to force Rails into production mode when you don't control
-# web/app server and can't set it the proper way 
+# web/app server and can't set it the proper way
 ENV['RAILS_ENV'] ||= 'production'
 
 # Specifies gem version of Rails to use when vendor/rails is not present
@@ -104,7 +104,7 @@ Rails::Initializer.run do |config|
   # end
 
   # needed for pdfkit
-  config.middleware.use "PDFKit::Middleware", :print_media_type => true  
+  config.middleware.use "PDFKit::Middleware", :print_media_type => true
 
 
   # set our session key to distinguish it from others
@@ -153,4 +153,4 @@ Mime::SET << Mime::CSV
 
 WhiteListHelper.tags.merge %w(u table tbody tr td iframe)
 WhiteListHelper.attributes.merge %w(id class style src target align frameborder marginheight marginwidth)
- 
+
