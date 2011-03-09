@@ -81,52 +81,36 @@ class Project < ActiveRecord::Base
     end
 
     if response.code == "200"
-      doc = Hpricot(response.body)
-      numbered_stories = {}
-      unnumbered_stories = {}
-      (doc/"story").each do |story|
-        id = story.at('id').try(:inner_html)
-        name = story.at('name').try(:inner_html)
-        type = story.at('story_type').try(:inner_html)
-        if type == 'feature'
-          if name =~ /^S\d+/ix
-            num = /\d+/x.match(name).to_s.to_i
-            numbered_stories[num] = name
-          else
-            # un-numbered story
-            unnumbered_stories[id] = name
-          end
+      walk_stories_to_renumber Hpricot(response.body), 'feature'
+      walk_stories_to_renumber Hpricot(response.body), 'chore'
+      ""
+    else
+      puts "Response Code: #{response.message} #{response.code}"
+    end
+  end
+
+  def walk_stories_to_renumber doc, story_type
+    numbered_stories = {}
+    unnumbered_stories = {}
+    (doc/"story").each do |story|
+      id = story.at('id').try(:inner_html)
+      name = story.at('name').try(:inner_html)
+      stype = story.at('story_type').try(:inner_html)
+      if stype == story_type
+        if (name =~ /^#{story_prefix(story_type)}\d+/ix)
+          num = /\d+/x.match(name).to_s.to_i
+          numbered_stories[num] = name
+        else
+          # un-numbered story
+          unnumbered_stories[id] = name
         end
       end
-      puts "Unnumbered stories:"
-      next_story = next_story_number numbered_stories
-      unnumbered_stories.each do |e|
-        update_story_name e[0], "S#{next_story}: #{e[1]}"
-        next_story = next_story_number(numbered_stories, next_story + 1)
-      end
-    else
-      puts "Response Code: #{response.code}"
     end
-    numbered_stories.keys.sort
-  end
-
-  def update_story_name story_id, name
-    body = "<story><name>#{name}</name></story>"
-    resource_uri = URI.parse("http://www.pivotaltracker.com/services/v3/projects/#{pivotal_identifier}/stories/#{story_id}")
-    http = Net::HTTP.new(resource_uri.host, resource_uri.port)
-    req = Net::HTTP::Put.new(resource_uri.path, {'Content-type' => 'application/xml', 'X-TrackerToken' => APP_CONFIG['pivotal_api_token']})
-    http.use_ssl = false
-    req.body = body
-    response = http.request(req)
-    puts "RESPONSE: #{response.code} #{response.body} #{response.message}" unless response.code == "200"
-    response.code == "200"
-  end
-
-  def next_story_number stories, start_at=1
-    for x in start_at..3000 do
-      return x unless stories.has_key? x
+    next_story = next_story_number numbered_stories
+    unnumbered_stories.each do |e|
+      update_story_name e[0], "#{story_prefix(story_type)}#{next_story}: #{e[1]}"
+      next_story = next_story_number(numbered_stories, next_story + 1)
     end
-    0
   end
 
 
@@ -244,6 +228,37 @@ class Project < ActiveRecord::Base
   end
 
   protected
+
+  def story_prefix story_type
+    puts story_type
+    case story_type
+      when 'feature' then
+        'S'
+      when 'chore' then
+        'C'
+      else
+        'X'
+    end
+  end
+
+  def update_story_name story_id, name
+    body = "<story><name>#{name}</name></story>"
+    resource_uri = URI.parse("http://www.pivotaltracker.com/services/v3/projects/#{pivotal_identifier}/stories/#{story_id}")
+    http = Net::HTTP.new(resource_uri.host, resource_uri.port)
+    req = Net::HTTP::Put.new(resource_uri.path, {'Content-type' => 'application/xml', 'X-TrackerToken' => APP_CONFIG['pivotal_api_token']})
+    http.use_ssl = false
+    req.body = body
+    response = http.request(req)
+    logger.info "RESPONSE: #{response.code} #{response.body} #{response.message}" unless response.code == "200"
+    response.code == "200"
+  end
+
+  def next_story_number stories, start_at=1
+    for x in start_at..3000 do
+      return x unless stories.has_key? x
+    end
+    0
+  end
 
   def calc_status(complete, remaining_hours, total_hours, description)
     status = "Not Started"
