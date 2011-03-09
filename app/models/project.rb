@@ -230,7 +230,6 @@ class Project < ActiveRecord::Base
   protected
 
   def story_prefix story_type
-    puts story_type
     case story_type
       when 'feature' then
         'S'
