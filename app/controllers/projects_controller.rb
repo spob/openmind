@@ -1,9 +1,9 @@
 class ProjectsController < ApplicationController
   COLORS = %w( #CF2626 #5767AF #336600 #356AA0 #CF5ACD #CF750C #D01FC3 #FF7200 #8F1A1A #ADD700 #57AF9D #C3CF5A #456F4F #C79810 )
   before_filter :login_required
-  before_filter :fetch_project, :only => [:destroy, :edit, :update, :show, :show_chart]
+  before_filter :fetch_project, :only => [:destroy, :edit, :update, :show, :show_chart, :renumber]
 
-  verify :method      => :post, :only => [:create, :refresh],
+  verify :method      => :post, :only => [:create, :refresh, :renumber],
          :redirect_to => {:action => :index}
   verify :method      => :put, :only => [:update],
          :redirect_to => {:action => :index}
@@ -72,6 +72,16 @@ class ProjectsController < ApplicationController
 
   def show_chart
     show
+  end
+
+  def renumber
+    msg = @project.renumber
+    if msg == ""
+      flash[:notice] = "Project #{@project.name} was successfully renumbered"
+    else
+      flash[:error] = "Project #{@project.name} renumber failed: #{msg}"
+    end
+    redirect_to (params[:from] == "show" ? project_path(@project) : projects_path)
   end
 
   def refresh
