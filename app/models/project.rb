@@ -204,7 +204,7 @@ class Project < ActiveRecord::Base
             @day = @iteration.task_estimates.create!(:as_of => self.calc_iteration_day,
                                                      :total_hours => self.latest_iteration.try(:total_hours),
                                                      :remaining_hours => self.latest_iteration.try(:remaining_hours),
-                                                     :remaining_qa_hours => self.latest_iteration.remaining_qa_hours,
+                                                     :remaining_qa_hours => self.latest_iteration.try(:remaining_qa_hours),
                                                      :points_delivered => self.latest_iteration.try(:total_points_delivered),
                                                      :velocity => self.latest_iteration.try(:total_points))
           end
