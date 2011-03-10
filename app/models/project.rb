@@ -129,9 +129,10 @@ class Project < ActiveRecord::Base
 #        iteration_number = iteration_number - 1 if iteration_number > 1 && Project.calculate_project_date < start_on
         @iteration = self.iterations.by_iteration_number(iteration_number).lock.first
 
+#        puts "#{iteration.at('finish').inner_html} -- #{Date.parse(iteration.at('finish').inner_html)}"
         if @iteration
           @iteration.update_attributes!(:start_on => Date.parse(iteration.at('start').inner_html)+1,
-                                        :end_on => iteration.at('finish').inner_html)
+                                        :end_on => Date.parse(iteration.at('finish').inner_html))
           @iteration.stories.each { |s| s.update_attributes!(:status => STATUS_PUSHED, :points => 0) }
         else
           @iteration = self.iterations.create!(:iteration_number => iteration_number,
