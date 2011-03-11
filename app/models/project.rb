@@ -38,7 +38,7 @@ class Project < ActiveRecord::Base
 
   def self.refresh_all
     Project.active.each do |project|
-      project.refresh
+#      project.refresh
       project.save
     end
   end
