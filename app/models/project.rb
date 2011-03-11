@@ -37,7 +37,10 @@ class Project < ActiveRecord::Base
   end
 
   def self.refresh_all
-    Project.active.each { |project| project.refresh }
+    Project.active.each do |project|
+      project.refresh
+      project.save
+    end
   end
 
   def refresh
@@ -53,10 +56,15 @@ class Project < ActiveRecord::Base
 
       self.name = doc.at('name').innerHTML
       self.iteration_length = doc.at('iteration_length').innerHTML
-      fetch_current_iteration unless self.new_record?
+      unless self.new_record?
+        fetch_current_iteration
+
+        fetch_notes
+      end
     else
       "#{pivotal_identifier} not found in pivotal tracker"
     end
+
   end
 
   def update_task_estimate task, iteration
@@ -74,6 +82,54 @@ class Project < ActiveRecord::Base
     end
   end
 
+  def fetch_notes
+    resource_uri = URI.parse("http://www.pivotaltracker.com/services/v3/projects/#{pivotal_identifier}/stories")
+    response = Net::HTTP.start(resource_uri.host, resource_uri.port) do |http|
+      http.get(resource_uri.path, {'X-TrackerToken' => APP_CONFIG['pivotal_api_token']})
+    end
+
+    if response.code == "200"
+      max_pivotal_id = StoryNote.maximum('pivotal_identifier',
+                                         :joins => {:story => {:iteration => :project}},
+                                         :conditions => {:story => {:iterations => {:project_id => 95188}}}) || 0
+      doc = Hpricot(response.body)
+      (doc/"story").each do |story|
+        story_id = story.at('id').try(:inner_html)
+        name = story.at('name').try(:inner_html)
+        story_type = story.at('story_type').try(:inner_html)
+        if story_type == 'bug'
+          if (name =~ /^D\d+/ix)
+            story_number = /\d+/x.match(name).to_s.to_i
+            notes = story.at('notes')
+            if notes
+              story = Story.find_by_pivotal_identifier(story_id)
+              if story
+                puts "#{story_id} Defect # #{story_number}: #{name}"
+                (notes/"note").each do |note|
+                  note_id = note.at('id').inner_html.to_i
+                  author = note.at('author').inner_html
+                  comment = note.at('text').inner_html
+                  noted_at = Time.parse(note.at('noted_at').inner_html)
+                  if note_id > max_pivotal_id
+                    unless StoryNote.find_by_pivotal_identifier(note_id)
+                      self.update_attribute(:max_note_id, note_id)
+                      puts "#{note_id} #{noted_at} #{author} wrote: #{comment}"
+                      story.notes.create!(:pivotal_identifier => note_id, :noted_at => noted_at,
+                                          :author => author, :comment => comment, :defect_id => story_number)
+                    end
+                  end
+                end
+              end
+            end
+          end
+        end
+      end
+      ""
+    else
+      "Response Code: #{response.message} #{response.code}"
+    end
+  end
+
   def renumber
     resource_uri = URI.parse("http://www.pivotaltracker.com/services/v3/projects/#{pivotal_identifier}/stories")
     response = Net::HTTP.start(resource_uri.host, resource_uri.port) do |http|
@@ -85,7 +141,7 @@ class Project < ActiveRecord::Base
       walk_stories_to_renumber Hpricot(response.body), 'chore'
       ""
     else
-      puts "Response Code: #{response.message} #{response.code}"
+      "Response Code: #{response.message} #{response.code}"
     end
   end
 
@@ -304,4 +360,5 @@ class Project < ActiveRecord::Base
 
     errors.add(:pivotal_identifier, error_msg) unless error_msg.nil?
   end
+
 end
