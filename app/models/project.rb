@@ -89,9 +89,6 @@ class Project < ActiveRecord::Base
     end
 
     if response.code == "200"
-      max_pivotal_id = StoryNote.maximum('pivotal_identifier',
-                                         :joins => {:story => {:iteration => :project}},
-                                         :conditions => {:story => {:iterations => {:project_id => 95188}}}) || 0
       doc = Hpricot(response.body)
       (doc/"story").each do |story|
         story_id = story.at('id').try(:inner_html)
@@ -110,7 +107,7 @@ class Project < ActiveRecord::Base
                   author = note.at('author').inner_html
                   comment = note.at('text').inner_html
                   noted_at = Time.parse(note.at('noted_at').inner_html)
-                  if note_id > max_pivotal_id
+                  if note_id > max_note_id
                     unless StoryNote.find_by_pivotal_identifier(note_id)
                       self.update_attribute(:max_note_id, note_id)
                       puts "#{note_id} #{noted_at} #{author} wrote: #{comment}"
