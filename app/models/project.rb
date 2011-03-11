@@ -57,9 +57,7 @@ class Project < ActiveRecord::Base
       self.name = doc.at('name').innerHTML
       self.iteration_length = doc.at('iteration_length').innerHTML
       unless self.new_record?
-        fetch_current_iteration
-
-        fetch_notes
+        fetch_current_iteration || fetch_notes
       end
     else
       "#{pivotal_identifier} not found in pivotal tracker"
@@ -83,6 +81,7 @@ class Project < ActiveRecord::Base
   end
 
   def fetch_notes
+    logger.info("fetch_notes for project #{id}")
     resource_uri = URI.parse("http://www.pivotaltracker.com/services/v3/projects/#{pivotal_identifier}/stories")
     response = Net::HTTP.start(resource_uri.host, resource_uri.port) do |http|
       http.get(resource_uri.path, {'X-TrackerToken' => APP_CONFIG['pivotal_api_token']})
@@ -110,7 +109,7 @@ class Project < ActiveRecord::Base
                   if note_id > max_note_id
                     unless StoryNote.find_by_pivotal_identifier(note_id)
                       self.update_attribute(:max_note_id, note_id)
-                      puts "#{note_id} #{noted_at} #{author} wrote: #{comment}"
+#                      puts "#{note_id} #{noted_at} #{author} wrote: #{comment}"
                       story.notes.create!(:pivotal_identifier => note_id, :noted_at => noted_at,
                                           :author => author, :comment => comment, :defect_id => story_number)
                     end
@@ -121,13 +120,14 @@ class Project < ActiveRecord::Base
           end
         end
       end
-      ""
+      nil
     else
       "Response Code: #{response.message} #{response.code}"
     end
   end
 
   def renumber
+    logger.info("renumber for project #{id}")
     resource_uri = URI.parse("http://www.pivotaltracker.com/services/v3/projects/#{pivotal_identifier}/stories")
     response = Net::HTTP.start(resource_uri.host, resource_uri.port) do |http|
       http.get(resource_uri.path, {'X-TrackerToken' => APP_CONFIG['pivotal_api_token']})
@@ -168,6 +168,7 @@ class Project < ActiveRecord::Base
 
 
   def fetch_current_iteration
+    logger.info("fetch_current_iteration for project #{id}")
     resource_uri = URI.parse("http://www.pivotaltracker.com/services/v3/projects/#{pivotal_identifier}/iterations/current")
     response = Net::HTTP.start(resource_uri.host, resource_uri.port) do |http|
       http.get(resource_uri.path, {'X-TrackerToken' => APP_CONFIG['pivotal_api_token']})
