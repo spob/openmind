@@ -88,6 +88,7 @@ class Project < ActiveRecord::Base
     end
 
     if response.code == "200"
+      new_max_note_id = self.max_note_id
       doc = Hpricot(response.body)
       (doc/"story").each do |story|
         story_id = story.at('id').try(:inner_html)
@@ -100,16 +101,18 @@ class Project < ActiveRecord::Base
             if notes
               story = Story.find_by_pivotal_identifier(story_id)
               if story
-                puts "#{story_id} Defect # #{story_number}: #{name}"
+                 "#{story_id} Defect # #{story_number}: #{name}"
                 (notes/"note").each do |note|
                   note_id = note.at('id').inner_html.to_i
                   author = note.at('author').inner_html
                   comment = note.at('text').inner_html
                   noted_at = Time.parse(note.at('noted_at').inner_html)
-                  if note_id > max_note_id
+#                  puts "#{note_id} #{noted_at} #{author} "
+                  if note_id > self.max_note_id
+#                    puts "note id less than max"
+                    new_max_note_id = note_id if note_id > new_max_note_id
                     unless StoryNote.find_by_pivotal_identifier(note_id)
-                      self.update_attribute(:max_note_id, note_id)
-#                      puts "#{note_id} #{noted_at} #{author} wrote: #{comment}"
+#                      puts "existing note not found"
                       story.notes.create!(:pivotal_identifier => note_id, :noted_at => noted_at,
                                           :author => author, :comment => comment, :defect_id => story_number,
                                           :formatted_noted_at => noted_at.in_time_zone('Eastern Time (US & Canada)').strftime("%A %B %d, %Y at %I:%M %p"))
@@ -121,6 +124,7 @@ class Project < ActiveRecord::Base
           end
         end
       end
+      self.update_attribute(:max_note_id, new_max_note_id)
       nil
     else
       "Response Code: #{response.message} #{response.code}"
