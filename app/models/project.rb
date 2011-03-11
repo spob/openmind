@@ -111,7 +111,8 @@ class Project < ActiveRecord::Base
                       self.update_attribute(:max_note_id, note_id)
 #                      puts "#{note_id} #{noted_at} #{author} wrote: #{comment}"
                       story.notes.create!(:pivotal_identifier => note_id, :noted_at => noted_at,
-                                          :author => author, :comment => comment, :defect_id => story_number)
+                                          :author => author, :comment => comment, :defect_id => story_number,
+                                          :formatted_noted_at => noted_at.in_time_zone('Eastern Time (US & Canada)').strftime("%A %B %d, %Y at %I:%M %p"))
                     end
                   end
                 end
