@@ -86,7 +86,7 @@ class ProjectsController < ApplicationController
 
   def refresh
     @project = Project.find(params[:id], :include => [{:latest_iteration => {:stories => {:tasks => :task_estimates}}}])
-    @project.refresh
+#    @project.refresh
     if @project.save
       flash[:notice] = "Project #{@project.name} was successfully refreshed."
     else
