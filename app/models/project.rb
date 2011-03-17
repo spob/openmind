@@ -37,7 +37,10 @@ class Project < ActiveRecord::Base
   end
 
   def self.refresh_all
-    Project.active.each { |project| project.refresh }
+    Project.active.each do |project|
+#      project.refresh
+      project.save
+    end
   end
 
   def refresh
@@ -53,10 +56,13 @@ class Project < ActiveRecord::Base
 
       self.name = doc.at('name').innerHTML
       self.iteration_length = doc.at('iteration_length').innerHTML
-      fetch_current_iteration unless self.new_record?
+      unless self.new_record?
+        fetch_current_iteration || fetch_notes
+      end
     else
       "#{pivotal_identifier} not found in pivotal tracker"
     end
+
   end
 
   def update_task_estimate task, iteration
@@ -74,7 +80,59 @@ class Project < ActiveRecord::Base
     end
   end
 
+  def fetch_notes
+    logger.info("fetch_notes for project #{id}")
+    resource_uri = URI.parse("http://www.pivotaltracker.com/services/v3/projects/#{pivotal_identifier}/stories")
+    response = Net::HTTP.start(resource_uri.host, resource_uri.port) do |http|
+      http.get(resource_uri.path, {'X-TrackerToken' => APP_CONFIG['pivotal_api_token']})
+    end
+
+    if response.code == "200"
+      new_max_note_id = self.max_note_id
+      doc = Hpricot(response.body)
+      (doc/"story").each do |story|
+        story_id = story.at('id').try(:inner_html)
+        name = story.at('name').try(:inner_html)
+        story_type = story.at('story_type').try(:inner_html)
+        if story_type == 'bug'
+          if (name =~ /^D\d+/ix)
+            story_number = /\d+/x.match(name).to_s.to_i
+            notes = story.at('notes')
+            if notes
+              story = Story.find_by_pivotal_identifier(story_id)
+              if story
+                 "#{story_id} Defect # #{story_number}: #{name}"
+                (notes/"note").each do |note|
+                  note_id = note.at('id').inner_html.to_i
+                  author = note.at('author').inner_html
+                  comment = note.at('text').inner_html
+                  noted_at = Time.parse(note.at('noted_at').inner_html)
+#                  puts "#{note_id} #{noted_at} #{author} "
+                  if note_id > self.max_note_id
+#                    puts "note id less than max"
+                    new_max_note_id = note_id if note_id > new_max_note_id
+                    unless StoryNote.find_by_pivotal_identifier(note_id)
+#                      puts "existing note not found"
+                      story.notes.create!(:pivotal_identifier => note_id, :noted_at => noted_at,
+                                          :author => author, :comment => comment, :defect_id => story_number,
+                                          :formatted_noted_at => noted_at.in_time_zone('Eastern Time (US & Canada)').strftime("%A %B %d, %Y at %I:%M %p"))
+                    end
+                  end
+                end
+              end
+            end
+          end
+        end
+      end
+      self.update_attribute(:max_note_id, new_max_note_id)
+      nil
+    else
+      "Response Code: #{response.message} #{response.code}"
+    end
+  end
+
   def renumber
+    logger.info("renumber for project #{id}")
     resource_uri = URI.parse("http://www.pivotaltracker.com/services/v3/projects/#{pivotal_identifier}/stories")
     response = Net::HTTP.start(resource_uri.host, resource_uri.port) do |http|
       http.get(resource_uri.path, {'X-TrackerToken' => APP_CONFIG['pivotal_api_token']})
@@ -85,7 +143,7 @@ class Project < ActiveRecord::Base
       walk_stories_to_renumber Hpricot(response.body), 'chore'
       ""
     else
-      puts "Response Code: #{response.message} #{response.code}"
+      "Response Code: #{response.message} #{response.code}"
     end
   end
 
@@ -115,6 +173,7 @@ class Project < ActiveRecord::Base
 
 
   def fetch_current_iteration
+    logger.info("fetch_current_iteration for project #{id}")
     resource_uri = URI.parse("http://www.pivotaltracker.com/services/v3/projects/#{pivotal_identifier}/iterations/current")
     response = Net::HTTP.start(resource_uri.host, resource_uri.port) do |http|
       http.get(resource_uri.path, {'X-TrackerToken' => APP_CONFIG['pivotal_api_token']})
@@ -304,4 +363,5 @@ class Project < ActiveRecord::Base
 
     errors.add(:pivotal_identifier, error_msg) unless error_msg.nil?
   end
+
 end
