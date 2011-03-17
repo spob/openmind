@@ -61,10 +61,10 @@ class Forum < ActiveRecord::Base
   def self.list_by_forum_group forum_group=nil
     return Forum.find(:all,
                       :conditions => ["forum_group_id is null"],
-                      :include => [:topics],
+                      :include => [{:topics => :comments}, :mediators],
                       :order => 'display_order ASC, name ASC') if forum_group.nil?
     Forum.find_all_by_forum_group_id(forum_group.id,
-                                     :include => [:topics],
+                                     :include => [{:topics => :comments}, :mediators],
                                      :order => 'display_order ASC, name ASC')
   end
 
@@ -79,7 +79,17 @@ class Forum < ActiveRecord::Base
   # Return a list of topics for this forum that have comments which have not yet
   # been read by the specified user
   def unread_topics user
-    topics.find_all { |topic| topic.unread_comment?(user) }
+  sql = <<EOS
+select topics.*
+from topics
+where NOT EXISTS
+(select NULL
+from user_topic_reads as utr
+where utr.topic_id = topics.id
+  and utr.user_id = ?)
+EOS
+    Topic.find_by_sql [sql, user.id]
+#    topics.find_all { |topic| topic.unread_comment?(user) }
   end
 
   def watch_all_topics user

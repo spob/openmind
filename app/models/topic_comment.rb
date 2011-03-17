@@ -46,6 +46,12 @@ class TopicComment < Comment
     end
   end
 
+  def unread? p_user, p_topic=nil
+    p_topic = self.topic unless p_topic
+    read = UserTopicRead.find_by_user_id_and_topic_id(user.id, p_topic.id)
+    read.nil? || read.updated_at < p_topic.last_posting_date
+  end
+
   def update_topic_commented_at_on_update
     update_topic_commented_at_on_create if !private and published_at.nil?
   end
