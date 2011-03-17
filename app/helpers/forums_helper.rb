@@ -23,8 +23,8 @@ module ForumsHelper
   end
   
   def last_forum_post forum
-    last_comment = forum.comments.public.most_recent.first unless forum.mediators.include? current_user
-    last_comment = forum.comments.most_recent.first if forum.mediators.include? current_user
+    last_comment = forum.comments.public.most_recent(:include => :topic).first unless forum.mediators.include? current_user
+    last_comment = forum.comments.most_recent(:include => :topic).first if forum.mediators.include? current_user
     return '-' if last_comment.nil?
     subject = ""
     subject += "RE: " if forum.comments.size > 1
@@ -34,7 +34,7 @@ module ForumsHelper
     subject = boldify(subject) if last_comment.topic.unread_comment?(current_user)
     
     comment = last_comment.body
-    comment = boldify(comment) if last_comment.topic.unread_comment?(current_user)
+    comment = boldify(comment) if last_comment.unread?(current_user)#.unread_comment?(current_user)
     
     author = user_display_name last_comment.user
     author = boldify(author) if last_comment.topic.unread_comment?(current_user)
