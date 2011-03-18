@@ -158,7 +158,7 @@ and
     read = UserTopicRead.find_by_user_id_and_topic_id(user.id, id)
     return false if last_comment.nil? # should never occur
     return true if read.nil?
-    read.updated_at < last_posting_date
+    read.updated_at < last_commented_at
   end
 
   def add_user_read user, update_view_count=true
