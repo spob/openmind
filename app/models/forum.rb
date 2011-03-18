@@ -88,7 +88,7 @@ NOT EXISTS
 from user_topic_reads as utr
 where utr.topic_id = topics.id
   and utr.user_id = ?
-  and utr.updated_at > topics.last_commented_at)
+  and utr.updated_at >= topics.last_commented_at)
 EOS
     Topic.find_by_sql [sql, self.id, user.id]
 #    topics.find_all { |topic| topic.unread_comment?(user) }
