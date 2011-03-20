@@ -14,7 +14,7 @@ port: 443
 # address in emails sent by openmind.
 admin_email: openmind@scribesoftware.com
 
-# The subject prefix. This will be the prefix in the subject for emails sent by 
+# The subject prefix. This will be the prefix in the subject for emails sent by
 # openmind. For example, "OpenMind: Your new account has been created..."
 email_subject_prefix: OpenMind
 
@@ -27,7 +27,7 @@ allocation_expiration_days: 120
 # The url to the directory where the images for emails are stored
 email_image_url: https://openmind.scribesoftware.com/themes/scribe-new/images/email
 
-# The name of the theme (e.g., skin). This should correspond to a directory 
+# The name of the theme (e.g., skin). This should correspond to a directory
 # under the public/themes directory
 app_theme: scribe-new
 
@@ -44,7 +44,7 @@ default_user_timezone: Eastern Time (US & Canada)
 max_file_upload_size: 500
 
 # The number of minutes to wait before, when an idea is created, sending a
-# reminder to the author of an idea to vote if they have not already done so. 
+# reminder to the author of an idea to vote if they have not already done so.
 # A value of -1 signifies no reminder should be sent
 minutes_to_send_vote_reminder: 60
 
@@ -56,7 +56,7 @@ periodic_job_timeout: 30
 # URL of the corporate web site (which the banner will redirect to)
 main_site_url: http://www.scribesoft.com
 
-# A list of release status, separated by commas, within parens, that should be considered GA 
+# A list of release status, separated by commas, within parens, that should be considered GA
 # releases
 released_release_statuses: (Released)
 
@@ -95,6 +95,6 @@ otp_expire_seconds: 60
 otp_trusted_sites: 127.0.0.1|71\.184\.232\.107|75\.150\.98\.197|65\.52\.0\..*|65\.52\.16\..*
 
 # List of products that can be forecasted
-forecasted_products: (6,7,8,42,11,12,43)
+forecasted_products: (6,7,8,42,11,12,43,47)
 
 sprint_standup_time: 600
