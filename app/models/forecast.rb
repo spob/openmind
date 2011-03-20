@@ -27,7 +27,7 @@ class Forecast < ActiveRecord::Base
     "Needs Analysis" => 3,
     "Selected" => 4,
     "Committed/Order Pending" => 5,
-    "Closed/Won" => 6,
+#    "Closed/Won" => 6,
     "Closed/Lost" => 7
   }
   end
