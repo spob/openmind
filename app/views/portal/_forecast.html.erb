@@ -3,7 +3,7 @@
     <%= h forecast.account_name %>
   </td>
   <td>
-    <%= h forecast.location %>
+    <%= h [forecast.address1, forecast.address2, forecast.city, forecast.state, forecast.postal_code, forecast.country].collect{|x| (x.blank? ? nil : x)}.compact.join(', ') %>
   </td>
   <td>
     <%= h forecast.region.description %>

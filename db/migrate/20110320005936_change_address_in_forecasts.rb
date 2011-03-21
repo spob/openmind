@@ -12,7 +12,10 @@ class ChangeAddressInForecasts < ActiveRecord::Migration
     Forecast.reset_column_information
 
     Forecast.all.each do |f|
-      f.update_attributes(:address1 => f.location, :city => 'XX', :country => 'XX')
+      f.address1 = f.location
+      f.city = 'XX'
+      f.country = 'XX'
+      f.save!
     end
 
     change_table :forecasts do |t|
@@ -25,22 +28,23 @@ class ChangeAddressInForecasts < ActiveRecord::Migration
 
   def self.down
     change_table :forecasts do |t|
-      t.remove :address1
-      t.remove :address2
-      t.remove :city
-      t.remove :state
-      t.remove :postal_code
-      t.remove :country
       t.string :location, :null => true
     end
 
     Forecast.reset_column_information
 
     Forecast.all.each do |f|
-      f.update_attributes(:location => f.address1)
+      f.location = f.address1
+      f.save!
     end
 
     change_table :forecasts do |t|
+      t.remove :address1
+      t.remove :address2
+      t.remove :city
+      t.remove :state
+      t.remove :postal_code
+      t.remove :country
       t.change :location, :string, :null => false
     end
   end

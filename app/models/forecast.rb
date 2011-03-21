@@ -7,10 +7,10 @@ class Forecast < ActiveRecord::Base
   has_and_belongs_to_many :products
 
   validates_presence_of :enterprise, :user, :partner_representative, :account_name, :rbm_id, :account_exec_id,
-                        :location, :stage, :product, :close_at, :amount
+                        :address1, :city, :country, :stage, :product, :close_at, :amount
   validates_length_of :partner_representative, :maximum => 50
   validates_length_of :account_name, :maximum => 50
-  validates_length_of :location, :maximum => 50
+  validates_length_of :state, :maximum => 2, :allow_nil => true
   validates_length_of :stage, :maximum => 25, :allow_nil => true
   validates_length_of :product, :maximum => 50, :allow_nil => true
   validates_length_of :comments, :maximum => 150
