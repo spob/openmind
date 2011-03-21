@@ -34,8 +34,28 @@
       </p>
 
       <p>
-        <%= form.label :location %>
-        <%= form.text_field :location, {:size => 50, :maxlength => 50} %>
+        <%= form.label :address1 %>
+        <%= form.text_field :address1 %>
+      </p>
+      <p>
+        <%= form.label :address2 %>
+        <%= form.text_field :address2 %>
+      </p>
+      <p>
+        <%= form.label :city %>
+        <%= form.text_field :city %>
+      </p>
+      <p>
+        <%= form.label :state %>
+        <%= form.select :state, options_for_select(state_options, @forecast.state) %>
+      </p>
+      <p>
+        <%= form.label :postal_code %>
+        <%= form.text_field :postal_code %>
+      </p>
+      <p>
+        <%= form.label :country %>
+        <%= form.text_field :country %>
       </p>
 
       <p>

@@ -84,13 +84,19 @@ class ForecastsController < ApplicationController
   def export
     response = ""
     csv      = FasterCSV.new(response, :row_sep => "\r\n")
-    csv     << ["Enterprise", "Account", "Location", "Region", "Partner Rep", "Scribe RBM", "Scribe Account Exec",
+    csv     << ["Enterprise", "Account", "Address1", "Address2", "City", "State", "Postal Code", "Country",
+                "Region", "Partner Rep", "Scribe RBM", "Scribe Account Exec",
                 "Product", "Adapters", "Amount", "Close Date", "Stage", "Stage Rank", "Comments", "Created At", "Updated At"]
 
     Forecast.export_sort.each do |f|
       csv << [f.enterprise.name,
               f.account_name,
-              f.location,
+              f.address1,
+              f.address2,
+              f.city,
+              f.state,
+              f.postal_code,
+              f.country,
               f.region.description,
               f.partner_representative,
               f.rbm.description,
