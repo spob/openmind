@@ -39,8 +39,7 @@ class Project < ActiveRecord::Base
 
   def self.refresh_all_bg
 #    options[:rails_env] ||= "production"
-    args = options.map { |n, v| "#{n.to_s.upcase}='#{v}'" }
-    system "/usr/bin/rake #{task} #{args.join(' ')} RAILS_ENV=production --trace >> /var/rails/openmind/log/rake.log &"
+    system "/usr/bin/rake :project:refresh RAILS_ENV=production --trace >> /var/rails/openmind/log/rake.log &"
   end
 
   def self.refresh_all
