@@ -39,7 +39,7 @@ class Project < ActiveRecord::Base
 
   def self.refresh_all_bg
 #    options[:rails_env] ||= "production"
-    system "/usr/bin/rake project:refresh RAILS_ENV=production --trace >> /var/rails/openmind/log/rake.log &"
+    system "cd /var/rails/openmind && /usr/bin/rake project:refresh RAILS_ENV=production --trace >> /var/rails/openmind/log/rake.log &"
   end
 
   def self.refresh_all
