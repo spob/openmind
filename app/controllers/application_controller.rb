@@ -29,6 +29,12 @@ class ApplicationController < ActionController::Base
 #    end
 #  end
 
+  def call_rake(task, options = {})
+    options[:rails_env] ||= "production"
+    args = options.map { |n, v| "#{n.to_s.upcase}='#{v}'" }
+    system "/usr/bin/rake #{task} #{args.join(' ')} --trace >> /var/rails/openmind/log/rake.log &"
+  end
+
   def set_time_zone
     Time.zone = current_user.time_zone if current_user != :false
   end
