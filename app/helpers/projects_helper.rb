@@ -10,6 +10,7 @@ module ProjectsHelper
   end
 
   def task_estimate_for_day estimate
+    puts "#{estimate ? "not null" : "nil"}::#{estimate} #{estimate.try(:status)}"
     (estimate && estimate.status != "pushed" ? '%.2f' % estimate.remaining_hours : "-")
   end
 

@@ -19,6 +19,7 @@ class Task < ActiveRecord::Base
   end
 
   def fetch_estimate_by_date the_date
+    puts "fetch estimate for #{the_date}"
     populate_estimates_hash unless @estimates
     @estimates[the_date]
   end
@@ -50,8 +51,10 @@ class Task < ActiveRecord::Base
   private
 
   def populate_estimates_hash
+    puts "populate hash"
     @estimates = {}
     self.task_estimates.each do |e|
+      puts "populating has #{e.as_of}"
       @estimates[e.as_of] = e
     end
   end
