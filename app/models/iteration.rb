@@ -65,19 +65,21 @@ class Iteration < ActiveRecord::Base
   end
 
   def calc_date day_num
-    the_date = self.start_on
-    (2..day_num).each do
-      the_date = the_date + 1
-      the_date = the_date + 2 if the_date.cwday == 6
-      the_date = the_date + 1 if the_date.cwday == 7
+    the_date = self.end_on
+    (day_num..10).each do
+      the_date = the_date - 1
+      the_date = the_date - 2 if the_date.cwday == 7
+      the_date = the_date -1 if the_date.cwday == 6
     end
     the_date
   end
 
+
   def calc_day_number the_date=Project.calculate_project_date
     the_date = end_on if the_date > end_on
     day_num = 0
-    (self.start_on..the_date).each do |d|
+
+    (self.end_on - 14..the_date).each do |d|
       day_num += 1 if d.cwday < 6
     end
     day_num

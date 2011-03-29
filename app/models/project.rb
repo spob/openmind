@@ -220,6 +220,7 @@ class Project < ActiveRecord::Base
 
 #        puts "#{iteration.at('finish').inner_html} -- #{Date.parse(iteration.at('finish').inner_html)}"
           if @iteration
+            start_on =
             @iteration.update_attributes!(:start_on => Date.parse(iteration.at('start').inner_html)+1,
                                           :end_on => Date.parse(iteration.at('finish').inner_html))
             @iteration.stories.each { |s| s.update_attributes!(:status => STATUS_PUSHED, :points => 0) }
@@ -275,6 +276,7 @@ class Project < ActiveRecord::Base
                                                :status => status,
                                                :qa => is_qa)
                 end
+#                puts "#{@task.description} #{total_hours} #{remaining_hours}"
                 update_task_estimate(@task, @iteration)
               end
             end
