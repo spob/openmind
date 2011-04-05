@@ -11,6 +11,10 @@ class Task < ActiveRecord::Base
               lambda { |param| return {} if param.nil? or param == "Y"
               {:conditions => ["tasks.status <> ?", "pushed"]}
               }
+  named_scope :by_status,
+              lambda { |param|
+              {:conditions => {:status => param}}
+              }
 
   @estimates = nil
 

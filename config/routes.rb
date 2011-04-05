@@ -43,6 +43,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :products
   map.resources :projects, :member => {:refresh        => :post,
                                        :renumber       => :post,
+                                       :show_board     => :get,
                                        :burndown_chart => :get,
                                        :velocity_chart => :get,
                                        :show_chart     => :get}
