@@ -27,19 +27,19 @@ class Story < ActiveRecord::Base
     stories.sort_by do |s|
       case s.status
         when "accepted" then
-          1
+          1000 + (s.sort ? s.sort : 0)
         when "delivered" then
-          2
+          2000 + (s.sort ? s.sort : 0)
         when "finished" then
-          3
+          3000 + (s.sort ? s.sort : 0)
         when "rejected" then
-          4
+          4000 + (s.sort ? s.sort : 0)
         when "started" then
-          5
+          5000 + (s.sort ? s.sort : 0)
         when "unstarted" then
-          6
+          6000 + (s.sort ? s.sort : 0)
         when "pushed" then
-          7
+          7000 + (s.sort ? s.sort : 0)
       end
     end
   end
