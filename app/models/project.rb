@@ -221,14 +221,15 @@ class Project < ActiveRecord::Base
 #        puts "#{iteration.at('finish').inner_html} -- #{Date.parse(iteration.at('finish').inner_html)}"
           if @iteration
             start_on =
-            @iteration.update_attributes!(:start_on => Date.parse(iteration.at('start').inner_html)+1,
-                                          :end_on => Date.parse(iteration.at('finish').inner_html))
+                @iteration.update_attributes!(:start_on => Date.parse(iteration.at('start').inner_html)+1,
+                                              :end_on => Date.parse(iteration.at('finish').inner_html))
             @iteration.stories.each { |s| s.update_attributes!(:status => STATUS_PUSHED, :points => 0) }
           else
             @iteration = self.iterations.create!(:iteration_number => iteration_number,
                                                  :start_on => Date.parse(iteration.at('start').inner_html)+1,
                                                  :end_on => iteration.at('finish').inner_html)
           end
+          n = 0
           (iteration.at('stories')/"story").each do |story|
             pivotal_id = story.at('id').inner_html.to_i
             @story = @iteration.stories.find_by_pivotal_identifier(pivotal_id)
@@ -237,7 +238,8 @@ class Project < ActiveRecord::Base
                                         :status => story.at('current_state').inner_html,
                                         :name => story.at('name').inner_html,
                                         :owner => story.at('owned_by').try(:inner_html),
-                                        :story_type => story.at('story_type').inner_html)
+                                        :story_type => story.at('story_type').inner_html,
+                                        :sort => n)
 
               @story.tasks.each do |t|
                 t.update_attributes!(:status => STATUS_PUSHED, :remaining_hours => 0.0)
@@ -249,8 +251,10 @@ class Project < ActiveRecord::Base
                                                   :status => story.at('current_state').inner_html,
                                                   :name => story.at('name').inner_html,
                                                   :owner => story.at('owned_by').try(:inner_html),
-                                                  :story_type => story.at('story_type').inner_html)
+                                                  :story_type => story.at('story_type').inner_html,
+                                                  :sort => n)
             end
+            n = n + 1
 
             tasks = story.at('tasks')
             if tasks
