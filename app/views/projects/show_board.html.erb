@@ -1,0 +1,44 @@
+<div id="actionButtons2">
+  <%= link_to 'View as Table', project_path(@project, :iteration_id => @project.latest_iteration), :class=> "button" %>
+</div>
+<h1>Project <%= h @project.name %>, Iteration <%= @project.latest_iteration.iteration_number %>
+  (<%= om_date(@project.latest_iteration.start_on) %> to <%= om_date(@project.latest_iteration.end_on) %>)</h1>
+<table>
+  <tr>
+    <th>Story</th>
+    <th width="15%">Not Started</th>
+    <th width="15%">In Progress</th>
+    <th width="15%">Done</th>
+    <th width="15%">Blocked</th>
+  </tr>
+  <% Story.sort_by_status(@project.latest_iteration.stories.conditional_not_accepted("N").conditional_pushed("N")).each do |story| %>
+      <tr>
+        <td><strong><%= h story.name %></strong>
+          <br />
+          (<%= h story.status.titleize %>, <%= pluralize(story.points, "point") %>, <%= owner_text story %>)
+        </td>
+        <td>
+            <% story.tasks.by_status("Not Started").each do |task| %>
+                  <p style="border:2px solid black;padding:5px 10px 15px 10px;margin:10px;background-color:#<%= task.qa ? "ffccff" : "ffff99"%>;"><%= h task.description %></p>
+            <% end %>
+        </td>
+        <td>
+            <% story.tasks.by_status("In Progress").each do |task| %>
+                  <p style="border:2px solid black;padding:5px 10px 15px 10px;margin:10px;background-color:#<%= task.qa ? "ffccff" : "ffff99"%>;"><%= h task.description %></p>
+            <% end %>
+        </td>
+        <td>
+            <% story.tasks.by_status("Done").each do |task| %>
+                  <p style="border:2px solid black;padding:5px 10px 15px 10px;margin:10px;background-color:#<%= task.qa ? "ffccff" : "ffff99"%>;"><%= h task.description %></p>
+            <% end %>
+        </td>
+        <td>
+          <table>
+            <% story.tasks.by_status("Blocked").each do |task| %>
+                  <p style="border:2px solid red;padding:5px 10px 15px 10px;margin:10px;background-color:#<%= task.qa ? "ffccff" : "ffff99"%>;"><%= h task.description %></p>
+            <% end %>
+          </table>
+        </td>
+      </tr>
+  <% end %>
+</table>

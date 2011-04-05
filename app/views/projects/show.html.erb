@@ -24,6 +24,7 @@
                  :onmouseover => "Tip('A stories numbers to stories in pivotal tracker which lack them')",
                  :class       => "button"}) %>
   <%= link_to 'Download Burndown (PDF)', project_path(@project, :format => "pdf", :iteration_id => @iteration), :target => "_blank", :class=> "button" %>
+  <%= link_to 'Storyboard', show_board_project_path(@project), :class=> "button" %>
 </div>
 <h1>Project <%= h @project.name %>, Iteration <%= @iteration.iteration_number %>
   (<%= om_date(@iteration.start_on) %> to <%= om_date(@iteration.end_on) %>)</h1>

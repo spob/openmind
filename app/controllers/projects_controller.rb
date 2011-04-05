@@ -3,11 +3,11 @@ class ProjectsController < ApplicationController
   before_filter :login_required
   before_filter :fetch_project, :only => [:destroy, :edit, :update, :show, :show_chart, :renumber]
 
-  verify :method      => :post, :only => [:create, :refresh, :renumber],
+  verify :method => :post, :only => [:create, :refresh, :renumber],
          :redirect_to => {:action => :index}
-  verify :method      => :put, :only => [:update],
+  verify :method => :put, :only => [:update],
          :redirect_to => {:action => :index}
-  verify :method      => :delete, :only => [:destroy],
+  verify :method => :delete, :only => [:destroy],
          :redirect_to => {:action => :index}
 
   access_control [:burndown_chart, :destroy, :show, :velocity_chart] => 'developer'
@@ -70,6 +70,10 @@ class ProjectsController < ApplicationController
 #    @velocity_chart = open_flash_chart_object(1024, 450, velocity_chart_project_path(@iteration))
   end
 
+  def show_board
+    @project = Project.find(params[:id], :include => [{:latest_iteration => {:stories => {:tasks => :task_estimates}}}])
+  end
+
   def show_chart
     show
   end
@@ -98,10 +102,10 @@ class ProjectsController < ApplicationController
   def velocity_chart
     iteration = Iteration.find(params[:id])
 
-    title     = Title.new("Daily Velocity for #{iteration.iteration_name}")
+    title = Title.new("Daily Velocity for #{iteration.iteration_name}")
     velocity_data, delivered_data = calc_velocity_chart_data(iteration)
 
-    chart       = OpenFlashChart.new
+    chart = OpenFlashChart.new
     chart.title = title
     set_legend(chart, "Day #", "Story Points")
     chart.y_axis = generate_y_axis(max(velocity_data, delivered_data))
@@ -124,7 +128,7 @@ class ProjectsController < ApplicationController
 
     chart =OpenFlashChart.new
     chart.set_title(title)
-    chart.y_axis       = generate_y_axis(max(ideal_hours_data, remaining_hours_data, total_hours_data))
+    chart.y_axis = generate_y_axis(max(ideal_hours_data, remaining_hours_data, total_hours_data))
     chart.y_axis_right = generate_y_axis(max(velocity_data, delivered_data), true)
     set_legend(chart, "Day #", "Task Hours", "Story Points")
 
@@ -153,46 +157,46 @@ class ProjectsController < ApplicationController
   end
 
   def chart_line(data, label, color)
-    dot                    = HollowDot.new
-    dot.size               = 3
-    dot.halo_size          = 2
-    dot.tooltip            = "#{label}<br>val = #val#"
+    dot = HollowDot.new
+    dot.size = 3
+    dot.halo_size = 2
+    dot.tooltip = "#{label}<br>val = #val#"
 
-    line                   = Line.new
-    line.text              = label
-    line.width             = 2
-    line.colour            = color
+    line = Line.new
+    line.text = label
+    line.width = 2
+    line.colour = color
     line.default_dot_style = dot
-    line.dot_size          = 5
-    line.values            = data
+    line.dot_size = 5
+    line.values = data
     line
   end
 
   def chart_bar(data, label, color)
-    bar         = Bar.new
-    bar.text    = label
-    bar.values  = data
+    bar = Bar.new
+    bar.text = label
+    bar.values = data
     bar.tooltip = "#{label}<br>val = #val#"
-    bar.colour  = color
+    bar.colour = color
     bar.attach_to_right_y_axis
     bar
   end
 
   def calc_velocity_chart_data(iteration)
-    velocity_data  = []
+    velocity_data = []
     delivered_data = []
 
     iteration.task_estimates.each do |e|
-      day_number                 = iteration.calc_day_number(e.as_of)
-      velocity_data[day_number]  = e.velocity
+      day_number = iteration.calc_day_number(e.as_of)
+      velocity_data[day_number] = e.velocity
       delivered_data[day_number] = e.points_delivered
     end
     return velocity_data, delivered_data
   end
 
   def generate_y_axis(max, right=false)
-    y          = (right ? YAxisRight.new : YAxis.new)
-    hours_max  = roundup(max, 5)
+    y = (right ? YAxisRight.new : YAxis.new)
+    hours_max = roundup(max, 5)
     y_interval = calc_y_interval(hours_max)
     hours_max = ((hours_max/y_interval).to_i + 1) * y_interval if hours_max/y_interval != (hours_max/y_interval).to_i
     y.set_range(0, hours_max, y_interval)
@@ -200,23 +204,23 @@ class ProjectsController < ApplicationController
   end
 
   def calc_hour_chart_data(iteration)
-    remaining_hours_data    = []
+    remaining_hours_data = []
     remaining_qa_hours_data = []
-    total_hours_data        = []
-    ideal_hours_data        = []
-    daily_progress          = iteration.latest_estimate.total_hours/(iteration.project.iteration_length * 5)
+    total_hours_data = []
+    ideal_hours_data = []
+    daily_progress = iteration.latest_estimate.total_hours/(iteration.project.iteration_length * 5)
 
     remaining_hours_data[0] = iteration.task_estimates.first.total_hours
     remaining_qa_hours_data[0] = iteration.task_estimates.first.remaining_qa_hours
-    total_hours_data[0]     = iteration.task_estimates.first.total_hours
-    ideal_hours_data[0]     = iteration.latest_estimate.total_hours
+    total_hours_data[0] = iteration.task_estimates.first.total_hours
+    ideal_hours_data[0] = iteration.latest_estimate.total_hours
 
     iteration.task_estimates.each do |e|
-      day_number                       = iteration.calc_day_number(e.as_of)
+      day_number = iteration.calc_day_number(e.as_of)
       remaining_hours_data[day_number] = e.remaining_hours
       remaining_qa_hours_data[day_number] = e.remaining_qa_hours
-      total_hours_data[day_number]     = e.total_hours
-      ideal_hours_data[day_number]     = iteration.latest_estimate.total_hours - (daily_progress * day_number)
+      total_hours_data[day_number] = e.total_hours
+      ideal_hours_data[day_number] = iteration.latest_estimate.total_hours - (daily_progress * day_number)
     end
     return ideal_hours_data, remaining_hours_data, remaining_qa_hours_data, total_hours_data
   end
@@ -258,7 +262,7 @@ class ProjectsController < ApplicationController
 
   def calc_y_interval x
     rounding_values = [1, 2, 5, 10, 15, 20, 25, 50, 75, 100, 150, 200, 250, 300, 400, 500, 750, 1000]
-    x               = x/8 + 1
+    x = x/8 + 1
     rounding_values.each do |v|
       return v if v > x
     end
