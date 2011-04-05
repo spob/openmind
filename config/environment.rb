@@ -104,7 +104,7 @@ Rails::Initializer.run do |config|
   # end
 
   # needed for pdfkit
-#  config.middleware.use "PDFKit::Middleware", :print_media_type => true
+  config.middleware.use "PDFKit::Middleware", :print_media_type => true
 
 
   # set our session key to distinguish it from others
