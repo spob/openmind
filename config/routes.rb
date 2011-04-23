@@ -12,58 +12,58 @@ ActionController::Routing::Routes.draw do |map|
   # purchase_url(:id => product.id)
 
   map.resources :allocations, :collection => {:export_import => :get,
-                                              :export        => :post, :import => :post, :toggle_pix => :get}
+                                              :export => :post, :import => :post, :toggle_pix => :get}
   map.resources :announcements, :collection => {:preview => :get, :rss => :get}
   map.resources :attachments, :member => {:download => :get, :html => :get},
-                :collection           => {:search => :get}
+                :collection => {:search => :get}
   map.resources :comments, :collection => {:preview => :get},
-                :member                => {:endorse   => :post, :unendorse => :post, :attach => :get,
-                                           :privatize => :post, :publicize => :post, :promote_power_user => :post}
+                :member => {:endorse => :post, :unendorse => :post, :attach => :get,
+                            :privatize => :post, :publicize => :post, :promote_power_user => :post}
   map.resources :enterprises, :member => {:next => :get, :previous => :get},
-                :collection           => {:search => :get, :auto_complete_for_enterprise_name => :get}
-  map.resources :forums, :collection => {:search               => :get,
-                                         :rss                  => :get, :tag => :get, :metrics => :get, :metrics_graphs => :get,
-                                         :open_count_graphs    => :get, :days_pending_graphs => :get,
+                :collection => {:search => :get, :auto_complete_for_enterprise_name => :get}
+  map.resources :forums, :collection => {:search => :get,
+                                         :rss => :get, :tag => :get, :metrics => :get, :metrics_graphs => :get,
+                                         :open_count_graphs => :get, :days_pending_graphs => :get,
                                          :pending_count_graphs => :get, :oldest_days_pending_graphs => :get},
-                :member              => {:mark_all_as_read => :post}
+                :member => {:mark_all_as_read => :post}
   map.resources :groups
   map.resources :link_sets, :member => {:update_sort => :post}
   map.resources :lookup_codes
   map.resources :merge_ideas
   map.resources :periodic_jobs, :member => {:rerun => :post, :runnow => :post}
-  map.resources :polls, :member => {:publish        => :post, :unpublish => :post, :pie => :get,
+  map.resources :polls, :member => {:publish => :post, :unpublish => :post, :pie => :get,
                                     :present_survey => :get, :take_survey => :post},
-                :collection     => {:toggle_details => :get, :display_comments => :get}
+                :collection => {:toggle_details => :get, :display_comments => :get}
   map.resources :portal, :only => :index,
-                :member        => {:show_serial_number => :get},
-                :collection    => {:auto_complete_for_user_email => :get}
+                :member => {:show_serial_number => :get},
+                :collection => {:auto_complete_for_user_email => :get}
   map.resources :products
   map.resources :releases, :member => {:commit => :post},
-                :collection        => {:preview       => :get, :list => :get, :check_for_updates => :get,
-                                       :compatibility => :get}
+                :collection => {:preview => :get, :list => :get, :check_for_updates => :get,
+                                :compatibility => :get}
   map.resources :topics, :collection => {:preview => :get, :search => :get,
-                                         :tag     => :get}, :member => {:rate => :post, :toggle_status => :put}
+                                         :tag => :get}, :member => {:rate => :post, :toggle_status => :put}
   map.resources :users,
-                :member     => {:update_profile => :put, :reset_password => :post},
-                :collection => {:activity         => :get, :edit_profile => :get, :auto_complete_for_user_email => :get, :list => :get,
+                :member => {:update_profile => :put, :reset_password => :post},
+                :collection => {:activity => :get, :edit_profile => :get, :auto_complete_for_user_email => :get, :list => :get,
                                 :process_imported => :post, :import => :get, :fetch_otp => :post, :export_import => :get,
-                                :lost_password    => :get}
+                                :lost_password => :get}
   map.resources :user_logons
-  map.resources :user_requests, :member => {:approve     => :post, :reject => :post,
+  map.resources :user_requests, :member => {:approve => :post, :reject => :post,
                                             :acknowledge => :get, :next => :get, :previous => :get},
-                :collection             => {:auto_complete_for_user_request_enterprise_name => :get}
+                :collection => {:auto_complete_for_user_request_enterprise_name => :get}
   map.resources :votes, :collection => {:create_from_show => :post}
   # NOTE: create_topic_watch really should just support a post. That said,
   # googlebot hits that page and tries to do a create_topic_watch with a git,
   # which fills the hoptoadapp log...so we'll handle enforcement down at
   # the controller level instead
-  map.resources :watches, :member => {:create_topic_watch                         => [:post, :get],
-                                      :destroy_topic_watch                        => :delete, :create_forum_watch => :post,
-                                      :create_product_watch                       => :post,
+  map.resources :watches, :member => {:create_topic_watch => [:post, :get],
+                                      :destroy_topic_watch => :delete, :create_forum_watch => :post,
+                                      :create_product_watch => :post,
                                       :create_product_watch_from_check_for_update => :post, :destroy_forum_watch => :delete,
-                                      :destroy_product_watch                      => :delete},
-                :collection       => {:create_from_show       => :post,
-                                      :create_product_watches => :get}
+                                      :destroy_product_watch => :delete},
+                :collection => {:create_from_show => :post,
+                                :create_product_watches => :get}
 
   # Allow downloading Web Service WSDL as a file with an extension instead of a
   # file named 'wsdl'
