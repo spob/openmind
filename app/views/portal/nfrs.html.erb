@@ -1,0 +1,38 @@
+<% content_for :head do -%>
+    <%= theme_stylesheet_link_tag 'sideBarRight' %>
+    <%= javascript_include_tag "tablecloth" %>
+<% end %>
+<% content_for :bodyTag do -%>
+    <%= set_focus_to_id 'user_email' -%>
+<% end %>
+
+<%= render :partial => "tab_menu" %>
+<div id="tabBody" style="position:relative; padding-top:15px;">
+  <h3>NFRs & Internal Licenses</h3>
+  <table>
+    <tr>
+      <th>
+        Product
+      </th>
+      <th>
+        Serial Number
+      </th>
+      <th>
+        Expires At
+      </th>
+      <th>
+        Registered To
+      </th>
+      <th>
+        Versions Installed
+      </th>
+    </tr>
+    <% if @nfrs.present? %>
+        <%= render :partial => 'nfr', :collection => @nfrs %>
+    <% else %>
+        <td colspan="5">
+          No records found
+        </td>
+    <% end %>
+  </table>
+</div>

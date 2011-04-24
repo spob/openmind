@@ -1,0 +1,50 @@
+<% content_for :head do -%>
+    <%= theme_stylesheet_link_tag 'sideBarRight' %>
+    <%= javascript_include_tag "tablecloth" %>
+<% end %>
+<% content_for :bodyTag do -%>
+    <%= set_focus_to_id 'user_email' -%>
+<% end %>
+
+<%= render :partial => "tab_menu" %>
+<div id="tabBody" style="position:relative; padding-top:15px;">
+<h3>Support Incidents</h3>
+<table>
+  <tr>
+    <th>
+      Case Number
+    </th>
+    <th>
+      Summary
+    </th>
+    <th>
+      Opened At
+    </th>
+    <th>
+      Closed At
+    </th>
+    <th>
+      Serial Number
+    </th>
+    <th>
+      Opened By
+    </th>
+    <th>
+      Customer
+    </th>
+    <th>
+      Within SLA
+    </th>
+    <th>
+      Billable
+    </th>
+  </tr>
+  <% if @tickets.present? %>
+      <%= render :partial => 'ticket', :collection => @tickets %>
+  <% else %>
+      <td colspan="6">
+        No records found
+      </td>
+  <% end %>
+</table>
+</div>
