@@ -96,7 +96,7 @@
         <label></label>
         <%= submit_tag (@forecast.new_record? ? "Create" : "Update"), options = {:class       => "button", :disable_with => "Please wait...",
                                                                                  :onmouseover => "Tip('Create a new opportunity')"} %>
-        <%= link_to 'Cancel', portal_index_path, {:class       => "button",
+        <%= link_to 'Cancel', forecasts_portal_path, {:class       => "button",
                                                   :onmouseover => "Tip('Do not save changes to the opportunity')"} %>
       </p>
     </div>

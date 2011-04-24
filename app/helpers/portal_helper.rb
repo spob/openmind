@@ -6,4 +6,8 @@ module PortalHelper
       serial_number_str
     end
   end
+
+  def tab_html_class controller, action
+    (params["action"] == action && params["controller"] == controller ? "class=\"selected\"" : "")
+  end
 end

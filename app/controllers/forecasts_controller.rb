@@ -26,7 +26,7 @@ class ForecastsController < ApplicationController
       @forecast.user                  = current_user
       if @forecast.save
         flash[:notice] = "Opportunity #{@forecast.account_name} was successfully created."
-        redirect_to portal_index_path
+        redirect_to forecasts_portal_path
       else
         render :action => 'new'
       end

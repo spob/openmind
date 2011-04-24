@@ -1,0 +1,73 @@
+<% content_for :head do -%>
+    <%= theme_stylesheet_link_tag 'sideBarRight' %>
+    <%= javascript_include_tag "tablecloth" %>
+<% end %>
+<% content_for :bodyTag do -%>
+    <%= set_focus_to_id 'user_email' -%>
+<% end %>
+
+<%= render :partial => "tab_menu" %>
+<div id="tabBody" style="position:relative; padding-top:15px;">
+  <% if @user == current_user && current_user.can_view_forecasts? %>
+      <div id="actionButtons">
+        <%= link_to 'New Opportunity', new_forecast_path,
+                    html_options = {:class => "button",
+                                    :onmouseover => "Tip('Create a new opportunity')"} %>
+        <% if current_user.can_specify_email_in_portal? %>
+            <%= button_to 'Export', export_forecasts_path, :target => "_blank", :class=> "button" %>
+        <% end %>
+      </div>
+  <% end %>
+
+  <h3>Forecasts</h3>
+  <table>
+    <tr>
+      <th>
+        Account
+      </th>
+      <th>
+        Location
+      </th>
+      <th>
+        Region
+      </th>
+      <th>
+        Partner Rep
+      </th>
+      <th>
+        Scribe RBM
+      </th>
+      <th>
+        Scribe Account Exec
+      </th>
+      <th>
+        Product
+      </th>
+      <th>
+        Adapters
+      </th>
+      <th>
+        Amount
+      </th>
+      <th>
+        Close Date
+      </th>
+      <th>
+        Stage
+      </th>
+      <th>
+        Comments
+      </th>
+      <th>
+        Action
+      </th>
+    </tr>
+    <% if @forecasts.present? %>
+        <%= render :partial => 'forecast', :collection => @forecasts %>
+    <% else %>
+        <td colspan="12">
+          No records found
+        </td>
+    <% end %>
+  </table>
+</div>

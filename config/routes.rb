@@ -39,7 +39,13 @@ ActionController::Routing::Routes.draw do |map|
                 :collection => {:toggle_details => :get, :display_comments => :get}
   map.resources :portal, :only => :index,
                 :member => {:show_serial_number => :get},
-                :collection => {:auto_complete_for_user_email => :get}
+                :collection => {:auto_complete_for_user_email => :get,
+                                :technical_consultants => :get,
+                                :sales_consultants => :get,
+                                :nfrs => :get,
+                                :users => :get,
+                                :forecasts => :get,
+                                :tickets => :get}
   map.resources :products
   map.resources :projects, :member => {:refresh => :post,
                                        :renumber => :post,
