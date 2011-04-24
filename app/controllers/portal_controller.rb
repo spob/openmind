@@ -16,7 +16,7 @@ class PortalController < ApplicationController
       @forecasts = @user.enterprise.forecasts.active.sort { |x, y| Forecast.stages[x.stage] <=> Forecast.stages[y.stage] } if @user
       @forecasts ||= []
     else
-      flash[:error] = "You don't have access to the partner portal"
+      flash[:error] = "You don't have access to forecasts"
       redirect_to portal_index_path
     end
   end
