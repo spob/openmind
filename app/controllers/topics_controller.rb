@@ -1,39 +1,39 @@
 class TopicsController < ApplicationController
   before_filter :fetch_topic, :only => [:show]
-  before_filter :login_required, :only => [:show], :if => :must_login 
+  before_filter :login_required, :only => [:show], :if => :must_login
   before_filter :login_required, :except => [:index, :show, :search]
-  cache_sweeper :topics_sweeper, :only => [ :create, :update, :destroy, :toggle_status ]
-  
+  cache_sweeper :topics_sweeper, :only => [:create, :update, :destroy, :toggle_status]
+
   # GETs should be safe (see http://www.w3.org/2001/tag/doc/whenToUseGet.html)
-  verify :method => :post, :only => [:create, :rate ],
-  :redirect_to => { :action => :index }
-  verify :method => :put, :only => [ :update, :toggle_status ],
-  :redirect_to => { :action => :index }
-  verify :method => :delete, :only => [ :destroy ],
-  :redirect_to => { :action => :index }
-  
+  verify :method => :post, :only => [:create, :rate],
+         :redirect_to => {:action => :index}
+  verify :method => :put, :only => [:update, :toggle_status],
+         :redirect_to => {:action => :index}
+  verify :method => :delete, :only => [:destroy],
+         :redirect_to => {:action => :index}
+
   def index
     redirect_to forums_path
   end
-  
+
   def new
     @forum ||= Forum.find(params[:forum_id])
-    
+
     unless @forum.can_see? current_user or prodmgr?
       flash[:error] = ForumsController.flash_for_forum_access_denied(current_user)
       redirect_to redirect_path_on_access_denied(current_user)
     end
-    
+
     if @forum.restrict_topic_creation and !@forum.mediator? current_user
       flash[:error] = 'You are not able to create new topics in this forum'
       redirect_to forum_path(@forum)
     end
-    
+
     @topic ||= Topic.new(:forum => @forum)
     @comment ||= TopicComment.new(:topic => @topic)
   end
-  
-  def create    
+
+  def create
     forum_id = params[:forum_id]
     forum = Forum.find(forum_id)
     if forum.restrict_topic_creation and !forum.mediator? current_user
@@ -44,19 +44,19 @@ class TopicsController < ApplicationController
     @topic = Topic.new(params[:topic])
     @topic.forum_id = forum_id
     @topic.user = current_user
-    if @topic.save   
+    if @topic.save
       @topic.add_user_read(current_user)
       comment = TopicComment.new(
-                                 :user_id => current_user.id,
-                                 :body => @topic.comment_body)
+          :user_id => current_user.id,
+          :body => @topic.comment_body)
       comment.endorser = current_user if @topic.forum.mediators.include? current_user
       @topic.comments << comment
-      
+
       # Is the user watching the forum
       for user in @topic.forum.watchers
         @topic.watchers << user unless @topic.watchers.include? user
       end
-      
+
       # or did they indicate they want to watch this topic explicitly
       if params[:watch] == 'yes'
         tw = TopicWatch.find_by_user_id_and_topic_id(current_user, @topic)
@@ -75,11 +75,11 @@ class TopicsController < ApplicationController
       render :action => 'new', :forum_id => forum_id
     end
   end
-  
+
   def preview
     render :layout => false
   end
-  
+
   def show
     session[:forums_search] = nil
     Topic.transaction do
@@ -93,30 +93,30 @@ class TopicsController < ApplicationController
       @topic.add_user_read(current_user).save unless current_user == :false
     end
   end
-  
+
   def destroy
     topic = Topic.find(params[:id])
     forum = topic.forum
     title = topic.title
-    
+
     # A bit bizarre, but if I don't clear the comments first, I get a stale object exception
     topic.comments.clear
     topic.save
     Topic.destroy(topic.id)
-    
+
     flash[:notice] = "Topic '#{title}' was successfully deleted."
     redirect_to forum_path(forum)
   end
-  
+
   def edit
     @topic = Topic.find(params[:id])
-    
+
     unless @topic.forum.can_edit? current_user or prodmgr?
       flash[:error] = ForumsController.flash_for_forum_access_denied(current_user)
       redirect_to redirect_path_on_access_denied(current_user)
     end
   end
-  
+
   def update
     @topic = Topic.find(params[:id])
     unless params[:topic][:owner_id].nil? or params[:topic][:owner_id].empty?
@@ -125,7 +125,7 @@ class TopicsController < ApplicationController
       # Add watcher unless owner is already watching or the owner did not change
       @topic.watchers << @user unless @topic.watchers.include? @user or @topic.owner == @user
     end
-    
+
     unless @topic.forum.can_edit? current_user or prodmgr?
       flash[:error] = ForumsController.flash_for_forum_access_denied(current_user)
       redirect_to redirect_path_on_access_denied(current_user)
@@ -137,18 +137,19 @@ class TopicsController < ApplicationController
       render :action => :edit
     end
   end
-  
+
   def search
     @forum = Forum.find(params[:forum_id])
     hits = {}
     @hits = []
     session[:forums_search] = params[:search]
-    
+
     # solr barfs if search string starts with a wild card...so strip it out
     #    params[:search] = StringUtils.sanitize_search_terms params[:search]
     begin
       #      search_results = Topic.find_by_solr(params[:search], :scores => true)
-      search_results = params[:search].blank? ? [] : Topic.search(params[:search], :retry_stale => true, :limit => 500)
+      search_results = params[:search].blank? ? [] : Topic.search(params[:search], :retry_stale => true, :limit => 200,
+                                                                  :match_mode => :extended)
     rescue RuntimeError => e
       flash[:error] = "An error occurred while executing your search. Perhaps there is a problem with the syntax of your search string."
       logger.error(e)
@@ -156,7 +157,7 @@ class TopicsController < ApplicationController
       # not sure why this is necessary
       #      flash[:error] = nil
       flash.discard
-      
+
       if search_results.nil?
         redirect_to forum_path(@forum)
         return
@@ -165,9 +166,9 @@ class TopicsController < ApplicationController
         hits[topic.id] = TopicHit.new(topic, true, 1) if topic.forum.can_see?(current_user) or prodmgr?
       end
       #      TopicComment.find_by_solr(params[:search], :scores => true).docs.each do |comment|
-       (params[:search].blank? ? [] : TopicComment.search(params[:search], :retry_stale => true, :limit => 500)).each do |comment|
+      (params[:search].blank? ? [] : TopicComment.search(params[:search], :retry_stale => true, :limit => 500)).each do |comment|
         if (comment.topic.forum.can_see?(current_user) or prodmgr?) and
-         (!comment.private or comment.topic.forum.mediators.include? current_user)
+            (!comment.private or comment.topic.forum.mediators.include? current_user)
           # first see if topic hit already exists
           topic_hit = hits[comment.topic.id]
           if topic_hit.nil?
@@ -180,11 +181,11 @@ class TopicsController < ApplicationController
           end
         end
       end
-      @hits = hits.values.find_all{ |hit| hit.topic.forum == @forum }
+      @hits = hits.values.find_all { |hit| hit.topic.forum == @forum }
       TopicHit.normalize_scores(@hits)
     end
   end
-  
+
   def toggle_status
     @topic = Topic.find(params[:id])
     @topic.open_status = !@topic.open_status
@@ -192,7 +193,7 @@ class TopicsController < ApplicationController
     flash[:notice] = "Topic has been marked as #{(@topic.open_status ? "open" : "closed")}"
     redirect_to topic_path(@topic)
   end
-  
+
   def toggle_topic_details_box
     @topic = Topic.find(params[:id])
     if session[:topic_details_box_display] == "SHOW"
@@ -200,15 +201,15 @@ class TopicsController < ApplicationController
     else
       session[:topic_details_box_display] = "SHOW"
     end
-    
+
     respond_to do |format|
-      format.html { 
+      format.html {
         index
       }
-      format.js  { do_rjs_toggle_topic_details_box }
+      format.js { do_rjs_toggle_topic_details_box }
     end
   end
-  
+
   def rate
     @topic = Topic.find(params[:id])
     @topic.rate(params[:stars], current_user, params[:dimension])
@@ -218,27 +219,27 @@ class TopicsController < ApplicationController
       page.visual_effect :highlight, id
     end
   end
-  
-  
+
+
   private
-  
-  def fetch_topic    
+
+  def fetch_topic
     @topic = Topic.find(params[:id], :include => {:comments => [:endorser, :user, :topic]})
   end
-  
+
   def must_login
-   (!@topic.forum.public? and current_user == :false)
+    (!@topic.forum.public? and current_user == :false)
   end
-  
+
   def redirect_path_on_access_denied user
     return forums_path unless user == :false
     return url_for(:controller => 'account', :action => 'login', :only_path => true) if user == :false
   end
-  
-  def do_rjs_toggle_topic_details_box 
+
+  def do_rjs_toggle_topic_details_box
     render :update do |page|
-      page.replace "topic_details_area", 
-      :partial => "show_hide_topic_details"
+      page.replace "topic_details_area",
+                   :partial => "show_hide_topic_details"
       if session[:topic_details_box_display] == "HIDE"
         page.visual_effect :blind_up, :topic_details, :duration => 0.5
       else
