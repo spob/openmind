@@ -8,7 +8,6 @@ production:
   enable_star: 1
   min_infix_len: 1
   max_matches: 200
-  match_mode: extended
   morphology: stem_en
   html_strip: 1
   bin_path: '/usr/local/bin'
