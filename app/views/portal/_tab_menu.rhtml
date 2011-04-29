@@ -1,0 +1,59 @@
+<%= javascript_include_tag "wz_tooltip.js", :cache => "cache/tooltip" %>
+<h1>Scribe Portal</h1>
+
+<% content_for :sidebar1 do -%>
+    <%= render(:partial => "sidebar1", :object => @current_user) %>
+<% end %>
+<% if current_user && current_user.can_specify_email_in_portal? %>
+    <% form_for :user, :url => portal_index_path, :html => {:class => 'cssform searchform'} do |f| %>
+        <p>
+          <label for="search">
+            View for User Email:
+          </label>
+          <%= text_field_with_auto_complete :user, :email, {}, {:method => :get} %>
+        </p>
+        <p>
+          <label>
+          </label>
+          <%= submit_tag 'View', :name => nil, :class=> "button" %>
+          <%= link_to 'Reset',
+                      portal_index_path(:reset => "Y"),
+                      {:class=> "button"} -%>
+        </p>
+    <% end %>
+<% end %>
+
+<div id="tabs">
+  <ul class="tabs">
+    <li <%= tab_html_class "portal", "index" %>><%= link_to "Customers", portal_index_path,
+                                                            html_options = {
+                                                                    :onmouseover => "Tip('View license keys for customers')"} %></li>
+    <li <%= tab_html_class "portal", "technical_consultants" %>><%= link_to "Technical Consultants", technical_consultants_portal_path,
+                                                                            html_options = {
+                                                                                    :onmouseover => "Tip('View certified technical consultants')",
+                                                                                    :method => :get} %></li>
+    <li <%= tab_html_class "portal", "sales_consultants" %>><%= link_to "Sales Consultants", sales_consultants_portal_path,
+                                                                        html_options = {
+                                                                                :onmouseover => "Tip('View certified sales consultants')",
+                                                                                :method => :get} %></li>
+    <li <%= tab_html_class "portal", "nfrs" %>><%= link_to "NFRs", nfrs_portal_path,
+                                                           html_options = {
+                                                                   :onmouseover => "Tip('View NFRs and Internal Licenses')",
+                                                                   :method => :get} %></li>
+    <li <%= tab_html_class "portal", "tickets" %>><%= link_to "Tickets", tickets_portal_path,
+                                                              html_options = {
+                                                                      :onmouseover => "Tip('View support incidents')",
+                                                                      :method => :get} %></li>
+    <li <%= tab_html_class "portal", "users" %>><%= link_to "Users", users_portal_path,
+                                                            html_options = {
+                                                                    :onmouseover => "Tip('View users for this organization')",
+                                                                    :method => :get} %></li>
+    <% if current_user.can_view_forecasts? || current_user.can_specify_email_in_portal? %>
+        <li <%= tab_html_class "portal", "forecasts" %>><%= link_to "Forecasts", forecasts_portal_path,
+                                                                html_options = {
+                                                                        :onmouseover => "Tip('View forecasts')",
+                                                                        :method => :get} %></li>
+    <% end %>
+  </ul>
+</div>
+<div id="menuline"></div>

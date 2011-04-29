@@ -1,0 +1,41 @@
+<% content_for :head do -%>
+    <%= theme_stylesheet_link_tag 'sideBarRight' %>
+    <%= javascript_include_tag "tablecloth" %>
+<% end %>
+<% content_for :bodyTag do -%>
+    <%= set_focus_to_id 'user_email' -%>
+<% end %>
+
+<%= render :partial => "tab_menu" %>
+<div id="tabBody" style="position:relative; padding-top:15px;">
+  <h3>Certified Consultants (Technical)</h3>
+  <table>
+    <tr>
+      <th>
+        Consultant Name
+      </th>
+      <th>
+        Email Address
+      </th>
+      <th>
+        Certification
+      </th>
+      <th>
+        Certified At
+      </th>
+      <th>
+        Active
+      </th>
+      <th>
+        Purchased Training?
+      </th>
+    </tr>
+    <% if @technical_consultants.present? %>
+        <%= render :partial => 'consultant', :collection => @technical_consultants, :locals => {:type => "T"} %>
+    <% else %>
+        <td colspan="6">
+          No records found
+        </td>
+    <% end %>
+  </table>
+</div>
