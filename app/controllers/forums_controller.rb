@@ -215,7 +215,7 @@ class ForumsController < ApplicationController
     begin
       #      search_results = Topic.find_by_solr(params[:search], :scores => true)
       search_results = params[:search].blank? ? [] : Topic.search(params[:search], :retry_stale => true, :limit => 200,
-       )
+       :match_mode => :extended)
     rescue RuntimeError => e
       flash[:error] = "An error occurred while executing your search. Perhaps there is a problem with the syntax of your search string."
       logger.error(e)
