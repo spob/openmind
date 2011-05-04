@@ -27,6 +27,11 @@ module ProjectsHelper
     end
   end
 
+  def done_color story
+    (story.status == "delivered" ? "green": "black")
+  end
+
+
   def cell_color_by_story_status story
     style = "border: 2px solid grey;"
     case story.status
