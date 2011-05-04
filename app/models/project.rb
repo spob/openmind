@@ -10,6 +10,7 @@ class Project < ActiveRecord::Base
 
   has_one :latest_iteration, :class_name => "Iteration", :order => "iteration_number DESC"
   has_many :iterations, :dependent => :destroy, :order => "iteration_number DESC"
+  has_many :bugs, :dependent => :destroy
 
   STATUS_PUSHED = "pushed"
 
@@ -365,11 +366,14 @@ class Project < ActiveRecord::Base
       num = /\d+/x.match(story.name).to_s
 #      puts "Look for bug number #{num}"
       bug = Bug.find_by_bug_number(num)
-      if bug && bug. pulled_from_pivotal_at.nil?
-#        puts "Found bug!!!"
-        update_story_name story.pivotal_identifier, "D#{num}: #{bug.title}", bug.description
-        bug.update_attribute :pulled_from_pivotal_at, Time.now
+      unless bug
+        self.bugs.create(:bug_number => num, :title => story.name)
       end
+#      if bug && bug. pulled_from_pivotal_at.nil?
+##        puts "Found bug!!!"
+#        update_story_name story.pivotal_identifier, "D#{num}: #{bug.title}", bug.description
+#        bug.update_attribute :pulled_from_pivotal_at, Time.now
+#      end
     end
   end
 
