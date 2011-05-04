@@ -254,6 +254,7 @@ class Project < ActiveRecord::Base
                                                   :story_type => story.at('story_type').inner_html,
                                                   :sort => n)
             end
+            integrate_bug(@story)
             n = n + 1
 
             tasks = story.at('tasks')
@@ -339,8 +340,9 @@ class Project < ActiveRecord::Base
     end
   end
 
-  def update_story_name story_id, name
-    body = "<story><name>#{name}</name></story>"
+  def update_story_name story_id, name, description=nil
+    desc = (description ? "<description>#{description}</description>" : "")
+    body = "<story><name>#{name}</name>#{desc}</story>"
     resource_uri = URI.parse("http://www.pivotaltracker.com/services/v3/projects/#{pivotal_identifier}/stories/#{story_id}")
     http = Net::HTTP.new(resource_uri.host, resource_uri.port)
     req = Net::HTTP::Put.new(resource_uri.path, {'Content-type' => 'application/xml', 'X-TrackerToken' => APP_CONFIG['pivotal_api_token']})
@@ -356,6 +358,19 @@ class Project < ActiveRecord::Base
       return x unless stories.has_key? x
     end
     0
+  end
+
+  def integrate_bug(story)
+    if (story.name =~ /^D\d+/ix)
+      num = /\d+/x.match(story.name).to_s
+#      puts "Look for bug number #{num}"
+      bug = Bug.find_by_bug_number(num)
+      if bug && bug. pulled_from_pivotal_at.nil?
+#        puts "Found bug!!!"
+        update_story_name story.pivotal_identifier, "D#{num}: #{bug.title}", bug.description
+        bug.update_attribute :pulled_from_pivotal_at, Time.now
+      end
+    end
   end
 
   def calc_status(complete, remaining_hours, total_hours, description)
