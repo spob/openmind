@@ -366,7 +366,7 @@ class Project < ActiveRecord::Base
   end
 
   def integrate_pivotal_bug(story)
-    update_story_name story.pivotal_identifier, "D#{story.bug_number}: #{story.name}", story.bug_description
+    update_story_name story.pivotal_identifier, story.name, story.bug_description
     story.update_attribute :bug_integrated_to_pivotal_at, Time.now
   end
 
