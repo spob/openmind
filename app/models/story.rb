@@ -13,6 +13,8 @@ class Story < ActiveRecord::Base
               :conditions => {:status => "pushed"}
   named_scope :pointed,
               :conditions => ['points >= 0']
+  named_scope :bugs_to_be_integrated,
+      :conditions => "bug_integrated_to_ontime_at is not null and bug_integrated_to_pivotal_at is null and story_type = 'bug'"
   named_scope :conditional_pushed,
               lambda { |param| return {} if param.nil? or param == "Y"
               {:conditions => ["stories.status <> ?", "pushed"]}

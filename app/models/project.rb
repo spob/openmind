@@ -313,6 +313,10 @@ class Project < ActiveRecord::Base
               update_task_estimate(t, @iteration)
             end
           end
+          Story.bugs_to_be_integrated.each do |b|
+            integrate_pivotal_bug(b)
+          end
+
           @iteration.update_attributes!(:last_synced_at => Time.now)
         end
       ensure
@@ -361,21 +365,10 @@ class Project < ActiveRecord::Base
     0
   end
 
-#  def integrate_bug(story)
-#    if (story.name =~ /^D\d+/ix)
-#      num = /\d+/x.match(story.name).to_s
-##      puts "Look for bug number #{num}"
-#      bug = Bug.find_by_bug_number(num)
-#      unless bug
-#        self.bugs.create(:bug_number => num, :title => story.name)
-#      end
-##      if bug && bug. pulled_from_pivotal_at.nil?
-###        puts "Found bug!!!"
-##        update_story_name story.pivotal_identifier, "D#{num}: #{bug.title}", bug.description
-##        bug.update_attribute :pulled_from_pivotal_at, Time.now
-##      end
-#    end
-#  end
+  def integrate_pivotal_bug(story)
+    update_story_name story.pivotal_identifier, "D#{story.bug_number}: #{story.name}", story.bug_description
+    story.update_attribute :bug_integrated_to_pivotal_at, Time.now
+  end
 
   def calc_status(complete, remaining_hours, total_hours, description)
     status = "Not Started"
