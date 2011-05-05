@@ -238,6 +238,7 @@ class Project < ActiveRecord::Base
                                         :status => story.at('current_state').inner_html,
                                         :name => story.at('name').inner_html,
                                         :owner => story.at('owned_by').try(:inner_html),
+                                        :bug_number => Story.parse_bug(story.at('name').inner_html),
                                         :story_type => story.at('story_type').inner_html,
                                         :sort => n)
 
@@ -250,11 +251,11 @@ class Project < ActiveRecord::Base
                                                   :points => story.at('estimate').try(:inner_html),
                                                   :status => story.at('current_state').inner_html,
                                                   :name => story.at('name').inner_html,
+                                                  :bug_number => Story.parse_bug(story.at('name').inner_html),
                                                   :owner => story.at('owned_by').try(:inner_html),
                                                   :story_type => story.at('story_type').inner_html,
                                                   :sort => n)
             end
-            integrate_bug(@story)
             n = n + 1
 
             tasks = story.at('tasks')
@@ -360,18 +361,21 @@ class Project < ActiveRecord::Base
     0
   end
 
-  def integrate_bug(story)
-    if (story.name =~ /^D\d+/ix)
-      num = /\d+/x.match(story.name).to_s
-#      puts "Look for bug number #{num}"
-      bug = Bug.find_by_bug_number(num)
-      if bug && bug. pulled_from_pivotal_at.nil?
-#        puts "Found bug!!!"
-        update_story_name story.pivotal_identifier, "D#{num}: #{bug.title}", bug.description
-        bug.update_attribute :pulled_from_pivotal_at, Time.now
-      end
-    end
-  end
+#  def integrate_bug(story)
+#    if (story.name =~ /^D\d+/ix)
+#      num = /\d+/x.match(story.name).to_s
+##      puts "Look for bug number #{num}"
+#      bug = Bug.find_by_bug_number(num)
+#      unless bug
+#        self.bugs.create(:bug_number => num, :title => story.name)
+#      end
+##      if bug && bug. pulled_from_pivotal_at.nil?
+###        puts "Found bug!!!"
+##        update_story_name story.pivotal_identifier, "D#{num}: #{bug.title}", bug.description
+##        bug.update_attribute :pulled_from_pivotal_at, Time.now
+##      end
+#    end
+#  end
 
   def calc_status(complete, remaining_hours, total_hours, description)
     status = "Not Started"

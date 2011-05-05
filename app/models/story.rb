@@ -1,7 +1,7 @@
 class Story < ActiveRecord::Base
   belongs_to :iteration
   has_many :tasks, :dependent => :destroy
-  has_many :notes, :class_name => 'StoryNote', :foreign_key => "story_id"#, :dependent => :destroy
+  has_many :notes, :class_name => 'StoryNote', :foreign_key => "story_id" #, :dependent => :destroy
 
   validates_numericality_of :pivotal_identifier, :greater_than_or_equal_to => 1, :only_integer => true, :allow_nil => true
   validates_uniqueness_of :pivotal_identifier, :case_sensitive => false, :scope => :iteration_id
@@ -41,6 +41,16 @@ class Story < ActiveRecord::Base
         when "pushed" then
           7000 + (s.sort ? s.sort : 0)
       end
+    end
+  end
+
+  def parse_bug_number
+    Story.parse_bug(self.name)
+  end
+
+  def self.parse_bug title
+    if (title =~ /^D\d+/ix)
+      /\d+/x.match(title).to_s.to_i
     end
   end
 end
