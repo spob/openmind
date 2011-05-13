@@ -50,6 +50,26 @@ class AccountController < ApplicationController
     end
   end
 
+  def external_login
+    return unless request.post?
+    trusted_sites = (APP_CONFIG['otp_trusted_sites'] || "")
+    if Regexp.new(trusted_sites).match(request.remote_ip)
+      self.current_user = User.authenticate(params[:login], params[:password])
+      logger.info("External login from #{request.remote_ip} resulted in #{logged_in?}")
+    else
+      logger.warn("Request for external login from an untrusted site: #{request.remote_ip} is not in #{APP_CONFIG['otp_trusted_sites']}")
+    end
+    respond_to do |format|
+      format.xml do
+        if logged_in?
+          render :xml => self.current_user.external_login_to_xml
+        else
+          render :nothing => true, :status => 404
+        end
+      end
+    end
+  end
+
   def login_openid
     return unless request.post?
 
@@ -64,15 +84,15 @@ class AccountController < ApplicationController
     status = begin_openid_authentication(@openid_url, '/account/continue_openid')
 
     flash[:error] = case status
-      when :missing then
-        'Sorry, the OpenID is missing.'
-      when :failed then
-        'Sorry, the OpenID verification failed.'
-      when :timeout then
-        'Timed out.'
-      when :unknown then
-        'Not sure what happened.'
-    end
+                      when :missing then
+                        'Sorry, the OpenID is missing.'
+                      when :failed then
+                        'Sorry, the OpenID verification failed.'
+                      when :timeout then
+                        'Timed out.'
+                      when :unknown then
+                        'Not sure what happened.'
+                    end
   end
 
   def continue_openid

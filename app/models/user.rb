@@ -54,18 +54,18 @@ class User < ActiveRecord::Base
   # same time they create a user
   attr_protected :activated_at
 
-  validates_presence_of     :email, :row_limit, :last_name, :enterprise
-  validates_presence_of     :password,                   :if => :password_required?
-  validates_presence_of     :password_confirmation,      :if => :password_required?
-  validates_length_of       :password, :within => 4..40, :if => :password_required?
-  validates_confirmation_of :password,                   :if => :password_required?
-  validates_length_of       :email,    :within => 3..100
-  validates_uniqueness_of   :email, :case_sensitive => false
+  validates_presence_of :email, :row_limit, :last_name, :enterprise
+  validates_presence_of :password, :if => :password_required?
+  validates_presence_of :password_confirmation, :if => :password_required?
+  validates_length_of :password, :within => 4..40, :if => :password_required?
+  validates_confirmation_of :password, :if => :password_required?
+  validates_length_of :email, :within => 3..100
+  validates_uniqueness_of :email, :case_sensitive => false
   validates_email_format_of :email, :allow_nil => true
   validates_numericality_of :row_limit
-  validates_length_of       :first_name, :maximum => 40, :allow_nil => true
-  validates_length_of       :last_name, :maximum => 40, :allow_nil => true
-  validates_length_of       :activation_code, :maximum => 40, :allow_nil => true
+  validates_length_of :first_name, :maximum => 40, :allow_nil => true
+  validates_length_of :last_name, :maximum => 40, :allow_nil => true
+  validates_length_of :activation_code, :maximum => 40, :allow_nil => true
   before_save :encrypt_password
 
   belongs_to :enterprise
@@ -78,17 +78,17 @@ class User < ActiveRecord::Base
   has_many :topic_watches
   # couldn't get through to work
   has_many :watched_topics, :class_name => 'Topic',
-    :finder_sql => 'SELECT t.* ' +
-    'from Topics AS t ' +
-    'INNER JOIN topic_watches AS tw ON t.id = tw.topic_id ' +
-    'WHERE tw.user_id = #{id} ' +
-    'ORDER BY t.forum_id, t.updated_at DESC'
+           :finder_sql => 'SELECT t.* ' +
+               'from Topics AS t ' +
+               'INNER JOIN topic_watches AS tw ON t.id = tw.topic_id ' +
+               'WHERE tw.user_id = #{id} ' +
+               'ORDER BY t.forum_id, t.updated_at DESC'
   has_and_belongs_to_many :poll_options, :join_table => 'poll_user_responses'
   has_and_belongs_to_many :mediated_forums, :join_table => 'forum_mediators', :class_name => 'Forum'
 
   has_one :last_logon, :class_name => "UserLogon", :order => "created_at DESC"
   has_many :user_logons, :order => "created_at DESC", :dependent => :destroy
-  has_many :ideas,:dependent => :destroy, :order => "id ASC"
+  has_many :ideas, :dependent => :destroy, :order => "id ASC"
   has_many :allocations, :dependent => :destroy, :order => "created_at ASC"
   #  has_many :active_allocations, :conditions => ["expiration_date > ?", Date.current.to_s(:db)],
   #    :order => "created_at ASCactive_allocations"
@@ -96,9 +96,9 @@ class User < ActiveRecord::Base
   has_many :votes, :through => :allocations, :order => "votes.id ASC"
   # all votes by this user regardless of allocation
   has_many :all_votes, :class_name => 'Vote', :foreign_key => "user_id", :order => "votes.id ASC"
-  has_many :comments,:dependent => :destroy, :order => "id ASC"
-  has_many :topic_comments,:dependent => :destroy, :order => "id ASC"
-  has_many :user_idea_reads,:dependent => :destroy
+  has_many :comments, :dependent => :destroy, :order => "id ASC"
+  has_many :topic_comments, :dependent => :destroy, :order => "id ASC"
+  has_many :user_idea_reads, :dependent => :destroy
   has_many :rates
   has_many :owned_topics, :class_name => 'Topic', :foreign_key => "owner_id"
   has_many :portal_orgs, :class_name => 'PortalUserOrgMap', :foreign_key => 'email', :primary_key => 'email'
@@ -109,40 +109,40 @@ class User < ActiveRecord::Base
 
 
   named_scope :active,
-    :conditions => [ "active = ?", true],
-    :order => 'email asc'
+              :conditions => ["active = ?", true],
+              :order => 'email asc'
 
   # imported users have both activated_at and activation_code as null
   named_scope :imported_users,
-    :conditions => ["activated_at is null and activation_code is null" ]
+              :conditions => ["activated_at is null and activation_code is null"]
 
   named_scope :immediate_topic_watcher,
-    :conditions => { :topic_notification_digests => false }
+              :conditions => {:topic_notification_digests => false}
 
   named_scope :sysadmins,
-    :joins => [:roles],
-    :conditions => {:active => 1, :roles => {:title => 'sysadmin'}},
-    :order => :email
+              :joins => [:roles],
+              :conditions => {:active => 1, :roles => {:title => 'sysadmin'}},
+              :order => :email
 
   named_scope :voters,
-    :joins => [:roles],
-    :conditions => {:active => 1, :roles => {:title => 'voter'}},
-    :order => 'users.email'
+              :joins => [:roles],
+              :conditions => {:active => 1, :roles => {:title => 'voter'}},
+              :order => 'users.email'
 
   named_scope :mediators,
-    :joins => [:roles],
-    :conditions => {:active => 1, :roles => {:title => 'mediator'}},
-    :order => 'users.email'
+              :joins => [:roles],
+              :conditions => {:active => 1, :roles => {:title => 'mediator'}},
+              :order => 'users.email'
 
   named_scope :next,
-    lambda{|email|{:conditions => ['email > ?', email],
-      :order => 'email',
-      :limit => 1}}
+              lambda { |email| {:conditions => ['email > ?', email],
+                                :order => 'email',
+                                :limit => 1} }
 
   named_scope :previous,
-    lambda{|email|{:conditions => ['email < ?', email],
-      :order => 'email desc',
-      :limit => 1}}
+              lambda { |email| {:conditions => ['email < ?', email],
+                                :order => 'email desc',
+                                :limit => 1} }
 
   def self.row_limit_options
     [10, 25, 50, 100]
@@ -221,7 +221,7 @@ class User < ActiveRecord::Base
 
   def authenticated?(password)
     crypted_password == encrypt(password) && enterprise.active && active &&
-      !activated_at.nil?
+        !activated_at.nil?
   end
 
   def remember_token?
@@ -240,13 +240,13 @@ class User < ActiveRecord::Base
   # browser closes
   def remember_me
     self.remember_token_expires_at = 2.weeks.from_now.utc
-    self.remember_token            = encrypt("#{email}--#{remember_token_expires_at}")
+    self.remember_token = encrypt("#{email}--#{remember_token_expires_at}")
     save(false)
   end
 
   def forget_me
     self.remember_token_expires_at = nil
-    self.remember_token            = nil
+    self.remember_token = nil
     save(false)
   end
 
@@ -290,8 +290,8 @@ class User < ActiveRecord::Base
       conditions << ids
     end
     paginate :page => page, :order => 'email',
-      :per_page => per_page, :include => [:enterprise, :last_logon],
-      :conditions => conditions
+             :per_page => per_page, :include => [:enterprise, :last_logon],
+             :conditions => conditions
   end
 
   def full_name
@@ -311,19 +311,47 @@ class User < ActiveRecord::Base
 
   def new_random_password
     self.salt = calc_salt
-    self.password=  self.salt[0,6]
+    self.password= self.salt[0, 6]
     self.password_confirmation = self.password
   end
 
   def new_otp
-    self.one_time_password = APP_CONFIG['otp_expire_seconds'].to_i.from_now.xmlschema + '|' + Digest::SHA1.hexdigest("--#{calc_salt[0,6]}--#{Time.now.to_s}--")
+    self.one_time_password = APP_CONFIG['otp_expire_seconds'].to_i.from_now.xmlschema + '|' + Digest::SHA1.hexdigest("--#{calc_salt[0, 6]}--#{Time.now.to_s}--")
   end
 
   require 'rexml/document'
+
   def otp_to_xml
     doc = REXML::Document.new
     root = doc.add_element "one_time_password"
     root.add_text self.one_time_password
+    doc << REXML::XMLDecl.new(REXML::XMLDecl::DEFAULT_VERSION, REXML::XMLDecl::DEFAULT_ENCODING)
+    doc.to_s
+  end
+
+  def external_login_to_xml
+    doc = REXML::Document.new
+    root = doc.add_element "external_login"
+    enterprise = root.add_element "enterprise"
+    enterprise.attributes["id"] = self.enterprise.id
+    enterprise.attributes["type"] = self.enterprise.enterprise_type.short_name
+    enterprise.add_text self.enterprise.name
+
+    roles = root.add_element "roles"
+    self.roles.each do |r|
+      role = REXML::Element.new "role"
+      role.attributes["id"] = r.id
+      role.add_text r.title
+      roles.elements << role
+    end
+
+    groups = root.add_element "groups"
+    self.groups.each do |g|
+      group = REXML::Element.new "group"
+      group.attributes["id"] = g.id
+      group.add_text g.name
+      groups.elements << group
+    end
     doc << REXML::XMLDecl.new(REXML::XMLDecl::DEFAULT_VERSION, REXML::XMLDecl::DEFAULT_ENCODING)
     doc.to_s
   end
@@ -402,7 +430,7 @@ class User < ActiveRecord::Base
   end
 
   def validate
-    errors.add(:row_limit, "should be at least 1 or greater") if row_limit.nil?  || row_limit < 1
+    errors.add(:row_limit, "should be at least 1 or greater") if row_limit.nil? || row_limit < 1
   end
 
   def make_activation_code
@@ -410,7 +438,7 @@ class User < ActiveRecord::Base
     if self.activation_code == 'SKIP'
       self.activation_code = nil
     else
-      self.activation_code = Digest::SHA1.hexdigest( Time.zone.now.to_s.split(//).sort_by {rand}.join )
+      self.activation_code = Digest::SHA1.hexdigest(Time.zone.now.to_s.split(//).sort_by { rand }.join)
     end
   end
 
@@ -425,7 +453,7 @@ class User < ActiveRecord::Base
   def fetch_enterprise_types config_type
     # strip surrounding ()
     types = (APP_CONFIG[config_type] || "").gsub(/^\s*\(|\)\s*$/, "").split(/,/) || [""]
-    LookupCode.find(:all, :conditions => { :short_name => types, :code_type => 'EnterpriseType'})
+    LookupCode.find(:all, :conditions => {:short_name => types, :code_type => 'EnterpriseType'})
   end
 
   def portal_enterprise_types
