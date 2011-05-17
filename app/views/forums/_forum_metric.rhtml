@@ -1,60 +1,64 @@
-<% if forum_metric.nil? || forum_metric.can_see?(current_user) %>
-<h3>
-	<% if forum_metric.nil? %>
-    All Topics By Enterprise
-	<% elsif forum_metric.id.nil? %>
-    <%= forum_metric.name %>
-    <% else %>
-    <%= link_to forum_metric.name, forum_path(forum_metric),
-    html_options = {:onmouseover => "Tip('View details for the #{forum_metric.name} forum')"} %>
-    <% end %>
-</h3>
-<table cellspacing="0" cellpadding="0" class="cssform">
-    <tr>
+<% if forum_metric.nil? || forum_metric == "by_forum" || forum_metric.can_see?(current_user) %>
+    <h3>
+      <% if forum_metric.nil? %>
+          All Topics By Enterprise
+      <% elsif forum_metric == "by_forum" %>
+          All Topics by Forum
+      <% elsif forum_metric.id.nil? %>
+          <%= forum_metric.name %>
+      <% else %>
+          <%= link_to forum_metric.name, forum_path(forum_metric),
+                      html_options = {:onmouseover => "Tip('View details for the #{forum_metric.name} forum')"} %>
+      <% end %>
+    </h3>
+    <table cellspacing="0" cellpadding="0" class="cssform">
+      <tr>
         <th rowspan="2">
-            Moderator
+          <%= forum_metric == "by_forum" ? "Forum" : "Moderator" %>
         </th>
         <th colspan="3">
-            Open Topics
+          Open Topics
         </th>
         <th colspan="2">
-            Pending Response Days
+          Pending Response Days
         </th>
         <th colspan="8">
-            Closed Topics in Week Beginning
+          Closed Topics in Week Beginning
         </th>
-    </tr>
-    <tr>
+      </tr>
+      <tr>
         <th>
-            Count
-        </th>
-        <th>
-            Average Days Open
+          Count
         </th>
         <th>
-            Oldest Days Open
+          Average Days Open
         </th>
         <th>
-            Average
+          Oldest Days Open
         </th>
         <th>
-            Oldest
+          Average
+        </th>
+        <th>
+          Oldest
         </th>
         <% (1..ForumsController.week_size).each do |i| %>
-        <th>
-            <%= @weeks[i].strftime("%b %d") %>
-        </th>
+            <th>
+              <%= @weeks[i].strftime("%b %d") %>
+            </th>
         <% end %>
-    </tr>
-    <% if forum_metric.nil? %>
-	<% enterprise_ids = User.mediators.all(:select => "distinct users.enterprise_id").collect(&:enterprise_id).find_all{|e| Topic.by_enterprise(e).owned.open_or_recently_closed(@weeks[9]).present? } %>
-	<% enterprises = Enterprise.find_all_by_id(enterprise_ids, :order => :name) %>
-    <%= render :partial => "mediator_forum_metric", :collection => enterprises, :locals => {:forum => nil} %>
-    <% else %>
-    <%=render(:partial => "mediator_forum_metric", :collection => forum_metric.mediators.find_all{|m| !m.owned_topics.open_or_recently_closed(@weeks[9]).by_forum(forum_metric.id).empty?},
-    :locals => {:forum => forum_metric} ) %>
-    <%=render(:partial => "mediator_forum_metric",
-    :locals => {:mediator_forum_metric => dummy_unassigned_mediator, :forum => forum_metric} ) %>
-    <% end %>
-</table>
+      </tr>
+      <% if forum_metric.nil? %>
+          <% enterprise_ids = User.mediators.all(:select => "distinct users.enterprise_id").collect(&:enterprise_id).find_all { |e| Topic.by_enterprise(e).owned.open_or_recently_closed(@weeks[9]).present? } %>
+          <% enterprises = Enterprise.find_all_by_id(enterprise_ids, :order => :name) %>
+          <%= render :partial => "mediator_forum_metric", :collection => enterprises, :locals => {:forum => nil} %>
+      <% elsif forum_metric == "by_forum" %>
+          <%= render :partial => "mediator_forum_metric", :collection => Forum.tracked.active.order_by_name, :locals => {:forum => nil} %>
+      <% else %>
+          <%= render(:partial => "mediator_forum_metric", :collection => forum_metric.mediators.find_all { |m| !m.owned_topics.open_or_recently_closed(@weeks[9]).by_forum(forum_metric.id).empty? },
+                     :locals => {:forum => forum_metric}) %>
+          <%= render(:partial => "mediator_forum_metric",
+                     :locals => {:mediator_forum_metric => dummy_unassigned_mediator, :forum => forum_metric}) %>
+      <% end %>
+    </table>
 <% end %>
