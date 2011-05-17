@@ -175,7 +175,8 @@ class UsersController < ApplicationController
 
   def lost_password
     return unless request.post?
-    @email = params[:email] # needed to remember email info if fails
+    @email =
+        params[:email] # needed to remember email info if fails
     user   = User.find_by_email(@email)
     if user.nil?
       flash[:notice] = "No such user #{@email}"

@@ -75,7 +75,10 @@ module ForumsHelper
     # For some reason topic.last_comment is not always returning the last comment.
     # it's less efficient, but I'll return all comments and grab the last one
     return if topic.comments.empty?
-    last_comment = topic.comments.last
+#    last_comment = topic.comments.last
+    last_comment = topic.comments.public.sort_by{|c| c.published_at}.last unless topic.forum.mediators.include? current_user
+    last_comment = topic.comments.last if topic.forum.mediators.include? current_user
+    return '-' if last_comment.nil?
     comment = last_comment.body
     comment = boldify(comment) if topic.unread_comment?(current_user)
 
