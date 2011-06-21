@@ -22,7 +22,7 @@
   </td>
   <td>
     <% if forecast.products.present? %>
-          <%= forecast.products.collect{|p| h p.name}.join("<br />") %>
+          <%= forecast.products.collect{|p| h p.name.sub(/\ Adapter$/, "")}.join("<br />") %>
     <% else %>
         &nbsp;
     <% end %>
