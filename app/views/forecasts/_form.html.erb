@@ -69,10 +69,10 @@
       </p>
 
       <p>
-        <label>Adapters</label>
+        <label>Applications</label>
         <% for product in forecasted_products %>
             <span style="display:block;margin-left:10px;"><%= check_box_tag "forecast[product_ids][]", product.id, @forecast.products.include?(product) %>
-              <%= h product.name %>
+              <%= strip_adapter(h product.name) %>
             </span>
         <% end %>
       </p>

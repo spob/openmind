@@ -4,6 +4,10 @@ module ForecastsHelper
     Forecast.stages.to_a.sort{|x,y| x[1] <=> y[1]}.collect{|x| x[0]}
   end
 
+  def strip_adapter(str)
+    str.sub(/\ Adapter$/, "")
+  end
+
   def product_options
     [
             "60 Day Migration License",
@@ -12,7 +16,8 @@ module ForecastsHelper
             "SB100",
             "Standard",
             "Professional",
-            "Enterprise"
+            "Enterprise",
+            "Scribe Online RS"
     ]
   end
 
