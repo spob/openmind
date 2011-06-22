@@ -88,7 +88,7 @@ and
 
   # the earliest comment that is pending a response from a moderator
   def earliest_pending_comment
-    last_moderated_comment = self.comments.by_moderator.sort_by { |c| c.id }.last
+    last_moderated_comment = self.comments.endorsed.sort_by { |c| c.id }.last
     if last_moderated_comment.nil?
       nil
     else
@@ -103,7 +103,7 @@ and
   def days_comment_pending
     comment = earliest_pending_comment
     if comment.nil?
-      if comments.by_moderator.empty?
+      if comments.endorsed.empty?
         comment = comments.first
       else
         return 0
