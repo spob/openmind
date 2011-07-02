@@ -1,7 +1,7 @@
 class Story < ActiveRecord::Base
   belongs_to :iteration
   has_many :tasks, :dependent => :destroy
-  has_many :notes, :class_name => 'StoryNote', :foreign_key => "story_id" #, :dependent => :destroy
+  has_many :notes, :class_name => 'StoryNote', :foreign_key => "story_id", :dependent => :destroy
 
   validates_numericality_of :pivotal_identifier, :greater_than_or_equal_to => 1, :only_integer => true, :allow_nil => true
   validates_uniqueness_of :pivotal_identifier, :case_sensitive => false, :scope => :iteration_id
