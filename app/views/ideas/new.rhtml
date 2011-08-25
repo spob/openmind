@@ -5,11 +5,15 @@
 <%content_for :bodyTag do -%>
   <%= set_focus_to_id 'idea_title' -%>
 <%end%>
-<%= javascript_include_tag "wz_tooltip.js", :cache => "cache/tooltip" %> 
+<%= javascript_include_tag "wz_tooltip.js", :cache => "cache/tooltip" %>
 <%= error_messages_for 'idea' %>
 <% form_for :idea, :html => {:id => "new-idea"}, :url => { :action => "create" } do |form| %>
   <div class="formTitle">New Idea</div>
   <div class="cssform widerLabel">
+    <p>
+      <%= theme_image_tag("icons/32x32/32_warning.png", :alt => "Note") %>
+      <strong style="font-size:125%;">Ideas are requests for features and improvements to Scribe products. If you are looking for help with a problem or issue, please visit <%= link_to "KnowledgeBase & Forums", forums_path %>.</strong>
+    </p>
     <p>
       <label for="title">Title:</label>
       <%= form.text_field :title, { :size => 60, :maxlength => 100 } %>
@@ -21,7 +25,7 @@
     <p>
       <label for="product">Product:</label>
       <%=form.collection_select :product_id, Product.active.by_name, :id, :name,
-        options = { :prompt => true} %>    
+        options = { :prompt => true} %>
     </p>
     <p>
       <label for="tag_list">Tags:</label>
@@ -31,12 +35,12 @@
     </p>
     <p>
       <label></label>
-      <%= submit_tag 'Create', options = {:class=> "button", 
+      <%= submit_tag 'Create', options = {:class=> "button",
         :disable_with => "Please wait...",
                 :onmouseover => "Tip('Create new idea')" } %>
-    <%= link_to 'Cancel', options = {:action => 'list'}, 
-      html_options = { :class=> "button", 
+    <%= link_to 'Cancel', options = {:action => 'list'},
+      html_options = { :class=> "button",
                 :onmouseover => "Tip('Cancel new idea, return to ideas list')"    } %>
     </p>
-  </div>  
+  </div>
 <% end %>
