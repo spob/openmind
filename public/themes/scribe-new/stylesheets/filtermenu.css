@@ -26,8 +26,8 @@
     width: 144px;
     text-decoration: none;
     color: white;
-    background-color: #86A52E;
-    border-left: 7px solid #9CB556;
+    background-color: #575757;
+    border-left: 7px solid #807272;
     border-top: solid 1px #ccc;
 }
 
@@ -47,7 +47,7 @@
 #filtermenu li .selected {
     color: #000;
     font-weight: bold;
-    border-left-color: #607F00;
+    border-left-color: #575757;
     background-color: #DFDFDF;
 }
 
