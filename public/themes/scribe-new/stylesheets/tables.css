@@ -14,7 +14,7 @@ table {width:100%;border-collapse:collapse;margin:1em 0;}
 
 th, td {text-align:left;padding:.5em;border:1px solid #fff;}
 th {
-    background-color:#86A52E;
+    background-color:#575757;
     color:#FFF;
     font-weight:bold;
     white-space:nowrap;
@@ -34,7 +34,7 @@ td.over, tr.even td.over, tr.odd td.over{background:#CCCCCC;}
 td.down, tr.even td.down, tr.odd td.down{background:#000;color:#fff;}
 td.selected, tr.even td.selected, tr.odd td.selected{background:#999;color:red;}
 
-/* use this if you want to apply different styleing to empty table cells*/
+/* use this if you want to apply different styling to empty table cells*/
 td.empty, tr.odd td.empty, tr.even td.empty{background:#fff;}
 
 
