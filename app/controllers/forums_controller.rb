@@ -206,6 +206,10 @@ class ForumsController < ApplicationController
     redirect_to forum_path(@forum.id)
   end
 
+  def google_search
+
+  end
+
   def search
     @hits = {}
     session[:forums_search] = params[:search]

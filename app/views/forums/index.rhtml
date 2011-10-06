@@ -1,11 +1,11 @@
-<%content_for :head do -%>     
+<%content_for :head do -%>
   <%= theme_stylesheet_link_tag 'sideBarRight' %>
   <%= javascript_include_tag "tablecloth" %>
 <%end%>
 <%content_for :bodyTag do -%>
   <%= set_focus_to_id 'forum_search' -%>
 <%end%>
-<%= javascript_include_tag "wz_tooltip.js", :cache => "cache/tooltip" %> 
+<%= javascript_include_tag "wz_tooltip.js", :cache => "cache/tooltip" %>
 <%= error_messages_for 'forum' %>
 <h1><%= theme_image_tag("icons/32x32/forums.png", options = {:alt=>"Forum"}) %>Forums</h1>
 <% if current_user != :false %>
@@ -21,7 +21,7 @@
 
 <%content_for :sidebar1 do -%>
   <%=render(:partial => "sidebar1", :object => @current_user)%>
-<%end%>  
+<%end%>
 
 <!--  -->
 <% form_tag(search_forums_path, :class => 'cssform searchform', :name => 'search' ) do -%>
@@ -35,6 +35,9 @@
     <br/>
     <%= link_to "search syntax help", {:controller => 'static', :action => 'search'},
       :popup => true %>
+    <br />
+    <br />
+    Or search the Forums & KnowledgeBase using <%= link_to "Google Search", google_search_forums_path %>
   </p>
 <% end %>
 <% cache(:controller => "forums", :action => "list_forums", :user_id => (logged_in? ? current_user.id : -1)) do %>

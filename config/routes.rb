@@ -24,7 +24,8 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :forums, :collection => {:search => :get,
                                          :rss => :get, :tag => :get, :metrics => :get, :metrics_graphs => :get,
                                          :open_count_graphs => :get, :days_pending_graphs => :get,
-                                         :pending_count_graphs => :get, :oldest_days_pending_graphs => :get},
+                                         :pending_count_graphs => :get, :oldest_days_pending_graphs => :get,
+                                         :google_search => :get },
                 :member => {:mark_all_as_read => :post}
   map.resources :forecasts,
                 :collection => {:auto_complete_for_forecast_account_name => :get, :export => :get}
