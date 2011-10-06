@@ -8,7 +8,7 @@
 <%content_for :bodyTag do -%>
   <%= set_focus_to_id 'forum_search' -%>
 <%end%>
-<%= javascript_include_tag "wz_tooltip.js", :cache => "cache/tooltip" %> 
+<%= javascript_include_tag "wz_tooltip.js", :cache => "cache/tooltip" %>
 
 <div id="actionButtons2">
   <%  if @forum.can_create_topic? current_user %>
@@ -44,12 +44,15 @@
     <br/>
     <%= link_to "search syntax help", {:controller => 'static', :action => 'search'},
       :popup => true %>
+    <br />
+    <br />
+    Or search the Forums & KnowledgeBase using <%= link_to "Google Search", google_search_forums_path %>
   </p>
 <% end %>
 
 <%content_for :sidebar1 do -%>
   <%=render(:partial => "sidebar1", :object => @forum)%>
-<%end%>  
+<%end%>
 
 <h1>Topics</h1>
 <% if @forum.tracked and @forum.can_edit? current_user %>
