@@ -282,7 +282,7 @@ class AttachmentsController < ApplicationController
         redirect_to request.env['HTTP_REFERER'] || url_for(:controller => 'ideas')
         return
       else
-        attachment.downloads += 1
+#        attachment.downloads += 1
         attachment.save!
         return attachment
       end

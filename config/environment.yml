@@ -92,9 +92,9 @@ otp_expire_seconds: 60
 
 # If you are using one time passwords for single sign on support, specify a regular express
 # used to match ip addresses which are allowed to request a one time password
-otp_trusted_sites: 127.0.0.1|71\.184\.232\.107|75\.150\.98\.197|65\.52\.0\..*|65\.52\.16\..*
+otp_trusted_sites: 71\.184\.232\.107|75\.150\.98\.197|65\.52\.0\..*|65\.52\..*\..*|64\.140\.216\.133
 
 # List of products that can be forecasted
-forecasted_products: (6,7,8,42,11,12,43,47)
+forecasted_products: (6,7,8,42,11,12,43)
 
 sprint_standup_time: 600
