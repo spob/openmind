@@ -17,6 +17,7 @@ class AccountController < ApplicationController
     return unless request.post?
     @login = params[:login] # needed to remember login info in login fails
     self.current_user = User.authenticate(params[:login], params[:password])
+    session[:return_to] = params[:return_to] if params[:return_to]
     if logged_in?
       logged_in
     else
