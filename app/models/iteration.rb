@@ -79,7 +79,7 @@ class Iteration < ActiveRecord::Base
     the_date = end_on if the_date > end_on
     day_num = 0
 
-    (self.end_on - 14..the_date).each do |d|
+    (self.start_on..the_date).each do |d|
       day_num += 1 if d.cwday < 6
     end
     day_num
