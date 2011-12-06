@@ -66,7 +66,7 @@ class Iteration < ActiveRecord::Base
 
   def calc_date day_num
     the_date = self.end_on
-    (day_num..10).each do
+    (day_num + 1..10).each do
       the_date = the_date - 1
       the_date = the_date - 2 if the_date.cwday == 7
       the_date = the_date -1 if the_date.cwday == 6
