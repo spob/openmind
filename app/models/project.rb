@@ -65,9 +65,10 @@ class Project < ActiveRecord::Base
         doc = Hpricot(response.body).at('project')
 
         self.name = doc.at('name').innerHTML
+        iteration_start_day_of_week = doc.at('week_start_day').innerHTML.strip
         self.iteration_length = doc.at('iteration_length').innerHTML
         unless self.new_record?
-          fetch_current_iteration || fetch_notes
+          fetch_current_iteration(iteration_start_day_of_week) || fetch_notes
         end
       else
         "#{pivotal_identifier} not found in pivotal tracker"
@@ -198,7 +199,7 @@ class Project < ActiveRecord::Base
   end
 
 
-  def fetch_current_iteration
+  def fetch_current_iteration iteration_start_day_of_week
     logger.info("fetch_current_iteration for project #{id}")
     resource_uri = URI.parse("http://www.pivotaltracker.com/services/v3/projects/#{pivotal_identifier}/iterations/current")
     response = Net::HTTP.start(resource_uri.host, resource_uri.port) do |http|
@@ -217,20 +218,20 @@ class Project < ActiveRecord::Base
 
         (doc/"iteration").each do |iteration|
           iteration_number = iteration.at('id').inner_html.to_i
-#        start_on = iteration.at('start').inner_html.to_date
 #        iteration_number = iteration_number - 1 if iteration_number > 1 && Project.calculate_project_date < start_on
           @iteration = self.iterations.by_iteration_number(iteration_number).lock.first
+          start_on = adjust_start_date(Date.parse(iteration.at('start').inner_html), iteration_start_day_of_week)
+          end_on = start_on + 7 * self.iteration_length - 1
 
 #        puts "#{iteration.at('finish').inner_html} -- #{Date.parse(iteration.at('finish').inner_html)}"
           if @iteration
-            start_on =
-                @iteration.update_attributes!(:start_on => Date.parse(iteration.at('start').inner_html)+1,
-                                              :end_on => Date.parse(iteration.at('finish').inner_html))
+                @iteration.update_attributes!(:start_on => start_on,
+                                              :end_on => end_on)
             @iteration.stories.each { |s| s.update_attributes!(:status => STATUS_PUSHED, :points => 0) }
           else
             @iteration = self.iterations.create!(:iteration_number => iteration_number,
-                                                 :start_on => Date.parse(iteration.at('start').inner_html)+1,
-                                                 :end_on => iteration.at('finish').inner_html)
+                                                 :start_on => start_on,
+                                                 :end_on => end_on)
           end
           n = 0
           (iteration.at('stories')/"story").each do |story|
@@ -415,4 +416,31 @@ class Project < ActiveRecord::Base
     errors.add(:pivotal_identifier, error_msg) unless error_msg.nil?
   end
 
+
+  # Pivotal sometimes gives screwy dates for the start and end time. It appears to be a timezone thing. So, for example,
+  # even though my iteration starts on a Friday, it will show the start date to be 11PM EST the previous thursday. So
+  # this method is a kludge to adjust the date if we know what the day of the week of the start date is, in case the
+  # start date is off by 1 day
+  def adjust_start_date iteration_start_day, day_string
+    day_number = day_to_cwday(day_string)
+    if iteration_start_day.cwday != day_number
+      if iteration_start_day.cwday == day_number - 1 || (day_number == 1 && iteration_start_day.cwday == 7)
+        iteration_start_day = iteration_start_day + 1
+      elsif iteration_start_day.cwday == day_number + 1 || (day_number == 7 && iteration_start_day.cwday == 1)
+        iteration_start_day = iteration_start_day - 1
+      else
+        raise "Invalid iteration start date found: #{iteration_start_day}"
+      end
+    end
+    iteration_start_day
+  end
+
+  def day_to_cwday day_string
+    days = {"Monday" => 1, "Tuesday" => 2, "Wednesday" => 3, "Thursday" => 4, "Friday" => 5, "Saturday" => 6, "Sunday" => 7}
+    cw_day = days[day_string]
+    if cw_day.nil?
+      raise "Invalid day: #{day_string}"
+    end
+    cw_day
+  end
 end
