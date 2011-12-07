@@ -93,7 +93,7 @@ class ForumsController < ApplicationController
     dot.tooltip = "#date:d M y#<br>Value: #val#"
     chart = OpenFlashChart.new
 
-    ForumMetric.all(:select => 'distinct enterprise_id').collect(& :enterprise).sort_by { |e| e.name }.each do |e|
+    ForumMetric.recent.all(:select => 'distinct enterprise_id', :conditions => "open_count > 0").collect(& :enterprise).sort_by { |e| e.name }.each do |e|
       data = []
       e.forum_metrics.recent.each do |m|
         data << ScatterValue.new(m.as_of.to_time.to_i, yield(m))
