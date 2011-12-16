@@ -36,3 +36,8 @@ production.rb
 newrelic.yml
 config/initializers/hoptoad.rb
 tmp/lock.txt
+public/BingSiteAuth.xml
+public/google*.html
+public/themes/*/cache
+public/robots.txt
+
