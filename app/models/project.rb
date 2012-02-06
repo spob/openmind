@@ -128,7 +128,7 @@ class Project < ActiveRecord::Base
                     if note_id > self.max_note_id
 #                    puts "note id less than max"
                       new_max_note_id = note_id if note_id > new_max_note_id
-                      unless StoryNote.find_by_pivotal_identifier(note_id)
+                      unless StoryNote.find_by_pivotal_identifier(note_id) || comment.blank?
 #                      puts "existing note not found"
                         story.notes.create!(:pivotal_identifier => note_id, :noted_at => noted_at,
                                             :author => author, :comment => comment, :defect_id => story_number,
