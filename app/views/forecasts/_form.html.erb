@@ -14,14 +14,16 @@
       </p>
 
       <p>
-        <%= form.label :account_name, "Account Name" %>
+        <%= form.label :account_name, "Customer Name" %>
         <%= text_field_with_auto_complete :forecast, :account_name, {}, {:method => :get} %>
       </p>
 
+<!--
       <p>
         <%= form.label :region %>
         <%= form.collection_select :region_id, Region.findall(true), :id, :description %>
       </p>
+-->
 
       <p>
         <%= form.label :rbm, "Scribe RBM" %>
@@ -46,7 +48,7 @@
         <%= form.text_field :city %>
       </p>
       <p>
-        <%= form.label :state %>
+        <%= form.label :state, "State / Province" %>
         <%= form.select :state, options_for_select(state_options, @forecast.state) %>
       </p>
       <p>
@@ -78,12 +80,12 @@
       </p>
 
       <p>
-        <%= form.label :close_at, "Close Date" %>
+        <%= form.label :close_at, "Expected Close Date" %>
         <%= calendar_date_select :forecast, :close_at, :popup => :force, :time => false %>
       </p>
 
       <p>
-        <%= form.label :amount, "Amount (in dollars)" %>
+        <%= form.label :amount, "Amount (USD)" %>
         <%= form.text_field :amount, {:size => 50, :maxlength => 50} %>
       </p>
 

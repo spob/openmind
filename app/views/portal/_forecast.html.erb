@@ -5,9 +5,11 @@
   <td>
     <%= h [forecast.address1, forecast.address2, forecast.city, forecast.state, forecast.postal_code, forecast.country].collect{|x| (x.blank? ? nil : x)}.compact.join(', ') %>
   </td>
+<!--
   <td>
-    <%= h forecast.region.description %>
+     h forecast.region.description 
   </td>
+-->
   <td>
     <%= h forecast.partner_representative %>
   </td>
