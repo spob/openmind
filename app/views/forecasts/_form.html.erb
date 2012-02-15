@@ -57,7 +57,7 @@
       </p>
       <p>
         <%= form.label :country %>
-        <%= form.text_field :country %>
+        <%= form.select :country, options_for_select(country_options, @forecast.country) %>
       </p>
 
       <p>

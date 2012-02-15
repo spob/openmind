@@ -15,7 +15,7 @@ class ForecastsController < ApplicationController
 
   def new
     can_forecast?
-    @forecast = Forecast.new(:partner_representative => current_user.full_name)
+    @forecast = Forecast.new(:partner_representative => current_user.full_name, :country => "US")
   end
 
   def create
