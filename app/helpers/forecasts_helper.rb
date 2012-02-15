@@ -11,13 +11,15 @@ module ForecastsHelper
   def product_options
     [
             "60 Day Migration License",
-            "Annual Day Migration License",
+#           "Annual Day Migration License",
             "SB15",
             "SB100",
             "Standard",
             "Professional",
             "Enterprise",
-            "Scribe Online RS"
+            "Scribe Online RS",
+            "Scribe Online SYS",
+            "Services / Training / Consulting"
     ]
   end
 
@@ -26,8 +28,10 @@ module ForecastsHelper
         ["NO STATE",""],
         ["ALABAMA","AL"],
         ["ALASKA","AK"],
+        ["ALBERTA","AB"],
         ["ARIZONA","AZ"],
         ["ARKANSAS","AR"],
+        ["BRITISH COLUMBIA","BC"],
         ["CALIFORNIA","CA"],
         ["COLORADO","CO"],
         ["CONNECTICUT","CT"],
@@ -45,6 +49,7 @@ module ForecastsHelper
         ["MAINE","ME"],
         ["MARYLAND","MD"],
         ["MASSACHUSETTS","MA"],
+        ["MANITOBA","MB"],
         ["MICHIGAN","MI"],
         ["MINNESOTA","MN"],
         ["MISSISSIPPI","MS"],
@@ -52,17 +57,25 @@ module ForecastsHelper
         ["MONTANA","MT"],
         ["NEBRASKA","NE"],
         ["NEVADA","NV"],
+        ["NEWFOUNDLAND","NF"],
         ["NEW HAMPSHIRE","NH"],
         ["NEW JERSEY","NJ"],
         ["NEW MEXICO","NM"],
         ["NEW YORK","NY"],
         ["NORTH CAROLINA","NC"],
         ["NORTH DAKOTA","ND"],
+        ["NORTHWEST TERRITORIES","NW"],
+        ["NOVA SCOTIA","NS"],
+        ["NUNAVUT","NU"],
         ["OHIO","OH"],
         ["OKLAHOMA","OK"],
+        ["ONTARIO","ON"],
         ["OREGON","OR"],
         ["PENNSYLVANIA","PA"],
+        ["PRINCE EDWARD ISLAND","PE"],
+        ["QUEBEC","QC"],
         ["RHODE ISLAND","RI"],
+        ["SASKATCHAWAN","SK"],
         ["SOUTH CAROLINA","SC"],
         ["SOUTH DAKOTA","SD"],
         ["TENNESSEE","TN"],
@@ -73,7 +86,8 @@ module ForecastsHelper
         ["WASHINGTON","WA"],
         ["WEST VIRGINIA","WV"],
         ["WISCONSIN","WI"],
-        ["WYOMING","WY"]
+        ["WYOMING","WY"],
+        ["YUKON TERRITORY","YT"]
     ]
   end
 

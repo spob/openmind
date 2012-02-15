@@ -275,7 +275,7 @@ class AttachmentsController < ApplicationController
           access_denied
         elsif params[:login_url]
           # allow caller to specify a custom login screen
-          redirect_to("#{params[:login_url]}?attachment_url=#{request.url }")
+          redirect_to("#{params[:login_url]}?attachment_url=#{request.url sudo }")
         else
           redirect_to :controller => 'account', :action => 'login'
         end

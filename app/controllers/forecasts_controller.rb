@@ -42,7 +42,7 @@ class ForecastsController < ApplicationController
       params[:forecast][:product_ids] ||= []
       if @forecast.update_attributes(params[:forecast])
         flash[:notice] = "Opportunity #{@forecast.account_name} was successfully updated."
-        redirect_to portal_index_path
+        redirect_to forecasts_portal_path
       else
         render :action => 'edit'
       end
@@ -52,7 +52,7 @@ class ForecastsController < ApplicationController
   def destroy
     @forecast.update_attribute(:deleted_at, Time.now)
     flash[:notice] = "Opportunity #{@forecast.account_name} was successfully deleted."
-    redirect_to portal_index_path
+    redirect_to forecasts_portal_path
   end
 
   def auto_complete_for_forecast_account_name

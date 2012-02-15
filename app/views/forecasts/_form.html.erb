@@ -23,7 +23,6 @@
         <%= form.label :region %>
         <%= form.collection_select :region_id, Region.findall(true), :id, :description %>
       </p>
--->
 
       <p>
         <%= form.label :rbm, "Scribe RBM" %>
@@ -34,6 +33,7 @@
         <%= form.label :account_exec, "Account Exec" %>
         <%= form.collection_select :account_exec_id, AccountExec.findall(true), :id, :description %>
       </p>
+-->
 
       <p>
         <%= form.label :address1 %>

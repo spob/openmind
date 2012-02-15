@@ -6,7 +6,7 @@ class Forecast < ActiveRecord::Base
   belongs_to :rbm
   has_and_belongs_to_many :products
 
-  validates_presence_of :enterprise, :user, :partner_representative, :account_name, :rbm_id, :account_exec_id,
+  validates_presence_of :enterprise, :user, :partner_representative, :account_name, # :rbm_id, :account_exec_id,
                         :address1, :city, :country, :stage, :product, :close_at, :amount
   validates_length_of :partner_representative, :maximum => 50
   validates_length_of :account_name, :maximum => 50
